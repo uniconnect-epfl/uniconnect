@@ -10,6 +10,7 @@ module.exports = {
       'plugin:@typescript-eslint/recommended',
       'plugin:react-hooks/recommended',
       'plugin:react-native/all',
+      'plugin:yml/standard'
     ],
     parser: '@typescript-eslint/parser',
     parserOptions: {
@@ -24,6 +25,7 @@ module.exports = {
       '@typescript-eslint',
       'react-hooks',
       'react-native',
+      'yml'
     ],
     rules: {
       // Custom rules here. Example:
