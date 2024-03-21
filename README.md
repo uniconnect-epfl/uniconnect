@@ -50,3 +50,6 @@ It is taken care by Expo Application Services (EAS). We will create an EAS accou
 
 More to come on this part.
 
+#Resources
+
+- Figma: https://www.figma.com/files/team/1352617570760695336
