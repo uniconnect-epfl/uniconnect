@@ -52,4 +52,5 @@ More to come on this part.
 
 # Resources
 
-- Figma: https://www.figma.com/files/team/1352617570760695336
+- [Figma]: (https://www.figma.com/files/team/1352617570760695336)
+- [Rules for Commit]: (https://kapeli.com/cheat_sheets/Conventional_Commits.docset/Contents/Resources/Documents/index)
