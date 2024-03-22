@@ -18,7 +18,7 @@ via `npm install library-name`. Developer dependencies are the libraries that ar
 Go ahead and install Expo Go app on your mobile device. You will want to inspect the components and screens that you will be developing in your app and
 this is where Expo Go comes into play. Each time you start your development session, open the terminal and type `npx expo start --go`. After it loads, you will
 see a QR code that you will need to scan using either the Expo Go app or your camera and it will run your app locally on the mobile device without needing to build
-the code each time. *Please make sure to be connected on the same wi-fi on both your machine and your phone, otherwise the app will not load on your phone*. When you
+the code each time. _Please make sure to be connected on the same wi-fi on both your machine and your phone, otherwise the app will not load on your phone_. When you
 edit the code, all the changes are directly reflected on your app instance in your phone without needing to reload the app.
 
 ## Working and commiting
