@@ -1,4 +1,4 @@
-name: Sonar
+name: Build
 on:
   push:
     branches:
@@ -12,12 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0  
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
-        with:
-          args: >
-            -Dsonar.organization=uniconnect-epfl
-            -Dsonar.projectKey=uniconnect-epfl_uniconnect
-        env: 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
