@@ -25,6 +25,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "fonts": "./assets/fonts/JetBrains-Mono-Regular.ttf'"
   }
 }
