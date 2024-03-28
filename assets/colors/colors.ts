@@ -5,3 +5,4 @@ export const blue = 'blue';
 export const black = 'black';
 export const lightgray = '#E2DFDE';
 export const lightpeach = '#FBF9F1';
+export const shadow = '#000';
