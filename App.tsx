@@ -1,6 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
-import { View } from 'react-native';
-import OnboardingScreen  from './screens/Onboarding/OnboardingScreen';
+//import OnboardingScreen from './screens/Onboarding/OnboardingScreen';
+import InformationScreen from './screens/Registration/InformationScreen/InformationScreen'
+
 import * as Font from 'expo-font';
 import React, { useState, useEffect } from 'react';
 
@@ -22,18 +22,15 @@ export default function App() {
 
   if(!fontsLoaded){
     //loading screen
-    return 1;
+    return;
   }
   
   return (
-    <View>
-      <StatusBar style="auto" />
 
-      <OnboardingScreen />
-    </View>
+      <InformationScreen />
+
   );
 }
-
 
 
 
