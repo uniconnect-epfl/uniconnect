@@ -1,11 +1,26 @@
 import { StyleSheet } from 'react-native';
-import { white, red, black, blue} from '../../assets/colors/colors';
+import {
+  white,
+  black,
+  blue,
+  lightgray,
+  lightpeach,
+  peach,
+} from '../../assets/colors/colors';
+import '../../assets/fonts/JetBrainsMono-Regular.ttf';
 
 const styles = StyleSheet.create({
+  border: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
   button: {
     alignItems: 'center',
-    backgroundColor: red,
+    backgroundColor: lightpeach,
+    borderColor: peach,
     borderRadius: 25,
+    borderWidth: 2,
     height: 50,
     justifyContent: 'center',
     marginBottom: 10,
@@ -14,26 +29,32 @@ const styles = StyleSheet.create({
   buttonGoogle: {
     alignItems: 'center',
     backgroundColor: white,
+
     borderRadius: 25,
     borderWidth: 1,
     height: 50,
     justifyContent: 'center',
     width: '100%',
   },
+
   buttonText: {
-    color: white,
+    color: black,
+    fontFamily: 'JetBrains-Mono',
     fontSize: 18,
   },
   buttonTextGoogle: {
     color: black,
     fontSize: 18,
+    fontWeight: 'bold',
   },
   container: {
     alignItems: 'center',
     flex: 1,
+    gap: 1,
     justifyContent: 'center',
     padding: 20,
   },
+
   dividerContainer: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -44,37 +65,38 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 1,
   },
-  dividerText: {
-    color: black,
-    marginHorizontal: 10,
-  },
+  
+
   forgotPassword: {
-    color: blue,
+    color: black,
     marginBottom: 20,
   },
+
   image: {
-    borderColor: black,
-    borderWidth: 1,
     height: 250,
-    marginBottom: 50,
+    marginBottom: 10,
     marginTop: 700,
     width: 250,
   },
+
   inputField: {
+    borderColor: lightgray,
+    borderRadius: 25,
     borderWidth: 1,
+    fontFamily: 'JetBrains-Mono',
+    fontSize: 18,
     height: 50,
     marginBottom: 20,
     padding: 10,
     width: '100%',
   },
-  logoPlaceholder: {
-    backgroundColor: red,
-    height: 100,
-    marginBottom: 50,
-    width: 100,
 
-    // Just a placeholder. Replace with an Image component and your logo.
+  logo: {
+    borderColor: white,
+    borderRadius: 1000,
+    width: '100%',
   },
+
   signUpButton: {
     color: blue,
   },
@@ -85,7 +107,11 @@ const styles = StyleSheet.create({
   signUpText: {
     color: black,
     marginRight: 5,
-  }
+  },
+
+  smalltext: {
+    color: black,
+  },
 });
 
 export default styles;
