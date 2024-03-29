@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, TextInput, TouchableOpacity, Text, Image, SafeAreaView } from 'react-native';
 import Styles from './styles';
-
 const Form: React.FC = () => {
   // State for form fields can be added here
 
@@ -33,21 +32,44 @@ const Form: React.FC = () => {
         <TextInput placeholder="Location" style={Styles.input} />
       </View>
       
+
       <View style={Styles.buttonContainer}>
         <TouchableOpacity style = {[Styles.button, Styles.locationButton]}>
-        <Text style = {[Styles.buttonText, Styles.locationText]}>Use my location?</Text>
+
+          <Image source={require("../../../assets/pin-icon.png")} style = {Styles.icon}/>
+          <Text style = {[Styles.buttonText, Styles.locationText]}>Use my location?</Text>
+
         </TouchableOpacity>
 
       </View>
 
+      <View style = {Styles.divider}/>
 
 
       {/* Additional buttons and functionality can be added here */}
       <View style={Styles.buttonContainer}>    
         <TouchableOpacity style={Styles.button}>
-          <Text style={Styles.buttonText}>Next</Text>
+          <Text style={Styles.buttonText}>Add a description now</Text>
         </TouchableOpacity>
       </View>
+
+      <View style={Styles.barContainer}>
+        <View style={Styles.nextBar}>
+
+        <TouchableOpacity style={[Styles.buttonSmall, Styles.buttonSmallLeft]}>
+        <Text style = {Styles.buttonTextLeft}>Back</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style = {Styles.buttonSmall}>
+        <Text>Next</Text>
+        </TouchableOpacity>
+
+
+          </View>
+      </View>
+      
+     
+
+
 
     </SafeAreaView>
   );

@@ -4,35 +4,84 @@ import {
   peach,
   black,
   lightpeach,
+  shadow,
+  white
 } from '../../../assets/colors/colors';
 import { StatusBar } from 'react-native';
 
 const Styles = StyleSheet.create({
+  barContainer: {},
+
   button: {
     alignItems: 'center',
     backgroundColor: lightpeach,
     borderColor: peach,
     borderRadius: 25,
     borderWidth: 2,
+    elevation: 8, //
     height: 50,
     justifyContent: 'center',
-    width: '100%',
+    marginHorizontal: 30,
+    shadowColor: shadow,
+    shadowOffset: { width: 0, height: 2.5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    width: 'auto',
   },
 
   buttonContainer: {
     marginHorizontal: 20,
     marginVertical: 10,
   },
+  buttonSmall: {
+    alignItems: 'center',
+    backgroundColor: lightpeach,
+    borderColor: peach,
+    borderRadius: 25,
+    borderWidth: 2,
+    display: 'flex',
+    elevation: 8,
+    height: 40,
+    justifyContent: 'center',
+    marginHorizontal: 5,
+    shadowColor: shadow,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    width: 90,
+  },
+
+  buttonSmallLeft: {
+    backgroundColor: peach,
+  },
 
   buttonText: {
     color: black,
     fontFamily: 'JetBrains-Mono',
   },
+
+  buttonTextLeft: {
+    color: white,
+    fontFamily: 'JetBrains-Mono',
+  },
+
   container: {
     justifyContent: 'center',
     padding: StatusBar.currentHeight,
   },
 
+  divider: {
+    backgroundColor: black,
+    height: 1,
+    marginHorizontal: 20,
+    marginVertical: 20,
+    width: 'auto',
+  },
+
+  icon: {
+    height: 20,
+    width: 20,
+  },
   icon_container: {
     flex: 1,
     flexDirection: 'row',
@@ -40,6 +89,7 @@ const Styles = StyleSheet.create({
     paddingTop: 20,
     width: '100%',
   },
+
   image: {
     alignSelf: 'center',
     height: 75,
@@ -58,14 +108,31 @@ const Styles = StyleSheet.create({
     width: '100%',
   },
   locationButton: {
+    display: 'flex',
+    flexDirection: 'row',
     height: 25,
-    marginBottom: 50,
-    width: 170,
+    marginBottom: 20,
+    marginLeft: 20,
+    width: 180,
   },
 
   locationText: {
     alignSelf: 'baseline',
-    paddingLeft: 10,
+    paddingLeft: 5,
+  },
+
+  nextBar: {
+    alignItems: 'center',
+    backgroundColor: lightpeach,
+    borderColor: peach,
+    borderRadius: 25,
+    borderWidth: 2,
+    display: 'flex',
+    flexDirection: 'row',
+    height: 60,
+    justifyContent: 'space-between',
+    marginHorizontal: 20,
+    marginTop: 100,
   },
 
   section: {
@@ -84,7 +151,7 @@ const Styles = StyleSheet.create({
   },
 
   sectionLast: {
-    paddingBottom: 50,
+    paddingBottom: 65,
   },
 
   topText: {
@@ -95,6 +162,7 @@ const Styles = StyleSheet.create({
     justifyContent: 'flex-start',
     padding: 20,
     paddingBottom: 25,
+    paddingTop: 50,
   },
 });
 

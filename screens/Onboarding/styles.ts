@@ -6,6 +6,7 @@ import {
   lightgray,
   lightpeach,
   peach,
+  shadow,
 } from '../../assets/colors/colors';
 import '../../assets/fonts/JetBrainsMono-Regular.ttf';
 
@@ -21,9 +22,14 @@ const styles = StyleSheet.create({
     borderColor: peach,
     borderRadius: 25,
     borderWidth: 2,
+    elevation: 8,
     height: 50,
     justifyContent: 'center',
     marginBottom: 10,
+    shadowColor: shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
     width: '100%',
   },
   buttonGoogle: {
@@ -34,6 +40,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: 50,
     justifyContent: 'center',
+    shadowColor: shadow,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
     width: '100%',
   },
 
@@ -65,7 +75,6 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 1,
   },
-  
 
   forgotPassword: {
     color: black,
