@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, {useState} from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Image, TextInput } from 'react-native';
 import styles from './styles';
 
@@ -10,29 +11,52 @@ interface InterestButtonProps {
 
 const InterestButton: React.FC<InterestButtonProps> = ({ title, selected, onSelect }) => (
   
-  <TouchableOpacity
-    style={[styles.interestButton, selected && styles.selectedInterestButton]}
-    onPress={onSelect}
-  >
-    <Text style={[styles.interestText, selected && styles.selectedInterestText]}>{title}</Text>
+  <TouchableOpacity 
+    style={[styles.interestButton, 
+        selected && styles.selectedInterestButton]} 
+    onPress={onSelect}>
+
+      <Text style={[styles.interestText, 
+        selected && styles.selectedInterestText]}>{title}</Text>
+
   </TouchableOpacity>
 );
 
+const interests = ['Machine Learning', 'Artificial Intelligence', 'Computer Vision', 'Data Science', 'NLP', 'Sport', 'Assembly', 'Pawning', 'Cyber Security', 'Blockchain', 'Ethereum', 'Solana'];
+
+
 const InterestsScreen = () => {
-  // You should replace this with a state to handle the selected interests
-  const selectedInterests = new Set<string>();
+    const[SearchTerm, setSearchTerm] = useState('');
+    const[filterdedInterests, setFilteredInterests] = useState(interests);
+    const[selectedInterests, setSelectedInterests] = useState(new Set());
 
-  // Dummy interests array
-  const interests = ['Machine Learning', 'Artificial Intelligence', 'Computer Vision', 'Data Science', 'NLP', 'Sport', 'Assembly', 'Pawning', 'Cyber Security', 'Blockchain', 'Ethereum', 'Solana   '];
-
+ 
   const toggleInterest = (interest: string) => {
-    if (selectedInterests.has(interest)) {
-      selectedInterests.delete(interest);
-    } else {
-      selectedInterests.add(interest);
+    setSelectedInterests((prev) => {
+        const newSelectedInterests = new Set(prev);
+        if(newSelectedInterests.has(interest)){
+            newSelectedInterests.delete(interest);
+        }else{
+            newSelectedInterests.add(interest)
+        }
+        return newSelectedInterests;
+    })
+  }
+
+
+
+  const handleSearch = (text: string) => {
+    setSearchTerm(text);
+    if(text){
+        const filteredData = interests.filter((interest) =>
+        interest.toLocaleLowerCase().includes(text.toLowerCase())
+        );
+        setFilteredInterests(filteredData);
+    }else{
+        setFilteredInterests(interests);
     }
-    // Normally, you would update the state here to re-render the component
-  };
+  
+    };
 
   return (
 
@@ -43,31 +67,39 @@ const InterestsScreen = () => {
       <Text style={styles.title}>Select your interests</Text>
       
       <View>
-        <TextInput placeholder='Search'style={styles.input}></TextInput>
+        <TextInput 
+            placeholder='Search'
+            style={styles.input}
+            onChangeText={handleSearch}/>
       </View>
-
 
       <View style={styles.interestsGrid}>
 
 
-        {interests.map((interest) => (
+        {filterdedInterests.map((interest) => (
           <InterestButton
             key={interest}
             title={interest}
-            selected={selectedInterests.has(interest)}
+            selected = {selectedInterests.has(interest)}
             onSelect={() => toggleInterest(interest)}
           />
-
-
         ))}
+
       </View>
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.footerButton}>
-          <Text style={styles.footerButtonText}></Text>
+
+
+      <View>
+        <View style={styles.nextBar}>
+
+        <TouchableOpacity style={[styles.buttonSmall, styles.buttonSmallLeft]}>
+        <Text style = {styles.buttonTextLeft}>Back</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.footerButton}>
-          <Text style={styles.footerButtonText}></Text>
+        <TouchableOpacity style = {styles.buttonSmall}>
+        <Text style={styles.buttonText}>Next</Text>
         </TouchableOpacity>
+
+
+          </View>
       </View>
     </ScrollView>
     </View>

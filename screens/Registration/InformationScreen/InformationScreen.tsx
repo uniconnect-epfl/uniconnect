@@ -53,14 +53,14 @@ const Form: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={Styles.barContainer}>
+      <View >
         <View style={Styles.nextBar}>
 
         <TouchableOpacity style={[Styles.buttonSmall, Styles.buttonSmallLeft]}>
         <Text style = {Styles.buttonTextLeft}>Back</Text>
         </TouchableOpacity>
         <TouchableOpacity style = {Styles.buttonSmall}>
-        <Text>Next</Text>
+        <Text style={Styles.buttonText}>Next</Text>
         </TouchableOpacity>
 
 
