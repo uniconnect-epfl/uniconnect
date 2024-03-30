@@ -11,9 +11,11 @@
     "lint": "eslint . --ext .ts,.tsx,.yml"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.5.20",
+    "@react-navigation/stack": "^6.3.29",
     "expo": "~50.0.11",
     "expo-status-bar": "~1.11.1",
-    "react": "18.2.0",
+    "react": "^18.2.0",
     "react-native": "0.73.4"
   },
   "devDependencies": {
