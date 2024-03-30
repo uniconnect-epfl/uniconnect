@@ -76,9 +76,13 @@ const styles = StyleSheet.create({
     height: 1,
   },
 
-  forgotPassword: {
-    color: black,
-    marginBottom: 20,
+  footer: {
+    alignContent: 'flex-end',
+    display: 'flex',
+    flexDirection: 'row',
+    height: 200,
+    marginTop: 10,
+    paddingTop: 160,
   },
 
   image: {
@@ -118,8 +122,18 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
 
-  smalltext: {
+  smallText: {
     color: black,
+    fontFamily: 'JetBrains-Mono',
+    fontSize: 10,
+    marginBottom: 20,
+    textDecorationLine: 'underline',
+  },
+
+  specialText: {
+    color: peach,
+    fontFamily: 'JetBrains-Mono',
+    fontSize: 10,
   },
 });
 

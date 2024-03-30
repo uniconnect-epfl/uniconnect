@@ -1,6 +1,6 @@
-//import OnboardingScreen from './screens/Onboarding/OnboardingScreen';
+import OnboardingScreen from './screens/Onboarding/OnboardingScreen';
 //import InformationScreen from './screens/Registration/InformationScreen/InformationScreen'
-import InterestsScreen from './screens/Registration/InterestsScreen/InterestsScreen'
+//import InterestsScreen from './screens/Registration/InterestsScreen/InterestsScreen'
 
 import * as Font from 'expo-font';
 import React, { useState, useEffect,  } from 'react';
@@ -33,8 +33,8 @@ export default function App() {
   return (
 
 
-       <InterestsScreen /> 
 
+    <OnboardingScreen />
 
   );
 }

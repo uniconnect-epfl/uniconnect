@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 //this is the login screenx
 import React from 'react';
 import {
@@ -45,7 +46,7 @@ const LoginScreen: React.FC = () => {
       </TouchableOpacity>
 
       <View >
-        <Text style={styles.forgotPassword}>Forgot password?</Text>  
+        <Text style={styles.smallText}>Forgot password?</Text>  
 
       </View>
 
@@ -55,6 +56,11 @@ const LoginScreen: React.FC = () => {
           source ={require("../../assets/cont_w_google.png")}
           style = {styles.logo} />        
       </TouchableOpacity>
+
+      <View style={styles.footer}>
+        <Text style= {styles.smallText}>Don't have an account?</Text>
+        <Text style = {styles.specialText}> Sign Up</Text>
+      </View>
     </View>
   
   );
