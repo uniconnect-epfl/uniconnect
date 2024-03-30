@@ -7,7 +7,7 @@ const Form: React.FC = () => {
   return (
 
     <SafeAreaView style={Styles.container}>
-
+   
       <View style = {Styles.icon_container}>
         <Image source ={require("../../../assets/icon.png")} style={Styles.image} />  
       </View>

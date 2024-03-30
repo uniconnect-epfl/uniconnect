@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, StatusBar  } from 'react-native';
 import {
   lightgray,
   peach,
@@ -7,7 +7,6 @@ import {
   shadow,
   white
 } from '../../../assets/colors/colors';
-import { StatusBar } from 'react-native';
 
 const Styles = StyleSheet.create({
   barContainer: {},

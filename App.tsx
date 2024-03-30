@@ -1,8 +1,11 @@
 //import OnboardingScreen from './screens/Onboarding/OnboardingScreen';
-import InformationScreen from './screens/Registration/InformationScreen/InformationScreen'
+//import InformationScreen from './screens/Registration/InformationScreen/InformationScreen'
+import InterestsScreen from './screens/Registration/InterestsScreen/InterestsScreen'
 
 import * as Font from 'expo-font';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,  } from 'react';
+
+
 
 
 
@@ -14,6 +17,7 @@ export default function App() {
     const loadFonts = async () => {
     await Font.loadAsync({
       'JetBrains-Mono': require('./assets/fonts/JetBrainsMono-Regular.ttf'),
+
     })
     setFontsLoaded(true)
   }
@@ -24,10 +28,13 @@ export default function App() {
     //loading screen
     return;
   }
-  
+
+
   return (
 
-      <InformationScreen />
+
+       <InterestsScreen /> 
+
 
   );
 }
