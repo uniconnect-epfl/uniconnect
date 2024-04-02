@@ -9,7 +9,10 @@ import {
   Image
 } from 'react-native';
 
+import '../../assets/global/globalStyles'
+
 import styles from './styles'; // Make sure the path is correct
+import { GlobalStyles } from '../../assets/global/globalStyles';
 
 
 const LoginScreen: React.FC = () => {
@@ -23,7 +26,7 @@ const LoginScreen: React.FC = () => {
 
       {/* Username/Email Field */}
       <TextInput
-        style={styles.inputField}
+        style={[styles.inputField, GlobalStyles.text]}
         placeholder="Username or email"
         placeholderTextColor={'black'}
         keyboardType="email-address"
@@ -32,7 +35,7 @@ const LoginScreen: React.FC = () => {
 
       {/* Password Field */}
       <TextInput
-        style={styles.inputField}
+        style={[styles.inputField, GlobalStyles.text]}
         placeholder="Password"
         placeholderTextColor={'black'}
         secureTextEntry
@@ -42,11 +45,11 @@ const LoginScreen: React.FC = () => {
 
       {/* Log In Button */}
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Log In</Text>
+        <Text style={[styles.buttonText, GlobalStyles.boldText]}>Log In</Text>
       </TouchableOpacity>
 
       <View >
-        <Text style={styles.smallText}>Forgot password?</Text>  
+        <Text style={[styles.smallText, GlobalStyles.text]}>Forgot password?</Text>  
 
       </View>
 

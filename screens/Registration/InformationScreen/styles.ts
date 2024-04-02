@@ -56,12 +56,10 @@ const Styles = StyleSheet.create({
 
   buttonText: {
     color: black,
-    fontFamily: 'JetBrains-Mono',
   },
 
   buttonTextLeft: {
     color: white,
-    fontFamily: 'JetBrains-Mono',
   },
 
   container: {
@@ -101,7 +99,6 @@ const Styles = StyleSheet.create({
     borderColor: lightgray,
     borderRadius: 25,
     borderWidth: 1,
-    fontFamily: 'JetBrains-Mono',
     height: 50,
     paddingHorizontal: 30,
     width: '100%',
@@ -157,7 +154,6 @@ const Styles = StyleSheet.create({
     color: black,
     flex: 1,
     flexDirection: 'row',
-    fontFamily: 'JetBrains-Mono',
     justifyContent: 'flex-start',
     padding: 20,
     paddingBottom: 25,

@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, TextInput, TouchableOpacity, Text, Image, SafeAreaView } from 'react-native';
 import Styles from './styles';
+import { GlobalStyles } from '../../../assets/global/globalStyles';
+
 const Form: React.FC = () => {
   // State for form fields can be added here
 
@@ -13,23 +15,23 @@ const Form: React.FC = () => {
       </View>
     
       <View style = {[Styles.section, Styles.sectionFirst]}>
-        <Text style={Styles.topText}>First name*</Text>    
-        <TextInput placeholder="First Name" style={Styles.input} />
+        <Text style={[Styles.topText, GlobalStyles.text]}>First name*</Text>    
+        <TextInput placeholder="First Name" style={[Styles.input, GlobalStyles.text]} />
       </View>
           
       <View style = {Styles.section}>
-        <Text style={Styles.topText}>Last name*</Text>
-        <TextInput placeholder="Last Name" style={Styles.input} />
+        <Text style={[Styles.topText, GlobalStyles.text]}>Last name*</Text>
+        <TextInput placeholder="Last Name" style={[Styles.input, GlobalStyles.text]} />
       </View>
 
       <View style = {Styles.section}>
-        <Text style={Styles.topText}>Date of birth*</Text>
-        <TextInput placeholder="Date of Birth" style={Styles.input} />
+        <Text style={[Styles.topText, GlobalStyles.text]}>Date of birth*</Text>
+        <TextInput placeholder="Date of Birth" style={[Styles.input, GlobalStyles.text]} />
       </View>
         
       <View style = {[Styles.section, Styles.sectionLast]}>
-        <Text style={Styles.topText}>Location</Text>
-        <TextInput placeholder="Location" style={Styles.input} />
+        <Text style={[Styles.topText, GlobalStyles.text]}>Location</Text>
+        <TextInput placeholder="Location" style={[Styles.input, GlobalStyles.text]} />
       </View>
       
 
@@ -37,7 +39,7 @@ const Form: React.FC = () => {
         <TouchableOpacity style = {[Styles.button, Styles.locationButton]}>
 
           <Image source={require("../../../assets/pin-icon.png")} style = {Styles.icon}/>
-          <Text style = {[Styles.buttonText, Styles.locationText]}>Use my location?</Text>
+          <Text style = {[Styles.buttonText, Styles.locationText, GlobalStyles.text]}>Use my location?</Text>
 
         </TouchableOpacity>
 
@@ -49,7 +51,7 @@ const Form: React.FC = () => {
       {/* Additional buttons and functionality can be added here */}
       <View style={Styles.buttonContainer}>    
         <TouchableOpacity style={Styles.button}>
-          <Text style={Styles.buttonText}>Add a description now</Text>
+          <Text style={[Styles.buttonText, GlobalStyles.text]}>Add a description now</Text>
         </TouchableOpacity>
       </View>
 
@@ -57,10 +59,10 @@ const Form: React.FC = () => {
         <View style={Styles.nextBar}>
 
         <TouchableOpacity style={[Styles.buttonSmall, Styles.buttonSmallLeft]}>
-        <Text style = {Styles.buttonTextLeft}>Back</Text>
+        <Text style = {[Styles.buttonTextLeft, GlobalStyles.text]}>Back</Text>
         </TouchableOpacity>
         <TouchableOpacity style = {Styles.buttonSmall}>
-        <Text style={Styles.buttonText}>Next</Text>
+        <Text style={[Styles.buttonText, GlobalStyles.text]}>Next</Text>
         </TouchableOpacity>
 
 

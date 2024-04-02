@@ -8,7 +8,6 @@ import {
   peach,
   shadow,
 } from '../../assets/colors/colors';
-import '../../assets/fonts/JetBrainsMono-Regular.ttf';
 
 const styles = StyleSheet.create({
   border: {
@@ -49,7 +48,6 @@ const styles = StyleSheet.create({
 
   buttonText: {
     color: black,
-    fontFamily: 'JetBrains-Mono',
     fontSize: 18,
   },
   buttonTextGoogle: {
@@ -96,7 +94,6 @@ const styles = StyleSheet.create({
     borderColor: lightgray,
     borderRadius: 25,
     borderWidth: 1,
-    fontFamily: 'JetBrains-Mono',
     fontSize: 18,
     height: 50,
     marginBottom: 20,
@@ -124,7 +121,6 @@ const styles = StyleSheet.create({
 
   smallText: {
     color: black,
-    fontFamily: 'JetBrains-Mono',
     fontSize: 10,
     marginBottom: 20,
     textDecorationLine: 'underline',
@@ -132,7 +128,6 @@ const styles = StyleSheet.create({
 
   specialText: {
     color: peach,
-    fontFamily: 'JetBrains-Mono',
     fontSize: 10,
   },
 });

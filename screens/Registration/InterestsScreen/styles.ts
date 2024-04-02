@@ -33,12 +33,10 @@ const styles = StyleSheet.create({
 
   buttonText: {
     color: black,
-    fontFamily: 'JetBrains-Mono',
   },
 
   buttonTextLeft: {
     color: white,
-    fontFamily: 'JetBrains-Mono',
   },
 
   container: {
@@ -81,7 +79,6 @@ const styles = StyleSheet.create({
     borderColor: lightgray,
     borderRadius: 25,
     borderWidth: 1,
-    fontFamily: 'JetBrains-Mono',
     height: 50,
     marginBottom: 25,
     paddingHorizontal: 30,
@@ -102,7 +99,6 @@ const styles = StyleSheet.create({
   interestText: {
     bottom: 0,
     color: black,
-    fontFamily: 'JetBrains-Mono',
     left: 0,
     position: 'absolute',
     right: 0,
@@ -141,10 +137,9 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontFamily: 'JetBrains-Mono',
     fontSize: 24,
     fontWeight: 'bold',
-
+    paddingBottom: 10,
     textAlign: 'center',
   },
 });

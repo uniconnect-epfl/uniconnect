@@ -2,6 +2,8 @@
 import React, {useState} from 'react';
 import { View, Text, TouchableOpacity, ScrollView, Image, TextInput } from 'react-native';
 import styles from './styles';
+import '../../../assets/global/globalStyles';
+import { GlobalStyles } from '../../../assets/global/globalStyles';
 
 interface InterestButtonProps {
   title: string;
@@ -12,12 +14,10 @@ interface InterestButtonProps {
 const InterestButton: React.FC<InterestButtonProps> = ({ title, selected, onSelect }) => (
   
   <TouchableOpacity 
-    style={[styles.interestButton, 
-        selected && styles.selectedInterestButton]} 
+    style={[styles.interestButton, selected && styles.selectedInterestButton]} 
     onPress={onSelect}>
 
-      <Text style={[styles.interestText, 
-        selected && styles.selectedInterestText]}>{title}</Text>
+      <Text style={[ [styles.interestText, GlobalStyles.text], selected && styles.selectedInterestText]}>{title}</Text>
 
   </TouchableOpacity>
 );
@@ -64,12 +64,12 @@ const InterestsScreen = () => {
     <Image source ={require("../../../assets/icon.png")} style={styles.image} />  
     <ScrollView style={styles.container}>
         
-      <Text style={styles.title}>Select your interests</Text>
+      <Text style={[styles.title, GlobalStyles.boldText]}>Select your interests</Text>
       
       <View>
         <TextInput 
             placeholder='Search'
-            style={styles.input}
+            style={[styles.input, GlobalStyles.text]}
             onChangeText={handleSearch}/>
       </View>
 
@@ -92,10 +92,10 @@ const InterestsScreen = () => {
         <View style={styles.nextBar}>
 
         <TouchableOpacity style={[styles.buttonSmall, styles.buttonSmallLeft]}>
-        <Text style = {styles.buttonTextLeft}>Back</Text>
+        <Text style = {[styles.buttonTextLeft, GlobalStyles.text]}>Back</Text>
         </TouchableOpacity>
         <TouchableOpacity style = {styles.buttonSmall}>
-        <Text style={styles.buttonText}>Next</Text>
+        <Text style={[styles.buttonText, GlobalStyles.text]}>Next</Text>
         </TouchableOpacity>
 
 
