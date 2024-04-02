@@ -1,11 +1,11 @@
-import { StyleSheet, StatusBar  } from 'react-native';
+import { StyleSheet, StatusBar } from 'react-native';
 import {
-  lightgray,
+  lightGray,
   peach,
   black,
-  lightpeach,
+  lightPeach,
   shadow,
-  white
+  white,
 } from '../../../assets/colors/colors';
 
 const Styles = StyleSheet.create({
@@ -13,7 +13,7 @@ const Styles = StyleSheet.create({
 
   button: {
     alignItems: 'center',
-    backgroundColor: lightpeach,
+    backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: 25,
     borderWidth: 2,
@@ -34,7 +34,7 @@ const Styles = StyleSheet.create({
   },
   buttonSmall: {
     alignItems: 'center',
-    backgroundColor: lightpeach,
+    backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: 25,
     borderWidth: 2,
@@ -96,7 +96,7 @@ const Styles = StyleSheet.create({
   },
 
   input: {
-    borderColor: lightgray,
+    borderColor: lightGray,
     borderRadius: 25,
     borderWidth: 1,
     height: 50,
@@ -119,7 +119,7 @@ const Styles = StyleSheet.create({
 
   nextBar: {
     alignItems: 'center',
-    backgroundColor: lightpeach,
+    backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: 25,
     borderWidth: 2,

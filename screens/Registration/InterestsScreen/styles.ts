@@ -1,9 +1,9 @@
 import { StyleSheet } from 'react-native';
 import {
-  lightgray,
+  lightGray,
   peach,
   black,
-  lightpeach,
+  lightPeach,
   white,
   shadow,
 } from '../../../assets/colors/colors';
@@ -11,7 +11,7 @@ import {
 const styles = StyleSheet.create({
   buttonSmall: {
     alignItems: 'center',
-    backgroundColor: lightpeach,
+    backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: 25,
     borderWidth: 2,
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    borderColor: lightgray,
+    borderColor: lightGray,
     borderRadius: 25,
     borderWidth: 1,
     height: 50,
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
 
   nextBar: {
     alignItems: 'center',
-    backgroundColor: lightpeach,
+    backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: 25,
     borderWidth: 2,
@@ -128,12 +128,12 @@ const styles = StyleSheet.create({
 
   selectedInterestButton: {
     backgroundColor: white,
-    borderColor: lightgray,
+    borderColor: lightGray,
     borderWidth: 2.5,
   },
 
   selectedInterestText: {
-    color: lightgray,
+    color: lightGray,
   },
 
   title: {
