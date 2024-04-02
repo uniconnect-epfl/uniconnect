@@ -1,8 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth } from 'firebase/auth';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -18,20 +15,4 @@ const firebaseConfig = {
 export const FIREBASE_APP = initializeApp(firebaseConfig);
 export const FIREBASE_AUTH = getAuth(FIREBASE_APP);
 
-//connectAuthEmulator(FIREBASE_AUTH, 'http://localhost:9099');
-
-
-// export const monitorAuthState = async (): Promise<void> => {
-//     onAuthStateChanged(FIREBASE_AUTH, user => {
-//         if (user) {
-//             console.log(user);
-//         } else {
-//             //TODO
-//         }
-//     })
-// }
-
-// export const logout = async (): Promise<void> => {
-//     await signOut(FIREBASE_AUTH);
-// }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
+import { View, TextInput, Button, StyleSheet, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 
@@ -33,7 +33,7 @@ const Login = () => {
         try {
             await createUserWithEmailAndPassword(auth, email, password);
             alert('Account created. Check email');
-        } catch (error: any) {
+        } catch (error ) {
             if (error instanceof Error) { // Type-guard check
                 console.log(`There was an error: ${error.message}`);
             }
@@ -76,27 +76,17 @@ const Login = () => {
 
 const styles = StyleSheet.create({
     container: {
+        alignItems: 'center',
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
-    },
-    header: {
-        fontSize: 24,
-        fontWeight: 'bold',
-    },
-    group: {
-        marginBottom: 15,
     },
     input: {
-        borderWidth: 1,
-        borderColor: 'gray',
-        width: '80%',
-        padding: 10,
         borderRadius: 5,
+        borderWidth: 1,
+        padding: 10,
+        width: '80%',
     },
-    errorLabel: {
-        color: 'red',
-    },
+
 });
 
 export default Login;

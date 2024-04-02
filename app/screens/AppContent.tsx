@@ -1,11 +1,13 @@
 // AppContent.tsx
-import { NavigationProp, RouteProp } from '@react-navigation/native';
+import { NavigationProp } from '@react-navigation/native';
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Button, StyleSheet } from 'react-native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
-
+import type {
+    ParamListBase,
+  } from '@react-navigation/routers';
 interface AppContentProps {
-    navigation: NavigationProp<any>;
+    navigation: NavigationProp<ParamListBase>;
 }
 
 const AppContent = ({navigation}: AppContentProps ) => {
@@ -19,19 +21,10 @@ const AppContent = ({navigation}: AppContentProps ) => {
 
 const styles = StyleSheet.create({
     container: {
+        alignItems: 'center',
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
         padding: 20,
-    },
-    header: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    authLabel: {
-        fontSize: 16,
-        marginBottom: 20,
     },
 });
 

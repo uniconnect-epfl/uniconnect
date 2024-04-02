@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import { View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './app/screens/Login';
 import AppContent from './app/screens/AppContent';
@@ -33,7 +32,7 @@ export default function App() {
   , []);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer >
       <Stack.Navigator initialRouteName='Login'>
         {user ? (
           <Stack.Screen name="AppLayout" component={AppLayout} options={{headerShown: false}} />
@@ -43,15 +42,6 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-};
-
-const styles = StyleSheet.create({
-  app: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-});
+}
 
 
