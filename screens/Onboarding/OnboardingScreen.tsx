@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import '../../assets/global/globalStyles'
-
+import { Ionicons } from '@expo/vector-icons';
 import styles from './styles'; // Make sure the path is correct
 import { GlobalStyles } from '../../assets/global/globalStyles';
 
@@ -22,8 +22,6 @@ const LoginScreen: React.FC = () => {
         
         <Image source={require("../../assets/icon.png")} style={styles.image} />
       
-    
-
       {/* Username/Email Field */}
       <TextInput
         style={[styles.inputField, GlobalStyles.text]}
@@ -55,9 +53,14 @@ const LoginScreen: React.FC = () => {
 
       {/* Continue with Google */}
       <TouchableOpacity style={styles.buttonGoogle}>
-        <Image 
-          source ={require("../../assets/cont_w_google.png")}
-          style = {styles.logo} />        
+      
+      <View style={styles.buttonPlaceholder}>
+        <Ionicons name="logo-google" size={30} color="black" style={styles.icon}/>
+        <Text style={[styles.buttonText,GlobalStyles.boldText]}>Continue with google</Text>
+      </View>         
+
+
+
       </TouchableOpacity>
 
       <View style={styles.footer}>

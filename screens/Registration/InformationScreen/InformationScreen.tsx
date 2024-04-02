@@ -2,6 +2,7 @@ import React from 'react';
 import { View, TextInput, TouchableOpacity, Text, Image, SafeAreaView } from 'react-native';
 import Styles from './styles';
 import { GlobalStyles } from '../../../assets/global/globalStyles';
+import {Ionicons} from '@expo/vector-icons';
 
 const Form: React.FC = () => {
   // State for form fields can be added here
@@ -38,8 +39,8 @@ const Form: React.FC = () => {
       <View style={Styles.buttonContainer}>
         <TouchableOpacity style = {[Styles.button, Styles.locationButton]}>
 
-          <Image source={require("../../../assets/pin-icon.png")} style = {Styles.icon}/>
-          <Text style = {[Styles.buttonText, Styles.locationText, GlobalStyles.text]}>Use my location?</Text>
+        <Ionicons name="location-outline" size={20} color="black" />
+        <Text style = {[Styles.buttonText, Styles.locationText, GlobalStyles.text]}>Use my location?</Text>
 
         </TouchableOpacity>
 

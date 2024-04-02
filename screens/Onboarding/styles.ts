@@ -3,8 +3,8 @@ import {
   white,
   black,
   blue,
-  lightgray,
-  lightpeach,
+  lightGray,
+  lightPeach,
   peach,
   shadow,
 } from '../../assets/colors/colors';
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignItems: 'center',
-    backgroundColor: lightpeach,
+    backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: 25,
     borderWidth: 2,
@@ -34,11 +34,13 @@ const styles = StyleSheet.create({
   buttonGoogle: {
     alignItems: 'center',
     backgroundColor: white,
-
     borderRadius: 25,
     borderWidth: 1,
+    display: 'flex',
+    flexDirection: 'row',
     height: 50,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    paddingLeft: 15,
     shadowColor: shadow,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -46,6 +48,12 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 
+  buttonPlaceholder: {
+    alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
   buttonText: {
     color: black,
     fontSize: 18,
@@ -82,7 +90,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
     paddingTop: 160,
   },
-
+  icon: {
+    paddingRight: 25,
+  },
   image: {
     height: 250,
     marginBottom: 10,
@@ -91,7 +101,7 @@ const styles = StyleSheet.create({
   },
 
   inputField: {
-    borderColor: lightgray,
+    borderColor: lightGray,
     borderRadius: 25,
     borderWidth: 1,
     fontSize: 18,
