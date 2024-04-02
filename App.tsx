@@ -1,19 +1,57 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { View, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import Login from './app/screens/Login';
+import AppContent from './app/screens/AppContent';
+import List from './app/screens/List';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { User, onAuthStateChanged } from 'firebase/auth';
+import { FIREBASE_AUTH } from './firebaseConfig';
 
-export default function App() {
+
+const Stack = createNativeStackNavigator();
+const AppContentStack = createNativeStackNavigator();
+
+function AppLayout () {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <AppContentStack.Navigator>
+      <AppContentStack.Screen name="AppContent" component={AppContent} />
+      <AppContentStack.Screen name="ToDos" component={List} />
+    </AppContentStack.Navigator>
   );
 }
 
+export default function App() {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      console.log('User state changed. Current user:', user);
+      setUser(user);
+    });
+  }
+  , []);
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='Login'>
+        {user ? (
+          <Stack.Screen name="AppLayout" component={AppLayout} options={{headerShown: false}} />
+        ) : (
+          <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
 const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
+  app: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
   },
+
 });
+
+
