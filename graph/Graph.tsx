@@ -1,92 +1,105 @@
 interface Node {
-    id: string
-    x: number
-    y: number
-    dx: number
-    dy: number
+  id: string
+  x: number
+  y: number
+  dx: number
+  dy: number
 }
-
 interface Link {
-    source: string
-    target: string
-    strength: number
-
+  source: string
+  target: string
+  strength: number
 }
 
-class Graph {
-    nodes: Node[]
-    links: Link[]
+export default class Graph {
+  
+  nodes: Node[];
 
-    constructor(ids: string[], sources: string[], targets: string[], strengths: number[]) {
-        if (sources.length !== targets.length || targets.length !== strengths.length){
-            console.log("sources, targets, and strengths must have the same length")
-        }  
-        
-        this.nodes = ids.map(
-            (id: string): Node => {
-                return {
-                    id: id,
-                    x: 0,
-                    y: 0,
-                    dx: 0,
-                    dy: 0
-                }
-            }
-        )
+ 
+  links: Link[];
 
-        this.links = sources.map(
-            (source: string, index: number): Link => {
-                return {
-                    source: source,
-                    target: targets[index],
-                    strength: strengths[index]
-                }
-            }
-        )
+  constructor(
+    ids: string[],
+    sources: string[],
+    targets: string[],
+    strengths: number[]
+  ) {
+    if (ids.length === 0) {
+      throw new Error("ids must not be empty");
+    }
+    if (sources.length === 0) {
+      throw new Error("sources must not be empty");
+    }
+    if (sources.length !== targets.length || targets.length !== strengths.length) {
+        throw new Error("sources, targets, and strengths must have the same length");
     }
 
-    getNodes(): Node[] {
-        return this.nodes
-    }
+    this.nodes = ids.map((id: string): Node => {
+      return {
+        id: id,
+        x: 0,
+        y: 0,
+        dx: 0,
+        dy: 0,
+      };
+    });
 
-    getLinks(): Link[] {
-        return this.links
-    }
+    this.links = sources.map((source: string, index: number): Link => {
+      return {
+        source: source,
+        target: targets[index],
+        strength: strengths[index],
+      };
+    });
+  }
 
-    addNode(id: string): void {
-        this.nodes.push({
-            id: id,
-            x: 0,
-            y: 0,
-            dx: 0,
-            dy: 0
-        })
-    }
+  
+  getNodes(): Node[] {
+    return this.nodes;
+  }
 
-    addLink(source: string, target: string, strength: number): void {
-        this.links.push({
-            source: source,
-            target: target,
-            strength: strength
-        })
-    }
+  
+  getLinks(): Link[] {
+    return this.links;
+  }
 
-    removeNode(id: string): void {
-        this.nodes = this.nodes.filter((node: Node): boolean => {
-            return node.id !== id
-        })
+  
+  addNode(id: string): void {
+    this.nodes.push({
+      id: id,
+      x: 0,
+      y: 0,
+      dx: 0,
+      dy: 0,
+    });
+  }
 
-        this.links = this.links.filter((link: Link): boolean => {
-            return link.source !== id && link.target !== id
-        })
-    }
+  
+  addLink(source: string, target: string, strength: number): void {
+    this.links.push({
+      source: source,
+      target: target,
+      strength: strength,
+    });
+  }
 
-    removeLink(source: string, target: string): void {
-        this.links = this.links.filter((link: Link): boolean => {
-            return link.source !== source || link.target !== target
-        })
-    }
+  
+  removeNode(id: string): void {
+    this.nodes = this.nodes.filter((node: Node): boolean => {
+      return node.id !== id;
+    });
+
+    this.links = this.links.filter((link: Link): boolean => {
+      return link.source !== id && link.target !== id;
+    });
+  }
+
+  
+  removeLink(source: string, target: string): void {
+    this.links = this.links.filter((link: Link): boolean => {
+      return link.source !== source || link.target !== target;
+    });
+  }
 }
 
-export default Graph
-export type { Node, Link }
+export type { Node, Link };
