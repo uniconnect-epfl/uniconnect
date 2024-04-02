@@ -10,13 +10,11 @@ export const fruchtermanReingold = (nodes: Node[], links: Link[], constrainedNod
 
     const distanceBetween = (p1: Node, p2: Node): number => Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
 
-    // @SONAR_STOP@
     // Calculate initial positions
     for (const node of nodes) {
         node.x = Math.random() * width;
         node.y = Math.random() * height;
     } 
-    // @SONAR_START@
 
     let temperature = width / 10; // Initial temperature
     const cooling = temperature / (iterations + 1); // Cooling rate
