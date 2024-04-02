@@ -1,27 +1,56 @@
+/**
+ * Node interface
+ */
 interface Node {
-  id: string;
-  x: number;
-  y: number;
-  dx: number;
-  dy: number;
-}
-interface Link {
-  source: string;
-  target: string;
-  strength: number;
+  id: string; // Unique identifier
+  x: number; // x-coordinate
+  y: number; // y-coordinate
+  dx: number; // x-velocity
+  dy: number; // y-velocity
 }
 
+/**
+ * Link interface
+ */
+interface Link {
+  source: string; // Source node identifier
+  target: string; // Target node identifier
+  strength: number; // Strength of the link
+}
+
+/**
+ *
+ * @class Graph
+ * @description Graph representation of the form (V, E) where V is a set of nodes and E is a set of links (edges)
+ */
 export default class Graph {
+  // Nodes in the graph
   nodes: Node[];
 
+  // Links in the graph
   links: Link[];
 
+  /**
+   *
+   * @constructor
+   * @param ids - Unique identifiers for the nodes
+   * @param sources - Source node identifiers for the links
+   * @param targets - Target node identifiers for the links
+   * @param strengths - Strengths of the links
+   */
   constructor(
     ids: string[],
     sources: string[],
     targets: string[],
     strengths: number[]
   ) {
+    /**
+     * @description Validate the inputs
+     * @throws {Error} - If ids is empty
+     * @throws {Error} - If sources is empty
+     * @throws {Error} - If sources, targets, and strengths have different lengths
+     */
+
     if (ids.length === 0) {
       throw new Error("ids must not be empty");
     }
@@ -37,6 +66,7 @@ export default class Graph {
       );
     }
 
+    // Initialize the nodes
     this.nodes = ids.map((id: string): Node => {
       return {
         id: id,
@@ -47,6 +77,7 @@ export default class Graph {
       };
     });
 
+    // Initialize the links
     this.links = sources.map((source: string, index: number): Link => {
       return {
         source: source,
@@ -56,14 +87,29 @@ export default class Graph {
     });
   }
 
+  /**
+   *
+   * @description Retrieve the nodes in the graph
+   * @returns - The nodes in the graph
+   */
   getNodes(): Node[] {
     return this.nodes;
   }
 
+  /**
+   *
+   * @description Retrieve the links in the graph
+   * @returns - The links in the graph
+   */
   getLinks(): Link[] {
     return this.links;
   }
 
+  /**
+   *
+   * @description Add a node to the graph
+   * @param id - Unique identifier for the node to be added
+   */
   addNode(id: string): void {
     this.nodes.push({
       id: id,
@@ -74,6 +120,13 @@ export default class Graph {
     });
   }
 
+  /**
+   *
+   * @description Add a link to the graph
+   * @param source - Source node identifier for the link to be added
+   * @param target - Target node identifier for the link to be added
+   * @param strength - Strength of the link to be added
+   */
   addLink(source: string, target: string, strength: number): void {
     this.links.push({
       source: source,
@@ -82,6 +135,11 @@ export default class Graph {
     });
   }
 
+  /**
+   *
+   * @description Remove a node from the graph and all links connected to it
+   * @param id - Unique identifier for the node to be removed
+   */
   removeNode(id: string): void {
     this.nodes = this.nodes.filter((node: Node): boolean => {
       return node.id !== id;
@@ -92,6 +150,12 @@ export default class Graph {
     });
   }
 
+  /**
+   *
+   * @description Remove a link from the graph
+   * @param source - Source node identifier for the link to be removed
+   * @param target - Target node identifier for the link to be removed
+   */
   removeLink(source: string, target: string): void {
     this.links = this.links.filter((link: Link): boolean => {
       return link.source !== source || link.target !== target;
