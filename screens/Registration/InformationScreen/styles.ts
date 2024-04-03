@@ -7,11 +7,7 @@ import {
   white,
 } from '../../../assets/colors/colors';
 
-import {
-  BUTTON_HEIGHT,
-  BUTTON_RADIUS,
-} from '../../../assets/global/constants';
-
+import { BUTTON_HEIGHT, BUTTON_RADIUS } from '../../../assets/global/constants';
 
 const styles = StyleSheet.create({
   button: {
@@ -39,7 +35,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: lightPeach,
     borderColor: peach,
-    borderRadius:BUTTON_RADIUS,
+    borderRadius: BUTTON_RADIUS,
     borderWidth: 2,
     display: 'flex',
     elevation: 8,

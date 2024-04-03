@@ -1,27 +1,24 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Image
-} from 'react-native';
+import { Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
 
-import '../../assets/global/globalStyles'
+import '../../assets/global/globalStyles';
 import { Ionicons } from '@expo/vector-icons';
-import styles from './styles'; 
+import styles from './styles';
 import { globalStyles } from '../../assets/global/globalStyles';
-import { useSafeAreaInsets} from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const LoginScreen: React.FC = () => {
-const insets = useSafeAreaInsets()
-
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, {paddingBottom: insets.bottom, paddingTop: insets.top}]}>
-        
-        <Image source={require("../../assets/icon.png")} style={styles.image} />
-      
+    <View
+      style={[
+        styles.container,
+        { paddingBottom: insets.bottom, paddingTop: insets.top },
+      ]}
+    >
+      <Image source={require('../../assets/icon.png')} style={styles.image} />
+
       {/* Username/Email Field */}
       <TextInput
         style={[styles.inputField, globalStyles.text]}
@@ -40,33 +37,37 @@ const insets = useSafeAreaInsets()
         autoCapitalize="none"
       />
 
-
       {/* Log In Button */}
       <TouchableOpacity style={styles.button}>
         <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
       </TouchableOpacity>
 
-      <View >
-        <Text style={[styles.smallText, globalStyles.text]}>Forgot password?</Text>  
-
+      <View>
+        <Text style={[styles.smallText, globalStyles.text]}>
+          Forgot password?
+        </Text>
       </View>
 
       {/* Continue with Google */}
       <TouchableOpacity style={styles.buttonGoogle}>
-      <View style={styles.buttonPlaceholder}>
-        <Ionicons name="logo-google" size={30} color="black" style={styles.icon}/>
-        <Text style={[styles.buttonText,globalStyles.boldText]}>Continue with google</Text>
-      </View>         
+        <View style={styles.buttonPlaceholder}>
+          <Ionicons
+            name="logo-google"
+            size={30}
+            color="black"
+            style={styles.icon}
+          />
+          <Text style={[styles.buttonText, globalStyles.boldText]}>
+            Continue with google
+          </Text>
+        </View>
       </TouchableOpacity>
 
       <View style={styles.footer}>
-        <Text style= {styles.smallText}>Dont have an account?</Text>
-        <Text style = {styles.specialText}> Sign Up</Text>
+        <Text style={styles.smallText}>Dont have an account?</Text>
+        <Text style={styles.specialText}> Sign Up</Text>
       </View>
     </View>
-  
   );
 };
-
-
 export default LoginScreen;

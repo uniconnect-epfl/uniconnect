@@ -7,10 +7,7 @@ import {
   white,
   shadow,
 } from '../../../assets/colors/colors';
-import {
-  BUTTON_HEIGHT,
-  BUTTON_RADIUS,
-} from '../../../assets/global/constants';
+import { BUTTON_HEIGHT, BUTTON_RADIUS } from '../../../assets/global/constants';
 
 const styles = StyleSheet.create({
   buttonSmall: {
@@ -116,8 +113,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
   },
-
- 
 
   selectedInterestButton: {
     backgroundColor: white,
