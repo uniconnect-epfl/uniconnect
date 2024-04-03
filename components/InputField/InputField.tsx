@@ -11,8 +11,6 @@ interface InputFieldProps {
 
 const InputField: React.FC<InputFieldProps> = ({label, placeholder}) => {
 
-
-    
     return(
         <View style = {styles.section}>
         <Text style={[styles.topText, globalStyles.text]}>{label}</Text>    
@@ -21,5 +19,5 @@ const InputField: React.FC<InputFieldProps> = ({label, placeholder}) => {
     )
 };
 
-export default InputField;
 
+export default InputField;
