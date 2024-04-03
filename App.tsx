@@ -17,11 +17,8 @@ export default function App() {
 
   useEffect(() => {
     async function prepare() {
-
       await SplashScreen.preventAutoHideAsync();
-
     }
-
     prepare();
   }, []);
 
@@ -30,10 +27,6 @@ export default function App() {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return null; // or your custom loading component
-  }
 
   return (
     <SafeAreaProvider>
