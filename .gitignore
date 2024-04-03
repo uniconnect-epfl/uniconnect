@@ -37,3 +37,8 @@ yarn-error.*
 
 #vscode
 .vscode/
+
+#metals
+.metals/
+
+ui-debug.log
