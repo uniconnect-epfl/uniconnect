@@ -2,12 +2,17 @@ import { StyleSheet } from 'react-native';
 import {
   white,
   black,
-  blue,
   lightGray,
   lightPeach,
   peach,
   shadow,
 } from '../../assets/colors/colors';
+
+import {
+  BUTTON_HEIGHT,
+  BUTTON_RADIUS,
+  BUTTON_TEXT_FONT_SIZE,
+} from '../../assets/global/constants';
 
 const styles = StyleSheet.create({
   border: {
@@ -19,10 +24,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: lightPeach,
     borderColor: peach,
-    borderRadius: 25,
+    borderRadius: BUTTON_RADIUS,
     borderWidth: 2,
     elevation: 8,
-    height: 50,
+    height: BUTTON_HEIGHT,
     justifyContent: 'center',
     marginBottom: 10,
     shadowColor: shadow,
@@ -34,11 +39,11 @@ const styles = StyleSheet.create({
   buttonGoogle: {
     alignItems: 'center',
     backgroundColor: white,
-    borderRadius: 25,
+    borderRadius: BUTTON_RADIUS,
     borderWidth: 1,
     display: 'flex',
     flexDirection: 'row',
-    height: 50,
+    height: BUTTON_HEIGHT,
     justifyContent: 'flex-start',
     paddingLeft: 15,
     shadowColor: shadow,
@@ -56,11 +61,11 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: black,
-    fontSize: 18,
+    fontSize: BUTTON_TEXT_FONT_SIZE,
   },
   buttonTextGoogle: {
     color: black,
-    fontSize: 18,
+    fontSize: BUTTON_TEXT_FONT_SIZE,
     fontWeight: 'bold',
   },
   container: {
@@ -70,18 +75,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
   },
-
-  dividerContainer: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    marginBottom: 20,
-  },
-  dividerLine: {
-    backgroundColor: black,
-    flex: 1,
-    height: 1,
-  },
-
   footer: {
     alignContent: 'flex-end',
     display: 'flex',
@@ -99,43 +92,22 @@ const styles = StyleSheet.create({
     marginRight: 30,
     width: 250,
   },
-
   inputField: {
     borderColor: lightGray,
-    borderRadius: 25,
+    borderRadius: BUTTON_RADIUS,
     borderWidth: 1,
-    fontSize: 18,
-    height: 50,
+    fontSize: BUTTON_TEXT_FONT_SIZE,
+    height: BUTTON_HEIGHT,
     marginBottom: 20,
     padding: 10,
     width: '100%',
   },
-
-  logo: {
-    borderColor: white,
-    borderRadius: 1000,
-    width: '100%',
-  },
-
-  signUpButton: {
-    color: blue,
-  },
-  signUpContainer: {
-    flexDirection: 'row',
-    marginTop: 20,
-  },
-  signUpText: {
-    color: black,
-    marginRight: 5,
-  },
-
   smallText: {
     color: black,
     fontSize: 10,
     marginBottom: 20,
     textDecorationLine: 'underline',
   },
-
   specialText: {
     color: peach,
     fontSize: 10,

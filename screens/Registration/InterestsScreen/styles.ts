@@ -7,13 +7,17 @@ import {
   white,
   shadow,
 } from '../../../assets/colors/colors';
+import {
+  BUTTON_HEIGHT,
+  BUTTON_RADIUS,
+} from '../../../assets/global/constants';
 
 const styles = StyleSheet.create({
   buttonSmall: {
     alignItems: 'center',
     backgroundColor: lightPeach,
     borderColor: peach,
-    borderRadius: 25,
+    borderRadius: BUTTON_RADIUS,
     borderWidth: 2,
     display: 'flex',
     elevation: 8,
@@ -50,7 +54,7 @@ const styles = StyleSheet.create({
   },
   footerButton: {
     backgroundColor: white,
-    borderRadius: 20,
+    borderRadius: BUTTON_RADIUS,
     paddingHorizontal: 30,
     paddingVertical: 15,
   },
@@ -77,9 +81,9 @@ const styles = StyleSheet.create({
 
   input: {
     borderColor: lightGray,
-    borderRadius: 25,
+    borderRadius: BUTTON_RADIUS,
     borderWidth: 1,
-    height: 50,
+    height: BUTTON_HEIGHT,
     marginBottom: 25,
     paddingHorizontal: 30,
     width: '100%',
@@ -113,18 +117,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
   },
 
-  nextBar: {
-    alignItems: 'center',
-    backgroundColor: lightPeach,
-    borderColor: peach,
-    borderRadius: 25,
-    borderWidth: 2,
-    display: 'flex',
-    flexDirection: 'row',
-    height: 60,
-    justifyContent: 'space-between',
-    marginHorizontal: 20,
-  },
+ 
 
   selectedInterestButton: {
     backgroundColor: white,
@@ -143,5 +136,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-
 export default styles;

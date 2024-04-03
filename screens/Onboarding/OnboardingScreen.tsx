@@ -1,5 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
-//this is the login screenx
 import React from 'react';
 import {
   Text,
@@ -11,20 +9,22 @@ import {
 
 import '../../assets/global/globalStyles'
 import { Ionicons } from '@expo/vector-icons';
-import styles from './styles'; // Make sure the path is correct
-import { GlobalStyles } from '../../assets/global/globalStyles';
-
+import styles from './styles'; 
+import { globalStyles } from '../../assets/global/globalStyles';
+import { useSafeAreaInsets} from 'react-native-safe-area-context';
 
 const LoginScreen: React.FC = () => {
-  
+const insets = useSafeAreaInsets()
+
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {paddingBottom: insets.bottom, paddingTop: insets.top}]}>
         
         <Image source={require("../../assets/icon.png")} style={styles.image} />
       
       {/* Username/Email Field */}
       <TextInput
-        style={[styles.inputField, GlobalStyles.text]}
+        style={[styles.inputField, globalStyles.text]}
         placeholder="Username or email"
         placeholderTextColor={'black'}
         keyboardType="email-address"
@@ -33,7 +33,7 @@ const LoginScreen: React.FC = () => {
 
       {/* Password Field */}
       <TextInput
-        style={[styles.inputField, GlobalStyles.text]}
+        style={[styles.inputField, globalStyles.text]}
         placeholder="Password"
         placeholderTextColor={'black'}
         secureTextEntry
@@ -43,28 +43,24 @@ const LoginScreen: React.FC = () => {
 
       {/* Log In Button */}
       <TouchableOpacity style={styles.button}>
-        <Text style={[styles.buttonText, GlobalStyles.boldText]}>Log In</Text>
+        <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
       </TouchableOpacity>
 
       <View >
-        <Text style={[styles.smallText, GlobalStyles.text]}>Forgot password?</Text>  
+        <Text style={[styles.smallText, globalStyles.text]}>Forgot password?</Text>  
 
       </View>
 
       {/* Continue with Google */}
       <TouchableOpacity style={styles.buttonGoogle}>
-      
       <View style={styles.buttonPlaceholder}>
         <Ionicons name="logo-google" size={30} color="black" style={styles.icon}/>
-        <Text style={[styles.buttonText,GlobalStyles.boldText]}>Continue with google</Text>
+        <Text style={[styles.buttonText,globalStyles.boldText]}>Continue with google</Text>
       </View>         
-
-
-
       </TouchableOpacity>
 
       <View style={styles.footer}>
-        <Text style= {styles.smallText}>Don't have an account?</Text>
+        <Text style= {styles.smallText}>Dont have an account?</Text>
         <Text style = {styles.specialText}> Sign Up</Text>
       </View>
     </View>

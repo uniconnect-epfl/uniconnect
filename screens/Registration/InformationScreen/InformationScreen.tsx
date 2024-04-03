@@ -1,80 +1,54 @@
 import React from 'react';
-import { View, TextInput, TouchableOpacity, Text, Image, SafeAreaView } from 'react-native';
-import Styles from './styles';
-import { GlobalStyles } from '../../../assets/global/globalStyles';
+import { View, TouchableOpacity, Text, Image } from 'react-native';
+import styles from './styles';
+import { globalStyles } from '../../../assets/global/globalStyles';
 import {Ionicons} from '@expo/vector-icons';
-
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import LowBar from '../../../components/LowBar/LowBar';
+import InputField from '../../../components/InputField/InputField';
 const Form: React.FC = () => {
-  // State for form fields can be added here
+
+  const insets = useSafeAreaInsets()
 
   return (
 
-    <SafeAreaView style={Styles.container}>
+    <View style={[styles.container, {paddingTop: insets.top, paddingBottom: insets.bottom}]}>
    
-      <View style = {Styles.icon_container}>
-        <Image source ={require("../../../assets/icon.png")} style={Styles.image} />  
-      </View>
-    
-      <View style = {[Styles.section, Styles.sectionFirst]}>
-        <Text style={[Styles.topText, GlobalStyles.text]}>First name*</Text>    
-        <TextInput placeholder="First Name" style={[Styles.input, GlobalStyles.text]} />
-      </View>
-          
-      <View style = {Styles.section}>
-        <Text style={[Styles.topText, GlobalStyles.text]}>Last name*</Text>
-        <TextInput placeholder="Last Name" style={[Styles.input, GlobalStyles.text]} />
-      </View>
 
-      <View style = {Styles.section}>
-        <Text style={[Styles.topText, GlobalStyles.text]}>Date of birth*</Text>
-        <TextInput placeholder="Date of Birth" style={[Styles.input, GlobalStyles.text]} />
-      </View>
-        
-      <View style = {[Styles.section, Styles.sectionLast]}>
-        <Text style={[Styles.topText, GlobalStyles.text]}>Location</Text>
-        <TextInput placeholder="Location" style={[Styles.input, GlobalStyles.text]} />
-      </View>
+        <Image source ={require("../../../assets/icon.png")} style={styles.image } />  
+
+
+
+      <InputField label="First name*" placeholder='First name' />
+      <InputField label="Last name*" placeholder='Last name'/>
+      <InputField label="Date of Birth*" placeholder = 'Date of birth'/>
+      <InputField label ="Location" placeholder ='Location'/>
       
 
-      <View style={Styles.buttonContainer}>
-        <TouchableOpacity style = {[Styles.button, Styles.locationButton]}>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style = {[styles.button, styles.locationButton]}>
 
         <Ionicons name="location-outline" size={20} color="black" />
-        <Text style = {[Styles.buttonText, Styles.locationText, GlobalStyles.text]}>Use my location?</Text>
+        <Text style = {[styles.buttonText, styles.locationText, globalStyles.text]}>Use my location?</Text>
 
         </TouchableOpacity>
 
       </View>
 
-      <View style = {Styles.divider}/>
+      <View style = {styles.divider}/>
 
 
-      {/* Additional buttons and functionality can be added here */}
-      <View style={Styles.buttonContainer}>    
-        <TouchableOpacity style={Styles.button}>
-          <Text style={[Styles.buttonText, GlobalStyles.text]}>Add a description now</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View >
-        <View style={Styles.nextBar}>
-
-        <TouchableOpacity style={[Styles.buttonSmall, Styles.buttonSmallLeft]}>
-        <Text style = {[Styles.buttonTextLeft, GlobalStyles.text]}>Back</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style = {Styles.buttonSmall}>
-        <Text style={[Styles.buttonText, GlobalStyles.text]}>Next</Text>
+        <TouchableOpacity style={[styles.button, styles.buttonContainer]}>
+          <Text style={[styles.buttonText, globalStyles.text]}>Add a description now</Text>
         </TouchableOpacity>
 
 
-          </View>
+      <View style={styles.footer}>
+        <LowBar/>
       </View>
       
-     
-
-
-
-    </SafeAreaView>
+    
+    </View>
   );
 };
 

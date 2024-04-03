@@ -1,6 +1,5 @@
-import { StyleSheet, StatusBar } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
-  lightGray,
   peach,
   black,
   lightPeach,
@@ -8,17 +7,21 @@ import {
   white,
 } from '../../../assets/colors/colors';
 
-const Styles = StyleSheet.create({
-  barContainer: {},
+import {
+  BUTTON_HEIGHT,
+  BUTTON_RADIUS,
+} from '../../../assets/global/constants';
 
+
+const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     backgroundColor: lightPeach,
     borderColor: peach,
-    borderRadius: 25,
+    borderRadius: BUTTON_RADIUS,
     borderWidth: 2,
     elevation: 8, //
-    height: 50,
+    height: BUTTON_HEIGHT,
     justifyContent: 'center',
     marginHorizontal: 30,
     shadowColor: shadow,
@@ -36,7 +39,7 @@ const Styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: lightPeach,
     borderColor: peach,
-    borderRadius: 25,
+    borderRadius:BUTTON_RADIUS,
     borderWidth: 2,
     display: 'flex',
     elevation: 8,
@@ -63,8 +66,7 @@ const Styles = StyleSheet.create({
   },
 
   container: {
-    justifyContent: 'center',
-    padding: StatusBar.currentHeight,
+    justifyContent: 'space-around',
   },
 
   divider: {
@@ -74,35 +76,17 @@ const Styles = StyleSheet.create({
     marginVertical: 20,
     width: 'auto',
   },
-
-  icon: {
-    height: 20,
-    width: 20,
-  },
-  icon_container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingTop: 20,
-    width: '100%',
+  footer: {
+    paddingTop: 100,
   },
 
   image: {
     alignSelf: 'center',
     height: 75,
     marginRight: 10,
-    marginTop: 30,
     width: 75,
   },
 
-  input: {
-    borderColor: lightGray,
-    borderRadius: 25,
-    borderWidth: 1,
-    height: 50,
-    paddingHorizontal: 30,
-    width: '100%',
-  },
   locationButton: {
     display: 'flex',
     flexDirection: 'row',
@@ -121,7 +105,7 @@ const Styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: lightPeach,
     borderColor: peach,
-    borderRadius: 25,
+    borderRadius: BUTTON_RADIUS,
     borderWidth: 2,
     display: 'flex',
     flexDirection: 'row',
@@ -130,35 +114,6 @@ const Styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 100,
   },
-
-  section: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    marginBottom: 5,
-    paddingBottom: 75,
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    width: '100%',
-  },
-
-  sectionFirst: {
-    paddingTop: 60,
-  },
-
-  sectionLast: {
-    paddingBottom: 65,
-  },
-
-  topText: {
-    color: black,
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    padding: 20,
-    paddingBottom: 25,
-    paddingTop: 50,
-  },
 });
 
-export default Styles;
+export default styles;
