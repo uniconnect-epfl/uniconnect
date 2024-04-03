@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     height: 75,
     marginRight: 10,
-    marginTop: 20,
     width: 75,
   },
 

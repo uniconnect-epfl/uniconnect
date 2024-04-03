@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, TouchableOpacity, Text, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity, Text, Image, TextInput } from 'react-native';
 import styles from './styles';
 import { globalStyles } from '../../../assets/global/globalStyles';
 import { Ionicons } from '@expo/vector-icons';
@@ -8,6 +8,8 @@ import LowBar from '../../../components/LowBar/LowBar';
 import InputField from '../../../components/InputField/InputField';
 const Form: React.FC = () => {
   const insets = useSafeAreaInsets();
+  const [isTextInputVisible, setTextInputVisible] = useState(false);
+  const [text, setText] = useState('');
 
   return (
     <View
@@ -38,11 +40,25 @@ const Form: React.FC = () => {
 
       <View style={styles.divider} />
 
-      <TouchableOpacity style={[styles.button, styles.buttonContainer]}>
+      <TouchableOpacity
+        style={[styles.button, styles.buttonContainer]}
+        onPress={() => setTextInputVisible(!isTextInputVisible)}
+      >
         <Text style={[styles.buttonText, globalStyles.text]}>
           Add a description now
         </Text>
       </TouchableOpacity>
+
+      {isTextInputVisible && (
+        <View style={styles.description}>
+          <TextInput
+            style={globalStyles.text}
+            placeholder="Describe yourself here!"
+            onChangeText={setText}
+            value={text}
+          ></TextInput>
+        </View>
+      )}
 
       <View style={styles.footer}>
         <LowBar />

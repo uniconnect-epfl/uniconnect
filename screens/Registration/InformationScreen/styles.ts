@@ -64,7 +64,19 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'space-around',
   },
-
+  description: {
+    alignSelf: 'center',
+    borderColor: peach,
+    borderRadius: 10,
+    borderWidth: 2,
+    display: 'flex',
+    flexDirection: 'column',
+    height: '17%',
+    justifyContent: 'space-between',
+    marginTop: 20,
+    padding: 5,
+    width: '70%',
+  },
   divider: {
     backgroundColor: black,
     height: 1,
