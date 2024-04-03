@@ -96,19 +96,18 @@ const InterestsScreen = () => {
         source={require('../../../assets/icon.png')}
         style={styles.image}
       />
+      <Text style={[styles.title, globalStyles.boldText]}>
+        Select your interests
+      </Text>
+
+      <View>
+        <TextInput
+          placeholder="Search"
+          style={[styles.input, globalStyles.text]}
+          onChangeText={handleSearch}
+        />
+      </View>
       <ScrollView style={styles.container}>
-        <Text style={[styles.title, globalStyles.boldText]}>
-          Select your interests
-        </Text>
-
-        <View>
-          <TextInput
-            placeholder="Search"
-            style={[styles.input, globalStyles.text]}
-            onChangeText={handleSearch}
-          />
-        </View>
-
         <View style={styles.interestsGrid}>
           {filterdedInterests.map((interest) => (
             <InterestButton
@@ -119,11 +118,10 @@ const InterestsScreen = () => {
             />
           ))}
         </View>
-
-        <View>
-          <LowBar />
-        </View>
       </ScrollView>
+      <View style={styles.footer}>
+        <LowBar />
+      </View>
     </View>
   );
 };

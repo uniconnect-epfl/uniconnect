@@ -45,10 +45,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
   },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+  footer: {},
   footerButton: {
     backgroundColor: white,
     borderRadius: BUTTON_RADIUS,
