@@ -60,7 +60,7 @@ const Login = () => {
                     placeholder="Password"
                     secureTextEntry={true}
                 />
-                {loading ? <ActivityIndicator size="large" color="#0000ff" /> : <>
+                {loading ? <ActivityIndicator size="large"  /> : <>
                     <Button
                         title="Log In"
                         onPress={loginEmailPassword}
