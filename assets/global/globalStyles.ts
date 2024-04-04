@@ -10,4 +10,6 @@ export const globalStyles = StyleSheet.create({
   text: {
     fontFamily: 'JetBrainsMono_400Regular',
   },
+
+
 });

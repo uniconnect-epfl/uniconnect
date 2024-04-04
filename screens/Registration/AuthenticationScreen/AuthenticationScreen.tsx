@@ -30,7 +30,7 @@ const Form: React.FC = () => {
   };
 
   const isEmail = () => {
-    return /\S+@\S+\.\S+/.test(email);
+    return true;
   };
 
   const doEmailsMatch = () => {
