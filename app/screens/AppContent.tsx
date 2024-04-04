@@ -6,14 +6,11 @@ import { FIREBASE_AUTH } from '../../firebaseConfig';
 import type {
     ParamListBase,
   } from '@react-navigation/routers';
-interface AppContentProps {
-    navigation: NavigationProp<ParamListBase>;
-}
 
-const AppContent = ({navigation}: AppContentProps ) => {
+
+const AppContent = ( ) => {
     return (
         <View style={styles.container}>
-            <Button title="ToDos" onPress={() => navigation.navigate('ToDos')} />
             <Button title="Log out" onPress={() => FIREBASE_AUTH.signOut()} />
         </View>
     );

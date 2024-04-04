@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import Login from './app/screens/Login';
 import AppContent from './app/screens/AppContent';
-import List from './app/screens/List';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { User, onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from './firebaseConfig';
@@ -15,7 +14,6 @@ function AppLayout () {
   return (
     <AppContentStack.Navigator>
       <AppContentStack.Screen name="AppContent" component={AppContent} />
-      <AppContentStack.Screen name="ToDos" component={List} />
     </AppContentStack.Navigator>
   );
 }
