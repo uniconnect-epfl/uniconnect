@@ -35,21 +35,9 @@ export const styles = StyleSheet.create({
         justifyContent: 'space-between',
         padding: 10,
     },
-    image: {
-        borderRadius: 35, // Circular image
-        borderWidth: 3,
-        height: 70,
-        marginRight: 10,
-        width: 70,
-    },
     list: {
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    logo: {
-        height: 70, 
-        resizeMode: 'contain',
-        width: 70,
     },
     name: {
         color: black,
