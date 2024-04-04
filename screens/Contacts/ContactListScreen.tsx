@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { View, Text, FlatList, Image, TextInput, TouchableOpacity} from 'react-native';
 import { styles } from './styles';
+import { Ionicons } from '@expo/vector-icons'
 
 type Contact = {
   uid: string,
@@ -49,16 +50,9 @@ export const ContactListScreen = () => {
   const TopScreen = () => { // will be a module
     return (
       <View style={styles.horizontalContainer}>
-        <Image 
-          source={require("../../assets/icon.png")}
-          style={styles.logo}
-        />
-        <Image 
-          source={require("../../assets/icon.png")}
-          style={styles.logo}
-        />
-        {/* Invisible view to balance the space on the right and enable centering */}
-        <View style={styles.logo} />
+        <Ionicons name="person" size={24} color="black"/>
+        <Ionicons name="settings" size={24} color="black"/>
+        <Ionicons name="settings" size={24} color="black"/>
       </View>
     )
   }
