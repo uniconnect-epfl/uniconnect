@@ -42,9 +42,9 @@ const Form: React.FC = () => {
    */
   const submitForm = () => {
     if (isPassword() && doPasswordsMatch() && isEmail() && doEmailsMatch()) {
-      return;
+      return true;
     } else {
-      return;
+      return false;
     }
   };
 
