@@ -1,11 +1,7 @@
 // AppContent.tsx
-import { NavigationProp } from '@react-navigation/native';
 import React from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import { FIREBASE_AUTH } from '../../firebaseConfig';
-import type {
-    ParamListBase,
-  } from '@react-navigation/routers';
 
 
 const AppContent = ( ) => {
