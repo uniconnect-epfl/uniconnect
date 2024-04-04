@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, View, Dimensions, StyleSheet } from "react-native";
-import Svg, { Circle, Line } from "react-native-svg";
+import { ActivityIndicator, View, Dimensions} from "react-native";
+import Svg, { Circle, Line} from "react-native-svg";
 
+import styles from "./styles";
 import Graph, { Link, Node } from "../Graph";
 import { fruchtermanReingold } from "../graph-algorithms/FruchtermanReingold";
 
@@ -168,11 +169,3 @@ function setNodesSizes(links: Link[]): Map<string, number> {
 
   return sizes;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    alignItems: "center",
-    flex: 1,
-    justifyContent: "center",
-  },
-});
