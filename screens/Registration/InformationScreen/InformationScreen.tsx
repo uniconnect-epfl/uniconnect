@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import LowBar from '../../../components/LowBar/LowBar';
 import InputField from '../../../components/InputField/InputField';
+import Divider from '../../../components/divider/divider';
 const Form: React.FC = () => {
   const insets = useSafeAreaInsets();
   const [isTextInputVisible, setTextInputVisible] = useState(false);
@@ -38,7 +39,7 @@ const Form: React.FC = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.divider} />
+      <Divider />
 
       <TouchableOpacity
         style={[styles.button, styles.buttonContainer]}

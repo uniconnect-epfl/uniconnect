@@ -77,13 +77,7 @@ const styles = StyleSheet.create({
     padding: 5,
     width: '70%',
   },
-  divider: {
-    backgroundColor: black,
-    height: 1,
-    marginHorizontal: 20,
-    marginVertical: 20,
-    width: 'auto',
-  },
+ 
   footer: {
     paddingTop: 100,
   },
