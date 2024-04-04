@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
-import { FIREBASE_AUTH } from '../../firebaseConfig';
+import { View, TextInput, Button, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
+import { FIREBASE_AUTH } from '../../../firebaseConfig';
+import styles from './styles';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 
 
@@ -33,7 +34,7 @@ const Login = () => {
         try {
             await createUserWithEmailAndPassword(auth, email, password);
             alert('Account created. Check email');
-        } catch (error ) {
+        } catch (error) {
             if (error instanceof Error) { // Type-guard check
                 console.log(`There was an error: ${error.message}`);
             }
@@ -73,20 +74,5 @@ const Login = () => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        alignItems: 'center',
-        flex: 1,
-        justifyContent: 'center',
-    },
-    input: {
-        borderRadius: 5,
-        borderWidth: 1,
-        padding: 10,
-        width: '80%',
-    },
-
-});
 
 export default Login;
