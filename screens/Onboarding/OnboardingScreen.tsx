@@ -43,9 +43,11 @@ const LoginScreen: React.FC = () => {
       </TouchableOpacity>
 
       <View>
-        <Text style={[styles.smallText, globalStyles.text]}>
-          Forgot password?
-        </Text>
+        <TouchableOpacity>
+          <Text style={[styles.smallText, globalStyles.text]}>
+            Forgot password?
+          </Text>
+        </TouchableOpacity>
       </View>
 
       {/* Continue with Google */}
@@ -63,10 +65,10 @@ const LoginScreen: React.FC = () => {
         </View>
       </TouchableOpacity>
 
-      <View style={styles.footer}>
+      <TouchableOpacity style={styles.footer}>
         <Text style={styles.smallText}>Dont have an account?</Text>
         <Text style={styles.specialText}> Sign Up</Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
