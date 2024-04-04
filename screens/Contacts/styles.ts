@@ -32,6 +32,7 @@ export const styles = StyleSheet.create({
     horizontalContainer: {
         alignItems: 'center',
         flexDirection: 'row',
+        height: 100,
         justifyContent: 'space-between',
         padding: 10,
     },
