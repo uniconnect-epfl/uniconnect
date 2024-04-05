@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
-import { peach, black, lightgray, transparent, lightpeach } from '../../assets/colors/colors';
+import { peach, black, lightGray, transparent, lightPeach } from '../../assets/colors/colors';
 
 export const styles = StyleSheet.create({
     cardContainer: {
         alignItems: 'center',
-        backgroundColor: lightpeach,
+        backgroundColor: lightPeach,
         borderColor: peach,
         borderRadius: 100,
         borderWidth: 2,
@@ -13,80 +13,79 @@ export const styles = StyleSheet.create({
         marginHorizontal: 16,
         marginVertical: 8,
         paddingLeft: 85,
-        paddingRight: 5,
+        paddingRight: 20,
+    },
+    contactDescription: {
+        flex: 1,
+        fontSize: 9,
+        fontStyle: 'italic',
+        position: 'absolute',
+        textAlignVertical: 'center',
+        top: `${5}%`,
+    },
+    contactFriendType: {
+        flex: 1,
+        fontSize: 12,
+        position: 'absolute',
+        top: `${78}%`
+    },
+    contactList: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    contactName: {
+        flex: 1,
+        fontSize: 18,
+        fontWeight: 'bold',
+        position: 'absolute',
+        top: `${50}%`,
     },
     container: {
         flex: 1,
     },
-    description: {
-        flex: 1,
-        fontSize: 10,
-        fontStyle: 'italic',
-        textAlignVertical: 'center'
-    },
-    friendType: {
-        flex: 1,
-        fontSize: 12,
-        fontStyle: 'italic',
-    },
-    horizontalContainer: {
-        alignItems: 'center',
-        flexDirection: 'row',
-        height: 100,
-        justifyContent: 'space-between',
-        padding: 10,
-    },
-    list: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    name: {
+    darkBoldText: {
         color: black,
-        fontSize: 18,
         fontWeight: 'bold',
     },
-    normalTabText: {
+    greyLightText: {
         alignItems: 'center',
-        color: lightgray,
+        color: lightGray,
         justifyContent: 'center',
     },
+    horizonatlBarContainer: {
+        alignItems: 'center',
+        height: 70,
+        justifyContent: 'center',
+    },
+    invisibleBackground: {
+        backgroundColor: transparent
+    },
     profilePicture: {
+        alignItems: 'center',
         borderColor: peach,
         borderRadius: 40,
         borderWidth: 2,
         height: 80,
+        justifyContent: 'center',
+        // this is needed to make the border of the profile picture and the botder of the contact overlap
         left: -2,
         marginRight: 100,
         position: 'absolute',
         width: 80,
     },
     searchBar: {
-        borderColor: lightgray,
+        borderColor: lightGray,
         borderRadius: 40,
         borderWidth: 1,
         height: 60,
         margin: 20,
         padding: 10,
-    },
-    selectedTabText: {
-        color: black,
-        fontWeight: 'bold',
-    },
-    spacer: {
-        width: 50,
-    },
-    textContainer: {
-        flex: 1,
-        justifyContent: 'center',
-    },
-    underline: {
-        backgroundColor: transparent,
+    }, 
+    viewCHoiceUnderLine: {
+        backgroundColor: peach,
         borderRadius: 4,
         height: 4,
         width: 80,
-    },
-    underlineVisible: {
-        backgroundColor: peach,
     },
     viewChoiceContainer: {
         alignItems: 'center',
