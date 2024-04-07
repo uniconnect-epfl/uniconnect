@@ -17,7 +17,7 @@ const Tab = createBottomTabNavigator();
 type IoniconName = "home"|"explore"|"add"|"search";
 
 
-
+// Create the TabNavigator used by the app after the user login. Allows the user to navigate from one screen to another
 const HomeTabNavigator = () => {
   return (
     <Tab.Navigator
