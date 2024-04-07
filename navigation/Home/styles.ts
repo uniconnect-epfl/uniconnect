@@ -22,23 +22,28 @@ export const styles = StyleSheet.create({
     iconContainer: {
       alignItems: 'center',
       display: 'flex',
-      height: 24,
+      height: 35,
       justifyContent: 'center',
-      width: 24,
+      marginTop: 30,
+      width: 35,
+
+      
+    },
+    icon_add: {
+        
     },
     tabBar: {
       alignItems: 'center',
       backgroundColor: tabBarFill,
+    borderColor: peach,
       borderRadius: 10, // Adjust the color to match your design
-      borderTopColor: peach,
-      borderTopWidth: 3,
-      
+      borderWidth: 2,
       flexDirection: 'row',
       height: 60, // Defined height for the bar
       justifyContent: 'space-evenly',
-      marginBottom: 20,
-      marginHorizontal: 20,
+      margin: 20,
       ...shadow.shadow,
+      
     },
   });
   

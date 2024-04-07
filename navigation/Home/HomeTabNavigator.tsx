@@ -25,16 +25,17 @@ const HomeTabNavigator = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
           let iconName : IoniconName = "home";
-          
 
           if (route.name === "Home")
           iconName = "home"
           if (route.name === "Add")
           iconName = "add"
           if (route.name === "Profile")
-          iconName = "search"
+            iconName = "search"
+
+         
           
-          return <View style={styles.iconContainer}><Ionicons style={styles.icon} name={iconName} size={focused? 24: 12} color={focused? peach : "black"} /></View>;
+          return <View style={styles.iconContainer}><Ionicons style={styles.icon} name={iconName} size={focused? 35: 24} color={focused? peach : "black"} /></View>;
         },
         tabBarActiveTintColor: peach,
         tabBarInactiveTintColor: 'gray',
