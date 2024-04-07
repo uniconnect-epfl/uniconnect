@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { peach, white } from '../../../assets/colors/colors';
+import { styles } from "./styles"
+
+
 
 // Define your navigation stack parameter list
 type AuthStackParamList = {
@@ -21,6 +23,7 @@ type AuthenticationScreenProps = {
 // Define the component using the props type
 export const AuthenticationScreen: React.FC<AuthenticationScreenProps> = ({ navigation }) => {
   return (
+    
     <View style={styles.container}>
       <Text style={styles.text}>This is the AuthenticationScreen.</Text>
       <Button title="Go to Information" onPress={() => navigation.navigate('Information')} />
@@ -28,17 +31,4 @@ export const AuthenticationScreen: React.FC<AuthenticationScreenProps> = ({ navi
   );
 };
 
-// Define the styles
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center', // Center horizontally
-    backgroundColor: white, // Set a background color
-    flex: 1,
-    justifyContent: 'center', // Center vertically
-    
-  },
-  text: {
-    color: peach, // Set the text color to ensure it's visible
-    marginBottom: 20, // Add some space below the text
-  },
-});
+

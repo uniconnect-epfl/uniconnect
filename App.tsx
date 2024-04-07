@@ -3,15 +3,13 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import RegistrationStackNavigator from './navigation/Registration/RegistrationStackNavigator';
-import HomeTabNavigator from './navigation/Home/HomeTabNavigator';
+//import HomeTabNavigator from './navigation/Home/HomeTabNavigator';
 
 export default function App() {
   return (
     <NavigationContainer>
-      <HomeTabNavigator />
+      < RegistrationStackNavigator/>
     </NavigationContainer>
-
-
 
   );
 }
