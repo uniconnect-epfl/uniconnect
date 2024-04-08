@@ -1,45 +1,40 @@
-import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import Login from './app/screens/Onboarding/Login';
-import AppContent from './app/screens/AppContent';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { User, onAuthStateChanged } from 'firebase/auth';
-import { FIREBASE_AUTH } from './firebaseConfig';
-
-
-const Stack = createNativeStackNavigator();
-const AppContentStack = createNativeStackNavigator();
-
-function AppLayout() {
-  return (
-    <AppContentStack.Navigator>
-      <AppContentStack.Screen name="AppContent" component={AppContent} />
-    </AppContentStack.Navigator>
-  );
-}
+import React, { useEffect } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
+import RegistrationStackNavigator from './navigation/Registration/RegistrationStackNavigator';
+import {
+  useFonts,
+  JetBrainsMono_100Thin_Italic,
+  JetBrainsMono_400Regular,
+  JetBrainsMono_700Bold,
+} from '@expo-google-fonts/jetbrains-mono';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
-  const [user, setUser] = useState<User | null>(null);
+  const [fontsLoaded] = useFonts({
+    JetBrainsMono_100Thin_Italic,
+    JetBrainsMono_400Regular,
+    JetBrainsMono_700Bold,
+  });
 
   useEffect(() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      console.log('User state changed. Current user:', user);
-      setUser(user);
-    });
-  }
-    , []);
+    async function prepare() {
+      await SplashScreen.preventAutoHideAsync();
+    }
+    prepare();
+  }, []);
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
 
   return (
-    <NavigationContainer >
-      <Stack.Navigator initialRouteName='Login'>
-        {user ? (
-          <Stack.Screen name="AppLayout" component={AppLayout} options={{ headerShown: false }} />
-        ) : (
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        )}
-      </Stack.Navigator>
+    <NavigationContainer>
+      <SafeAreaProvider>
+        <RegistrationStackNavigator/>
+      </SafeAreaProvider>
     </NavigationContainer>
   );
 }
-
-
