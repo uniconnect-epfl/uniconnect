@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, View, Dimensions } from "react-native";
-import Svg, { Circle, Line } from "react-native-svg";
+import Svg, { Circle, G, Line } from "react-native-svg";
 
 import styles from "./styles";
 import Graph, { Link, Node } from "../Graph";
@@ -8,6 +8,7 @@ import { fruchtermanReingold } from "../graph-algorithms/FruchtermanReingold";
 
 import {
   PanGestureHandler,
+  PinchGestureHandler,
   State,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
@@ -52,10 +53,13 @@ const ForceDirectedGraph: React.FC<{
   const [clickedNodeID, setClickedNodeID] = useState<string>(
     DEFAULT_CLICKED_NODE_ID
   ); // Node ID of clicked node
+  const [scale, setScale] = useState(1);
+  const [lastScale, setLastScale] = useState(1); // Add state to keep track of last scale
 
   const pressStartRef = useRef(0);
 
   const panRef = useRef(null);
+  const pinchRef = useRef(null);
 
   // Use effect to update the graph
   useEffect(() => {
@@ -94,8 +98,8 @@ const ForceDirectedGraph: React.FC<{
     nativeEvent: { translationX: number; translationY: number };
   }) => {
     setTotalOffset({
-      x: event.nativeEvent.translationX,
-      y: event.nativeEvent.translationY,
+      x: event.nativeEvent.translationX / lastScale,
+      y: event.nativeEvent.translationY / lastScale,
     });
   };
 
@@ -116,6 +120,21 @@ const ForceDirectedGraph: React.FC<{
         setClickedNodeID(DEFAULT_CLICKED_NODE_ID);
       }
       setTotalOffset({ x: 0, y: 0 });
+    }
+  };
+
+  // Handle Zooming
+  const handlePinchGestureEvent = (event: {
+    nativeEvent: { scale: React.SetStateAction<number> };
+  }) => {
+    setScale(Number(event.nativeEvent.scale) * Number(lastScale));
+  };
+
+  const handlePinchHandlerStateChange = (event: {
+    nativeEvent: { state: number };
+  }) => {
+    if (event.nativeEvent.state === State.END) {
+      setLastScale(scale);
     }
   };
 
@@ -221,20 +240,30 @@ const ForceDirectedGraph: React.FC<{
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <PanGestureHandler
-        ref={panRef}
-        onGestureEvent={handlePanGestureEvent}
-        onHandlerStateChange={handlePanHandlerStateChange}
-        minPointers={1}
-        maxPointers={1}
+      <PinchGestureHandler
+        ref={pinchRef}
+        onGestureEvent={handlePinchGestureEvent}
+        onHandlerStateChange={handlePinchHandlerStateChange}
+        simultaneousHandlers={panRef}
       >
-        <View style={styles.container}>
-          <Svg width={WIDTH} height={HEIGHT}>
-            {LINES}
-            {CIRCLES}
-          </Svg>
-        </View>
-      </PanGestureHandler>
+        <PanGestureHandler
+          ref={panRef}
+          onGestureEvent={handlePanGestureEvent}
+          onHandlerStateChange={handlePanHandlerStateChange}
+          minPointers={1}
+          maxPointers={1}
+          simultaneousHandlers={pinchRef}
+        >
+          <View style={styles.container}>
+            <Svg width={WIDTH} height={HEIGHT}>
+              <G scale={scale} originX={CENTER_WIDTH} originY={CENTER_HEIGHT}>
+                {LINES}
+                {CIRCLES}
+              </G>
+            </Svg>
+          </View>
+        </PanGestureHandler>
+      </PinchGestureHandler>
     </GestureHandlerRootView>
   );
 };
