@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, View, Dimensions} from "react-native";
-import Svg, { Circle, Line} from "react-native-svg";
+import { ActivityIndicator, View, Dimensions } from "react-native";
+import Svg, { Circle, Line } from "react-native-svg";
 
 import styles from "./styles";
 import Graph, { Link, Node } from "../Graph";
@@ -12,6 +12,7 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 
+const SHORT_PRESS_DURATION = 100;
 const DEFAULT_NODE_SIZE = 10; // Default size of the nodes
 const DEFAULT_NODE_SIZE_INCREMENT = 2; // Increment in the size of the nodes
 
@@ -19,6 +20,7 @@ const DEFAULT_NODE_COLOR = "blue"; // Default color of the nodes
 const CONSTRAINED_NODE_COLOR = "red"; // Color of the constrained node
 
 const DEFAULT_LINK_COLOR = "black"; // Default color of the links
+const DEFAULT_CLICKED_NODE_ID = "";
 
 const MAX_ITERATIONS = 1000; // Maximum number of iterations for the used algorithn
 
@@ -46,7 +48,12 @@ const ForceDirectedGraph: React.FC<{
 
   // State to store the total offset when dragging the graph
   const [totalOffset, setTotalOffset] = useState({ x: 0, y: 0 });
+  const [dragEnabled, setDragEnabled] = useState(true); // Toggle drag
+  const [clickedNodeID, setClickedNodeID] = useState<string>(
+    DEFAULT_CLICKED_NODE_ID
+  ); // Node ID of clicked node
 
+  const pressStartRef = useRef(0);
 
   const panRef = useRef(null);
 
@@ -71,6 +78,11 @@ const ForceDirectedGraph: React.FC<{
     setSizes(initialSizes);
     setLoad(true);
   }, [graph, constrainedNodeId]);
+
+  // Update the draggable state of the whole graph when a node is clicked
+  useEffect(() => {
+    setDragEnabled(clickedNodeID === DEFAULT_CLICKED_NODE_ID);
+  }, [clickedNodeID]);
 
   // If the graph is not loaded, display an activity indicator
   if (!load) {
@@ -99,17 +111,39 @@ const ForceDirectedGraph: React.FC<{
           y: coordY(node),
         }))
       );
+
+      if (!dragEnabled) {
+        setClickedNodeID(DEFAULT_CLICKED_NODE_ID);
+      }
       setTotalOffset({ x: 0, y: 0 });
+    }
+  };
+
+  // Handle PRESS IN
+  const handlePressIn = (onPressCallback = () => {}) => {
+    onPressCallback();
+  };
+
+  // Handle PRESS OUT
+  const handlePressOut = (shortPressCallback = () => {}) => {
+    if (Date.now() - pressStartRef.current < SHORT_PRESS_DURATION) {
+      shortPressCallback();
     }
   };
 
   // Functions to get the X and Y coordinates of the nodes and the fill color of the nodes
   const coordX = (node: Node): number => {
-    return node.x + totalOffset.x;
+    if (dragEnabled || clickedNodeID === node.id) {
+      return node.x + totalOffset.x;
+    }
+    return node.x;
   };
 
   const coordY = (node: Node): number => {
-    return node.y + totalOffset.y;
+    if (dragEnabled || clickedNodeID === node.id) {
+      return node.y + totalOffset.y;
+    }
+    return node.y;
   };
 
   const circleFill = (node: Node): string => {
@@ -170,27 +204,38 @@ const ForceDirectedGraph: React.FC<{
       cy={coordY(node)}
       r={sizes.get(node.id) ?? DEFAULT_NODE_SIZE}
       fill={circleFill(node)}
+      onPressIn={() =>
+        handlePressIn(() => {
+          pressStartRef.current = Date.now();
+          setClickedNodeID(node.id);
+        })
+      }
+      onPressOut={() =>
+        handlePressOut(() => {
+          console.warn("Short Press");
+          setClickedNodeID(DEFAULT_CLICKED_NODE_ID);
+        })
+      }
     />
   ));
 
   return (
     <GestureHandlerRootView style={styles.container}>
-<PanGestureHandler
-      ref={panRef}
-      onGestureEvent={handlePanGestureEvent}
-      onHandlerStateChange={handlePanHandlerStateChange}
-      minPointers={1}
-      maxPointers={1}
-    >
-      <View style={styles.container}>
-      <Svg width={WIDTH} height={HEIGHT}>
-          {LINES}
-          {CIRCLES}
-      </Svg>
-    </View>
-    </PanGestureHandler>
+      <PanGestureHandler
+        ref={panRef}
+        onGestureEvent={handlePanGestureEvent}
+        onHandlerStateChange={handlePanHandlerStateChange}
+        minPointers={1}
+        maxPointers={1}
+      >
+        <View style={styles.container}>
+          <Svg width={WIDTH} height={HEIGHT}>
+            {LINES}
+            {CIRCLES}
+          </Svg>
+        </View>
+      </PanGestureHandler>
     </GestureHandlerRootView>
-    
   );
 };
 
