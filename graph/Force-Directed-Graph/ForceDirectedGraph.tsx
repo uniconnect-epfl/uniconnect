@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, View, Dimensions } from "react-native";
-import Svg, { Circle, G, Line } from "react-native-svg";
+import Svg, { Circle, G, Line, Text as SVGText, Image} from "react-native-svg";
 
 import styles from "./styles";
 import Graph, { Link, Node } from "../Graph";
@@ -16,9 +16,6 @@ import {
 const SHORT_PRESS_DURATION = 100;
 const DEFAULT_NODE_SIZE = 10; // Default size of the nodes
 const DEFAULT_NODE_SIZE_INCREMENT = 2; // Increment in the size of the nodes
-
-const DEFAULT_NODE_COLOR = "blue"; // Default color of the nodes
-const CONSTRAINED_NODE_COLOR = "red"; // Color of the constrained node
 
 const DEFAULT_LINK_COLOR = "black"; // Default color of the links
 const DEFAULT_CLICKED_NODE_ID = "";
@@ -165,17 +162,10 @@ const ForceDirectedGraph: React.FC<{
     return node.y;
   };
 
-  const circleFill = (node: Node): string => {
-    if (node.id === constrainedNodeId) {
-      return CONSTRAINED_NODE_COLOR;
-    }
-    return DEFAULT_NODE_COLOR;
-  };
-
   // Create the lines and circles for the graph
   const LINES = links.map((link) => (
     <Line
-      key={link.source + link.target}
+      key={link.source + link.target + "line"}
       x1={coordX(
         nodes.find((node) => node.id === link.source) ?? {
           x: CENTER_WIDTH,
@@ -217,12 +207,13 @@ const ForceDirectedGraph: React.FC<{
   ));
 
   const CIRCLES = nodes.map((node) => (
+    <G 
+    key={node.id + "group"}>
     <Circle
-      key={node.id}
+      key={node.id + "circle"}
       cx={coordX(node)}
       cy={coordY(node)}
       r={sizes.get(node.id) ?? DEFAULT_NODE_SIZE}
-      fill={circleFill(node)}
       onPressIn={() =>
         handlePressIn(() => {
           pressStartRef.current = Date.now();
@@ -236,6 +227,24 @@ const ForceDirectedGraph: React.FC<{
         })
       }
     />
+    <Image
+    key={node.id + "image"}
+    x={coordX(node) - (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
+    y={coordY(node) - (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
+    width={2 * (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
+    height={2 * (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
+    href={require('../../assets/graph-template-profile-picture.png')} // Replace with your image path
+    clipPath={"url(#clip" + node.id + ")"}
+        />
+    <SVGText
+    key={node.id + "text"}
+  x={coordX(node)} // Align horizontally with the center of the circle
+  y={coordY(node) + (sizes.get(node.id) ?? DEFAULT_NODE_SIZE) + DEFAULT_NODE_SIZE} // Position below the circle; adjust 10 as needed
+  textAnchor="middle" // Center the text under the circle
+    >
+  {node.id}
+</SVGText>
+    </G>
   ));
 
   return (
