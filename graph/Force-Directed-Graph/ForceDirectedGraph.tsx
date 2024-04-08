@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, View, Dimensions} from "react-native";
 import Svg, { Circle, Line} from "react-native-svg";
 
 import styles from "./styles";
 import Graph, { Link, Node } from "../Graph";
 import { fruchtermanReingold } from "../graph-algorithms/FruchtermanReingold";
+
+import {
+  PanGestureHandler,
+  State,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
 
 const DEFAULT_NODE_SIZE = 10; // Default size of the nodes
 const DEFAULT_NODE_SIZE_INCREMENT = 2; // Increment in the size of the nodes
@@ -38,6 +44,12 @@ const ForceDirectedGraph: React.FC<{
   const [sizes, setSizes] = useState<Map<string, number>>(new Map());
   const [load, setLoad] = useState<boolean>(false);
 
+  // State to store the total offset when dragging the graph
+  const [totalOffset, setTotalOffset] = useState({ x: 0, y: 0 });
+
+
+  const panRef = useRef(null);
+
   // Use effect to update the graph
   useEffect(() => {
     // Get the initial links, nodes and sizes
@@ -65,13 +77,39 @@ const ForceDirectedGraph: React.FC<{
     return <ActivityIndicator size="large" color="#0000ff" />;
   }
 
+  // Handle Dragging
+  const handlePanGestureEvent = (event: {
+    nativeEvent: { translationX: number; translationY: number };
+  }) => {
+    setTotalOffset({
+      x: event.nativeEvent.translationX,
+      y: event.nativeEvent.translationY,
+    });
+  };
+
+  // Handle Dragging State Change
+  const handlePanHandlerStateChange = (event: {
+    nativeEvent: { state: number };
+  }) => {
+    if (event.nativeEvent.state === State.END) {
+      setNodes(
+        nodes.map((node) => ({
+          ...node,
+          x: coordX(node),
+          y: coordY(node),
+        }))
+      );
+      setTotalOffset({ x: 0, y: 0 });
+    }
+  };
+
   // Functions to get the X and Y coordinates of the nodes and the fill color of the nodes
   const coordX = (node: Node): number => {
-    return node.x;
+    return node.x + totalOffset.x;
   };
 
   const coordY = (node: Node): number => {
-    return node.y;
+    return node.y + totalOffset.y;
   };
 
   const circleFill = (node: Node): string => {
@@ -136,12 +174,23 @@ const ForceDirectedGraph: React.FC<{
   ));
 
   return (
-    <View style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
+<PanGestureHandler
+      ref={panRef}
+      onGestureEvent={handlePanGestureEvent}
+      onHandlerStateChange={handlePanHandlerStateChange}
+      minPointers={1}
+      maxPointers={1}
+    >
+      <View style={styles.container}>
       <Svg width={WIDTH} height={HEIGHT}>
-        {LINES}
-        {CIRCLES}
+          {LINES}
+          {CIRCLES}
       </Svg>
     </View>
+    </PanGestureHandler>
+    </GestureHandlerRootView>
+    
   );
 };
 
