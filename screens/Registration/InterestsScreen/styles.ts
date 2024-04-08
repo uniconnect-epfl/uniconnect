@@ -5,7 +5,7 @@ import {
   black,
   lightPeach,
   white,
-  shadow,
+  shadowColor,
 } from '../../../assets/colors/colors';
 import { BUTTON_HEIGHT, BUTTON_RADIUS } from '../../../assets/global/constants';
 
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     marginHorizontal: 5,
-    shadowColor: shadow,
+    shadowColor,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,

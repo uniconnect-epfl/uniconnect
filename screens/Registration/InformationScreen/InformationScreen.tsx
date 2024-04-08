@@ -7,7 +7,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import LowBar from '../../../components/LowBar/LowBar';
 import InputField from '../../../components/InputField/InputField';
 import Divider from '../../../components/divider/divider';
-const Form: React.FC = () => {
+
+const InformationScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
   const [isTextInputVisible, setTextInputVisible] = useState(false);
   const [text, setText] = useState('');
@@ -68,4 +69,4 @@ const Form: React.FC = () => {
   );
 };
 
-export default Form;
+export default InformationScreen;

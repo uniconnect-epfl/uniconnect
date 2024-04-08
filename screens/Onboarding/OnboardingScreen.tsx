@@ -6,8 +6,10 @@ import { Ionicons } from '@expo/vector-icons';
 import styles from './styles';
 import { globalStyles } from '../../assets/global/globalStyles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
-const LoginScreen: React.FC = () => {
+const OnboardingScreen: React.FC = () => {
+  const navigation = useNavigation();
   const insets = useSafeAreaInsets();
 
   return (
@@ -38,7 +40,7 @@ const LoginScreen: React.FC = () => {
       />
 
       {/* Log In Button */}
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("Home" as never)}} >
         <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
       </TouchableOpacity>
 
@@ -65,11 +67,12 @@ const LoginScreen: React.FC = () => {
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.footer}>
+      <TouchableOpacity style={styles.footer} onPress={() => navigation.navigate("Information" as never)}>
         <Text style={styles.smallText}>Dont have an account?</Text>
         <Text style={styles.specialText}> Sign Up</Text>
       </TouchableOpacity>
     </View>
-  );
-};
-export default LoginScreen;
+  )
+}
+
+export default OnboardingScreen

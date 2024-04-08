@@ -1,8 +1,8 @@
+
+import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
-//import OnboardingScreen from './screens/Onboarding/OnboardingScreen';
-import InformationScreen from './screens/Registration/InformationScreen/InformationScreen';
-//import InterestsScreen from './screens/Registration/InterestsScreen/InterestsScreen';
+import RegistrationStackNavigator from './navigation/Registration/RegistrationStackNavigator';
 import {
   useFonts,
   JetBrainsMono_100Thin_Italic,
@@ -32,10 +32,10 @@ export default function App() {
   }, [fontsLoaded]);
 
   return (
-    <SafeAreaProvider>
-      <InformationScreen />
-      {/* <InterestsScreen/>   */}
-      {/* <OnboardingScreen/>  */}
-    </SafeAreaProvider>
+    <NavigationContainer>
+      <SafeAreaProvider>
+        <RegistrationStackNavigator/>
+      </SafeAreaProvider>
+    </NavigationContainer>
   );
 }

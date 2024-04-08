@@ -5,7 +5,7 @@ import {
   lightGray,
   lightPeach,
   peach,
-  shadow,
+  shadowColor,
 } from '../../assets/colors/colors';
 
 import {
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     height: BUTTON_HEIGHT,
     justifyContent: 'center',
     marginBottom: 10,
-    shadowColor: shadow,
+    shadowColor,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     height: BUTTON_HEIGHT,
     justifyContent: 'flex-start',
     paddingLeft: 15,
-    shadowColor: shadow,
+    shadowColor,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 5,

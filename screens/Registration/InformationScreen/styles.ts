@@ -3,7 +3,7 @@ import {
   peach,
   black,
   lightPeach,
-  shadow,
+  shadowColor,
   white,
 } from '../../../assets/colors/colors';
 
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     height: BUTTON_HEIGHT,
     justifyContent: 'center',
     marginHorizontal: 30,
-    shadowColor: shadow,
+    shadowColor,
     shadowOffset: { width: 0, height: 2.5 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     marginHorizontal: 5,
-    shadowColor: shadow,
+    shadowColor,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,

@@ -13,7 +13,7 @@ import LowBar from '../../../components/LowBar/LowBar';
 import { Entypo } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 
-const Form: React.FC = () => {
+const AuthenticationScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
   const MIN_LENGHT = 8;
   const [password, setPassword] = useState<string>('');
@@ -127,4 +127,5 @@ const Form: React.FC = () => {
     </View>
   );
 };
-export default Form;
+
+export default AuthenticationScreen;

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { peach, lightPeach, shadow } from '../../../assets/colors/colors';
+import { peach, lightPeach, shadowColor } from '../../../assets/colors/colors';
 
 import { BUTTON_RADIUS } from '../../../assets/global/constants';
 const styles = StyleSheet.create({
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 60,
     marginTop: 35,
-    shadowColor: shadow,
+    shadowColor,
     shadowOffset: { width: 0, height: 2.5 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
