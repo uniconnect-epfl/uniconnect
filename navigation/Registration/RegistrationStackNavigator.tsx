@@ -1,15 +1,17 @@
 
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import {AuthenticationScreen} from '../../screens/Registration/AuthenticationScreen/AuthenticationScreen';
-import {InformationScreen} from '../../screens/Registration/InformationScreen/InformationScreen';
-import {InterestsScreen} from '../../screens/Registration/InterestsScreen/InterestsScreen';
+import OnboardingScreen from '../../screens/Onboarding/OnboardingScreen'
+import InformationScreen from '../../screens/Registration/InformationScreen/InformationScreen'
+import InterestsScreen from '../../screens/Registration/InterestsScreen/InterestsScreen'
+import HomeTabNavigator from '../../navigation/Home/HomeTabNavigator'
 
 //Definition of type for Typescript compatibility
 export type RegistrationStackParamList = {
   Authentication: undefined; 
   Information: undefined;     
   Interests: undefined;       
+  Home: undefined;
 };
 
 const Stack = createStackNavigator<RegistrationStackParamList>();
@@ -20,7 +22,7 @@ const RegistrationStackNavigator: React.FC = () => {
     <Stack.Navigator initialRouteName="Authentication">
       <Stack.Screen
         name="Authentication"
-        component={AuthenticationScreen}
+        component={OnboardingScreen}
         options={{ headerShown: false }} // Set options as needed, i.e hiding the header
       />
       <Stack.Screen
@@ -33,8 +35,13 @@ const RegistrationStackNavigator: React.FC = () => {
         component={InterestsScreen}
         options={{ headerShown: false }} 
       />
+      <Stack.Screen
+        name="Home"
+        component={HomeTabNavigator}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
-
+    
 export default RegistrationStackNavigator;

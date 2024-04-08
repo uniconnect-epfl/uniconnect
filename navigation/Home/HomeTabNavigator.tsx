@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { View } from 'react-native';
-import {OnboardingScreen} from '../../screens/Onboarding/OnboardingScreen';
 import {MyProfileScreen} from '../../screens/Profile/MyProfileScreen/MyProfileScreen';
 
 
@@ -44,15 +43,11 @@ const HomeTabNavigator = () => {
       })}
       initialRouteName="Home"
     >
-      <Tab.Screen name="Home" component={OnboardingScreen} options={{headerShown: false}} />
       <Tab.Screen name="Add" component={MyProfileScreen} options={{headerShown: false}}/>
       <Tab.Screen name="Profile" component={MyProfileScreen} options={{headerShown: false}}/>
     </Tab.Navigator>
   );
 };
-
-
-
 
 export default HomeTabNavigator;
 

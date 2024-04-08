@@ -1,11 +1,11 @@
 import { StyleSheet } from "react-native"
-import {  shadowColor, tabBarFill, peach } from '../../assets/colors/colors'
+import {  shadowColor, lightPeach, peach } from '../../assets/colors/colors'
 
 
 const shadow = StyleSheet.create({
     shadow: {
       elevation: 5,
-      shadowColor: shadowColor,
+      shadowColor,
       shadowOffset: {
         height: 10,
         width: 0,
@@ -34,7 +34,7 @@ export const styles = StyleSheet.create({
     },
     tabBar: {
       alignItems: 'center',
-      backgroundColor: tabBarFill,
+      backgroundColor: lightPeach,
     borderColor: peach,
       borderRadius: 10, // Adjust the color to match your design
       borderWidth: 2,
