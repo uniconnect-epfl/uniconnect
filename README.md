@@ -40,6 +40,12 @@ The entry file is `App.tsx`. You could think of it as a main function that is la
 
 More to come on this part. We will use local tests as well as Sonar tools.
 
+## Unit testing
+
+For unit testing we are using the framework jest. For the expo configuration, you can see some documentation [here](https://docs.expo.dev/develop/unit-testing/).
+
+In order to run all tests you can run `npm run test`
+
 # Build
 
 ## Building the APK
