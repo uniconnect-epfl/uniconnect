@@ -2,6 +2,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import RegistrationStackNavigator from './navigation/Registration/RegistrationStackNavigator';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import styles from './styles';
 import {
   useFonts,
   JetBrainsMono_100Thin_Italic,
@@ -31,10 +33,13 @@ export default function App() {
   }, [fontsLoaded]);
 
   return (
-    <NavigationContainer>
-      <SafeAreaProvider>
-        <RegistrationStackNavigator/>
-      </SafeAreaProvider>
-    </NavigationContainer>
+    <GestureHandlerRootView style={styles.gestureHandler}>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <RegistrationStackNavigator/>
+        </SafeAreaProvider>
+      </NavigationContainer>
+    </GestureHandlerRootView>
+    
   );
 }
