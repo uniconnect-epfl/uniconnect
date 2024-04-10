@@ -83,24 +83,23 @@ const styles = StyleSheet.create({
   },
 
   interestButton: {
+    alignContent: 'center',
     borderColor: peach,
     borderRadius: 10,
     borderWidth: 2,
     display: 'flex',
     height: 110,
+    justifyContent: 'center',
     marginBottom: 10,
     padding: 10,
     width: 150,
   },
 
   interestText: {
-    bottom: 0,
     color: black,
     left: 0,
-    position: 'absolute',
     right: 0,
     textAlign: 'center',
-    top: '50%',
   },
 
   interestsGrid: {

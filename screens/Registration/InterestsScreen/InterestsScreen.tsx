@@ -41,7 +41,7 @@ const InterestButton: React.FC<InterestButtonProps> = ({
 
 const interests = [
   'Machine Learning',
-  'Artificial Intelligence',
+  'Artificial Intelligence is very cool',
   'Computer Vision',
   'Data Science',
   'NLP',
@@ -53,6 +53,11 @@ const interests = [
   'Ethereum',
   'Solana',
   'Computer graphics',
+  'Bananas',
+  'Apples',
+  'Big tech',
+  'Finance',
+  'Gaspard tes teubé t con',
 ];
 
 const InterestsScreen = () => {
