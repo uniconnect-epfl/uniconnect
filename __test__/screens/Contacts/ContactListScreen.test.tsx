@@ -1,9 +1,7 @@
 import React from 'react';
-import { render } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react-native'
 import { ContactListScreen } from '../../../screens/Contacts/ContactListScreen';
 import { Contact } from '../../../screens/Contacts/ContactListScreen';
-
-
 
 describe('ContactListScreen', () => {
     const dummyData: Contact[] = [
@@ -17,16 +15,53 @@ describe('ContactListScreen', () => {
         {uid: '8', firstName: 'Stephanović', lastName: 'Vladimir', profilePictureUrl: '', description: 'I love fish', interests: ['surfing', 'machine learning'], qualifications: ['biology']},
         {uid: '9', firstName: 'Lulu', lastName: 'Nom', profilePictureUrl: '', description: 'I love bamboo', interests: ['surfing', 'machine learning'], qualifications: ['litterature']},
         {uid: '10', firstName: 'Lili', lastName: 'De', profilePictureUrl: '', description: '19 + 4 = 22', interests: ['surfing', 'machine learning'], qualifications: ['a', 'b', 'c', 'd', 'e', 'f', 'h']},
-        {uid: '11', firstName: 'Lala', lastName: 'Famille', profilePictureUrl: '', description: 'I\'m doing university for fun', interests: ['a', 'b', 'c', 'd', 'e', 'f', 'h'], qualifications: ['a', 'b', 'c', 'd', 'e', 'f', 'h']},
-        {uid: '12', firstName: 'Abc', lastName: 'Onu', profilePictureUrl: '', description: 'Didn\'t want a description', interests: [], qualifications: ['a', 'b', 'c', 'd', 'e', 'f', 'h']},
-        {uid: '13', firstName: 'Def', lastName: 'Steph', profilePictureUrl: '', description: '-', interests: ['movies'], qualifications: ['history']},
-        {uid: '14', firstName: 'Hij', lastName: 'Non', profilePictureUrl: '', description: 'Mataphisical question', interests: [], qualifications: []},
     ]
 
-    it('renders the complete list of contacts', () => {
-        const component = render(<ContactListScreen initialContacts={dummyData} />);
+    it('renders the screen', () => {
+        const component = render(<ContactListScreen initialContacts={dummyData} />)
         expect(component).toBeTruthy()
-      });
+    });
+
+    it('renders all items from the contacts list', async () => {
+        const { findByText } = render(<ContactListScreen initialContacts={dummyData} />)
+
+        for(const contact of dummyData){
+            const element = await findByText(contact.firstName);
+            expect(element).toBeTruthy();
+        }
+    })
+    
+    it('filters contacts based on search input', async () => {
+        const { getByText, getByPlaceholderText, queryByText } = render(<ContactListScreen initialContacts={dummyData} />)
+
+        fireEvent.changeText(getByPlaceholderText('Search...'), 'Jocovi')
+        expect(getByText('Jocović')).toBeTruthy()
+        expect(queryByText('Hervé')).toBeNull()
+        expect(queryByText('')).toBeNull()
+        expect(queryByText('Abc')).toBeNull()
+
+        fireEvent.changeText(getByPlaceholderText('Search...'), '')
+        expect(getByText('Hervé')).toBeTruthy()
+    })
+    
+    it('displays correct contact details', () => {
+        const { getByText } = render(<ContactListScreen initialContacts={dummyData} />)
+        const firstContact = dummyData[0];
+        expect(getByText(firstContact.firstName)).toBeTruthy()
+        expect(getByText(firstContact.description)).toBeTruthy()
+    })
+    
+    it('updates tab selection on button press', () => {
+        const { getByText } = render(<ContactListScreen initialContacts={dummyData} />)
+
+        fireEvent.press(getByText('Graph View'))
+        expect(getByText('Graph View').props.style[1].fontWeight).toBe('bold')
+        expect(getByText('Plain View').props.style[1]).not.toHaveProperty('fontWeight')
+        fireEvent.press(getByText('Plain View'))
+        expect(getByText('Graph View').props.style[1]).not.toHaveProperty('fontWeight')
+        expect(getByText('Plain View').props.style[1].fontWeight).toBe('bold')
+    })
+
 })
 
 
