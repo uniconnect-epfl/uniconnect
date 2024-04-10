@@ -19,7 +19,7 @@ const InputField: React.FC<InputFieldProps> = ({
 }) => {
   return (
     <View style={styles.section}>
-      <Text style={[styles.topText, globalStyles.text]}>{label}</Text>
+      <Text style={[styles.label, globalStyles.text]}>{label}</Text>
       <TextInput
         placeholder={placeholder}
         style={[styles.input, globalStyles.text]}
