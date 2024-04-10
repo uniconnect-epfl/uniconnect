@@ -10,7 +10,7 @@ import Divider from '../../../components/divider/divider';
 
 const InformationScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
-  const [isTextInputVisible, setTextInputVisible] = useState(false);
+  const [isTextInputVisible, setIsTextInputVisible] = useState(false);
   const [text, setText] = useState('');
 
   return (
@@ -44,7 +44,7 @@ const InformationScreen: React.FC = () => {
 
       <TouchableOpacity
         style={[styles.button, styles.buttonContainer]}
-        onPress={() => setTextInputVisible(!isTextInputVisible)}
+        onPress={() => setIsTextInputVisible(!isTextInputVisible)}
       >
         <Text style={[styles.buttonText, globalStyles.text]}>
           Add a description now

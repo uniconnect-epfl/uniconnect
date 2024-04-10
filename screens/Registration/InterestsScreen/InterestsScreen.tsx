@@ -8,7 +8,6 @@ import {
   TextInput,
 } from 'react-native';
 import styles from './styles';
-import '../../../assets/global/globalStyles';
 import { globalStyles } from '../../../assets/global/globalStyles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import LowBar from '../../../components/LowBar/LowBar';
