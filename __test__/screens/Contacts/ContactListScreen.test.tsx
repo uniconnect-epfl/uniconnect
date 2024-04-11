@@ -31,7 +31,7 @@ describe('ContactListScreen', () => {
         }
     })
     
-    it('filters contacts based on search input', async () => {
+    it('filters contacts based on search input', () => {
         const { getByText, getByPlaceholderText, queryByText } = render(<ContactListScreen initialContacts={dummyData} />)
 
         fireEvent.changeText(getByPlaceholderText('Search...'), 'Jocovi')
