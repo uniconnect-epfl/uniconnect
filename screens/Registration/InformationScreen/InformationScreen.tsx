@@ -23,7 +23,6 @@ const InformationScreen: React.FC = () => {
   const [desc, setDesc] = useState(false);
   const [loc, setLoc] = useState(false);
   const firstRef = useRef<TextInput>(null);
-  const secondRef = useRef<TextInput>(null);
   const thirdRef = useRef<TextInput>(null);
   const lastRef = useRef<TextInput>(null);
 
@@ -52,15 +51,11 @@ const InformationScreen: React.FC = () => {
             placeholder="Last name"
             returnKeyType="next"
             ref={firstRef}
-            onSubmitEditing={() => secondRef.current?.focus()}
-          />
-          <InputField
-            label="Date of Birth*"
-            placeholder="Date of birth"
-            returnKeyType="next"
-            ref={secondRef}
             onSubmitEditing={() => thirdRef.current?.focus()}
           />
+
+          {/* Date Input should be here */}
+
           <InputField
             label="Location"
             placeholder="Location"
