@@ -21,7 +21,7 @@
     "@expo-google-fonts/jetbrains-mono": "0.2.3",
     "@expo/metro-runtime": "~3.1.3",
     "@expo/vector-icons": "^14.0.0",
-    "@testing-library/react-native": "^11.2.7",
+    "@testing-library/react-native": "^12.4.0",
     "@testing-library/user-event": "^14.5.0",
     "expo": "~50.0.11",
     "expo-splash-screen": "~0.26.4",
@@ -54,7 +54,7 @@
   },
   "jest": {
     "preset": "jest-expo",
-    "testEnvironment": "jsdom",
+    "testEnvironment": "node",
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
     ],
