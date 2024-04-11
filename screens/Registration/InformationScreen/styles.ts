@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 10,
   },
+
   buttonSmall: {
     alignItems: 'center',
     backgroundColor: lightPeach,
@@ -73,13 +74,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     height: '17%',
     justifyContent: 'space-between',
-    marginTop: 20,
     padding: 5,
     width: '70%',
   },
- 
+
   footer: {
-    paddingTop: 100,
+    
+    width: '100%',
   },
 
   image: {

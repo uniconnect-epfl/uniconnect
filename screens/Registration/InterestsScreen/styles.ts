@@ -43,9 +43,12 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: white,
     flex: 1,
-    padding: 10,
   },
-  footer: {},
+
+  footer: {
+    width: '100%',
+  },
+
   footerButton: {
     backgroundColor: white,
     borderRadius: BUTTON_RADIUS,

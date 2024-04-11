@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     height: 60,
     justifyContent: 'space-between',
     marginHorizontal: 20,
-    marginTop: 10,
+
   },
 });
 
