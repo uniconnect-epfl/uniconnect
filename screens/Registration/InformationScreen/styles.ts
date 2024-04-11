@@ -65,6 +65,9 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'space-around',
   },
+  date:{
+    
+  },
   description: {
     alignSelf: 'center',
     borderColor: peach,
@@ -77,6 +80,9 @@ const styles = StyleSheet.create({
     padding: 5,
     width: '70%',
   },
+
+
+ 
 
   footer: {
     

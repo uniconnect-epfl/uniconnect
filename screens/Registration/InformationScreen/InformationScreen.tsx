@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, TouchableOpacity, Text, Image } from 'react-native';
 import styles from './styles';
 import { globalStyles } from '../../../assets/global/globalStyles';
@@ -15,6 +15,10 @@ const InformationScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
   const [desc, setDesc] = useState(false);
   const [loc, setLoc] = useState(false);
+  const firstRef = useRef<TextInput>(null);
+  const secondRef = useRef<TextInput>(null);
+  const thirdRef = useRef<TextInput>(null);
+  const lastRef = useRef<TextInput>(null);
 
   return (
     <View
@@ -29,10 +33,33 @@ const InformationScreen: React.FC = () => {
       />
 
       <View>
-        <InputField label="First name*" placeholder="First name" />
-        <InputField label="Last name*" placeholder="Last name" />
-        <InputField label="Date of Birth*" placeholder="Date of birth" />
-        <InputField label="Location" placeholder="Location" />
+        <InputField
+          label="First name*"
+          placeholder="First name"
+          returnKeyType="next"
+          onSubmitEditing={() => firstRef.current?.focus()}
+        />
+        <InputField
+          label="Last name*"
+          placeholder="Last name"
+          returnKeyType="next"
+          ref={firstRef}
+          onSubmitEditing={() => secondRef.current?.focus()}
+        />
+        <InputField
+          label="Date of Birth*"
+          placeholder="Date of birth"
+          returnKeyType="next"
+          ref={secondRef}
+          onSubmitEditing={() => thirdRef.current?.focus()}
+        />
+        <InputField
+          label="Location"
+          placeholder="Location"
+          returnKeyType="next"
+          ref={thirdRef}
+          onSubmitEditing={() => lastRef.current?.focus()}
+        />
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity

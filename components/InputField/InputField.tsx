@@ -1,22 +1,20 @@
-import React from 'react';
-import { View, TextInput, Text } from 'react-native';
+/* eslint-disable react/display-name */
+import React, { forwardRef } from 'react';
+import { View, TextInput, Text, TextInputProps } from 'react-native';
 import { globalStyles } from '../../assets/global/globalStyles';
 
 import styles from './styles';
 
-interface InputFieldProps {
+interface InputFieldProps extends TextInputProps {
   label: string;
-  placeholder: string;
+  placeholder?: string; // TextInputProps already has placeholder, make sure this doesn't conflict
   value?: string;
   onChangeText?: (text: string) => void;
+  onSubmitEditing?: () => void;
 }
 
-const InputField: React.FC<InputFieldProps> = ({
-  label,
-  placeholder,
-  value,
-  onChangeText,
-}) => {
+const InputField = forwardRef<TextInput, InputFieldProps>((props, ref) => {
+  const { label, placeholder, value, onChangeText, onSubmitEditing, ...rest } = props;
   return (
     <View style={styles.section}>
       <Text style={[styles.label, globalStyles.text]}>{label}</Text>
@@ -25,9 +23,11 @@ const InputField: React.FC<InputFieldProps> = ({
         style={[styles.input, globalStyles.text]}
         value={value}
         onChangeText={onChangeText}
+        onSubmitEditing={onSubmitEditing}
+        ref={ref}
+        {...rest}
       />
     </View>
   );
-};
-
+});
 export default InputField;
