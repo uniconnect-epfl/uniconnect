@@ -7,6 +7,8 @@ import {
   TextInput,
   FlatList,
   ListRenderItemInfo,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import styles from './styles';
 import '../../../assets/global/globalStyles';
@@ -100,42 +102,42 @@ const InterestsScreen = () => {
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        { paddingBottom: insets.bottom, paddingTop: insets.top },
-      ]}
-    >
-      <Image
-        source={require('../../../assets/icon.png')}
-        style={styles.image}
-      />
-      <Text style={[styles.title, globalStyles.boldText]}>
-        Select your interests
-      </Text>
-
-      <View>
-        <TextInput
-          placeholder="Search"
-          style={[styles.input, globalStyles.text]}
-          onChangeText={handleSearch}
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View
+        style={[
+          styles.container,
+          { paddingBottom: insets.bottom, paddingTop: insets.top },
+        ]}
+      >
+        <Image
+          source={require('../../../assets/icon.png')}
+          style={styles.image}
         />
-      </View>
+        <Text style={[styles.title, globalStyles.boldText]}>
+          Select your interests
+        </Text>
 
+        <View>
+          <TextInput
+            placeholder="Search"
+            style={[styles.input, globalStyles.text]}
+            onChangeText={handleSearch}
+          />
+        </View>
 
         <FlatList
           data={filterdedInterests}
           renderItem={renderItem}
           keyExtractor={(item) => item}
-          numColumns={2} 
-          style={styles.interestsGrid} 
+          numColumns={2}
+          style={styles.interestsGrid}
         />
 
-
-      <View style={styles.footer}>
-        <LowBar nextScreen="Authentication" />
+        <View style={styles.footer}>
+          <LowBar nextScreen="Authentication" />
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 

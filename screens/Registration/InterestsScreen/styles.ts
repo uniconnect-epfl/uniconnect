@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
 
   interestButton: {
     alignContent: 'center',
-    borderColor: peach,
+    borderColor: lightGray,
     borderRadius: 10,
     borderWidth: 2,
     display: 'flex',
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
 
   interestText: {
-    color: black,
+    color: lightGray,
     left: 0,
     right: 0,
     textAlign: 'center',
@@ -113,12 +113,12 @@ const styles = StyleSheet.create({
 
   selectedInterestButton: {
     backgroundColor: white,
-    borderColor: lightGray,
+    borderColor: peach,
     borderWidth: 2.5,
   },
 
   selectedInterestText: {
-    color: lightGray,
+    color: black,
   },
 
   title: {

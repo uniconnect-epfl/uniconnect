@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
 
 import InputField from '../../../components/InputField/InputField';
 
@@ -49,82 +56,84 @@ const AuthenticationScreen: React.FC = () => {
   };
 
   return (
-    <View style={{ paddingBottom: insets.bottom, paddingTop: insets.top }}>
-      <Image
-        source={require('../../../assets/icon.png')}
-        style={styles.image}
-      />
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={{ paddingBottom: insets.bottom, paddingTop: insets.top }}>
+        <Image
+          source={require('../../../assets/icon.png')}
+          style={styles.image}
+        />
 
-      <Text style={[styles.title, globalStyles.boldText]}>Last Step</Text>
+        <Text style={[styles.title, globalStyles.boldText]}>Last Step</Text>
 
-      <InputField
-        label="Password*"
-        placeholder="****************"
-        onChangeText={setPassword}
-        value={password}
-      ></InputField>
+        <InputField
+          label="Password*"
+          placeholder="****************"
+          onChangeText={setPassword}
+          value={password}
+        ></InputField>
 
-      <InputField
-        label="Confirm Password*"
-        placeholder="****************"
-        onChangeText={setConfirmPassword}
-        value={confirmPassword}
-      ></InputField>
+        <InputField
+          label="Confirm Password*"
+          placeholder="****************"
+          onChangeText={setConfirmPassword}
+          value={confirmPassword}
+        ></InputField>
 
-      <View style={styles.container}>
-        <View style={styles.phrase}>
-          <Entypo name="cross" color="red" />
-          <Text style={[globalStyles.text, globalStyles.smallText]}>
-            Password strength
-          </Text>
+        <View style={styles.container}>
+          <View style={styles.phrase}>
+            <Entypo name="cross" color="red" />
+            <Text style={[globalStyles.text, globalStyles.smallText]}>
+              Password strength
+            </Text>
+          </View>
+
+          <View style={styles.phrase}>
+            {!doPasswordsMatch() && <Entypo name="cross" color="red" />}
+            {doPasswordsMatch() && <AntDesign name="check" color="green" />}
+            <Text style={[globalStyles.text, globalStyles.smallText]}>
+              Passwords matching
+            </Text>
+          </View>
+
+          <View style={styles.phrase}>
+            {!isPassword() && <Entypo name="cross" color="red" />}
+            {isPassword() && <AntDesign name="check" color="green" />}
+            <Text style={[globalStyles.text, globalStyles.smallText]}>
+              At least 8 characters
+            </Text>
+          </View>
+
+          <View style={styles.phrase}>
+            <Entypo name="cross" color="red" />
+            <Text style={[globalStyles.text, globalStyles.smallText]}>
+              Contains a number and a symbol
+            </Text>
+          </View>
         </View>
 
-        <View style={styles.phrase}>
-          {!doPasswordsMatch() && <Entypo name="cross" color="red" />}
-          {doPasswordsMatch() && <AntDesign name="check" color="green" />}
-          <Text style={[globalStyles.text, globalStyles.smallText]}>
-            Passwords matching
-          </Text>
-        </View>
+        <Divider />
 
-        <View style={styles.phrase}>
-          {!isPassword() && <Entypo name="cross" color="red" />}
-          {isPassword() && <AntDesign name="check" color="green" />}
-          <Text style={[globalStyles.text, globalStyles.smallText]}>
-            At least 8 characters
-          </Text>
-        </View>
+        <InputField
+          label="E-mail*"
+          placeholder="E-mail"
+          onChangeText={setEmail}
+          value={email}
+        ></InputField>
 
-        <View style={styles.phrase}>
-          <Entypo name="cross" color="red" />
-          <Text style={[globalStyles.text, globalStyles.smallText]}>
-            Contains a number and a symbol
-          </Text>
-        </View>
+        <InputField
+          label="Confirm e-mail*"
+          placeholder="Confirm your e-mail"
+          onChangeText={setConfirmEmail}
+          value={confirmEmail}
+        ></InputField>
+
+        <TouchableOpacity style={styles.button} onPress={submitForm}>
+          <Text style={globalStyles.boldText}>Send confirmation e-mail</Text>
+        </TouchableOpacity>
+
+        <LowBar nextScreen="Home" />
       </View>
-
-      <Divider />
-
-      <InputField
-        label="E-mail*"
-        placeholder="E-mail"
-        onChangeText={setEmail}
-        value={email}
-      ></InputField>
-
-      <InputField
-        label="Confirm e-mail*"
-        placeholder="Confirm your e-mail"
-        onChangeText={setConfirmEmail}
-        value={confirmEmail}
-      ></InputField>
-
-      <TouchableOpacity style={styles.button} onPress={submitForm}>
-        <Text style={globalStyles.boldText}>Send confirmation e-mail</Text>
-      </TouchableOpacity>
-
-      <LowBar nextScreen='Home'/>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
