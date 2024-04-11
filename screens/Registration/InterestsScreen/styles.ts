@@ -76,13 +76,14 @@ const styles = StyleSheet.create({
   },
 
   input: {
+    alignSelf: 'center',
     borderColor: lightGray,
     borderRadius: BUTTON_RADIUS,
     borderWidth: 1,
     height: BUTTON_HEIGHT,
     marginBottom: 25,
     paddingHorizontal: 30,
-    width: '100%',
+    width: '95%',
   },
 
   interestButton: {
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
     height: 110,
     justifyContent: 'center',
     marginBottom: 10,
+    marginHorizontal: 10,
     padding: 10,
     width: 150,
   },
@@ -106,10 +108,7 @@ const styles = StyleSheet.create({
   },
 
   interestsGrid: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-evenly',
+    alignSelf: 'center',
   },
 
   selectedInterestButton: {

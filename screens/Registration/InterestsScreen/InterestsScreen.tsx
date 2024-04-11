@@ -3,9 +3,10 @@ import {
   View,
   Text,
   TouchableOpacity,
-  ScrollView,
   Image,
   TextInput,
+  FlatList,
+  ListRenderItemInfo,
 } from 'react-native';
 import styles from './styles';
 import '../../../assets/global/globalStyles';
@@ -66,6 +67,14 @@ const InterestsScreen = () => {
   const [filterdedInterests, setFilteredInterests] = useState(interests);
   const [selectedInterests, setSelectedInterests] = useState(new Set());
 
+  const renderItem = ({ item }: ListRenderItemInfo<string>) => (
+    <InterestButton
+      title={item}
+      selected={selectedInterests.has(item)}
+      onSelect={() => toggleInterest(item)}
+    />
+  );
+
   const toggleInterest = (interest: string) => {
     setSelectedInterests((prev) => {
       const newSelectedInterests = new Set(prev);
@@ -112,20 +121,19 @@ const InterestsScreen = () => {
           onChangeText={handleSearch}
         />
       </View>
-      <ScrollView style={styles.container}>
-        <View style={styles.interestsGrid}>
-          {filterdedInterests.map((interest) => (
-            <InterestButton
-              key={interest}
-              title={interest}
-              selected={selectedInterests.has(interest)}
-              onSelect={() => toggleInterest(interest)}
-            />
-          ))}
-        </View>
-      </ScrollView>
+
+
+        <FlatList
+          data={filterdedInterests}
+          renderItem={renderItem}
+          keyExtractor={(item) => item}
+          numColumns={2} 
+          style={styles.interestsGrid} 
+        />
+
+
       <View style={styles.footer}>
-        <LowBar nextScreen='Authentication'/>
+        <LowBar nextScreen="Authentication" />
       </View>
     </View>
   );
