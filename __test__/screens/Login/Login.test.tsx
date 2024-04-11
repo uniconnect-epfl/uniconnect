@@ -8,5 +8,7 @@ describe('Login', () => {
     const component = render(<Login />)
     expect(component).toBeTruthy()
   })
+
+  // need to be able to mock firebase in order to do more
   
 })
