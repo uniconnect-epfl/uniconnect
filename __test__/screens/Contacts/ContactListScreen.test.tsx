@@ -1,7 +1,7 @@
-import React from 'react';
+import React from 'react'
 import { render, fireEvent } from '@testing-library/react-native'
-import { ContactListScreen } from '../../../screens/Contacts/ContactListScreen';
-import { Contact } from '../../../screens/Contacts/ContactListScreen';
+import { ContactListScreen } from '../../../screens/Contacts/ContactListScreen'
+import { Contact } from '../../../screens/Contacts/ContactListScreen'
 
 describe('ContactListScreen', () => {
     const dummyData: Contact[] = [
@@ -20,14 +20,14 @@ describe('ContactListScreen', () => {
     it('renders the screen', () => {
         const component = render(<ContactListScreen initialContacts={dummyData} />)
         expect(component).toBeTruthy()
-    });
+    })
 
     it('renders all items from the contacts list', async () => {
         const { findByText } = render(<ContactListScreen initialContacts={dummyData} />)
 
         for(const contact of dummyData){
-            const element = await findByText(contact.firstName);
-            expect(element).toBeTruthy();
+            const element = await findByText(contact.firstName)
+            expect(element).toBeTruthy()
         }
     })
     
