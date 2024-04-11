@@ -68,7 +68,7 @@ const InformationScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.footer}>
-        <LowBar />
+        <LowBar nextScreen="Interests" />
       </View>
     </View>
   );

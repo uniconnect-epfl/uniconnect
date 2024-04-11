@@ -125,7 +125,7 @@ const InterestsScreen = () => {
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        <LowBar />
+        <LowBar nextScreen='Authentication'/>
       </View>
     </View>
   );
