@@ -1,6 +1,12 @@
-describe('<divider />', () => {
-    it('dummy test', () => {
-      const value = true
-      expect(value).toBeTruthy()
-    })
+import React from 'react'
+import { render } from '@testing-library/react-native'
+import Form from '../../../components/divider/divider'
+
+describe('Form', () => {
+  
+  it('renders the screen', () => {
+    const component = render(<Form />)
+    expect(component).toBeTruthy()
   })
+  
+})
