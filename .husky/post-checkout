@@ -1,0 +1,4 @@
+#!/bin/sh
+echo "Reinstalling dependencies..."
+rm -rf node_modules/
+npm install
