@@ -5,11 +5,11 @@ import { globalStyles } from '../../assets/global/globalStyles'
 import styles from './styles' 
 
 interface InputFieldProps extends TextInputProps {
-  label: string;
-  placeholder?: string;
-  value?: string;
-  onChangeText?: (text: string) => void;
-  onSubmitEditing?: () => void;
+  label: string 
+  placeholder?: string 
+  value?: string 
+  onChangeText?: (text: string) => void 
+  onSubmitEditing?: () => void 
 }
 
 const InputField = forwardRef<TextInput, InputFieldProps>(function InputField(
@@ -17,7 +17,7 @@ const InputField = forwardRef<TextInput, InputFieldProps>(function InputField(
   ref
 ) {
   const { label, placeholder, value, onChangeText, onSubmitEditing, ...rest } =
-    props;
+    props 
   return (
     <View style={styles.section}>
       <Text style={[styles.label, globalStyles.text]}>{label}</Text>
