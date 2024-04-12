@@ -18,36 +18,36 @@ export default function App() {
     JetBrainsMono_100Thin_Italic,
     JetBrainsMono_400Regular,
     JetBrainsMono_700Bold,
-  })
-  const [appIsReady, setAppIsReady] = useState(false)
+  });
+  const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
     async function prepare() {
       try {
-        await SplashScreen.preventAutoHideAsync()
-        await new Promise((resolve) => setTimeout(resolve, 2000))
+        await SplashScreen.preventAutoHideAsync();
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       } catch (e) {
-        console.warn(e)
+        console.warn(e);
       } finally {
-        setAppIsReady(true)
+        setAppIsReady(true);
       }
     }
 
-    prepare()
-  }, [])
+    prepare();
+  }, []);
 
   useEffect(() => {
     async function hideSplashScreen() {
       if (fontsLoaded && appIsReady) {
-        await SplashScreen.hideAsync()
+        await SplashScreen.hideAsync();
       }
     }
 
-    hideSplashScreen()
-  }, [fontsLoaded, appIsReady])
+    hideSplashScreen();
+  }, [fontsLoaded, appIsReady]);
 
   if (!fontsLoaded || !appIsReady) {
-    return null
+    return null;
   }
   return (
     <GestureHandlerRootView style={styles.gestureHandler}>
