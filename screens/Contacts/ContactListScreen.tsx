@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { View, Text, FlatList, Image, TextInput, TouchableOpacity} from 'react-native';
-import { styles } from './styles';
+import { useState } from 'react' 
+import { View, Text, FlatList, Image, TextInput, TouchableOpacity} from 'react-native' 
+import { styles } from './styles' 
 import { Ionicons } from '@expo/vector-icons'
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context' 
 
 type Contact = {
   uid: string,
@@ -32,20 +32,20 @@ const dummyData: Contact[] = [
 ]
 
 export const ContactListScreen = () => {
-  const [filteredContacts, setFilteredContacts] = useState(dummyData);
-  const [searchText, setSearchText] = useState('');
-  const [selectedTab, setSelectedTab] = useState('Plain View');
+  const [filteredContacts, setFilteredContacts] = useState(dummyData) 
+  const [searchText, setSearchText] = useState('') 
+  const [selectedTab, setSelectedTab] = useState('Plain View') 
   const insets = useSafeAreaInsets()
  
   const handleSearch = (text: string) => {
-    setSearchText(text);
+    setSearchText(text) 
     if(text){
         const filtered = dummyData.filter((contact) =>
           `${contact.firstName} ${contact.lastName}`.toLowerCase().includes(text.toLowerCase())
         )
-        setFilteredContacts(filtered);
+        setFilteredContacts(filtered) 
     }else{
-        setFilteredContacts(dummyData);
+        setFilteredContacts(dummyData) 
     }
   }
 

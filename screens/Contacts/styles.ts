@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { peach, black, lightGray, transparent, lightPeach } from '../../assets/colors/colors';
+import { StyleSheet } from 'react-native' 
+import { peach, black, lightGray, transparent, lightPeach } from '../../assets/colors/colors' 
 
 export const styles = StyleSheet.create({
     cardContainer: {
