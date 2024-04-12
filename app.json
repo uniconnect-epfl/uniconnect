@@ -21,11 +21,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.gcharles.uniconnect"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "fonts": "./assets/fonts/JetBrains-Mono-Regular.ttf'"
+    "fonts": "./assets/fonts/JetBrains-Mono-Regular.ttf'",
+    "extra": {
+      "eas": {
+        "projectId": "97abc5f1-8ed2-4137-92fe-623aa2fd46c9"
+      }
+    }
   }
 }
