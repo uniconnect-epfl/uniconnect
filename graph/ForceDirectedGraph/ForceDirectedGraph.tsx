@@ -36,8 +36,10 @@ const CENTER_HEIGHT = HEIGHT / 2 // Center Y-coordinates of the screen
  * @param constrainedNodeId - Identifier of the node to be constrained to the center
  * @returns - Force-directed graph component
  */
-const ForceDirectedGraph: React.FC<{graph: Graph, constrainedNodeId: string}> = ({graph, constrainedNodeId}) => {
-
+const ForceDirectedGraph: React.FC<{
+  graph: Graph
+  constrainedNodeId: string
+}> = ({ graph, constrainedNodeId }) => {
   // States to store the nodes, links, sizes and loading status
   const [nodes, setNodes] = useState<Node[]>([])
   const [links, setLinks] = useState<Link[]>([])
@@ -92,7 +94,7 @@ const ForceDirectedGraph: React.FC<{graph: Graph, constrainedNodeId: string}> = 
 
   // Handle Dragging
   const handlePanGestureEvent = (event: {
-    nativeEvent: { translationX: number ; translationY: number }
+    nativeEvent: { translationX: number; translationY: number }
   }) => {
     setTotalOffset({
       x: event.nativeEvent.translationX / lastScale,
@@ -246,7 +248,7 @@ const ForceDirectedGraph: React.FC<{graph: Graph, constrainedNodeId: string}> = 
           coordY(node) +
           (sizes.get(node.id) ?? DEFAULT_NODE_SIZE) +
           DEFAULT_NODE_SIZE
-        } // Position below the circle adjust 10 as needed
+        } // Position below the circle; adjust 10 as needed
         textAnchor="middle" // Center the text under the circle
       >
         {node.id}
