@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View, Text, FlatList, Image, TextInput, TouchableOpacity} from 'react-native';
 import { styles } from './styles';
 import { Ionicons } from '@expo/vector-icons'
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Contact = {
   uid: string,
@@ -34,6 +35,7 @@ export const ContactListScreen = () => {
   const [filteredContacts, setFilteredContacts] = useState(dummyData);
   const [searchText, setSearchText] = useState('');
   const [selectedTab, setSelectedTab] = useState('Plain View');
+  const insets = useSafeAreaInsets()
  
   const handleSearch = (text: string) => {
     setSearchText(text);
@@ -74,12 +76,7 @@ export const ContactListScreen = () => {
   )
 
   return (
-    <View style={styles.container}>
-      
-      <View style={styles.horizonatlBarContainer}>
-        <Text>Here will be the top navigation bar</Text>
-      </View>
-      
+    <View style={[styles.container, { paddingTop: insets.top }]}>  
       <View style={styles.viewChoiceContainer}>
         <TouchableOpacity style={styles.contactList} onPress={() => setSelectedTab('Plain View')}>
           <Text style={[styles.greyLightText, selectedTab === 'Plain View' && styles.darkBoldText]}>
@@ -112,11 +109,6 @@ export const ContactListScreen = () => {
           keyExtractor={(contact) => contact.uid}
         />
       </View>
-
-      <View style={styles.horizonatlBarContainer}>
-        <Text>Here will be the bottom navigation bar</Text>
-      </View>
-
     </View>
   )
 

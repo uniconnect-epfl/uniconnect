@@ -40,7 +40,7 @@ const OnboardingScreen: React.FC = () => {
       />
 
       {/* Log In Button */}
-      <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("Home" as never)}} >
+      <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("HomeTabs" as never)}} >
         <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
       </TouchableOpacity>
 

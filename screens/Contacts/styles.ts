@@ -52,11 +52,6 @@ export const styles = StyleSheet.create({
         color: lightGray,
         justifyContent: 'center',
     },
-    horizonatlBarContainer: {
-        alignItems: 'center',
-        height: 70,
-        justifyContent: 'center',
-    },
     invisibleBackground: {
         backgroundColor: transparent
     },
