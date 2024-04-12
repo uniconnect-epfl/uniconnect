@@ -17,6 +17,7 @@ import Divider from '../../../components/divider/divider';
 import { TextInput } from 'react-native-gesture-handler';
 import { Entypo } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import MyDateInputComponent from '../../../components/DatePicker/DatePicker';
 
 const InformationScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
@@ -25,6 +26,17 @@ const InformationScreen: React.FC = () => {
   const firstRef = useRef<TextInput>(null);
   const thirdRef = useRef<TextInput>(null);
   const lastRef = useRef<TextInput>(null);
+  const [dateModal, setDateModal] = useState(false);
+  const today = new Date();
+  const [date, setDate] = useState<Date>(today);
+  const [hasBeenTouched, setHasBeenTouched] = useState(false);
+
+  const onPress = () => {
+    setDateModal(!dateModal);
+    setHasBeenTouched(true);
+  };
+
+  const opacity = !hasBeenTouched ? 0.2 : 1
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -54,7 +66,29 @@ const InformationScreen: React.FC = () => {
             onSubmitEditing={() => thirdRef.current?.focus()}
           />
 
-          {/* Date Input should be here */}
+          <TouchableOpacity style={styles.section} onPress={onPress}>
+            <Text style={[styles.label, globalStyles.text]}>
+              {'Date of Birth*'}
+            </Text>
+            <View style={styles.input}>
+              <Text
+                style={[
+                  globalStyles.text,
+                  { opacity: opacity},
+                ]}
+              >
+                {!hasBeenTouched
+                  ? 'JJ.MM.YYYY'
+                  : '' +
+                    date.getUTCDate().toString() +
+                    '.' +
+                    (date.getUTCMonth() + 1).toString() +
+                    '.' +
+                    date.getFullYear().toString() +
+                    ''}
+              </Text>
+            </View>
+          </TouchableOpacity>
 
           <InputField
             label="Location"
@@ -100,6 +134,14 @@ const InformationScreen: React.FC = () => {
         <View style={styles.footer}>
           <LowBar nextScreen="Interests" />
         </View>
+
+        {dateModal && (
+          <MyDateInputComponent
+            date={date}
+            setDate={setDate}
+            setDateModal={setDateModal}
+          />
+        )}
       </View>
     </TouchableWithoutFeedback>
   );

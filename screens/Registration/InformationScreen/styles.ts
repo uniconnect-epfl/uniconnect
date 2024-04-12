@@ -5,6 +5,8 @@ import {
   lightPeach,
   shadowColor,
   white,
+  lightGray,
+  gray,
 } from '../../../assets/colors/colors';
 
 import { BUTTON_HEIGHT, BUTTON_RADIUS } from '../../../assets/global/constants';
@@ -65,8 +67,8 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'space-around',
   },
-  date:{
-    
+  date: {
+    color: gray,
   },
   description: {
     alignSelf: 'center',
@@ -81,11 +83,7 @@ const styles = StyleSheet.create({
     width: '70%',
   },
 
-
- 
-
   footer: {
-    
     width: '100%',
   },
 
@@ -94,6 +92,23 @@ const styles = StyleSheet.create({
     height: 75,
     marginRight: 10,
     width: 75,
+  },
+  input: {
+    borderColor: lightGray,
+    borderRadius: 25,
+    borderWidth: 1,
+    height: 50,
+    justifyContent: 'center',
+    paddingHorizontal: 30,
+    width: '100%',
+  },
+  label: {
+    color: black,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginTop: 10,
+    paddingLeft: 20,
   },
 
   locationButton: {
@@ -122,6 +137,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: 20,
     marginTop: 100,
+  },
+  section: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    width: '100%',
   },
 });
 

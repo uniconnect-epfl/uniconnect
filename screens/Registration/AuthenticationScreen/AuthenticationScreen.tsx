@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 import {
-  View,
   Text,
   Image,
   TouchableOpacity,
   TouchableWithoutFeedback,
+  View,
   Keyboard,
+  TextInput,
 } from 'react-native';
 
 import InputField from '../../../components/InputField/InputField';
@@ -19,6 +20,7 @@ import Divider from '../../../components/divider/divider';
 import LowBar from '../../../components/LowBar/LowBar';
 import { Entypo } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import { red, green } from '../../../assets/colors/colors';
 
 const AuthenticationScreen: React.FC = () => {
   const insets = useSafeAreaInsets();
@@ -27,6 +29,9 @@ const AuthenticationScreen: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');
+  const firstRef = useRef<TextInput>(null);
+  const secRef = useRef<TextInput>(null);
+  const thirdRef = useRef<TextInput>(null);
 
   const isPassword = () => {
     return password.length >= MIN_LENGHT;
@@ -70,6 +75,7 @@ const AuthenticationScreen: React.FC = () => {
           placeholder="****************"
           onChangeText={setPassword}
           value={password}
+          onSubmitEditing={() => firstRef.current?.focus()}
         ></InputField>
 
         <InputField
@@ -77,6 +83,8 @@ const AuthenticationScreen: React.FC = () => {
           placeholder="****************"
           onChangeText={setConfirmPassword}
           value={confirmPassword}
+          ref={firstRef}
+          onSubmitEditing={() => secRef.current?.focus()}
         ></InputField>
 
         <View style={styles.container}>
@@ -88,23 +96,23 @@ const AuthenticationScreen: React.FC = () => {
           </View>
 
           <View style={styles.phrase}>
-            {!doPasswordsMatch() && <Entypo name="cross" color="red" />}
-            {doPasswordsMatch() && <AntDesign name="check" color="green" />}
+            {!doPasswordsMatch() && <Entypo name="cross" color={red} />}
+            {doPasswordsMatch() && <AntDesign name="check" color={green} />}
             <Text style={[globalStyles.text, globalStyles.smallText]}>
               Passwords matching
             </Text>
           </View>
 
           <View style={styles.phrase}>
-            {!isPassword() && <Entypo name="cross" color="red" />}
-            {isPassword() && <AntDesign name="check" color="green" />}
+            {!isPassword() && <Entypo name="cross" color={red} />}
+            {isPassword() && <AntDesign name="check" color={green} />}
             <Text style={[globalStyles.text, globalStyles.smallText]}>
               At least 8 characters
             </Text>
           </View>
 
           <View style={styles.phrase}>
-            <Entypo name="cross" color="red" />
+            <Entypo name="cross" color={red} />
             <Text style={[globalStyles.text, globalStyles.smallText]}>
               Contains a number and a symbol
             </Text>
@@ -118,6 +126,8 @@ const AuthenticationScreen: React.FC = () => {
           placeholder="E-mail"
           onChangeText={setEmail}
           value={email}
+          ref={secRef}
+          onSubmitEditing={() => thirdRef.current?.focus()}
         ></InputField>
 
         <InputField
@@ -125,6 +135,7 @@ const AuthenticationScreen: React.FC = () => {
           placeholder="Confirm your e-mail"
           onChangeText={setConfirmEmail}
           value={confirmEmail}
+          ref={thirdRef}
         ></InputField>
 
         <TouchableOpacity style={styles.button} onPress={submitForm}>

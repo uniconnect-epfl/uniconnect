@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   Text,
   View,
@@ -19,6 +19,7 @@ import { useNavigation } from '@react-navigation/native';
 const OnboardingScreen: React.FC = () => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+  const nextRef = useRef<TextInput>(null);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -37,6 +38,7 @@ const OnboardingScreen: React.FC = () => {
           placeholderTextColor={'black'}
           keyboardType="email-address"
           autoCapitalize="none"
+          onSubmitEditing={() => nextRef.current?.focus()}
         />
 
         {/* Password Field */}
@@ -46,6 +48,7 @@ const OnboardingScreen: React.FC = () => {
           placeholderTextColor={'black'}
           secureTextEntry
           autoCapitalize="none"
+          ref={nextRef}
         />
 
         {/* Log In Button */}
@@ -82,10 +85,12 @@ const OnboardingScreen: React.FC = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.footer}
+          style={[styles.footer, { bottom: insets.bottom }]}
           onPress={() => navigation.navigate('Information' as never)}
         >
-          <Text style={[styles.smallText, globalStyles.text]}>Dont have an account?</Text>
+          <Text style={[styles.smallText, globalStyles.text]}>
+            Dont have an account?
+          </Text>
           <Text style={[styles.specialText, globalStyles.text]}> Sign Up</Text>
         </TouchableOpacity>
       </View>
