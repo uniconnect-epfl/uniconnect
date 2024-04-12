@@ -1,4 +1,4 @@
-import React, { useState } from 'react' 
+import React, { useState } from 'react'
 import {
   View,
   Text,
@@ -17,9 +17,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import LowBar from '../../../components/LowBar/LowBar' 
 
 interface InterestButtonProps {
-  title: string 
-  selected: boolean 
-  onSelect: () => void 
+  title: string
+  selected: boolean
+  onSelect: () => void
 }
 
 const InterestButton: React.FC<InterestButtonProps> = ({
@@ -40,7 +40,7 @@ const InterestButton: React.FC<InterestButtonProps> = ({
       {title}
     </Text>
   </TouchableOpacity>
-) 
+)
 
 const interests = [
   'Machine Learning',
@@ -63,10 +63,10 @@ const interests = [
 ]
 
 const InterestsScreen = () => {
-  const insets = useSafeAreaInsets() 
-  const [searchTerm, setSearchTerm] = useState('') 
-  const [filterdedInterests, setFilteredInterests] = useState(interests) 
-  const [selectedInterests, setSelectedInterests] = useState(new Set()) 
+  const insets = useSafeAreaInsets()
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filterdedInterests, setFilteredInterests] = useState(interests)
+  const [selectedInterests, setSelectedInterests] = useState(new Set())
 
   const renderItem = ({ item }: ListRenderItemInfo<string>) => (
     <InterestButton
@@ -78,27 +78,27 @@ const InterestsScreen = () => {
 
   const toggleInterest = (interest: string) => {
     setSelectedInterests((prev) => {
-      const newSelectedInterests = new Set(prev) 
+      const newSelectedInterests = new Set(prev)
       if (newSelectedInterests.has(interest)) {
-        newSelectedInterests.delete(interest) 
+        newSelectedInterests.delete(interest)
       } else {
-        newSelectedInterests.add(interest) 
+        newSelectedInterests.add(interest)
       }
-      return newSelectedInterests 
-    }) 
-  } 
+      return newSelectedInterests
+    })
+  }
 
   const handleSearch = (text: string) => {
-    setSearchTerm(text) 
+    setSearchTerm(text)
     if (searchTerm) {
       const filteredData = interests.filter((interest) =>
         interest.toLocaleLowerCase().includes(text.toLowerCase())
-      ) 
-      setFilteredInterests(filteredData) 
+      )
+      setFilteredInterests(filteredData)
     } else {
-      setFilteredInterests(interests) 
+      setFilteredInterests(interests)
     }
-  } 
+  }
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -140,4 +140,4 @@ const InterestsScreen = () => {
   )
 }
 
-export default InterestsScreen 
+export default InterestsScreen
