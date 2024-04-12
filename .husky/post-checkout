@@ -1,0 +1,15 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Checking for changes in package.json..."
+
+# Check if package.json was changed
+PACKAGE_JSON_CHANGED=$(git diff --name-only HEAD@{1} HEAD | grep -E '^package.json$')
+
+if [ "$PACKAGE_JSON_CHANGED" ]; then
+    echo "package.json changed. Reinstalling dependencies..."
+    rm -rf node_modules/
+    npm install
+else
+    echo "No changes in package.json."
+fi
