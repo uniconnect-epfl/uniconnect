@@ -1,7 +1,7 @@
 // AppContent.tsx
-import React from 'react' 
-import { View, Button, StyleSheet } from 'react-native' 
-import { FIREBASE_AUTH } from '../../firebaseConfig' 
+import React from 'react';
+import { View, Button, StyleSheet } from 'react-native';
+import { FIREBASE_AUTH } from '../../firebaseConfig';
 
 
 const AppContent = ( ) => {
@@ -9,8 +9,8 @@ const AppContent = ( ) => {
         <View style={styles.container}>
             <Button title="Log out" onPress={() => FIREBASE_AUTH.signOut()} />
         </View>
-    ) 
-} 
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -19,6 +19,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 20,
     },
-}) 
+});
 
-export default AppContent 
+export default AppContent;

@@ -1,7 +1,7 @@
-import { StyleSheet } from 'react-native' 
-import { peach, lightPeach, shadowColor } from '../../../assets/colors/colors' 
+import { StyleSheet } from 'react-native';
+import { peach, lightPeach, shadowColor } from '../../../assets/colors/colors';
 
-import { BUTTON_RADIUS } from '../../../assets/global/constants' 
+import { BUTTON_RADIUS } from '../../../assets/global/constants';
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
@@ -47,6 +47,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     textAlign: 'center',
   },
-}) 
+});
 
-export default styles 
+export default styles;

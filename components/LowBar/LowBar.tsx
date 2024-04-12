@@ -1,12 +1,12 @@
-import React from 'react' 
-import { View, TouchableOpacity, Text } from 'react-native' 
+import React from 'react';
+import { View, TouchableOpacity, Text } from 'react-native';
 
-import styles from './styles' 
-import { globalStyles } from '../../assets/global/globalStyles' 
-import { useNavigation } from '@react-navigation/native' 
+import styles from './styles';
+import { globalStyles } from '../../assets/global/globalStyles';
+import { useNavigation } from '@react-navigation/native';
 
 const LowBar: React.FC = () => {
-  const navigation = useNavigation() 
+  const navigation = useNavigation();
 
     return(
         <View style={styles.nextBar}>
@@ -19,6 +19,6 @@ const LowBar: React.FC = () => {
             </TouchableOpacity>
         </View>
     )
-} 
+};
 
-export default LowBar 
+export default LowBar;

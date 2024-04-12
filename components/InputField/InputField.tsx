@@ -1,14 +1,14 @@
-import React from 'react' 
-import { View, TextInput, Text } from 'react-native' 
-import { globalStyles } from '../../assets/global/globalStyles' 
+import React from 'react';
+import { View, TextInput, Text } from 'react-native';
+import { globalStyles } from '../../assets/global/globalStyles';
 
-import styles from './styles' 
+import styles from './styles';
 
 interface InputFieldProps {
-  label: string 
-  placeholder: string 
-  value?: string 
-  onChangeText?: (text: string) => void 
+  label: string;
+  placeholder: string;
+  value?: string;
+  onChangeText?: (text: string) => void;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -27,7 +27,7 @@ const InputField: React.FC<InputFieldProps> = ({
         onChangeText={onChangeText}
       />
     </View>
-  ) 
-} 
+  );
+};
 
-export default InputField 
+export default InputField;

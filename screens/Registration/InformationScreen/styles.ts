@@ -1,13 +1,13 @@
-import { StyleSheet } from 'react-native' 
+import { StyleSheet } from 'react-native';
 import {
   peach,
   black,
   lightPeach,
   shadowColor,
   white,
-} from '../../../assets/colors/colors' 
+} from '../../../assets/colors/colors';
 
-import { BUTTON_HEIGHT, BUTTON_RADIUS } from '../../../assets/global/constants' 
+import { BUTTON_HEIGHT, BUTTON_RADIUS } from '../../../assets/global/constants';
 
 const styles = StyleSheet.create({
   button: {
@@ -116,6 +116,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginTop: 100,
   },
-}) 
+});
 
-export default styles 
+export default styles;

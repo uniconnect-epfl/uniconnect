@@ -1,11 +1,11 @@
-import { StyleSheet } from 'react-native' 
+import { StyleSheet } from 'react-native';
 import {
   peach,
   black,
   lightPeach,
   white,
   shadowColor,
-} from '../../assets/colors/colors' 
+} from '../../assets/colors/colors';
 
 const styles = StyleSheet.create({
   buttonSmall: {
@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: 20,
   },
-}) 
+});
 
-export default styles 
+export default styles;

@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native' 
-import { black, lightGray } from '../../assets/colors/colors' 
+import { StyleSheet } from 'react-native';
+import { black, lightGray } from '../../assets/colors/colors';
 
 const styles = StyleSheet.create({
   input: {
@@ -39,6 +39,6 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     paddingTop: 50,
   },
-}) 
+});
 
-export default styles 
+export default styles;

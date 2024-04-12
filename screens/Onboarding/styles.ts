@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native' 
+import { StyleSheet } from 'react-native';
 import {
   white,
   black,
@@ -6,13 +6,13 @@ import {
   lightPeach,
   peach,
   shadowColor,
-} from '../../assets/colors/colors' 
+} from '../../assets/colors/colors';
 
 import {
   BUTTON_HEIGHT,
   BUTTON_RADIUS,
   BUTTON_TEXT_FONT_SIZE,
-} from '../../assets/global/constants' 
+} from '../../assets/global/constants';
 
 const styles = StyleSheet.create({
   border: {
@@ -112,6 +112,6 @@ const styles = StyleSheet.create({
     color: peach,
     fontSize: 10,
   },
-}) 
+});
 
-export default styles 
+export default styles;
