@@ -1,51 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react' 
 
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native' 
 
-import InputField from '../../../components/InputField/InputField';
+import InputField from '../../../components/InputField/InputField' 
 
-import styles from './styles';
+import styles from './styles' 
 
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { globalStyles } from '../../../assets/global/globalStyles';
-import Divider from '../../../components/divider/divider';
-import LowBar from '../../../components/LowBar/LowBar';
-import { Entypo, AntDesign } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context' 
+import { globalStyles } from '../../../assets/global/globalStyles' 
+import Divider from '../../../components/divider/divider' 
+import LowBar from '../../../components/LowBar/LowBar' 
+import { Entypo, AntDesign } from '@expo/vector-icons' 
 
 const AuthenticationScreen: React.FC = () => {
-  const insets = useSafeAreaInsets();
-  const MIN_LENGHT = 8;
-  const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [confirmEmail, setConfirmEmail] = useState('');
+  const insets = useSafeAreaInsets() 
+  const MIN_LENGHT = 8 
+  const [password, setPassword] = useState<string>('') 
+  const [confirmPassword, setConfirmPassword] = useState('') 
+  const [email, setEmail] = useState('') 
+  const [confirmEmail, setConfirmEmail] = useState('') 
 
   const isPassword = () => {
-    return password.length >= MIN_LENGHT;
-  };
+    return password.length >= MIN_LENGHT 
+  } 
 
   const doPasswordsMatch = () => {
-    return password === confirmPassword;
-  };
+    return password === confirmPassword 
+  } 
 
   const isEmail = () => {
-    return true;
-  };
+    return true 
+  } 
 
   const doEmailsMatch = () => {
-    return email == confirmEmail;
-  };
+    return email == confirmEmail 
+  } 
 
   /**
    * Function that submits the user data to the DB
    */
   const submitForm = () => {
     if (isPassword() && doPasswordsMatch() && isEmail() && doEmailsMatch()) {
-      return true;
+      return true 
     } else {
-      return false;
+      return false 
     }
-  };
+  } 
 
   return (
     <View style={{ paddingBottom: insets.bottom, paddingTop: insets.top }}>
@@ -124,7 +124,7 @@ const AuthenticationScreen: React.FC = () => {
 
       <LowBar />
     </View>
-  );
-};
+  ) 
+} 
 
-export default AuthenticationScreen;
+export default AuthenticationScreen 

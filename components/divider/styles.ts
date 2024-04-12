@@ -1,6 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native' 
 
-import { black } from '../../assets/colors/colors';
+import { black } from '../../assets/colors/colors' 
 
 const styles = StyleSheet.create({
   divider: {
@@ -10,6 +10,6 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     width: 'auto',
   },
-});
+}) 
 
-export default styles;
+export default styles 
