@@ -85,8 +85,8 @@ const OnboardingScreen: React.FC = () => {
           style={styles.footer}
           onPress={() => navigation.navigate('Information' as never)}
         >
-          <Text style={styles.smallText}>Dont have an account?</Text>
-          <Text style={styles.specialText}> Sign Up</Text>
+          <Text style={[styles.smallText, globalStyles.text]}>Dont have an account?</Text>
+          <Text style={[styles.specialText, globalStyles.text]}> Sign Up</Text>
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
