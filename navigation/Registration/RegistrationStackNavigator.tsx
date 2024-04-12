@@ -3,16 +3,20 @@ import { createStackNavigator } from "@react-navigation/stack"
 import OnboardingScreen from "../../screens/Onboarding/OnboardingScreen"
 import InformationScreen from "../../screens/Registration/InformationScreen/InformationScreen"
 import InterestsScreen from "../../screens/Registration/InterestsScreen/InterestsScreen"
-import AuthenticationScreen from "../../screens/Registration/AuthenticationScreen/AuthenticationScreen"
 import HomeTabNavigator from "../../navigation/Home/HomeTabNavigator"
+import { MyProfileScreen } from "../../screens/Profile/MyProfileScreen/MyProfileScreen"
+import { SettingsScreen } from "../../screens/Settings/SettingsScreen"
+import AuthenticationScreen from "../../screens/Registration/AuthenticationScreen/AuthenticationScreen"
 
 //Definition of type for Typescript compatibility
 export type RegistrationStackParamList = {
-  Onboarding: undefined
   Authentication: undefined
+  Onboarding: undefined
   Information: undefined
   Interests: undefined
-  Home: undefined
+  HomeTabs: undefined
+  Profile: undefined
+  Settings: undefined
 }
 
 const Stack = createStackNavigator<RegistrationStackParamList>()
@@ -42,8 +46,18 @@ const RegistrationStackNavigator: React.FC = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Home"
+        name="HomeTabs"
         component={HomeTabNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={MyProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Settings"
+        component={SettingsScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
