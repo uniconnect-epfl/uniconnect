@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, View, Dimensions} from "react-native";
-import Svg, { Circle, Line} from "react-native-svg";
+import React, { useEffect, useState } from "react" 
+import { ActivityIndicator, View, Dimensions} from "react-native" 
+import Svg, { Circle, Line} from "react-native-svg" 
 
-import styles from "./styles";
-import Graph, { Link, Node } from "../Graph";
-import { fruchtermanReingold } from "../graph-algorithms/FruchtermanReingold";
+import styles from "./styles" 
+import Graph, { Link, Node } from "../Graph" 
+import { fruchtermanReingold } from "../graph-algorithms/FruchtermanReingold" 
 
-const DEFAULT_NODE_SIZE = 10; // Default size of the nodes
-const DEFAULT_NODE_SIZE_INCREMENT = 2; // Increment in the size of the nodes
+const DEFAULT_NODE_SIZE = 10  // Default size of the nodes
+const DEFAULT_NODE_SIZE_INCREMENT = 2  // Increment in the size of the nodes
 
-const DEFAULT_NODE_COLOR = "blue"; // Default color of the nodes
-const CONSTRAINED_NODE_COLOR = "red"; // Color of the constrained node
+const DEFAULT_NODE_COLOR = "blue"  // Default color of the nodes
+const CONSTRAINED_NODE_COLOR = "red"  // Color of the constrained node
 
-const DEFAULT_LINK_COLOR = "black"; // Default color of the links
+const DEFAULT_LINK_COLOR = "black"  // Default color of the links
 
-const MAX_ITERATIONS = 1000; // Maximum number of iterations for the used algorithn
+const MAX_ITERATIONS = 1000  // Maximum number of iterations for the used algorithn
 
-const WIDTH = Dimensions.get("window").width; // Width of the screen
-const HEIGHT = Dimensions.get("window").height; // Height of the screen
-const CENTER_WIDTH = WIDTH / 2; // Center X-coordinates of the screen
-const CENTER_HEIGHT = HEIGHT / 2; // Center Y-coordinates of the screen
+const WIDTH = Dimensions.get("window").width  // Width of the screen
+const HEIGHT = Dimensions.get("window").height  // Height of the screen
+const CENTER_WIDTH = WIDTH / 2  // Center X-coordinates of the screen
+const CENTER_HEIGHT = HEIGHT / 2  // Center Y-coordinates of the screen
 
 /**
  *
@@ -29,23 +29,23 @@ const CENTER_HEIGHT = HEIGHT / 2; // Center Y-coordinates of the screen
  * @returns - Force-directed graph component
  */
 const ForceDirectedGraph: React.FC<{
-  graph: Graph;
-  constrainedNodeId: string;
+  graph: Graph 
+  constrainedNodeId: string 
 }> = ({ graph, constrainedNodeId }) => {
   // States to store the nodes, links, sizes and loading status
-  const [nodes, setNodes] = useState<Node[]>([]);
-  const [links, setLinks] = useState<Link[]>([]);
-  const [sizes, setSizes] = useState<Map<string, number>>(new Map());
-  const [load, setLoad] = useState<boolean>(false);
+  const [nodes, setNodes] = useState<Node[]>([]) 
+  const [links, setLinks] = useState<Link[]>([]) 
+  const [sizes, setSizes] = useState<Map<string, number>>(new Map()) 
+  const [load, setLoad] = useState<boolean>(false) 
 
   // Use effect to update the graph
   useEffect(() => {
     // Get the initial links, nodes and sizes
-    const initialLinks = graph.getLinks();
-    const initialNodes = graph.getNodes();
-    const initialSizes = setNodesSizes([...initialLinks]);
+    const initialLinks = graph.getLinks() 
+    const initialNodes = graph.getNodes() 
+    const initialSizes = setNodesSizes([...initialLinks]) 
     // Set the links, nodes and sizes
-    setLinks([...initialLinks]);
+    setLinks([...initialLinks]) 
     setNodes(
       fruchtermanReingold(
         [...initialNodes],
@@ -55,31 +55,31 @@ const ForceDirectedGraph: React.FC<{
         HEIGHT,
         MAX_ITERATIONS
       )
-    );
-    setSizes(initialSizes);
-    setLoad(true);
-  }, [graph, constrainedNodeId]);
+    ) 
+    setSizes(initialSizes) 
+    setLoad(true) 
+  }, [graph, constrainedNodeId]) 
 
   // If the graph is not loaded, display an activity indicator
   if (!load) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return <ActivityIndicator size="large" color="#0000ff" /> 
   }
 
   // Functions to get the X and Y coordinates of the nodes and the fill color of the nodes
   const coordX = (node: Node): number => {
-    return node.x;
-  };
+    return node.x 
+  } 
 
   const coordY = (node: Node): number => {
-    return node.y;
-  };
+    return node.y 
+  } 
 
   const circleFill = (node: Node): string => {
     if (node.id === constrainedNodeId) {
-      return CONSTRAINED_NODE_COLOR;
+      return CONSTRAINED_NODE_COLOR 
     }
-    return DEFAULT_NODE_COLOR;
-  };
+    return DEFAULT_NODE_COLOR 
+  } 
 
   // Create the lines and circles for the graph
   const LINES = links.map((link) => (
@@ -123,7 +123,7 @@ const ForceDirectedGraph: React.FC<{
       )}
       stroke={DEFAULT_LINK_COLOR}
     />
-  ));
+  )) 
 
   const CIRCLES = nodes.map((node) => (
     <Circle
@@ -133,7 +133,7 @@ const ForceDirectedGraph: React.FC<{
       r={sizes.get(node.id) ?? DEFAULT_NODE_SIZE}
       fill={circleFill(node)}
     />
-  ));
+  )) 
 
   return (
     <View style={styles.container}>
@@ -142,10 +142,10 @@ const ForceDirectedGraph: React.FC<{
         {CIRCLES}
       </Svg>
     </View>
-  );
-};
+  ) 
+} 
 
-export default ForceDirectedGraph;
+export default ForceDirectedGraph 
 
 /**
  *
@@ -155,7 +155,7 @@ export default ForceDirectedGraph;
  */
 function setNodesSizes(links: Link[]): Map<string, number> {
   // Initialize the sizes
-  const sizes = new Map<string, number>();
+  const sizes = new Map<string, number>() 
 
   // Increment the size of the nodes based on the links
   for (const link of links) {
@@ -163,9 +163,9 @@ function setNodesSizes(links: Link[]): Map<string, number> {
       sizes.set(
         id,
         (sizes.get(id) ?? DEFAULT_NODE_SIZE) + DEFAULT_NODE_SIZE_INCREMENT
-      );
-    });
+      ) 
+    }) 
   }
 
-  return sizes;
+  return sizes 
 }

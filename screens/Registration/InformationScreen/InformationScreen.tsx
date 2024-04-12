@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, Image, TextInput } from 'react-native';
-import styles from './styles';
-import { globalStyles } from '../../../assets/global/globalStyles';
-import { Ionicons } from '@expo/vector-icons';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import LowBar from '../../../components/LowBar/LowBar';
-import InputField from '../../../components/InputField/InputField';
-import Divider from '../../../components/divider/divider';
+import React, { useState } from 'react' 
+import { View, TouchableOpacity, Text, Image, TextInput } from 'react-native' 
+import styles from './styles' 
+import { globalStyles } from '../../../assets/global/globalStyles' 
+import { Ionicons } from '@expo/vector-icons' 
+import { useSafeAreaInsets } from 'react-native-safe-area-context' 
+import LowBar from '../../../components/LowBar/LowBar' 
+import InputField from '../../../components/InputField/InputField' 
+import Divider from '../../../components/divider/divider' 
 
 const InformationScreen: React.FC = () => {
-  const insets = useSafeAreaInsets();
-  const [isTextInputVisible, setTextInputVisible] = useState(false);
-  const [text, setText] = useState('');
+  const insets = useSafeAreaInsets() 
+  const [isTextInputVisible, setTextInputVisible] = useState(false) 
+  const [text, setText] = useState('') 
 
   return (
     <View
@@ -66,7 +66,7 @@ const InformationScreen: React.FC = () => {
         <LowBar />
       </View>
     </View>
-  );
-};
+  ) 
+} 
 
-export default InformationScreen;
+export default InformationScreen 
