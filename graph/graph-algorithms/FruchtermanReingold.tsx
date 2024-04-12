@@ -1,4 +1,4 @@
-import { Node, Link } from "../Graph" 
+import { Node, Link } from "../Graph";
 
 /**
  *
@@ -19,187 +19,127 @@ export const fruchtermanReingold = (
   height: number,
   iterations: number
 ) => {
+  // Area of the graph
+  const area = width * height;
+
   // Maximum distance between nodes
-  const k = Math.sqrt((width * height) / nodes.length) 
+  const k = Math.sqrt(area / nodes.length);
+
+  /**
+   *
+   * @description Calculate attractive force between two nodes
+   * @param distance - Distance between the nodes
+   * @returns - Attractive force
+   */
+  const attractiveForce = (distance: number): number => distance ** 2 / k;
+
+  /**
+   *
+   * @description Calculate repulsive force between two nodes inversely proportional to distance
+   * @param distance - Distance between the nodes
+   * @returns - Repulsive force
+   */
+  const repulsiveForce = (distance: number): number => k ** 2 / distance;
+
+  /**
+   *
+   * @description Calculate Euclidean distance between two nodes
+   * @param p1 - First node
+   * @param p2 - Second node
+   * @returns - Euclidean distance
+   */
+  const distanceBetween = (p1: Node, p2: Node): number =>
+    Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2);
 
   // Randomly initialize node positions
-  initializePositions(nodes, width, height) 
+  for (const node of nodes) {
+    node.x = Math.random() * width;
+    node.y = Math.random() * height;
+  }
 
   // Initialize temperature and cooling rate
-  let temperature = width / 10 
-  const cooling = temperature / (iterations + 1) 
+  let temperature = width / 10;
+  const cooling = temperature / (iterations + 1);
 
   // Perform iterations
-  for (let i = 0 ;  i < iterations ; i++) {
+  for (let i = 0; i < iterations; i++) {
     // Calculate repulsive forces
-    repulsiveForces(nodes, k) 
+    for (const node of nodes) {
+      // Reset displacement
+      node.dx = 0;
+      node.dy = 0;
 
-    // Calculate attractive forces
-    attractiveForces(nodes, links, k) 
+      // Calculate displacement
+      for (const otherNode of nodes) {
+        // Skip if the nodes are the same
+        if (node != otherNode) {
+          const dx = node.x - otherNode.x;
+          const dy = node.y - otherNode.y;
+          const distance = distanceBetween(node, otherNode);
 
-    // Update node positions
-    updatePositions(nodes, temperature, width, height, constrainedNodeId) 
-
-    // Cool down temperature
-    temperature -= cooling 
-  }
-
-  return nodes 
-} 
-
-/**
- *
- * @description Initialize node positions randomly
- * @param nodes - Array of nodes
- * @param width - Width of the graph
- * @param height - Height of the graph
- */
-const initializePositions = (
-  nodes: Node[],
-  width: number,
-  height: number
-): void => {
-  for (const node of nodes) {
-    node.x = Math.random() * width 
-    node.y = Math.random() * height 
-  }
-} 
-
-/**
- * @description Calculate repulsive forces between nodes
- * @param nodes - Array of nodes
- * @param k - Maximum distance between nodes
- */
-const repulsiveForces = (nodes: Node[], k: number): void => {
-  for (const node of nodes) {
-    // Reset displacement
-    node.dx = 0 
-    node.dy = 0 
-
-    // Calculate displacement
-    for (const otherNode of nodes) {
-      // Skip if the nodes are the same
-      if (node != otherNode) {
-        const dx = node.x - otherNode.x 
-        const dy = node.y - otherNode.y 
-        const distance = distanceBetween(
-          node.x,
-          node.y,
-          otherNode.x,
-          otherNode.y
-        ) 
-
-        // Skip if the nodes are too close
-        if (distance != 0) {
-          const force = repulsiveForce(distance, k) / distance 
-          node.dx += dx * force 
-          node.dy += dy * force 
+          // Skip if the nodes are too close
+          if (distance != 0) {
+            const force = repulsiveForce(distance) / distance;
+            node.dx += dx * force;
+            node.dy += dy * force;
+          }
         }
       }
     }
-  }
-} 
 
-/**
- * @description Calculate attractive forces between nodes
- * @param nodes - Array of nodes
- * @param links - Array of links
- * @param k - Maximum distance between nodes
- */
-const attractiveForces = (nodes: Node[], links: Link[], k: number): void => {
-  for (const link of links) {
-    // Retrieve source and target nodes
-    const source = nodes.find((node) => node.id === link.source) 
-    const target = nodes.find((node) => node.id === link.target) 
+    // Calculate attractive forces
+    for (const link of links) {
+      // Retrieve source and target nodes
+      const source = nodes.find((node) => node.id === link.source);
+      const target = nodes.find((node) => node.id === link.target);
 
-    // Calculate displacement if both nodes exist
-    if (source && target) {
-      const distance = distanceBetween(source.x, source.y, target.x, target.y) 
+      // Calculate displacement if both nodes exist
+      if (source && target) {
+        const dx = target.x - source.x;
+        const dy = target.y - source.y;
+        const distance = distanceBetween(source, target);
 
-      // Skip if the nodes are too close
-      if (distance != 0) {
-        const force = attractiveForce(distance, k) / distance 
-        source.dx += (target.x - source.x) * force 
-        source.dy += (target.y - source.y) * force 
-        target.dx -= (target.x - source.x) * force 
-        target.dy -= (target.y - source.y) * force 
+        // Skip if the nodes are too close
+        if (distance != 0) {
+          const force = attractiveForce(distance) / distance;
+          source.dx += dx * force;
+          source.dy += dy * force;
+          target.dx -= dx * force;
+          target.dy -= dy * force;
+        }
       }
     }
-  }
-} 
 
-/**
- * @description Update node positions based on forces
- * @param nodes - Array of nodes
- * @param temperature - Current temperature
- * @param width - Width of the graph
- * @param height - Height of the graph
- * @param constrainedNodeId - Identifier of the node to be constrained to the center
- */
-const updatePositions = (
-  nodes: Node[],
-  temperature: number,
-  width: number,
-  height: number,
-  constrainedNodeId: string
-): void => {
-  for (const node of nodes) {
-    // Constrain node to the center
-    if (node.id === constrainedNodeId) {
-      node.x = width / 2 
-      node.y = height / 2 
-      continue 
+    // Update node positions
+    for (const node of nodes) {
+      // Constrain node to the center
+      if (node.id === constrainedNodeId) {
+        node.x = width / 2;
+        node.y = height / 2;
+        continue;
+      }
+
+      // Calculate displacement
+      const distance = Math.sqrt(node.dx ** 2 + node.dy ** 2);
+
+      // Skip if the node is too close
+      if (distance != 0) {
+        // Calculate ratio of displacement, limited to temperature, to distance
+        const ratio = Math.min(distance, temperature) / distance;
+
+        // Update node position
+        node.x += node.dx * ratio;
+        node.y += node.dy * ratio;
+
+        // Keep node within the graph
+        node.x = Math.min(width, Math.max(0, node.x));
+        node.y = Math.min(height, Math.max(0, node.y));
+      }
     }
 
-    // Calculate displacement
-    const distance = distanceBetween(0, 0, node.dx, node.dy) 
-
-    // Skip if the node is too close
-    if (distance != 0) {
-      // Calculate ratio of displacement, limited to temperature, to distance
-      const ratio = Math.min(distance, temperature) / distance 
-
-      // Update node position
-      node.x += node.dx * ratio 
-      node.y += node.dy * ratio 
-
-      // Keep node within the graph
-      node.x = Math.min(width, Math.max(0, node.x)) 
-      node.y = Math.min(height, Math.max(0, node.y)) 
-    }
+    // Cool down temperature
+    temperature -= cooling;
   }
-} 
 
-/**
- *
- * @description Calculate attractive force between two nodes
- * @param distance - Distance between the nodes
- * @returns - Attractive force
- */
-const attractiveForce = (distance: number, k: number): number =>
-  distance ** 2 / k 
-
-/**
- *
- * @description Calculate repulsive force between two nodes inversely proportional to distance
- * @param distance - Distance between the nodes
- * @returns - Repulsive force
- */
-const repulsiveForce = (distance: number, k: number): number =>
-  k ** 2 / distance 
-
-/**
- *
- * @description Calculate Euclidean distance between two points
- * @param x1 - X-coordinate of the first point
- * @param y1 - Y-coordinate of the first point
- * @param x2 - X-coordinate of the second point
- * @param y2 - Y-coordinate of the second point
- * @returns - Euclidean distance
- */
-const distanceBetween = (
-  x1: number,
-  y1: number,
-  x2: number,
-  y2: number
-): number => Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2) 
+  return nodes;
+};

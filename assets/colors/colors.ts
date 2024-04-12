@@ -1,4 +1,4 @@
-export const shadowColor = '#7F5DF0';
+export const shadowColor = '#7F5DF0'
 export const white = 'white';
 export const peach = '#FD9890';
 export const red = 'red';
@@ -7,5 +7,3 @@ export const black = 'black';
 export const lightGray = '#E2DFDE';
 export const transparent = 'transparent';
 export const lightPeach = '#FBF9F1';
-export const green = 'green';
-export const gray = 'gray';

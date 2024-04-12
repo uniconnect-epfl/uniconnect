@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native' 
+import { StyleSheet } from 'react-native';
 
 
 const styles = StyleSheet.create({
@@ -13,6 +13,6 @@ const styles = StyleSheet.create({
         padding: 10,
         width: '80%',
     },
-}) 
+});
 
-export default styles 
+export default styles;

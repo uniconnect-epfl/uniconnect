@@ -1,46 +1,46 @@
-import React, { useState } from 'react' 
-import { View, TextInput, Button, ActivityIndicator, KeyboardAvoidingView } from 'react-native' 
-import { FIREBASE_AUTH } from '../../../firebaseConfig' 
-import styles from './styles' 
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth' 
+import React, { useState } from 'react';
+import { View, TextInput, Button, ActivityIndicator, KeyboardAvoidingView } from 'react-native';
+import { FIREBASE_AUTH } from '../../../firebaseConfig';
+import styles from './styles';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 
 
 const Login = () => {
-    const [email, setEmail] = useState('') 
-    const [password, setPassword] = useState('') 
-    const [loading, setLoading] = useState(false) 
-    const auth = FIREBASE_AUTH 
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const auth = FIREBASE_AUTH;
 
     const loginEmailPassword = async () => {
-        setLoading(true) 
+        setLoading(true);
         try {
-            const unserCredential = await signInWithEmailAndPassword(auth, email, password) 
-            const user = unserCredential.user 
-            console.log(user) 
+            const unserCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = unserCredential.user;
+            console.log(user);
 
         } catch (error) {
             if (error instanceof Error) { // Type-guard check
-                console.log(`There was an error: ${error.message}`) 
+                console.log(`There was an error: ${error.message}`);
             }
-            alert('There was an error' + error) 
+            alert('There was an error' + error);
 
         } finally {
-            setLoading(false) 
+            setLoading(false);
         }
     }
 
     const createAccount = async () => {
-        setLoading(true) 
+        setLoading(true);
         try {
-            await createUserWithEmailAndPassword(auth, email, password) 
-            alert('Account created. Check email') 
+            await createUserWithEmailAndPassword(auth, email, password);
+            alert('Account created. Check email');
         } catch (error) {
             if (error instanceof Error) { // Type-guard check
-                console.log(`There was an error: ${error.message}`) 
+                console.log(`There was an error: ${error.message}`);
             }
-            alert('There was an error' + error) 
+            alert('There was an error' + error);
         } finally {
-            setLoading(false) 
+            setLoading(false);
         }
     }
 
@@ -72,7 +72,7 @@ const Login = () => {
                 </>}
             </KeyboardAvoidingView>
         </View>
-    ) 
-} 
+    );
+};
 
-export default Login 
+export default Login;
