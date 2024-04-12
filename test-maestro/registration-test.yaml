@@ -1,0 +1,7 @@
+# flow.yaml
+
+appId: com.alexandremrt.uniconnect
+---
+- "launchApp"
+
+

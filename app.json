@@ -21,11 +21,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.alexandremrt.uniconnect"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "fonts": "./assets/fonts/JetBrains-Mono-Regular.ttf'"
+    "fonts": "./assets/fonts/JetBrains-Mono-Regular.ttf'",
+    "extra": {
+      "eas": {
+        "projectId": "b224d8d5-7914-4ee3-a65a-e5e897b92bac"
+      }
+    }
   }
 }

@@ -24,6 +24,7 @@ const OnboardingScreen: React.FC = () => {
       {/* Username/Email Field */}
       <TextInput
         style={[styles.inputField, globalStyles.text]}
+        id="username_placeholder"
         placeholder="Username or email"
         placeholderTextColor={'black'}
         keyboardType="email-address"
@@ -40,7 +41,7 @@ const OnboardingScreen: React.FC = () => {
       />
 
       {/* Log In Button */}
-      <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("Home" as never)}} >
+      <TouchableOpacity style={styles.button} testID='login-btn' onPress={() => { navigation.navigate("Home" as never)}} >
         <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
       </TouchableOpacity>
 
