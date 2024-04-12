@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react' 
+import { createStackNavigator } from '@react-navigation/stack' 
 import OnboardingScreen from '../../screens/Onboarding/OnboardingScreen'
 import InformationScreen from '../../screens/Registration/InformationScreen/InformationScreen'
 import InterestsScreen from '../../screens/Registration/InterestsScreen/InterestsScreen'
@@ -16,7 +16,7 @@ export type RegistrationStackParamList = {
   Home: undefined;
 };
 
-const Stack = createStackNavigator<RegistrationStackParamList>();
+const Stack = createStackNavigator<RegistrationStackParamList>() 
 
 // return  the StackNavigation that will be called in the app to allow the user to Login/Register
 const RegistrationStackNavigator: React.FC = () => {
@@ -48,7 +48,7 @@ const RegistrationStackNavigator: React.FC = () => {
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
-  );
-};
+  ) 
+} 
     
-export default RegistrationStackNavigator;
+export default RegistrationStackNavigator 

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef } from 'react'
 import {
   Text,
   View,
@@ -7,19 +7,18 @@ import {
   Image,
   Keyboard,
   TouchableWithoutFeedback,
-} from 'react-native';
+} from 'react-native'
 
-import '../../assets/global/globalStyles';
-import { Ionicons } from '@expo/vector-icons';
-import styles from './styles';
-import { globalStyles } from '../../assets/global/globalStyles';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons'
+import styles from './styles' 
+import { globalStyles } from '../../assets/global/globalStyles' 
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useNavigation } from '@react-navigation/native'
 
 const OnboardingScreen: React.FC = () => {
-  const navigation = useNavigation();
-  const insets = useSafeAreaInsets();
-  const nextRef = useRef<TextInput>(null);
+  const navigation = useNavigation()
+  const insets = useSafeAreaInsets()
+  const nextRef = useRef<TextInput>(null)
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -55,7 +54,7 @@ const OnboardingScreen: React.FC = () => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            navigation.navigate('Home' as never);
+            navigation.navigate('Home' as never)
           }}
         >
           <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
@@ -95,7 +94,7 @@ const OnboardingScreen: React.FC = () => {
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
-  );
-};
+  )
+}
 
-export default OnboardingScreen;
+export default OnboardingScreen

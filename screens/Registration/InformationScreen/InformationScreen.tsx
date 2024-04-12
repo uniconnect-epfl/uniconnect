@@ -144,7 +144,7 @@ const InformationScreen: React.FC = () => {
         )}
       </View>
     </TouchableWithoutFeedback>
-  );
-};
+  )
+}
 
 export default InformationScreen;

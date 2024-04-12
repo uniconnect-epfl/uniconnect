@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native' 
 import {
   lightGray,
   peach,
@@ -6,8 +6,8 @@ import {
   lightPeach,
   white,
   shadowColor,
-} from '../../../assets/colors/colors';
-import { BUTTON_HEIGHT, BUTTON_RADIUS } from '../../../assets/global/constants';
+} from '../../../assets/colors/colors' 
+import { BUTTON_HEIGHT, BUTTON_RADIUS } from '../../../assets/global/constants' 
 
 const styles = StyleSheet.create({
   buttonSmall: {
@@ -127,5 +127,5 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     textAlign: 'center',
   },
-});
-export default styles;
+}) 
+export default styles 

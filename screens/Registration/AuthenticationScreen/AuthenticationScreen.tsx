@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react'
 
 import {
   Text,
@@ -8,57 +8,57 @@ import {
   View,
   Keyboard,
   TextInput,
-} from 'react-native';
+} from 'react-native'
 
-import InputField from '../../../components/InputField/InputField';
+import InputField from '../../../components/InputField/InputField' 
 
-import styles from './styles';
+import styles from './styles' 
 
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { globalStyles } from '../../../assets/global/globalStyles';
-import Divider from '../../../components/divider/divider';
-import LowBar from '../../../components/LowBar/LowBar';
-import { Entypo } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import { red, green } from '../../../assets/colors/colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { globalStyles } from '../../../assets/global/globalStyles'
+import Divider from '../../../components/divider/divider'
+import LowBar from '../../../components/LowBar/LowBar'
+import { Entypo } from '@expo/vector-icons'
+import { AntDesign } from '@expo/vector-icons'
+import { red, green } from '../../../assets/colors/colors'
 
 const AuthenticationScreen: React.FC = () => {
-  const insets = useSafeAreaInsets();
-  const MIN_LENGHT = 8;
-  const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [confirmEmail, setConfirmEmail] = useState('');
-  const firstRef = useRef<TextInput>(null);
-  const secRef = useRef<TextInput>(null);
-  const thirdRef = useRef<TextInput>(null);
+  const insets = useSafeAreaInsets()
+  const MIN_LENGHT = 8
+  const [password, setPassword] = useState<string>('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [email, setEmail] = useState('')
+  const [confirmEmail, setConfirmEmail] = useState('')
+  const firstRef = useRef<TextInput>(null)
+  const secRef = useRef<TextInput>(null)
+  const thirdRef = useRef<TextInput>(null)
 
   const isPassword = () => {
-    return password.length >= MIN_LENGHT;
-  };
+    return password.length >= MIN_LENGHT 
+  } 
 
   const doPasswordsMatch = () => {
-    return password === confirmPassword;
-  };
+    return password === confirmPassword 
+  } 
 
   const isEmail = () => {
-    return true;
-  };
+    return true 
+  } 
 
   const doEmailsMatch = () => {
-    return email == confirmEmail;
-  };
+    return email == confirmEmail 
+  } 
 
   /**
    * Function that submits the user data to the DB
    */
   const submitForm = () => {
     if (isPassword() && doPasswordsMatch() && isEmail() && doEmailsMatch()) {
-      return true;
+      return true 
     } else {
-      return false;
+      return false 
     }
-  };
+  } 
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -145,7 +145,7 @@ const AuthenticationScreen: React.FC = () => {
         <LowBar nextScreen="Home" />
       </View>
     </TouchableWithoutFeedback>
-  );
-};
+  )
+}
 
-export default AuthenticationScreen;
+export default AuthenticationScreen 

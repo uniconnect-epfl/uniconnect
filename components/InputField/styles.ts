@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { black, lightGray } from '../../assets/colors/colors';
+import { StyleSheet } from 'react-native' 
+import { black, lightGray } from '../../assets/colors/colors' 
 
 const styles = StyleSheet.create({
   
@@ -37,6 +37,6 @@ const styles = StyleSheet.create({
   sectionLast: {
     paddingBottom: 65,
   },
-});
+})
 
 export default styles;

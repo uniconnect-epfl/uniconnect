@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import React from 'react' 
+import { View, TouchableOpacity, Text } from 'react-native' 
 
-import styles from './styles';
-import { globalStyles } from '../../assets/global/globalStyles';
-import { useNavigation } from '@react-navigation/native';
+import styles from './styles' 
+import { globalStyles } from '../../assets/global/globalStyles' 
+import { useNavigation } from '@react-navigation/native' 
 
 interface LowBarProps {
   nextScreen?: string;

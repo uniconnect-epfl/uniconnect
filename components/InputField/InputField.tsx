@@ -1,8 +1,8 @@
-import React, { forwardRef } from 'react';
-import { View, TextInput, Text, TextInputProps } from 'react-native';
-import { globalStyles } from '../../assets/global/globalStyles';
+import React, { forwardRef } from 'react'
+import { View, TextInput, Text, TextInputProps } from 'react-native'
+import { globalStyles } from '../../assets/global/globalStyles'
 
-import styles from './styles';
+import styles from './styles' 
 
 interface InputFieldProps extends TextInputProps {
   label: string;
@@ -31,6 +31,6 @@ const InputField = forwardRef<TextInput, InputFieldProps>(function InputField(
         {...rest}
       />
     </View>
-  );
-});
-export default InputField;
+  )
+})
+export default InputField
