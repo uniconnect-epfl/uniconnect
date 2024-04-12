@@ -1,12 +1,11 @@
 import React from 'react' 
 import { Text, View, TextInput, TouchableOpacity, Image } from 'react-native' 
 
-import '../../assets/global/globalStyles' 
-import { Ionicons } from '@expo/vector-icons' 
+import { Ionicons } from '@expo/vector-icons'
 import styles from './styles' 
 import { globalStyles } from '../../assets/global/globalStyles' 
-import { useSafeAreaInsets } from 'react-native-safe-area-context' 
-import { useNavigation } from '@react-navigation/native' 
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useNavigation } from '@react-navigation/native'
 
 const OnboardingScreen: React.FC = () => {
   const navigation = useNavigation() 

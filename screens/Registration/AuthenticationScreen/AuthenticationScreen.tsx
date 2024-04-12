@@ -10,8 +10,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { globalStyles } from '../../../assets/global/globalStyles' 
 import Divider from '../../../components/divider/divider' 
 import LowBar from '../../../components/LowBar/LowBar' 
-import { Entypo } from '@expo/vector-icons' 
-import { AntDesign } from '@expo/vector-icons' 
+import { Entypo, AntDesign } from '@expo/vector-icons' 
 
 const AuthenticationScreen: React.FC = () => {
   const insets = useSafeAreaInsets() 
