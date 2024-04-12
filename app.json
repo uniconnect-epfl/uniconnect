@@ -24,6 +24,7 @@
       },
       "package": "com.gcharles.uniconnect"
     },
+    "owner": "uniconnect-epfl",
     "web": {
       "favicon": "./assets/favicon.png"
     },

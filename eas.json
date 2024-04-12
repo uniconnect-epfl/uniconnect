@@ -3,13 +3,17 @@
     "version": ">= 7.8.0"
   },
   "build": {
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
     "development": {
       "developmentClient": true,
       "distribution": "internal"
     },
-    "preview": {
-      "distribution": "internal"
-    },
+
     "production": {}
   },
   "submit": {
