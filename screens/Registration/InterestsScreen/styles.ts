@@ -43,9 +43,12 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: white,
     flex: 1,
-    padding: 10,
   },
-  footer: {},
+
+  footer: {
+    width: '100%',
+  },
+
   footerButton: {
     backgroundColor: white,
     borderRadius: BUTTON_RADIUS,
@@ -73,51 +76,49 @@ const styles = StyleSheet.create({
   },
 
   input: {
+    alignSelf: 'center',
     borderColor: lightGray,
     borderRadius: BUTTON_RADIUS,
     borderWidth: 1,
     height: BUTTON_HEIGHT,
     marginBottom: 25,
     paddingHorizontal: 30,
-    width: '100%',
+    width: '95%',
   },
 
   interestButton: {
-    borderColor: peach,
+    alignContent: 'center',
+    borderColor: lightGray,
     borderRadius: 10,
     borderWidth: 2,
     display: 'flex',
     height: 110,
+    justifyContent: 'center',
     marginBottom: 10,
+    marginHorizontal: 10,
     padding: 10,
     width: 150,
   },
 
   interestText: {
-    bottom: 0,
-    color: black,
+    color: lightGray,
     left: 0,
-    position: 'absolute',
     right: 0,
     textAlign: 'center',
-    top: '50%',
   },
 
   interestsGrid: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-evenly',
+    alignSelf: 'center',
   },
 
   selectedInterestButton: {
     backgroundColor: white,
-    borderColor: lightGray,
+    borderColor: peach,
     borderWidth: 2.5,
   },
 
   selectedInterestText: {
-    color: lightGray,
+    color: black,
   },
 
   title: {

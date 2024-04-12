@@ -72,16 +72,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     gap: 1,
-    justifyContent: 'center',
     padding: 20,
   },
   footer: {
-    alignContent: 'flex-end',
     display: 'flex',
     flexDirection: 'row',
-    height: 200,
-    marginTop: 10,
-    paddingTop: 165,
+    position: 'absolute',
+
   },
   icon: {
     paddingRight: 25,

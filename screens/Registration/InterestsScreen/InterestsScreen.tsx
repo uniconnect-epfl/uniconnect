@@ -3,14 +3,18 @@ import {
   View,
   Text,
   TouchableOpacity,
-  ScrollView,
   Image,
   TextInput,
-} from 'react-native' 
-import styles from './styles' 
-import { globalStyles } from '../../../assets/global/globalStyles' 
-import { useSafeAreaInsets } from 'react-native-safe-area-context' 
-import LowBar from '../../../components/LowBar/LowBar' 
+  FlatList,
+  ListRenderItemInfo,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native'
+import styles from './styles';
+import '../../../assets/global/globalStyles';
+import { globalStyles } from '../../../assets/global/globalStyles';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import LowBar from '../../../components/LowBar/LowBar';
 
 interface InterestButtonProps {
   title: string 
@@ -52,13 +56,25 @@ const interests = [
   'Ethereum',
   'Solana',
   'Computer graphics',
-] 
+  'Bananas',
+  'Apples',
+  'Big tech',
+  'Finance',
+]
 
 const InterestsScreen = () => {
   const insets = useSafeAreaInsets() 
   const [searchTerm, setSearchTerm] = useState('') 
   const [filterdedInterests, setFilteredInterests] = useState(interests) 
   const [selectedInterests, setSelectedInterests] = useState(new Set()) 
+
+  const renderItem = ({ item }: ListRenderItemInfo<string>) => (
+    <InterestButton
+      title={item}
+      selected={selectedInterests.has(item)}
+      onSelect={() => toggleInterest(item)}
+    />
+  );
 
   const toggleInterest = (interest: string) => {
     setSelectedInterests((prev) => {
@@ -85,44 +101,43 @@ const InterestsScreen = () => {
   } 
 
   return (
-    <View
-      style={[
-        styles.container,
-        { paddingBottom: insets.bottom, paddingTop: insets.top },
-      ]}
-    >
-      <Image
-        source={require('../../../assets/icon.png')}
-        style={styles.image}
-      />
-      <Text style={[styles.title, globalStyles.boldText]}>
-        Select your interests
-      </Text>
-
-      <View>
-        <TextInput
-          placeholder="Search"
-          style={[styles.input, globalStyles.text]}
-          onChangeText={handleSearch}
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View
+        style={[
+          styles.container,
+          { paddingBottom: insets.bottom, paddingTop: insets.top },
+        ]}
+      >
+        <Image
+          source={require('../../../assets/icon.png')}
+          style={styles.image}
         />
-      </View>
-      <ScrollView style={styles.container}>
-        <View style={styles.interestsGrid}>
-          {filterdedInterests.map((interest) => (
-            <InterestButton
-              key={interest}
-              title={interest}
-              selected={selectedInterests.has(interest)}
-              onSelect={() => toggleInterest(interest)}
-            />
-          ))}
+        <Text style={[styles.title, globalStyles.boldText]}>
+          Select your interests
+        </Text>
+
+        <View>
+          <TextInput
+            placeholder="Search"
+            style={[styles.input, globalStyles.text]}
+            onChangeText={handleSearch}
+          />
         </View>
-      </ScrollView>
-      <View style={styles.footer}>
-        <LowBar />
+
+        <FlatList
+          data={filterdedInterests}
+          renderItem={renderItem}
+          keyExtractor={(item) => item}
+          numColumns={2}
+          style={styles.interestsGrid}
+        />
+
+        <View style={styles.footer}>
+          <LowBar nextScreen="Authentication" />
+        </View>
       </View>
-    </View>
-  ) 
-} 
+    </TouchableWithoutFeedback>
+  )
+}
 
 export default InterestsScreen 
