@@ -1,54 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, TextInput, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { Text, View, TextInput, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
 
-import '../../assets/global/globalStyles';
-import { Ionicons } from '@expo/vector-icons';
-import styles from './styles';
-import { globalStyles } from '../../assets/global/globalStyles';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import { loginEmailPassword } from '../../components/Login';
-import { User, onAuthStateChanged } from 'firebase/auth';
-import { FIREBASE_AUTH } from '../../firebaseConfig';
+import '../../assets/global/globalStyles'
+import { Ionicons } from '@expo/vector-icons'
+import styles from './styles'
+import { globalStyles } from '../../assets/global/globalStyles'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { useNavigation } from '@react-navigation/native'
+import { loginEmailPassword } from '../../components/Login'
+import { User, onAuthStateChanged } from 'firebase/auth'
+import { FIREBASE_AUTH } from '../../firebaseConfig'
 
 
 
 const OnboardingScreen: React.FC = () => {
-  const navigation = useNavigation();
-  const insets = useSafeAreaInsets();
+  const navigation = useNavigation()
+  const insets = useSafeAreaInsets()
 
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    onAuthStateChanged(FIREBASE_AUTH, (user) => {
-      console.log('User state changed. Current user:', user);
-      setUser(user);
-    });
-  }
-    , []);
+  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   const loginUser = async () => {
-    setLoading(true);
+    setLoading(true)
 
     try {
-      const val = await loginEmailPassword(email, password);
+      const val = await loginEmailPassword(email, password)
 
       if (val) {
-        navigation.navigate("Home" as never);
-        console.log("Login successful!" + user);
+        navigation.navigate("Home" as never)
       } else {
-        alert("Login failed!");
+        alert("Login failed!")
       }
     } catch (error) {
-      console.error("Login Error:", error);
-      alert("An error occurred during login.");
+      alert("An error occurred during login.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <View

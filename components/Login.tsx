@@ -13,7 +13,6 @@ export const loginEmailPassword = async (email: string, password: string): Promi
 
     } catch (error) {
         if (error instanceof Error) { // Type-guard check
-            console.log(`There was an error: ${error.message}`)
         }
         alert('There was an error' + error)
 
@@ -28,7 +27,6 @@ export const createAccount = async (email: string, password: string) => {
         alert('Account created. Check email')
     } catch (error) {
         if (error instanceof Error) { // Type-guard check
-            console.log(`There was an error: ${error.message}`)
         }
         alert('There was an error' + error)
     }
