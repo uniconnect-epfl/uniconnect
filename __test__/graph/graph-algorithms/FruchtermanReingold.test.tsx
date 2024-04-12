@@ -14,13 +14,13 @@ describe('fruchtermanReingold', () => {
         { id: 'node1', x: 100, y: 100, dx: 0, dy: 0 },
         { id: 'node2', x: 200, y: 200, dx: 0, dy: 0 },
         { id: 'node3', x: 300, y: 300, dx: 0, dy: 0 },
-    ];
+    ]
 
     links = [
         { source: 'node1', target: 'node2', strength: 1 },
         { source: 'node2', target: 'node3', strength: 1 },
         { source: 'node3', target: 'node1', strength: 1 },
-    ];
+    ]
     constrainedNodeId = 'someNodeId'
     width = 800
     height = 600

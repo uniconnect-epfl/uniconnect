@@ -16,9 +16,9 @@ describe('InputField', () => {
     })
 
     it('allows text to be entered in the TextInput', () => {
-        let testValue = '';
+        let testValue = ''
         const handleChangeText = (text: string) => {
-            testValue = text;
+            testValue = text
         }
 
         const { getByPlaceholderText } = render(
