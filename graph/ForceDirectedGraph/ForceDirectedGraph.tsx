@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, View, Dimensions } from "react-native";
-import Svg, { Circle, G, Line, Text as SVGText, Image} from "react-native-svg";
+import Svg, { Circle, G, Line, Text as SVGText, Image } from "react-native-svg";
 
 import styles from "./styles";
 import Graph, { Link, Node } from "../Graph";
-import { fruchtermanReingold } from "../graph-algorithms/FruchtermanReingold";
+import { fruchtermanReingold } from "../graphAlgorithms/FruchtermanReingold";
 
 import {
   PanGestureHandler,
@@ -13,7 +13,9 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
 
+const VERY_SHORT_PRESS_DURATION = 50;
 const SHORT_PRESS_DURATION = 100;
+const NODE_HITBOX_SIZE = 20; // Hitbox size of the nodes
 const DEFAULT_NODE_SIZE = 10; // Default size of the nodes
 const DEFAULT_NODE_SIZE_INCREMENT = 2; // Increment in the size of the nodes
 
@@ -142,7 +144,10 @@ const ForceDirectedGraph: React.FC<{
 
   // Handle PRESS OUT
   const handlePressOut = (shortPressCallback = () => {}) => {
-    if (Date.now() - pressStartRef.current < SHORT_PRESS_DURATION) {
+    if (
+      Date.now() - pressStartRef.current < SHORT_PRESS_DURATION &&
+      Date.now() - pressStartRef.current > VERY_SHORT_PRESS_DURATION
+    ) {
       shortPressCallback();
     }
   };
@@ -207,43 +212,47 @@ const ForceDirectedGraph: React.FC<{
   ));
 
   const CIRCLES = nodes.map((node) => (
-    <G 
-    key={node.id + "group"}>
-    <Circle
-      key={node.id + "circle"}
-      cx={coordX(node)}
-      cy={coordY(node)}
-      r={sizes.get(node.id) ?? DEFAULT_NODE_SIZE}
-      onPressIn={() =>
-        handlePressIn(() => {
-          pressStartRef.current = Date.now();
-          setClickedNodeID(node.id);
-        })
-      }
-      onPressOut={() =>
-        handlePressOut(() => {
-          console.warn("Short Press");
-          setClickedNodeID(DEFAULT_CLICKED_NODE_ID);
-        })
-      }
-    />
-    <Image
-    key={node.id + "image"}
-    x={coordX(node) - (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
-    y={coordY(node) - (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
-    width={2 * (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
-    height={2 * (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
-    href={require('../../assets/graph-template-profile-picture.png')} // Replace with your image path
-    clipPath={"url(#clip" + node.id + ")"}
-        />
-    <SVGText
-    key={node.id + "text"}
-  x={coordX(node)} // Align horizontally with the center of the circle
-  y={coordY(node) + (sizes.get(node.id) ?? DEFAULT_NODE_SIZE) + DEFAULT_NODE_SIZE} // Position below the circle; adjust 10 as needed
-  textAnchor="middle" // Center the text under the circle
-    >
-  {node.id}
-</SVGText>
+    <G key={node.id + "group"}>
+      <Circle
+        key={node.id + "circle"}
+        cx={coordX(node)}
+        cy={coordY(node)}
+        r={(sizes.get(node.id) ?? DEFAULT_NODE_SIZE) + NODE_HITBOX_SIZE}
+        fill={"transparent"}
+        onPressIn={() =>
+          handlePressIn(() => {
+            pressStartRef.current = Date.now();
+            setClickedNodeID(node.id);
+          })
+        }
+        onPressOut={() =>
+          handlePressOut(() => {
+            console.warn("Short Press");
+            setClickedNodeID(DEFAULT_CLICKED_NODE_ID);
+          })
+        }
+      />
+      <Image
+        key={node.id + "image"}
+        x={coordX(node) - (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
+        y={coordY(node) - (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
+        width={2 * (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
+        height={2 * (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
+        href={require("../../assets/graph-template-profile-picture.png")} // Replace with your image path
+        clipPath={"url(#clip" + node.id + ")"}
+      />
+      <SVGText
+        key={node.id + "text"}
+        x={coordX(node)} // Align horizontally with the center of the circle
+        y={
+          coordY(node) +
+          (sizes.get(node.id) ?? DEFAULT_NODE_SIZE) +
+          DEFAULT_NODE_SIZE
+        } // Position below the circle; adjust 10 as needed
+        textAnchor="middle" // Center the text under the circle
+      >
+        {node.id}
+      </SVGText>
     </G>
   ));
 
