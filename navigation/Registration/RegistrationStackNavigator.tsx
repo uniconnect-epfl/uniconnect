@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import OnboardingScreen from '../../screens/Onboarding/OnboardingScreen'
 import InformationScreen from '../../screens/Registration/InformationScreen/InformationScreen'
 import InterestsScreen from '../../screens/Registration/InterestsScreen/InterestsScreen'
-import AuthenticationScreen from '../../screens/Registration/AuthenticationScreen/AuthenticationScreen';
+import AuthenticationScreen from '../../screens/Registration/AuthenticationScreen/AuthenticationScreen'
 import HomeTabNavigator from '../../navigation/Home/HomeTabNavigator'
 import { MyProfileScreen } from '../../screens/Profile/MyProfileScreen/MyProfileScreen' 
 import { SettingsScreen } from '../../screens/Settings/SettingsScreen' 
@@ -17,7 +17,7 @@ export type RegistrationStackParamList = {
   HomeTabs: undefined 
   Profile: undefined 
   Settings: undefined 
-  Onboarding: undefined;
+  Onboarding: undefined
 } 
 
 const Stack = createStackNavigator<RegistrationStackParamList>() 

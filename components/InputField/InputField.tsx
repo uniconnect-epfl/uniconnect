@@ -17,7 +17,7 @@ const InputField = forwardRef<TextInput, InputFieldProps>(function InputField(
   ref
 ) {
   const { label, placeholder, value, onChangeText, onSubmitEditing, ...rest } =
-    props;
+    props
   return (
     <View style={styles.section}>
       <Text style={[styles.label, globalStyles.text]}>{label}</Text>

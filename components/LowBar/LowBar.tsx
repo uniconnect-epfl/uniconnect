@@ -6,11 +6,11 @@ import { globalStyles } from '../../assets/global/globalStyles'
 import { useNavigation } from '@react-navigation/native' 
 
 interface LowBarProps {
-  nextScreen?: string;
+  nextScreen?: string
 }
 
 const LowBar: React.FC<LowBarProps> = ({ nextScreen }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   return (
     <View style={styles.nextBar}>
@@ -28,7 +28,7 @@ const LowBar: React.FC<LowBarProps> = ({ nextScreen }) => {
         <Text style={[styles.buttonText, globalStyles.text]}>Next</Text>
       </TouchableOpacity>
     </View>
-  );
-};
+  )
+}
 
-export default LowBar;
+export default LowBar
