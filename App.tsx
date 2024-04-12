@@ -11,6 +11,7 @@ import {
   JetBrainsMono_700Bold,
 } from '@expo-google-fonts/jetbrains-mono';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -34,6 +35,7 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={styles.gestureHandler}>
+      <StatusBar style="dark" />
       <NavigationContainer>
         <SafeAreaProvider>
           <RegistrationStackNavigator/>
