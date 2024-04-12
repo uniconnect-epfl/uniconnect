@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Text, View, TextInput, TouchableOpacity, Image, ActivityIndicator } from 'react-native'
 
 import '../../assets/global/globalStyles'
@@ -8,8 +8,6 @@ import { globalStyles } from '../../assets/global/globalStyles'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
 import { loginEmailPassword } from '../../components/Login'
-import { User, onAuthStateChanged } from 'firebase/auth'
-import { FIREBASE_AUTH } from '../../firebaseConfig'
 
 
 
