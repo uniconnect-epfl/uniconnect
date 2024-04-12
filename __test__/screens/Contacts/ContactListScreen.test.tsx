@@ -1,7 +1,6 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react-native'
-import { ContactListScreen } from '../../../screens/Contacts/ContactListScreen'
-import { Contact } from '../../../screens/Contacts/ContactListScreen'
+import { ContactListScreen, Contact } from '../../../screens/Contacts/ContactListScreen'
 
 describe('ContactListScreen', () => {
     const dummyData: Contact[] = [
