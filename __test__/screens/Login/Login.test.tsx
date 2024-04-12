@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react-native'
-import Login from '../../../app/screens/Onboarding/Login'
+import Login from '../../../screens/Onboarding/FirebaseTemp/Login'
 
 describe('Login', () => {
   

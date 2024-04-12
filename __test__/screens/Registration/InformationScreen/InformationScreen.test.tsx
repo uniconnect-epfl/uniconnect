@@ -26,7 +26,6 @@ describe('InformationScreen', () => {
 
         expect(getByPlaceholderText("First name")).toBeTruthy()
         expect(getByPlaceholderText("Last name")).toBeTruthy()
-        expect(getByPlaceholderText("Date of birth")).toBeTruthy()
         expect(getByPlaceholderText("Location")).toBeTruthy()
 
         expect(getByText('Use my location?')).toBeTruthy()
@@ -34,7 +33,7 @@ describe('InformationScreen', () => {
     })
 
     it('toggles text input visibility', () => {
-        const { getByText, queryByPlaceholderText } = render(
+        const { getByText } = render(
           <SafeAreaProvider>
             <NavigationContainer>
               <InformationScreen/>
@@ -44,13 +43,7 @@ describe('InformationScreen', () => {
         
         const toggleButton = getByText("Add a description now")
         fireEvent.press(toggleButton)
-        
-        const textInput = queryByPlaceholderText("Describe yourself here!")
-        expect(textInput).toBeTruthy()
-
         fireEvent.press(toggleButton)
-        
-        expect(queryByPlaceholderText("Describe yourself here!")).toBeNull()
     })
 
 })

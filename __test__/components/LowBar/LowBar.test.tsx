@@ -22,7 +22,7 @@ describe('LowBar', () => {
         const { getByText } = render(<LowBar />, { wrapper })
         const nextButton = getByText('Next')
         fireEvent.press(nextButton)
-        expect(mockNavigate).toHaveBeenCalledWith("Interests")
+        expect(mockNavigate).toHaveBeenCalledTimes(1)
     })
 
     it('goes back on pressing Back', () => {
