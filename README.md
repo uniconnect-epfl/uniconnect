@@ -36,7 +36,7 @@ a Github thread. Also, the Continuous Integration(CI) will need to pass before y
 
 Here is a rough overview of the architecture of the app:
 
-<img width="776" alt="Capture" src="https://github.com/uniconnect-epfl/uniconnect/assets/93329823/8aeb899f-70ee-4bda-84d3-b682cf50ec37">
+![Untitled-2024-04-12-1348(2)](https://github.com/uniconnect-epfl/uniconnect/assets/93329823/b640cb56-4c61-4046-a38a-f1eaff065923)
 
 The entry file is `App.tsx`. You could think of it as a main function that is launched upon execution of the app. There is an `assets` folder for images and other assets. Another folder `components` is for the components such as buttons, list items, bottom bars, search bars, cards etc. Components will be used in `screens` where a screen can be `LoginScreen`, `HomeScreen`, `OptionsScreen` or any other screen that is used in the app. There are also config files and folders such as `.husky`, `app.json`, `tsconfig.json` or `node_modules` where node modules are the source files for all the libraries that are installed as listed by `package.json`.
 
