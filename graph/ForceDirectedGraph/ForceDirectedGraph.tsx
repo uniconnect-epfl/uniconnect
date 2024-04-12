@@ -36,10 +36,8 @@ const CENTER_HEIGHT = HEIGHT / 2; // Center Y-coordinates of the screen
  * @param constrainedNodeId - Identifier of the node to be constrained to the center
  * @returns - Force-directed graph component
  */
-const ForceDirectedGraph: React.FC<{
-  graph: Graph;
-  constrainedNodeId: string;
-}> = ({ graph, constrainedNodeId }) => {
+const ForceDirectedGraph: React.FC<{graph: Graph, constrainedNodeId: string}> = ({graph, constrainedNodeId}) => {
+
   // States to store the nodes, links, sizes and loading status
   const [nodes, setNodes] = useState<Node[]>([]);
   const [links, setLinks] = useState<Link[]>([]);
