@@ -1,36 +1,32 @@
-import React, { forwardRef } from 'react'
-import { View, TextInput, Text, TextInputProps } from 'react-native'
-import { globalStyles } from '../../assets/global/globalStyles'
+import React from 'react';
+import { View, TextInput, Text } from 'react-native';
+import { globalStyles } from '../../assets/global/globalStyles';
+import styles from './styles';
 
-import styles from './styles' 
-
-interface InputFieldProps extends TextInputProps {
+interface InputFieldProps {
   label: string;
-  placeholder?: string;
+  placeholder: string;
   value?: string;
   onChangeText?: (text: string) => void;
-  onSubmitEditing?: () => void;
 }
 
-const InputField = forwardRef<TextInput, InputFieldProps>(function InputField(
-  props,
-  ref
-) {
-  const { label, placeholder, value, onChangeText, onSubmitEditing, ...rest } =
-    props
+const InputField: React.FC<InputFieldProps> = ({
+  label,
+  placeholder,
+  value,
+  onChangeText,
+}) => {
   return (
     <View style={styles.section}>
-      <Text style={[styles.label, globalStyles.text]}>{label}</Text>
+      <Text style={[styles.topText, globalStyles.text]}>{label}</Text>
       <TextInput
         placeholder={placeholder}
         style={[styles.input, globalStyles.text]}
         value={value}
         onChangeText={onChangeText}
-        onSubmitEditing={onSubmitEditing}
-        ref={ref}
-        {...rest}
       />
     </View>
-  )
-})
-export default InputField
+  );
+};
+
+export default InputField;

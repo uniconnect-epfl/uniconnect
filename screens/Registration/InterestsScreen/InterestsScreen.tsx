@@ -1,14 +1,11 @@
-import React, { useState } from 'react' 
+import React, { useState } from 'react'
 import {
   View,
   Text,
   TouchableOpacity,
+  ScrollView,
   Image,
   TextInput,
-  FlatList,
-  ListRenderItemInfo,
-  Keyboard,
-  TouchableWithoutFeedback,
 } from 'react-native'
 import styles from './styles'
 import '../../../assets/global/globalStyles'
@@ -17,9 +14,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import LowBar from '../../../components/LowBar/LowBar'
 
 interface InterestButtonProps {
-  title: string 
-  selected: boolean 
-  onSelect: () => void 
+  title: string
+  selected: boolean
+  onSelect: () => void
 }
 
 const InterestButton: React.FC<InterestButtonProps> = ({
@@ -40,7 +37,7 @@ const InterestButton: React.FC<InterestButtonProps> = ({
       {title}
     </Text>
   </TouchableOpacity>
-) 
+)
 
 const interests = [
   'Machine Learning',
@@ -56,88 +53,77 @@ const interests = [
   'Ethereum',
   'Solana',
   'Computer graphics',
-  'Bananas',
-  'Apples',
-  'Big tech',
-  'Finance',
 ]
 
 const InterestsScreen = () => {
-  const insets = useSafeAreaInsets() 
-  const [searchTerm, setSearchTerm] = useState('') 
-  const [filterdedInterests, setFilteredInterests] = useState(interests) 
-  const [selectedInterests, setSelectedInterests] = useState(new Set()) 
-
-  const renderItem = ({ item }: ListRenderItemInfo<string>) => (
-    <InterestButton
-      title={item}
-      selected={selectedInterests.has(item)}
-      onSelect={() => toggleInterest(item)}
-    />
-  )
+  const insets = useSafeAreaInsets()
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filterdedInterests, setFilteredInterests] = useState(interests)
+  const [selectedInterests, setSelectedInterests] = useState(new Set())
 
   const toggleInterest = (interest: string) => {
     setSelectedInterests((prev) => {
-      const newSelectedInterests = new Set(prev) 
+      const newSelectedInterests = new Set(prev)
       if (newSelectedInterests.has(interest)) {
-        newSelectedInterests.delete(interest) 
+        newSelectedInterests.delete(interest)
       } else {
-        newSelectedInterests.add(interest) 
+        newSelectedInterests.add(interest)
       }
-      return newSelectedInterests 
-    }) 
-  } 
+      return newSelectedInterests
+    })
+  }
 
   const handleSearch = (text: string) => {
-    setSearchTerm(text) 
+    setSearchTerm(text)
     if (searchTerm) {
       const filteredData = interests.filter((interest) =>
         interest.toLocaleLowerCase().includes(text.toLowerCase())
-      ) 
-      setFilteredInterests(filteredData) 
+      )
+      setFilteredInterests(filteredData)
     } else {
-      setFilteredInterests(interests) 
+      setFilteredInterests(interests)
     }
-  } 
+  }
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View
-        style={[
-          styles.container,
-          { paddingBottom: insets.bottom, paddingTop: insets.top },
-        ]}
-      >
-        <Image
-          source={require('../../../assets/icon.png')}
-          style={styles.image}
+    <View
+      style={[
+        styles.container,
+        { paddingBottom: insets.bottom, paddingTop: insets.top },
+      ]}
+    >
+      <Image
+        source={require('../../../assets/icon.png')}
+        style={styles.image}
+      />
+      <Text style={[styles.title, globalStyles.boldText]}>
+        Select your interests
+      </Text>
+
+      <View>
+        <TextInput
+          placeholder="Search"
+          style={[styles.input, globalStyles.text]}
+          onChangeText={handleSearch}
         />
-        <Text style={[styles.title, globalStyles.boldText]}>
-          Select your interests
-        </Text>
-
-        <View>
-          <TextInput
-            placeholder="Search"
-            style={[styles.input, globalStyles.text]}
-            onChangeText={handleSearch}
-          />
-        </View>
-
-        <FlatList
-          data={filterdedInterests}
-          renderItem={renderItem}
-          keyExtractor={(item) => item}
-          numColumns={2}
-          style={styles.interestsGrid}
-        />
-
-        <View style={styles.footer}>
-          <LowBar nextScreen="Authentication" />
-        </View>
       </View>
-    </TouchableWithoutFeedback>
+      <ScrollView style={styles.container}>
+        <View style={styles.interestsGrid}>
+          {filterdedInterests.map((interest) => (
+            <InterestButton
+              key={interest}
+              title={interest}
+              selected={selectedInterests.has(interest)}
+              onSelect={() => toggleInterest(interest)}
+            />
+          ))}
+        </View>
+      </ScrollView>
+      <View style={styles.footer}>
+        <LowBar />
+      </View>
+    </View>
   )
 }
 
-export default InterestsScreen 
+export default InterestsScreen

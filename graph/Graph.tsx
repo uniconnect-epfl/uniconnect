@@ -2,20 +2,20 @@
  * Node interface
  */
 interface Node {
-  id: string  // Unique identifier
-  x: number  // x-coordinate
-  y: number  // y-coordinate
-  dx: number  // x-velocity
-  dy: number  // y-velocity
+  id: string; // Unique identifier
+  x: number; // x-coordinate
+  y: number; // y-coordinate
+  dx: number; // x-velocity
+  dy: number; // y-velocity
 }
 
 /**
  * Link interface
  */
 interface Link {
-  source: string  // Source node identifier
-  target: string  // Target node identifier
-  strength: number  // Strength of the link
+  source: string; // Source node identifier
+  target: string; // Target node identifier
+  strength: number; // Strength of the link
 }
 
 /**
@@ -25,10 +25,10 @@ interface Link {
  */
 export default class Graph {
   // Nodes in the graph
-  nodes: Node[] 
+  nodes: Node[];
 
   // Links in the graph
-  links: Link[] 
+  links: Link[];
 
   /**
    *
@@ -52,10 +52,10 @@ export default class Graph {
      */
 
     if (ids.length === 0) {
-      throw new Error("ids must not be empty") 
+      throw new Error("ids must not be empty");
     }
     if (sources.length === 0) {
-      throw new Error("sources must not be empty") 
+      throw new Error("sources must not be empty");
     }
     if (
       sources.length !== targets.length ||
@@ -63,7 +63,7 @@ export default class Graph {
     ) {
       throw new Error(
         "sources, targets, and strengths must have the same length"
-      ) 
+      );
     }
 
     // Initialize the nodes
@@ -74,8 +74,8 @@ export default class Graph {
         y: 0,
         dx: 0,
         dy: 0,
-      } 
-    }) 
+      };
+    });
 
     // Initialize the links
     this.links = sources.map((source: string, index: number): Link => {
@@ -83,8 +83,8 @@ export default class Graph {
         source: source,
         target: targets[index],
         strength: strengths[index],
-      } 
-    }) 
+      };
+    });
   }
 
   /**
@@ -93,7 +93,7 @@ export default class Graph {
    * @returns - The nodes in the graph
    */
   getNodes(): Node[] {
-    return this.nodes 
+    return this.nodes;
   }
 
   /**
@@ -102,7 +102,7 @@ export default class Graph {
    * @returns - The links in the graph
    */
   getLinks(): Link[] {
-    return this.links 
+    return this.links;
   }
 
   /**
@@ -117,7 +117,7 @@ export default class Graph {
       y: 0,
       dx: 0,
       dy: 0,
-    }) 
+    });
   }
 
   /**
@@ -132,7 +132,7 @@ export default class Graph {
       source: source,
       target: target,
       strength: strength,
-    }) 
+    });
   }
 
   /**
@@ -142,12 +142,12 @@ export default class Graph {
    */
   removeNode(id: string): void {
     this.nodes = this.nodes.filter((node: Node): boolean => {
-      return node.id !== id 
-    }) 
+      return node.id !== id;
+    });
 
     this.links = this.links.filter((link: Link): boolean => {
-      return link.source !== id && link.target !== id 
-    }) 
+      return link.source !== id && link.target !== id;
+    });
   }
 
   /**
@@ -158,9 +158,9 @@ export default class Graph {
    */
   removeLink(source: string, target: string): void {
     this.links = this.links.filter((link: Link): boolean => {
-      return link.source !== source || link.target !== target 
-    }) 
+      return link.source !== source || link.target !== target;
+    });
   }
 }
 
-export type { Node, Link } 
+export type { Node, Link };

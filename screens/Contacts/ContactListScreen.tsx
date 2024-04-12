@@ -113,5 +113,3 @@ export const ContactListScreen = () => {
   )
 
 }
-
-
