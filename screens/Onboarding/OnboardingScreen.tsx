@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, View, TextInput, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, TextInput, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 
 import '../../assets/global/globalStyles';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,10 +7,48 @@ import styles from './styles';
 import { globalStyles } from '../../assets/global/globalStyles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import { loginEmailPassword } from '../../components/Login';
+import { User, onAuthStateChanged } from 'firebase/auth';
+import { FIREBASE_AUTH } from '../../firebaseConfig';
+
+
 
 const OnboardingScreen: React.FC = () => {
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
+
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    onAuthStateChanged(FIREBASE_AUTH, (user) => {
+      console.log('User state changed. Current user:', user);
+      setUser(user);
+    });
+  }
+    , []);
+
+  const loginUser = async () => {
+    setLoading(true);
+
+    try {
+      const val = await loginEmailPassword(email, password);
+
+      if (val) {
+        navigation.navigate("Home" as never);
+        console.log("Login successful!" + user);
+      } else {
+        alert("Login failed!");
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert("An error occurred during login.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View
@@ -25,6 +63,8 @@ const OnboardingScreen: React.FC = () => {
       <TextInput
         style={[styles.inputField, globalStyles.text]}
         placeholder="Username or email"
+        onChangeText={setEmail}
+        value={email}
         placeholderTextColor={'black'}
         keyboardType="email-address"
         autoCapitalize="none"
@@ -34,14 +74,20 @@ const OnboardingScreen: React.FC = () => {
       <TextInput
         style={[styles.inputField, globalStyles.text]}
         placeholder="Password"
+        onChangeText={setPassword}
+        value={password}
         placeholderTextColor={'black'}
         secureTextEntry
         autoCapitalize="none"
       />
 
       {/* Log In Button */}
-      <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate("Home" as never)}} >
-        <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
+      <TouchableOpacity style={styles.button} onPress={loginUser} disabled={loading}>
+        {loading ? (
+          <ActivityIndicator size="small" color="#FFFFFF" />
+        ) : (
+          <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
+        )}
       </TouchableOpacity>
 
       <View>
