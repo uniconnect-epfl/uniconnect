@@ -13,7 +13,7 @@ const shadow = StyleSheet.create({
       shadowOpacity: 0.25,
       shadowRadius: 3.5,
     },
-  });
+  }) 
   
 export const styles = StyleSheet.create({
     icon: {
@@ -45,5 +45,5 @@ export const styles = StyleSheet.create({
       ...shadow.shadow,
       
     },
-  });
+  }) 
   
