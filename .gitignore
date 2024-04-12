@@ -42,8 +42,3 @@ yarn-error.*
 .metals/
 
 ui-debug.log
-
-# Jest Coverage
-/coverage/
-
-
