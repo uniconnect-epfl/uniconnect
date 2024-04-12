@@ -10,11 +10,11 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native'
-import styles from './styles';
-import '../../../assets/global/globalStyles';
-import { globalStyles } from '../../../assets/global/globalStyles';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import LowBar from '../../../components/LowBar/LowBar';
+import styles from './styles' 
+import '../../../assets/global/globalStyles' 
+import { globalStyles } from '../../../assets/global/globalStyles' 
+import { useSafeAreaInsets } from 'react-native-safe-area-context' 
+import LowBar from '../../../components/LowBar/LowBar' 
 
 interface InterestButtonProps {
   title: string 
@@ -74,7 +74,7 @@ const InterestsScreen = () => {
       selected={selectedInterests.has(item)}
       onSelect={() => toggleInterest(item)}
     />
-  );
+  ) 
 
   const toggleInterest = (interest: string) => {
     setSelectedInterests((prev) => {

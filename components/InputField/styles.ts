@@ -1,8 +1,7 @@
-import { StyleSheet } from 'react-native' 
-import { black, lightGray } from '../../assets/colors/colors' 
+import { StyleSheet } from 'react-native'
+import { black, lightGray } from '../../assets/colors/colors'
 
 const styles = StyleSheet.create({
-  
   input: {
     borderColor: lightGray,
     borderRadius: 25,
@@ -11,7 +10,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     width: '100%',
   },
-  
+
   label: {
     color: black,
     display: 'flex',
@@ -39,4 +38,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default styles;
+export default styles

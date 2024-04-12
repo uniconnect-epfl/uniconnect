@@ -1,10 +1,10 @@
-import React from 'react';
-import { View, Platform, Pressable } from 'react-native';
+import React from 'react'
+import { View, Platform, Pressable } from 'react-native'
 import DateTimePicker, {
   DateTimePickerEvent,
-} from '@react-native-community/datetimepicker';
+} from '@react-native-community/datetimepicker'
 
-import styles from './styles';
+import styles from './styles'
 
 interface MyDateInputComponentProps {
   date: Date
@@ -21,12 +21,12 @@ const MyDateInputComponent: React.FC<MyDateInputComponentProps> = ({
     event: DateTimePickerEvent,
     selectedDate: Date | undefined
   ) => {
-    const currentDate = selectedDate || date;
-    setDate(currentDate);
-  };
+    const currentDate = selectedDate || date
+    setDate(currentDate)
+  }
 
   return (
-    <Pressable style = {styles.absView} onPress={() => setDateModal(false)}>
+    <Pressable style={styles.absView} onPress={() => setDateModal(false)}>
       <View style={styles.dateContainer}>
         <DateTimePicker
           // minimumDate={}
@@ -39,7 +39,7 @@ const MyDateInputComponent: React.FC<MyDateInputComponentProps> = ({
         />
       </View>
     </Pressable>
-  );
-};
+  )
+}
 
-export default MyDateInputComponent;
+export default MyDateInputComponent

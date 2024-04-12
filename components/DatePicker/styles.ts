@@ -1,12 +1,11 @@
-import { StyleSheet } from 'react-native';
-import { lightPeach, white } from '../../assets/colors/colors';
+import { StyleSheet } from 'react-native'
+import { lightPeach, white } from '../../assets/colors/colors'
 
 const styles = StyleSheet.create({
-
   absView: {
     alignItems: 'center',
     height: '100%',
-    justifyContent:'center',
+    justifyContent: 'center',
     position: 'absolute',
     width: '100%',
   },
@@ -18,9 +17,7 @@ const styles = StyleSheet.create({
   dateContainer: {
     backgroundColor: white,
     borderRadius: 10,
-
   },
-  
-});
+})
 
-export default styles;
+export default styles
