@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import {
   Text,
   View,
@@ -7,18 +7,41 @@ import {
   Image,
   Keyboard,
   TouchableWithoutFeedback,
+  ActivityIndicator
 } from 'react-native'
-
 import { Ionicons } from '@expo/vector-icons'
 import styles from './styles' 
 import { globalStyles } from '../../assets/global/globalStyles' 
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
+import { loginEmailPassword } from "../../firebase/Login"
 
 const OnboardingScreen: React.FC = () => {
   const navigation = useNavigation()
   const insets = useSafeAreaInsets()
   const nextRef = useRef<TextInput>(null)
+
+  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  const loginUser = async () => {
+    setLoading(true)
+
+    try {
+    const val = await loginEmailPassword(email, password)
+
+    if (val) {
+      navigation.navigate("HomeTabs" as never)
+    } else {
+      alert("Login failed!")
+    }
+    } catch (error) {
+    alert("An error occurred during login.")
+    } finally {
+    setLoading(false)
+    }
+  }
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -38,6 +61,8 @@ const OnboardingScreen: React.FC = () => {
           placeholderTextColor={'black'}
           keyboardType="email-address"
           autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
           onSubmitEditing={() => nextRef.current?.focus()}
         />
 
@@ -47,14 +72,24 @@ const OnboardingScreen: React.FC = () => {
           placeholder="Password"
           placeholderTextColor={'black'}
           secureTextEntry
+          value={password}
+          onChangeText={setPassword}
           autoCapitalize="none"
           ref={nextRef}
         />
 
-      {/* Log In Button */}
-      <TouchableOpacity testID='login-btn' style={styles.button} onPress={() => { navigation.navigate("HomeTabs" as never)}} >
-        <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
-      </TouchableOpacity>
+        {/* Log In Button */}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={loginUser}
+          disabled={loading}
+        >
+          {loading ? (
+          <ActivityIndicator size="small" color="#FFFFFF" />
+          ) : (
+          <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
+          )}
+        </TouchableOpacity>
 
         <View>
           <TouchableOpacity>
