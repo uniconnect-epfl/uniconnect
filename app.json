@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "uni-connect",
-    "slug": "uni-connect",
+    "slug": "uniconnect",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,15 +22,16 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.alexandremrt.uniconnect"
+      "package": "com.epfl.uniconnect"
     },
+    "owner": "uniconnect-epfl",
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "fonts": "./assets/fonts/JetBrains-Mono-Regular.ttf'",
     "extra": {
       "eas": {
-        "projectId": "b224d8d5-7914-4ee3-a65a-e5e897b92bac"
+        "projectId": "93c2373f-cb15-4998-8e0d-9da43cf47cb0"
       }
     }
   }

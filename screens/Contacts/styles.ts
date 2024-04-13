@@ -1,5 +1,5 @@
-import { StyleSheet } from 'react-native';
-import { peach, black, lightGray, transparent, lightPeach } from '../../assets/colors/colors';
+import { StyleSheet } from 'react-native' 
+import { peach, black, lightGray, transparent, lightPeach } from '../../assets/colors/colors' 
 
 export const styles = StyleSheet.create({
     cardContainer: {
@@ -50,11 +50,6 @@ export const styles = StyleSheet.create({
     greyLightText: {
         alignItems: 'center',
         color: lightGray,
-        justifyContent: 'center',
-    },
-    horizonatlBarContainer: {
-        alignItems: 'center',
-        height: 70,
         justifyContent: 'center',
     },
     invisibleBackground: {

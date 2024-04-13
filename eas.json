@@ -1,24 +1,22 @@
 {
   "cli": {
-    "version": ">= 7.8.1"
+    "version": ">= 7.8.0"
   },
   "build": {
-    "preview": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
       "android": {
         "buildType": "apk"
       }
     },
-    "preview2": {
+    "production": {
       "android": {
-        "gradleCommand": ":app:assembleRelease"
+        "buildType": "apk"
       }
-    },
-    "preview3": {
-      "developmentClient": true
-    },
-    "preview4": {
-      "distribution": "internal"
-    },
+    }
+  },
+  "submit": {
     "production": {}
   }
 }
