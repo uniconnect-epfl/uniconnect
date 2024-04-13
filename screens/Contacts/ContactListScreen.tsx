@@ -1,14 +1,7 @@
-import { useState } from "react"
-import {
-  View,
-  Text,
-  FlatList,
-  Image,
-  TextInput,
-  TouchableOpacity,
-} from "react-native"
-import { styles } from "./styles"
-import { Ionicons } from "@expo/vector-icons"
+import { useState } from 'react' 
+import { View, Text, FlatList, Image, TextInput, TouchableOpacity} from 'react-native' 
+import { styles } from './styles' 
+import { Ionicons } from '@expo/vector-icons'
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 type Contact = {
