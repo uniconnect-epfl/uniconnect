@@ -1,0 +1,31 @@
+# flow.yaml
+
+appId: com.alexandremrt.uniconnect
+---
+- "launchApp"
+- startRecording
+- tapOn: "Dont have an account?"
+- tapOn: "First name"
+- inputText: "Alex"
+- tapOn: "Last name"
+- inputText: "Mourot"
+- tapOn: "Date of birth"
+- inputText: "01/01/1990"
+- tapOn: "Location"
+- inputText: "Paris"
+
+- tapOn: "Add a description now"
+- inputText: "I am a software engineer"
+- hideKeyboard
+
+- tapOn: "Next"
+
+- tapOn: "Machine Learning"
+- tapOn: "NLP"
+- tapOn: "Search"
+- inputText: "Ass"
+- tapOn: "Assembly"
+- tapOn: "Next"
+
+
+- stopRecording

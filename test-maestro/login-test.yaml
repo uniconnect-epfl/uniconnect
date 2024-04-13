@@ -1,0 +1,14 @@
+# flow.yaml
+
+appId: com.alexandremrt.uniconnect
+
+---
+- "launchApp"
+- tapOn: "Username or email"
+- inputText: "alex.mourot@icloud.com"
+- tapOn: "Password"
+- inputText: "superSecure"
+- tapOn:
+    id: "login-btn"
+
+
