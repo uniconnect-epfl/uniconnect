@@ -24,6 +24,7 @@
       },
       "package": "com.epfl.uniconnect"
     },
+    "owner": "uniconnect-epfl",
     "web": {
       "favicon": "./assets/favicon.png"
     },
@@ -32,7 +33,6 @@
       "eas": {
         "projectId": "93c2373f-cb15-4998-8e0d-9da43cf47cb0"
       }
-    },
-    "owner": "uniconnect-epfl"
+    }
   }
 }

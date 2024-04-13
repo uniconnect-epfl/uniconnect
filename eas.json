@@ -10,9 +10,6 @@
         "buildType": "apk"
       }
     },
-    "preview": {
-      "distribution": "internal"
-    },
     "production": {}
   },
   "submit": {
