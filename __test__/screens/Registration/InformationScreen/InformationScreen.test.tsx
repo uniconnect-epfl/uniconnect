@@ -26,7 +26,7 @@ describe('InformationScreen', () => {
 
         expect(getByPlaceholderText("First name")).toBeTruthy()
         expect(getByPlaceholderText("Last name")).toBeTruthy()
-        expect(getByPlaceholderText("Date of birth")).toBeTruthy()
+        expect(getByText("Date of Birth*")).toBeTruthy()
         expect(getByPlaceholderText("Location")).toBeTruthy()
 
         expect(getByText('Use my location?')).toBeTruthy()

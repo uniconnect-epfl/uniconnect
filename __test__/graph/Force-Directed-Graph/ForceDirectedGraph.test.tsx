@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react-native'
-import ForceDirectedGraph from '../../../graph/Force-Directed-Graph/ForceDirectedGraph'
+import ForceDirectedGraph from '../../../graph/ForceDirectedGraph/ForceDirectedGraph'
 import Graph from '../../../graph/Graph'
 
 describe('ForceDirectedGraph', () => {

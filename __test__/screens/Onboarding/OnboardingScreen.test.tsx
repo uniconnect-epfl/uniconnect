@@ -54,7 +54,7 @@ describe('OnboardingScreen', () => {
     const loginButton = getByText('Log In')
 
     fireEvent.press(loginButton)
-    expect(mockNavigate).toHaveBeenCalledWith('Home')
+    expect(mockNavigate).toHaveBeenCalledWith('HomeTabs')
   })
 
   it('shows a continue with Google option', () => {

@@ -1,4 +1,4 @@
-import { fruchtermanReingold } from '../../../graph/graph-algorithms/FruchtermanReingold'
+import { fruchtermanReingold } from '../../../graph/graphAlgorithms/FruchtermanReingold'
 import { Node, Link } from '../../../graph/Graph'
 
 describe('fruchtermanReingold', () => {
