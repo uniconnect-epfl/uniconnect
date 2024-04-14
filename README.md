@@ -44,6 +44,14 @@ The entry file is `App.tsx`. You could think of it as a main function that is la
 
 More to come on this part. We will use local tests as well as Sonar tools.
 
+## Unit testing
+
+For unit testing we are using the framework jest. For the expo configuration, you can see some documentation [here](https://docs.expo.dev/develop/unit-testing/).
+
+In order to run all tests you can run `npm run test`.
+
+The test will always run with coverage report on. You can see the coverage report in terminal but you can also go see them afterwards by navigating to `coverage/lcov-report` and opening the file `index.html` with a web browser.
+
 # Build
 
 ## Building the APK
