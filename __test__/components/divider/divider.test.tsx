@@ -1,12 +1,10 @@
-import React from 'react'
-import { render } from '@testing-library/react-native'
-import Form from '../../../components/divider/divider'
+import React from "react"
+import { render } from "@testing-library/react-native"
+import Divider from "../../../components/Divider/Divider"
 
-describe('Form', () => {
-  
-  it('renders the screen', () => {
-    const component = render(<Form />)
+describe("Divider", () => {
+  it("renders the screen", () => {
+    const component = render(<Divider />)
     expect(component).toBeTruthy()
   })
-  
 })

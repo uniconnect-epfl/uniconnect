@@ -8,18 +8,7 @@ import { MyProfileScreen } from "../../screens/Profile/MyProfileScreen/MyProfile
 import { SettingsScreen } from "../../screens/Settings/SettingsScreen"
 import AuthenticationScreen from "../../screens/Registration/AuthenticationScreen/AuthenticationScreen"
 
-//Definition of type for Typescript compatibility
-export type RegistrationStackParamList = {
-  Authentication: undefined
-  Onboarding: undefined
-  Information: undefined
-  Interests: undefined
-  HomeTabs: undefined
-  Profile: undefined
-  Settings: undefined
-}
-
-const Stack = createStackNavigator<RegistrationStackParamList>()
+const Stack = createStackNavigator()
 
 // return  the StackNavigation that will be called in the app to allow the user to Login/Register
 const RegistrationStackNavigator: React.FC = () => {

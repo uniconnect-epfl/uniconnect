@@ -2,8 +2,8 @@ import React from 'react'
 import styles from './styles' 
 import { View } from 'react-native' 
 
-const Form: React.FC = () => {
+const Divider: React.FC = () => {
   return <View style={styles.divider} /> 
 } 
 
-export default Form 
+export default Divider 
