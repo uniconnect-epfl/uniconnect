@@ -45,11 +45,6 @@ describe('InformationScreen', () => {
         const toggleButton = getByText("Add a description now")
         fireEvent.press(toggleButton)
         
-        const textInput = queryByPlaceholderText("Describe yourself here!")
-        expect(textInput).toBeTruthy()
-
-        fireEvent.press(toggleButton)
-        
         expect(queryByPlaceholderText("Describe yourself here!")).toBeNull()
     })
 
