@@ -55,6 +55,8 @@ const ForceDirectedGraph: React.FC<{
   const [scale, setScale] = useState(1)
   const [lastScale, setLastScale] = useState(1) // Add state to keep track of last scale
 
+  const [animationStarted, setAnimationStarted] = useState(false) // Add state to keep track of animation start
+
   const pressStartRef = useRef(0)
 
   const panRef = useRef(null)
@@ -94,18 +96,21 @@ const ForceDirectedGraph: React.FC<{
 
   // Handle Dragging
   const handlePanGestureEvent = (event: {
-    nativeEvent: { translationX: number; translationY: number }
+    nativeEvent: { translationX: number ; translationY: number }
   }) => {
+    if (!animationStarted){
     setTotalOffset({
       x: event.nativeEvent.translationX / lastScale,
       y: event.nativeEvent.translationY / lastScale,
     })
+  }
   }
 
   // Handle Dragging State Change
   const handlePanHandlerStateChange = (event: {
     nativeEvent: { state: number }
   }) => {
+    if (!animationStarted){
     if (event.nativeEvent.state === State.END) {
       setNodes(
         nodes.map((node) => ({
@@ -121,20 +126,25 @@ const ForceDirectedGraph: React.FC<{
       setTotalOffset({ x: 0, y: 0 })
     }
   }
+  }
 
   // Handle Zooming
   const handlePinchGestureEvent = (event: {
     nativeEvent: { scale: React.SetStateAction<number> }
   }) => {
+    if (!animationStarted){
     setScale(Number(event.nativeEvent.scale) * Number(lastScale))
+    }
   }
 
   const handlePinchHandlerStateChange = (event: {
     nativeEvent: { state: number }
   }) => {
+    if (!animationStarted){
     if (event.nativeEvent.state === State.END) {
       setLastScale(scale)
     }
+  }
   }
 
   // Handle PRESS IN
@@ -151,6 +161,59 @@ const ForceDirectedGraph: React.FC<{
       shortPressCallback()
     }
   }
+
+  const nodeZoomIn = (clickedNode: Node) => {
+    setAnimationStarted(true) // Set animation started to true
+    const targetScale = 2 // Target scale for zooming in
+    const animationDuration = 200 // Duration of the animation in milliseconds
+    const framesPerSecond = 60 // Number of frames per second for smooth animation
+    const totalFrames = framesPerSecond * (animationDuration / 1000) // Total number of frames
+  
+    let currentFrame = 0
+  
+    const initialScale = lastScale // Initial scale before zooming
+  
+    const scaleIncrement = (targetScale - initialScale) / totalFrames // Incremental change in scale per frame
+  
+    const initialOffsetX = totalOffset.x // Initial offset X before zooming
+    const initialOffsetY = totalOffset.y // Initial offset Y before zooming
+  
+    const targetOffsetX =
+      initialOffsetX - (coordX(clickedNode) - CENTER_WIDTH) // Target offset X after zooming
+    const targetOffsetY =
+      initialOffsetY - (coordY(clickedNode) - CENTER_HEIGHT) // Target offset Y after zooming
+  
+    const animateZoom = () => {
+      if (currentFrame <= totalFrames) {
+        const newScale = initialScale + scaleIncrement * currentFrame
+        const newOffsetX = initialOffsetX + (targetOffsetX - initialOffsetX) * currentFrame / totalFrames
+        const newOffsetY = initialOffsetY + (targetOffsetY - initialOffsetY) * currentFrame / totalFrames
+  
+        setScale(newScale)
+        setTotalOffset({ x: newOffsetX, y: newOffsetY })
+  
+        currentFrame++
+  
+        requestAnimationFrame(animateZoom)
+      } else {
+        setLastScale(targetScale) // Set last scale to the target scale
+        setScale(targetScale) // Set scale to the target scale
+        setTotalOffset({ x: 0, y: 0 }) // Reset the total offset
+        setNodes(
+          nodes.map((node) => ({
+            ...node,
+            x: coordX(node) - (coordX(clickedNode) - CENTER_WIDTH),
+            y: coordY(node) - (coordY(clickedNode) - CENTER_HEIGHT),
+          }))
+        )
+        setAnimationStarted(false) // Set animation started to false
+      }
+    }
+  
+    animateZoom()
+  }
+  
+  
 
   // Functions to get the X and Y coordinates of the nodes and the fill color of the nodes
   const coordX = (node: Node): number => {
@@ -228,6 +291,7 @@ const ForceDirectedGraph: React.FC<{
         onPressOut={() =>
           handlePressOut(() => {
             console.warn("Short Press")
+            nodeZoomIn(node)
             setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
           })
         }
@@ -248,7 +312,7 @@ const ForceDirectedGraph: React.FC<{
           coordY(node) +
           (sizes.get(node.id) ?? DEFAULT_NODE_SIZE) +
           DEFAULT_NODE_SIZE
-        } // Position below the circle; adjust 10 as needed
+        } // Position below the circle adjust 10 as needed
         textAnchor="middle" // Center the text under the circle
       >
         {node.id}
@@ -272,7 +336,7 @@ const ForceDirectedGraph: React.FC<{
           maxPointers={1}
           simultaneousHandlers={pinchRef}
         >
-          <View style={styles.container}>
+          <View style={styles.container} >
             <Svg width={WIDTH} height={HEIGHT}>
               <G scale={scale} originX={CENTER_WIDTH} originY={CENTER_HEIGHT}>
                 {LINES}
