@@ -6,4 +6,4 @@ const Divider: React.FC = () => {
   return <View style={styles.divider} /> 
 } 
 
-export default Divider 
+export default Divider
