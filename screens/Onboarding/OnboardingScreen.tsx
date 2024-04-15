@@ -41,7 +41,7 @@ const OnboardingScreen: React.FC = () => {
   }, []
   )
 
-  const googleSignin = async () => {
+  const googleSignin = async ()  : Promise<User> => {
     try {
       await GoogleSignin.hasPlayServices()
       const user: User = await GoogleSignin.signIn()
@@ -52,13 +52,9 @@ const OnboardingScreen: React.FC = () => {
       setError((e as string))
       alert("An error occurred during Google Sign In." + error)
     }
+    return userInfo as User
   }
 
-  const googleLogout = () => {
-    setUserInfo(null)
-    GoogleSignin.revokeAccess()
-    GoogleSignin.signOut()
-  }
 
   const loginUser = async () => {
     setLoading(true)
