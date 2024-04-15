@@ -8,16 +8,16 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ActivityIndicator,
-  Button
 } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
 import styles from './styles'
 import { globalStyles } from '../../assets/global/globalStyles'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
 import { loginEmailPassword } from "../../firebase/Login"
-import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { User } from '@react-native-google-signin/google-signin'
+import { Ionicons } from '@expo/vector-icons'
+
 
 
 
@@ -37,26 +37,28 @@ const OnboardingScreen: React.FC = () => {
 
 
   useEffect(() => {
-    GoogleSignin.configure({webClientId: "618676460374-5h642avt17te1uj9qo8imr233gb6n3qj.apps.googleusercontent.com"})
+    GoogleSignin.configure({ webClientId: "618676460374-5h642avt17te1uj9qo8imr233gb6n3qj.apps.googleusercontent.com" })
   }, []
   )
 
   const googleSignin = async () => {
     try {
-      await GoogleSignin.hasPlayServices();
-      const user: User = await GoogleSignin.signIn();
-      setUserInfo(user);
-      setError(null);
+      await GoogleSignin.hasPlayServices()
+      const user: User = await GoogleSignin.signIn()
+      setUserInfo(user)
+      setError(null)
+      navigation.navigate("HomeTabs" as never)
     } catch (e) {
-      setError((e as string));
+      setError((e as string))
+      alert("An error occurred during Google Sign In." + error)
     }
   }
 
   const googleLogout = () => {
-    setUserInfo(null);
-    GoogleSignin.revokeAccess();
-    GoogleSignin.signOut();
-  };
+    setUserInfo(null)
+    GoogleSignin.revokeAccess()
+    GoogleSignin.signOut()
+  }
 
   const loginUser = async () => {
     setLoading(true)
@@ -132,18 +134,20 @@ const OnboardingScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.container}>
-          {userInfo && <Text>{JSON.stringify(userInfo.user)}</Text>}
-          {userInfo ? (
-            <Button title="Logout" onPress={googleLogout} />
-          ) : (
-            <GoogleSigninButton
-            size={GoogleSigninButton.Size.Standard}
-              color={GoogleSigninButton.Color.Light}
-              onPress={googleSignin}
+        <TouchableOpacity style={styles.buttonGoogle}
+          onPress={googleSignin}>
+          <View style={styles.buttonPlaceholder}>
+            <Ionicons
+              name="logo-google"
+              size={30}
+              color="black"
+              style={styles.icon}
             />
-          )}
-        </View>
+            <Text style={[styles.buttonText, globalStyles.boldText]}>
+              Continue with google
+            </Text>
+          </View>
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.footer, { bottom: insets.bottom }]}
