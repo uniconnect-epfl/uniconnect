@@ -13,6 +13,24 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler"
 
+const profile_picture_0 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-0.png")
+const profile_picture_1 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-1.png")
+const profile_picture_2 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-2.png")
+const profile_picture_3 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-3.png")
+const profile_picture_4 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-4.png")
+const profile_picture_5 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-5.png")
+const profile_picture_6 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-6.png")
+
+const PROFILE_PICTURES = [
+  profile_picture_0,
+  profile_picture_1,
+  profile_picture_2,
+  profile_picture_3,
+  profile_picture_4,
+  profile_picture_5,
+  profile_picture_6,
+]
+
 const VERY_SHORT_PRESS_DURATION = 50
 const SHORT_PRESS_DURATION = 100
 const NODE_HITBOX_SIZE = 20 // Hitbox size of the nodes
@@ -276,6 +294,14 @@ const ForceDirectedGraph: React.FC<{
 
   const CIRCLES = nodes.map((node) => (
     <G key={node.id + "group"}>
+      <Image
+        key={node.id + "image"}
+        x={coordX(node) - (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
+        y={coordY(node) - (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
+        width={2 * (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
+        height={2 * (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
+        href={PROFILE_PICTURES[parseInt(node.id) % PROFILE_PICTURES.length]}
+      />
       <Circle
         key={node.id + "circle"}
         cx={coordX(node)}
@@ -295,15 +321,6 @@ const ForceDirectedGraph: React.FC<{
             setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
           })
         }
-      />
-      <Image
-        key={node.id + "image"}
-        x={coordX(node) - (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
-        y={coordY(node) - (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
-        width={2 * (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
-        height={2 * (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
-        href={require("../../../assets/graph-template-profile-picture.png")} // Replace with your image path
-        clipPath={"url(#clip" + node.id + ")"}
       />
       <SVGText
         key={node.id + "text"}
