@@ -18,6 +18,7 @@ import { TextInput } from "react-native-gesture-handler"
 import { Entypo } from "@expo/vector-icons"
 import { AntDesign } from "@expo/vector-icons"
 import MyDateInputComponent from "../../../components/DatePicker/DatePicker"
+import { useNavigation } from "@react-navigation/native"
 
 const InformationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
@@ -29,6 +30,7 @@ const InformationScreen: React.FC = () => {
   const today = new Date()
   const [date, setDate] = useState<Date>(today)
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
+  const useNav = useNavigation()
 
   const onPress = () => {
     setDateModal(!dateModal)
@@ -114,15 +116,14 @@ const InformationScreen: React.FC = () => {
 
           <Divider />
 
-
           <TouchableOpacity
             style={[styles.button, styles.buttonContainer]}
+            onPress={() => useNav.navigate("Description" as never)}
           >
             <Text style={[styles.buttonText, globalStyles.text]}>
               Add a description now
             </Text>
           </TouchableOpacity>
-          
         </View>
         <View style={styles.footer}>
           <LowBar nextScreen="Interests" />

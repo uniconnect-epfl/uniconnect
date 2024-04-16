@@ -10,9 +10,7 @@ import AuthenticationScreen from "../../screens/Registration/AuthenticationScree
 import { MyQrCodeScreen } from "../../screens/Profile/MyQrCode/MyQrCodeScreen"
 import { UpdateMyProfileScreen } from "../../screens/Profile/UpdateMyProfile/UpdateMyProfileScreen"
 import ExternalProfileScreen from "../../screens/Profile/ExternalProfileScreen/ExternalProfileScreen"
-import { auth } from "../../firebase/firebaseConfig"
-import { User, onAuthStateChanged } from "firebase/auth"
-import LoadingScreen from "../../screens/Loading/LoadingScreen"
+import  DescriptionScreen  from "../../screens/Registration/DescriptionScreen/DescriptionScreen"
 
 const Stack = createStackNavigator()
 
@@ -40,9 +38,32 @@ const MainStackNavigator: React.FC = () => {
     )
   }
   return (
-    <Stack.Navigator>
-      {user?
-      <>
+    <Stack.Navigator initialRouteName="Onboarding">
+      <Stack.Screen
+        name="Onboarding"
+        component={OnboardingScreen}
+        options={{ headerShown: false }} // Set options as needed, i.e hiding the header
+      />
+      <Stack.Screen
+        name="Information"
+        component={InformationScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Description"
+        component={DescriptionScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Interests"
+        component={InterestsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Authentication"
+        component={AuthenticationScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="HomeTabs"
         component={HomeTabNavigator}
@@ -73,31 +94,6 @@ const MainStackNavigator: React.FC = () => {
         component={SettingsScreen}
         options={{ headerShown: false }}
       />
-      </>
-      :
-      <>
-       <Stack.Screen
-        name="Onboarding"
-        component={OnboardingScreen}
-        options={{ headerShown: false }} // Set options as needed, i.e hiding the header
-      />
-      <Stack.Screen
-        name="Information"
-        component={InformationScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Interests"
-        component={InterestsScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Authentication"
-        component={AuthenticationScreen}
-        options={{ headerShown: false }}
-      />
-      </>
-      }
     </Stack.Navigator>
   )
 }
