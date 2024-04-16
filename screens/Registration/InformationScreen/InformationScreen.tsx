@@ -21,7 +21,6 @@ import MyDateInputComponent from "../../../components/DatePicker/DatePicker"
 
 const InformationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
-  const [desc, setDesc] = useState(false)
   const [loc, setLoc] = useState(false)
   const firstRef = useRef<TextInput>(null)
   const thirdRef = useRef<TextInput>(null)
@@ -115,16 +114,15 @@ const InformationScreen: React.FC = () => {
 
           <Divider />
 
-          {desc && <TextInput style={styles.description}></TextInput>}
 
           <TouchableOpacity
             style={[styles.button, styles.buttonContainer]}
-            onPress={() => setDesc(!desc)}
           >
             <Text style={[styles.buttonText, globalStyles.text]}>
               Add a description now
             </Text>
           </TouchableOpacity>
+          
         </View>
         <View style={styles.footer}>
           <LowBar nextScreen="Interests" />
