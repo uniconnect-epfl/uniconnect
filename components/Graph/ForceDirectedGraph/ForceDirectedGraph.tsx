@@ -1,5 +1,12 @@
 import React, { useEffect, useRef, useState } from "react"
-import { ActivityIndicator, View, Dimensions } from "react-native"
+import {
+  ActivityIndicator,
+  View,
+  Dimensions,
+  Modal,
+  Text,
+  TouchableWithoutFeedback,
+} from "react-native"
 import Svg, { Circle, G, Line, Text as SVGText, Image } from "react-native-svg"
 
 import styles from "./styles"
@@ -73,14 +80,15 @@ const ForceDirectedGraph: React.FC<{
 
   // State to store the total offset when dragging the graph
   const [totalOffset, setTotalOffset] = useState({ x: 0, y: 0 })
-  const [dragEnabled, setDragEnabled] = useState(true) // Toggle drag
   const [clickedNodeID, setClickedNodeID] = useState<string>(
     DEFAULT_CLICKED_NODE_ID
   ) // Node ID of clicked node
   const [scale, setScale] = useState(1)
   const [lastScale, setLastScale] = useState(1) // Add state to keep track of last scale
 
-  const [animationStarted, setAnimationStarted] = useState(false) // Add state to keep track of animation start
+  const [gestureEnabled, setGestureEnabled] = useState(true) // Add state to keep track of animation start
+
+  const [modalVisible, setModalVisible] = useState(false)
 
   const pressStartRef = useRef(0)
 
@@ -109,11 +117,6 @@ const ForceDirectedGraph: React.FC<{
     setLoad(true)
   }, [graph, constrainedNodeId])
 
-  // Update the draggable state of the whole graph when a node is clicked
-  useEffect(() => {
-    setDragEnabled(clickedNodeID === DEFAULT_CLICKED_NODE_ID)
-  }, [clickedNodeID])
-
   // If the graph is not loaded, display an activity indicator
   if (!load) {
     return <ActivityIndicator size="large" color="#0000ff" />
@@ -121,21 +124,18 @@ const ForceDirectedGraph: React.FC<{
 
   // Handle Dragging
   const handlePanGestureEvent = (event: {
-    nativeEvent: { translationX: number ; translationY: number }
+    nativeEvent: { translationX: number; translationY: number }
   }) => {
-    if (!animationStarted){
     setTotalOffset({
       x: event.nativeEvent.translationX / lastScale,
       y: event.nativeEvent.translationY / lastScale,
     })
-  }
   }
 
   // Handle Dragging State Change
   const handlePanHandlerStateChange = (event: {
     nativeEvent: { state: number }
   }) => {
-    if (!animationStarted){
     if (event.nativeEvent.state === State.END) {
       setNodes(
         nodes.map((node) => ({
@@ -145,31 +145,24 @@ const ForceDirectedGraph: React.FC<{
         }))
       )
 
-      if (!dragEnabled) {
-        setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-      }
+      setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
       setTotalOffset({ x: 0, y: 0 })
     }
-  }
   }
 
   // Handle Zooming
   const handlePinchGestureEvent = (event: {
     nativeEvent: { scale: React.SetStateAction<number> }
   }) => {
-    if (!animationStarted){
     setScale(Number(event.nativeEvent.scale) * Number(lastScale))
-    }
   }
 
   const handlePinchHandlerStateChange = (event: {
     nativeEvent: { state: number }
   }) => {
-    if (!animationStarted){
     if (event.nativeEvent.state === State.END) {
       setLastScale(scale)
     }
-  }
   }
 
   // Handle PRESS IN
@@ -188,37 +181,42 @@ const ForceDirectedGraph: React.FC<{
   }
 
   const nodeZoomIn = (clickedNode: Node) => {
-    setAnimationStarted(true) // Set animation started to true
+    setGestureEnabled(false) // Set animation started to true
     const targetScale = 2 // Target scale for zooming in
-    const animationDuration = 200 // Duration of the animation in milliseconds
+    const animationDuration = 500 // Duration of the animation in milliseconds
     const framesPerSecond = 60 // Number of frames per second for smooth animation
     const totalFrames = framesPerSecond * (animationDuration / 1000) // Total number of frames
-  
+
     let currentFrame = 0
-  
+
     const initialScale = lastScale // Initial scale before zooming
-  
+
     const scaleIncrement = (targetScale - initialScale) / totalFrames // Incremental change in scale per frame
-  
+
     const initialOffsetX = totalOffset.x // Initial offset X before zooming
     const initialOffsetY = totalOffset.y // Initial offset Y before zooming
-  
-    const targetOffsetX =
-      initialOffsetX - (coordX(clickedNode) - CENTER_WIDTH) // Target offset X after zooming
-    const targetOffsetY =
-      initialOffsetY - (coordY(clickedNode) - CENTER_HEIGHT) // Target offset Y after zooming
-  
+
+    const targetOffsetX = initialOffsetX - (coordX(clickedNode) - CENTER_WIDTH) // Target offset X after zooming
+    const targetOffsetY = initialOffsetY - (coordY(clickedNode) - CENTER_HEIGHT) // Target offset Y after zooming
+
     const animateZoom = () => {
+      setModalVisible(true)
+
       if (currentFrame <= totalFrames) {
         const newScale = initialScale + scaleIncrement * currentFrame
-        const newOffsetX = initialOffsetX + (targetOffsetX - initialOffsetX) * currentFrame / totalFrames
-        const newOffsetY = initialOffsetY + (targetOffsetY - initialOffsetY) * currentFrame / totalFrames
-  
+
+        const newOffsetX =
+          initialOffsetX +
+          ((targetOffsetX - initialOffsetX) * currentFrame) / totalFrames
+        const newOffsetY =
+          initialOffsetY +
+          ((targetOffsetY - initialOffsetY) * currentFrame) / totalFrames
+
         setScale(newScale)
         setTotalOffset({ x: newOffsetX, y: newOffsetY })
-  
+
         currentFrame++
-  
+
         requestAnimationFrame(animateZoom)
       } else {
         setLastScale(targetScale) // Set last scale to the target scale
@@ -231,25 +229,32 @@ const ForceDirectedGraph: React.FC<{
             y: coordY(node) - (coordY(clickedNode) - CENTER_HEIGHT),
           }))
         )
-        setAnimationStarted(false) // Set animation started to false
+        setGestureEnabled(true) // Set animation started to false
+        setModalVisible(true)
       }
     }
-  
+
     animateZoom()
   }
-  
-  
 
   // Functions to get the X and Y coordinates of the nodes and the fill color of the nodes
   const coordX = (node: Node): number => {
-    if (dragEnabled || clickedNodeID === node.id) {
+    if (
+      !gestureEnabled ||
+      (gestureEnabled &&
+        (clickedNodeID == DEFAULT_CLICKED_NODE_ID || clickedNodeID === node.id))
+    ) {
       return node.x + totalOffset.x
     }
     return node.x
   }
 
   const coordY = (node: Node): number => {
-    if (dragEnabled || clickedNodeID === node.id) {
+    if (
+      !gestureEnabled ||
+      (gestureEnabled &&
+        (clickedNodeID == DEFAULT_CLICKED_NODE_ID || clickedNodeID === node.id))
+    ) {
       return node.y + totalOffset.y
     }
     return node.y
@@ -323,9 +328,7 @@ const ForceDirectedGraph: React.FC<{
         }
         onPressOut={() =>
           handlePressOut(() => {
-            console.warn("Short Press")
             nodeZoomIn(node)
-            setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
           })
         }
       />
@@ -345,32 +348,78 @@ const ForceDirectedGraph: React.FC<{
   ))
 
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <PinchGestureHandler
-        ref={pinchRef}
-        onGestureEvent={handlePinchGestureEvent}
-        onHandlerStateChange={handlePinchHandlerStateChange}
-        simultaneousHandlers={panRef}
+    <View style={styles.container}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false)
+        }}
       >
-        <PanGestureHandler
-          ref={panRef}
-          onGestureEvent={handlePanGestureEvent}
-          onHandlerStateChange={handlePanHandlerStateChange}
-          minPointers={1}
-          maxPointers={1}
-          simultaneousHandlers={pinchRef}
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setModalVisible(false)
+            setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
+            setGestureEnabled(true)
+          }}
         >
-          <View style={styles.container} >
-            <Svg width={WIDTH} height={HEIGHT}>
-              <G scale={scale} originX={CENTER_WIDTH} originY={CENTER_HEIGHT}>
-                {LINES}
-                {CIRCLES}
-              </G>
-            </Svg>
+          <View style={styles.modalContainer}>
+            <TouchableWithoutFeedback>
+              <View style={styles.modalView}>
+                <Svg style={styles.modalProfilePicture}>
+                  <Image
+                    key={clickedNodeID + "modalimage"}
+                    width={80}
+                    height={80}
+                    href={
+                      PROFILE_PICTURES[
+                        parseInt(clickedNodeID) % PROFILE_PICTURES.length
+                      ]
+                    }
+                    onPress={() => {
+                      console.warn("Pressed")
+                    }}
+                  />
+                </Svg>
+                <Text style={styles.modalProfileName}>
+                  Node ID: {clickedNodeID}
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-        </PanGestureHandler>
-      </PinchGestureHandler>
-    </GestureHandlerRootView>
+        </TouchableWithoutFeedback>
+      </Modal>
+
+      <GestureHandlerRootView style={styles.container}>
+        <PinchGestureHandler
+          ref={pinchRef}
+          onGestureEvent={handlePinchGestureEvent}
+          onHandlerStateChange={handlePinchHandlerStateChange}
+          simultaneousHandlers={panRef}
+          enabled={gestureEnabled}
+        >
+          <PanGestureHandler
+            ref={panRef}
+            onGestureEvent={handlePanGestureEvent}
+            onHandlerStateChange={handlePanHandlerStateChange}
+            minPointers={1}
+            maxPointers={1}
+            simultaneousHandlers={pinchRef}
+            enabled={gestureEnabled}
+          >
+            <View style={styles.container}>
+              <Svg width={WIDTH} height={HEIGHT}>
+                <G scale={scale} originX={CENTER_WIDTH} originY={CENTER_HEIGHT}>
+                  {LINES}
+                  {CIRCLES}
+                </G>
+              </Svg>
+            </View>
+          </PanGestureHandler>
+        </PinchGestureHandler>
+      </GestureHandlerRootView>
+    </View>
   )
 }
 
