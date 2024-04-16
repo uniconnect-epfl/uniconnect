@@ -13,12 +13,19 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler"
 
+// eslint-disable-next-line
 const profile_picture_0 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-0.png")
+// eslint-disable-next-line
 const profile_picture_1 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-1.png")
+// eslint-disable-next-line
 const profile_picture_2 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-2.png")
+// eslint-disable-next-line
 const profile_picture_3 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-3.png")
+// eslint-disable-next-line
 const profile_picture_4 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-4.png")
+// eslint-disable-next-line
 const profile_picture_5 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-5.png")
+// eslint-disable-next-line
 const profile_picture_6 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-6.png")
 
 const PROFILE_PICTURES = [

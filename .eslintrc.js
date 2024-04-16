@@ -32,7 +32,6 @@ module.exports = {
     'react/react-in-jsx-scope': 'off', // Not needed with React 17+
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'semi': ['error', 'never'],
-    '@typescript-eslint/no-var-requires': 0 // Allow require statements
     // Adjust rules based on your project needs
   },
   settings: {
