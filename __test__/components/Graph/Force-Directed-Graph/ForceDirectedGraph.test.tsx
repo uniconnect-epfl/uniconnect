@@ -1,7 +1,8 @@
 import React from "react"
-import { render, act} from "@testing-library/react-native"
+import { render, act, fireEvent, waitFor} from "@testing-library/react-native"
 import ForceDirectedGraph from "../../../../components/Graph/ForceDirectedGraph/ForceDirectedGraph"
 import Graph from "../../../../components/Graph/Graph"
+
 
 
 jest.mock("react-native-gesture-handler", () => {
@@ -22,8 +23,8 @@ describe("ForceDirectedGraph", () => {
   let constrainedNodeId: string
 
   beforeEach(() => {
-    graph = new Graph(["A", "B", "C"], ["A", "B"], ["B", "C"], [1, 2])
-    constrainedNodeId = "someNodeId"
+    graph = new Graph(["1", "2", "3"], ["1", "2"], ["2", "3"], [1, 2])
+    constrainedNodeId = "2"
   })
 
   it("renders without crashing", () => {
@@ -36,18 +37,18 @@ describe("ForceDirectedGraph", () => {
   it('dragging moves the graph', () => {
     const component = render(<ForceDirectedGraph graph={graph} constrainedNodeId={constrainedNodeId} />)
     const panHandler = component.getByTestId('pan-handler')
-    const nodeA = component.getByTestId("node-A")
-    const nodeB = component.getByTestId("node-B")
-    const nodeC = component.getByTestId("node-C")
+    const node1 = component.getByTestId("node-1")
+    const node2 = component.getByTestId("node-2")
+    const node3 = component.getByTestId("node-3")
 
-    const initialX_A = nodeA.props.cx
-    const initialY_A = nodeA.props.cy
+    const initialX_A = node1.props.cx
+    const initialY_A = node1.props.cy
 
-    const initialX_B = nodeB.props.cx
-    const initialY_B = nodeB.props.cy
+    const initialX_B = node2.props.cx
+    const initialY_B = node2.props.cy
 
-    const initialX_C = nodeC.props.cx
-    const initialY_C = nodeC.props.cy
+    const initialX_C = node3.props.cx
+    const initialY_C = node3.props.cy
 
 
     // Simulate a touch start event
@@ -64,14 +65,14 @@ describe("ForceDirectedGraph", () => {
     })
   })
 
-  expect(nodeA.props.cx).toBe(initialX_A + 10)
-  expect(nodeA.props.cy).toBe(initialY_A + 10)
+  expect(node1.props.cx).toBe(initialX_A + 10)
+  expect(node1.props.cy).toBe(initialY_A + 10)
 
-  expect(nodeB.props.cx).toBe(initialX_B + 10)
-  expect(nodeB.props.cy).toBe(initialY_B + 10)
+  expect(node2.props.cx).toBe(initialX_B + 10)
+  expect(node2.props.cy).toBe(initialY_B + 10)
 
-  expect(nodeC.props.cx).toBe(initialX_C + 10)
-  expect(nodeC.props.cy).toBe(initialY_C + 10)
+  expect(node3.props.cx).toBe(initialX_C + 10)
+  expect(node3.props.cy).toBe(initialY_C + 10)
 
   expect(graph.getNodes()[0].x).toBe(initialX_A)
   expect(graph.getNodes()[0].y).toBe(initialY_A)
@@ -89,14 +90,58 @@ describe("ForceDirectedGraph", () => {
     })
   })
 
-  expect(nodeA.props.cx).toBe(initialX_A + 10)
-  expect(nodeA.props.cy).toBe(initialY_A + 10)
+  expect(node1.props.cx).toBe(initialX_A + 10)
+  expect(node1.props.cy).toBe(initialY_A + 10)
 
-  expect(nodeB.props.cx).toBe(initialX_B + 10)
-  expect(nodeB.props.cy).toBe(initialY_B + 10)
+  expect(node2.props.cx).toBe(initialX_B + 10)
+  expect(node2.props.cy).toBe(initialY_B + 10)
 
-  expect(nodeC.props.cx).toBe(initialX_C + 10)
-  expect(nodeC.props.cy).toBe(initialY_C + 10)
+  expect(node3.props.cx).toBe(initialX_C + 10)
+  expect(node3.props.cy).toBe(initialY_C + 10)
 
+  })
+
+  it('clicking a node launches animation', async () => {
+    const component = render(<ForceDirectedGraph graph={graph} constrainedNodeId={constrainedNodeId} />)
+    const node1 = component.getByTestId("node-1")
+    const panHandler = component.getByTestId('pan-handler')
+
+    const initialX_A = node1.props.cx
+    const initialY_A = node1.props.cy
+    
+    fireEvent.press(node1)
+    await waitFor(() => {
+      setTimeout(() => {
+          expect(panHandler.props.enabled).toBe(false)
+          const modal = component.getByTestId('modal')
+          expect(modal).toBeTruthy()
+          expect(modal.props.visible).toBe(true)
+          expect(Math.abs(node1.props.cx - initialX_A)).toBeGreaterThan(0)
+          expect(Math.abs(node1.props.cy - initialY_A)).toBeGreaterThan(0)
+      }, 100)
+
+    })
+  
+  await waitFor(() => {
+    setTimeout(() => {
+        expect(panHandler.props.enabled).toBe(true)
+    }, 500)
+})
+})
+
+ it('clicking on a node sets clickedNode', async () => {
+    const component = render(<ForceDirectedGraph graph={graph} constrainedNodeId={constrainedNodeId} />)
+    const node1 = component.getByTestId("node-1")
+    fireEvent.press(node1)
+
+    await waitFor(() => {
+      setTimeout(() => {
+          const modal = component.getByTestId('modal')
+          expect(modal).toBeTruthy()
+          expect(modal.props.key).toBe('node-1')
+      }, 100)
+    }
+    )
+    
   })
 })

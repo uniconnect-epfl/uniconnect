@@ -61,6 +61,12 @@ const HEIGHT = Dimensions.get("window").height // Height of the screen
 const CENTER_WIDTH = WIDTH / 2 // Center X-coordinates of the screen
 const CENTER_HEIGHT = HEIGHT / 2 // Center Y-coordinates of the screen
 
+const TARGET_SCALE = 2 // Target scale for zooming in
+const ANIMATION_DURATION = 500 // Duration of the animation in milliseconds
+const FPS = 60 // Number of frames per second for smooth animation
+const TOTAL_FRAMES = FPS * (ANIMATION_DURATION / 1000) // Total number of frames
+
+
 /**
  *
  * @description Force-directed graph component
@@ -182,16 +188,12 @@ const ForceDirectedGraph: React.FC<{
 
   const nodeZoomIn = (clickedNode: Node) => {
     setGestureEnabled(false) // Set animation started to true
-    const targetScale = 2 // Target scale for zooming in
-    const animationDuration = 500 // Duration of the animation in milliseconds
-    const framesPerSecond = 60 // Number of frames per second for smooth animation
-    const totalFrames = framesPerSecond * (animationDuration / 1000) // Total number of frames
 
     let currentFrame = 0
 
     const initialScale = lastScale // Initial scale before zooming
 
-    const scaleIncrement = (targetScale - initialScale) / totalFrames // Incremental change in scale per frame
+    const scaleIncrement = (TARGET_SCALE - initialScale) / TOTAL_FRAMES // Incremental change in scale per frame
 
     const initialOffsetX = totalOffset.x // Initial offset X before zooming
     const initialOffsetY = totalOffset.y // Initial offset Y before zooming
@@ -202,15 +204,15 @@ const ForceDirectedGraph: React.FC<{
     const animateZoom = () => {
       setModalVisible(true)
 
-      if (currentFrame <= totalFrames) {
+      if (currentFrame <= TOTAL_FRAMES) {
         const newScale = initialScale + scaleIncrement * currentFrame
 
         const newOffsetX =
           initialOffsetX +
-          ((targetOffsetX - initialOffsetX) * currentFrame) / totalFrames
+          ((targetOffsetX - initialOffsetX) * currentFrame) / TOTAL_FRAMES
         const newOffsetY =
           initialOffsetY +
-          ((targetOffsetY - initialOffsetY) * currentFrame) / totalFrames
+          ((targetOffsetY - initialOffsetY) * currentFrame) / TOTAL_FRAMES
 
         setScale(newScale)
         setTotalOffset({ x: newOffsetX, y: newOffsetY })
@@ -219,8 +221,8 @@ const ForceDirectedGraph: React.FC<{
 
         requestAnimationFrame(animateZoom)
       } else {
-        setLastScale(targetScale) // Set last scale to the target scale
-        setScale(targetScale) // Set scale to the target scale
+        setLastScale(TARGET_SCALE) // Set last scale to the target scale
+        setScale(TARGET_SCALE) // Set scale to the target scale
         setTotalOffset({ x: 0, y: 0 }) // Reset the total offset
         setNodes(
           nodes.map((node) => ({
@@ -229,8 +231,7 @@ const ForceDirectedGraph: React.FC<{
             y: coordY(node) - (coordY(clickedNode) - CENTER_HEIGHT),
           }))
         )
-        setGestureEnabled(true) // Set animation started to false
-        setModalVisible(true)
+        setGestureEnabled(true)
       }
     }
 
@@ -318,7 +319,7 @@ const ForceDirectedGraph: React.FC<{
         key={node.id + "circle"}
         cx={coordX(node)}
         cy={coordY(node)}
-        r={(sizes.get(node.id) ?? DEFAULT_NODE_SIZE) + NODE_HITBOX_SIZE}
+        r={(sizes.get(node.id) ?? DEFAULT_NODE_SIZE) + NODE_HITBOX_SIZE * 1/scale}
         fill={"transparent"}
         onPressIn={() =>
           handlePressIn(() => {
@@ -357,6 +358,8 @@ const ForceDirectedGraph: React.FC<{
         onRequestClose={() => {
           setModalVisible(false)
         }}
+        testID="modal"
+        key={clickedNodeID}
       >
         <TouchableWithoutFeedback
           onPress={() => {
@@ -364,6 +367,7 @@ const ForceDirectedGraph: React.FC<{
             setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
             setGestureEnabled(true)
           }}
+          testID="modal-touchable"
         >
           <View style={styles.modalContainer}>
             <TouchableWithoutFeedback>
