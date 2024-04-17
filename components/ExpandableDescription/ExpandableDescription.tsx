@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { black } from '../../assets/colors/colors'
-import { styles } from "./styles"
+import { styles } from './styles'
 
 interface ExpandableDescriptionProps {
   description: string;
@@ -22,7 +22,7 @@ const ExpandableDescription: React.FC<ExpandableDescriptionProps> = ({ descripti
       <TouchableOpacity 
         style={styles.button}
         onPress={() => setLimitNbLines(!limitNbLines) }>
-          <Ionicons name={limitNbLines ? "chevron-down-outline" : "chevron-up-outline"} size={24} color={black} />
+          <Ionicons name={limitNbLines ? 'chevron-down-outline' : 'chevron-up-outline'} size={24} color={black} />
       </TouchableOpacity>
     </View>
   )

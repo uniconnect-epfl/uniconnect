@@ -15,7 +15,7 @@ describe('ExpandableDescription', () => {
   })
 
   it('renders correct text', () => {
-    const description = "hfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vo"
+    const description = 'hfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vo'
     const { getByText } = render(
         <ExpandableDescription
             description={description}
@@ -25,7 +25,7 @@ describe('ExpandableDescription', () => {
   })
 
   it('renders long text only when expanding', () => {
-    const description = "hfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vo "
+    const description = 'hfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vohfjdklahfjd fhei lv hsnrei vruie vei veiu eul nesbua bfwzuag fwua feuo vo '
     const { UNSAFE_getByType, getByText } = render(
         <ExpandableDescription
             description={description}

@@ -1,8 +1,8 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet } from 'react-native'
 
 export const styles = StyleSheet.create({
   leftAlign: {
-    alignSelf: "flex-start"
+    alignSelf: 'flex-start'
   },
   view: {
     alignItems: 'center',

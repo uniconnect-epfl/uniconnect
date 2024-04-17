@@ -15,7 +15,7 @@ const GeneralProfile: React.FC<GeneralProfileProps> = ({
     surname,
     location
 }) => {
-  const profilePictureUrl = ""
+  const profilePictureUrl = ''
 
   return (
     <View style={styles.container}>
@@ -27,14 +27,14 @@ const GeneralProfile: React.FC<GeneralProfileProps> = ({
             />
         ) : (
             <View style={styles.profilePicture}>
-                <Ionicons name="person" size={50} color={black} />
+                <Ionicons name='person' size={50} color={black} />
             </View>
         )}
 
         <Text style={styles.name}>{name} {surname}</Text>
 
         <View style={styles.horizontalContainer}>
-            <Ionicons name="location-outline" size={14} color={black} />
+            <Ionicons name='location-outline' size={14} color={black} />
             <Text style={styles.location}>{location}</Text>
         </View>
 

@@ -1,5 +1,5 @@
-import { StyleSheet } from "react-native"
-import { peach } from "../../assets/colors/colors"
+import { StyleSheet } from 'react-native'
+import { peach } from '../../assets/colors/colors'
 
 export const styles = StyleSheet.create({
     container: {
@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
         margin: 10,
     },
     horizontalContainer: {
-        flexDirection: "row"
+        flexDirection: 'row'
     },
     location: {
         fontSize: 11,
