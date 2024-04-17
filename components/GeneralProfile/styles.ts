@@ -1,12 +1,37 @@
 import { StyleSheet } from 'react-native'
-import { peach } from '../../assets/colors/colors'
+import { lightPeach, peach, shadowColor } from '../../assets/colors/colors'
+import { BUTTON_RADIUS } from '../../assets/global/constants'
 
 export const styles = StyleSheet.create({
+
+    button: {
+        alignItems: 'center',
+        alignSelf: 'center',
+        backgroundColor: lightPeach,
+        borderColor: peach,
+        borderRadius: BUTTON_RADIUS,
+        borderWidth: 3,
+        display: 'flex',
+        elevation: 8,
+        height: 40,
+        justifyContent: 'center',
+        marginBottom: 60,
+        marginTop: 35,
+        shadowColor,
+        shadowOffset: { width: 0, height: 2.5 },
+        shadowOpacity: 0.3,
+        shadowRadius: 5,
+        width: '60%',
+      },
+      
     container: {
+        flexDirection: 'row',
         justifyContent: 'center',
         left: 10,
         margin: 10,
     },
+    
+
     horizontalContainer: {
         flexDirection: 'row'
     },
@@ -26,5 +51,7 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         width: 80,
     },
-
+    vertical: {
+        flexDirection: 'column',
+    },
 })
