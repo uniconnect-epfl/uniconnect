@@ -220,6 +220,19 @@ const ForceDirectedGraph: React.FC<{
 
         requestAnimationFrame(animateZoom)
       }
+      else {
+        setGestureEnabled(true)
+        setLastScale(TARGET_SCALE) // Set last scale to the target scale
+        setScale(TARGET_SCALE) // Set scale to the target scale
+        setTotalOffset({ x: 0, y: 0 }) // Reset the total offset
+        setNodes(
+          nodes.map((node) => ({
+            ...node,
+            x: coordX(node) - (coordX(clickedNode) - CENTER_WIDTH),
+            y: coordY(node) - (coordY(clickedNode) - CENTER_HEIGHT),
+          })),
+        )
+      }
     }
 
     animateZoom()
@@ -322,17 +335,6 @@ const ForceDirectedGraph: React.FC<{
         onPressOut={() =>{
           handlePressOut(() => {
             nodeZoomIn(node)
-            setGestureEnabled(true)
-        setLastScale(TARGET_SCALE) // Set last scale to the target scale
-        setScale(TARGET_SCALE) // Set scale to the target scale
-        setTotalOffset({ x: 0, y: 0 }) // Reset the total offset
-        setNodes(
-          nodes.map((node2) => ({
-            ...node2,
-            x: coordX(node2) - (coordX(node) - CENTER_WIDTH),
-            y: coordY(node2) - (coordY(node) - CENTER_HEIGHT),
-          })),
-        )
           })
         }
         }
