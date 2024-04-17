@@ -212,7 +212,6 @@ export const ContactListScreen = () => {
       <SelectableChoices 
         choices={["Plain View", "Graph View"]}
         startingChoice="Plain View"
-        selectBarWidth={80}
         onChoiceChange={choice => {setSelectedTab(choice)}}
       />
 

@@ -5,15 +5,15 @@ import { styles } from "./styles"
 interface SelectableChoicesProps {
   choices: string[]
   startingChoice: string
-  selectBarWidth: number
+  selectBarWidth?: number
   onChoiceChange: (newChoice: string) => void
 }
 
 const SelectableChoices: React.FC<SelectableChoicesProps> = ({
     choices,
-    startingChoice = choices[0],
+    startingChoice,
     selectBarWidth = 80,
-    onChoiceChange = () => {}
+    onChoiceChange
 }) => {
     const [currentChoice, setCurrentChoice] = useState(startingChoice)
 
