@@ -6,6 +6,5 @@ export const styles = StyleSheet.create({
     },
     text:{
         fontSize: 12,
-        paddingHorizontal: 10,
     },
 })

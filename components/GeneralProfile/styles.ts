@@ -4,8 +4,6 @@ import { peach } from '../../assets/colors/colors'
 export const styles = StyleSheet.create({
     container: {
         justifyContent: 'center',
-        left: 10,
-        margin: 10,
     },
     horizontalContainer: {
         flexDirection: 'row'
@@ -14,9 +12,8 @@ export const styles = StyleSheet.create({
         fontSize: 11,
     },
     name: {
-        fontSize: 16,
+        fontSize: 13,
         fontWeight: 'bold',
-        marginVertical: 5,
     },
     profilePicture: {
         alignItems: 'center',
