@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native' 
-import { peach, black, lightGray, transparent, lightPeach } from '../../assets/colors/colors' 
+import { peach, lightGray, lightPeach, black } from '../../assets/colors/colors' 
 
 export const styles = StyleSheet.create({
     cardContainer: {
@@ -43,18 +43,6 @@ export const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    darkBoldText: {
-        color: black,
-        fontWeight: 'bold',
-    },
-    greyLightText: {
-        alignItems: 'center',
-        color: lightGray,
-        justifyContent: 'center',
-    },
-    invisibleBackground: {
-        backgroundColor: transparent
-    },
     profilePicture: {
         alignItems: 'center',
         borderColor: peach,
@@ -76,17 +64,12 @@ export const styles = StyleSheet.create({
         margin: 20,
         padding: 10,
     }, 
-    viewCHoiceUnderLine: {
-        backgroundColor: peach,
-        borderRadius: 4,
-        height: 4,
-        width: 80,
-    },
-    viewChoiceContainer: {
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingHorizontal: 95,
+    separationBar: {
+        backgroundColor: black,
+        borderRadius: 1,
+        height: 1.5,
+        marginHorizontal: 20,
+        marginTop: 8,
     },
 })
   
