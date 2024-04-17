@@ -6,6 +6,7 @@ import { styles } from "./styles"
 import { black } from "../../../assets/colors/colors"
 import InputField from "../../../components/InputField/InputField"
 import { useState } from "react"
+import { useNavigation } from "@react-navigation/native"
 
 type Contact = {
   uid: string
@@ -18,7 +19,7 @@ type Contact = {
   location: string
 }
 
-const dummyProfile1: Contact = {
+const dummyProfile: Contact = {
   uid: "4",
   firstName: "Hervé",
   lastName: "DelaMontagne",
@@ -29,21 +30,9 @@ const dummyProfile1: Contact = {
   location: "EPFL Ecublens"
 }
 
-//const dummyProfile2: Contact = {
-//  uid: "4",
-//  firstName: "Hervé",
-//  lastName: "DelaMontagnophobe",
-//  profilePictureUrl: "",
-//  description: "Description, description, description, loooooooooong descriiiiiiiiiiption, this is a veeeeeeeeeeeeeeeeeeeeeery loooooooooooooooooooooooooooooooooooooooooooong descriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiption alala",
-//  interests: ["running"],
-//  qualifications: ["bowling"],
-//  location: "EPFL Ecublens"
-//}
-
-const dummyProfile = dummyProfile1
-
 export const MyProfileScreen = () => {
   const [search, setSearch] = useState("")
+  const useNav = useNavigation()
 
   return (
     <View style={styles.container}>
@@ -64,11 +53,15 @@ export const MyProfileScreen = () => {
 
           <View style={styles.horizontalContainer}>
 
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity 
+              style={styles.button}
+              onPress={() => useNav.navigate("Update my profile" as never)}>
               <Text style={styles.buttonText}>Update</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity 
+              style={styles.button}
+              onPress={() => useNav.navigate("My QR code" as never)}>
               <View style={styles.horizontalContainer}>
                 <Ionicons name="qr-code" size={14} color={black} />
                 <Text style={styles.buttonText}>QR</Text>
