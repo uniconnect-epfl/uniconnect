@@ -1,11 +1,11 @@
-import { Text, View, TouchableOpacity } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
-import ExpandableDescription from '../../../components/ExpandableDescription/ExpandableDescription'
-import GeneralProfile from '../../../components/GeneralProfile/GeneralProfile'
-import { styles } from './styles'
-import { black } from '../../../assets/colors/colors'
-import InputField from '../../../components/InputField/InputField'
-import { useState } from 'react'
+import { Text, View, TouchableOpacity } from "react-native"
+import { Ionicons } from "@expo/vector-icons"
+import ExpandableDescription from "../../../components/ExpandableDescription/ExpandableDescription"
+import GeneralProfile from "../../../components/GeneralProfile/GeneralProfile"
+import { styles } from "./styles"
+import { black } from "../../../assets/colors/colors"
+import InputField from "../../../components/InputField/InputField"
+import { useState } from "react"
 
 type Contact = {
   uid: string
@@ -21,7 +21,7 @@ type Contact = {
 const dummyProfile1: Contact = {
   uid: "4",
   firstName: "Hervé",
-  lastName: "Dela",
+  lastName: "DelaMontagne",
   profilePictureUrl: "",
   description: "Description, description, descrc hdsjklaf hel fhj fdj bjhd vbfdhj vbdjhl vdjlh vdhj vfdjh hvdu vdh vdfj vdfs hfdj fdj vdfjl d grei hrj heiua fjispd jis gjdrkl gjreks reksl grei gril nrsj njiption, loooooooooong descriiiiiiiiiiption, this is a veeeeeeeeeeeeeeeeeeeeeery loooooooooooooooooooooooooooooooooooooooooooong descriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiption alala",
   interests: ["running"],
@@ -43,7 +43,7 @@ const dummyProfile1: Contact = {
 const dummyProfile = dummyProfile1
 
 export const MyProfileScreen = () => {
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState("")
 
   return (
     <View style={styles.container}>
@@ -70,7 +70,7 @@ export const MyProfileScreen = () => {
 
             <TouchableOpacity style={styles.button}>
               <View style={styles.horizontalContainer}>
-                <Ionicons name='qr-code' size={14} color={black} />
+                <Ionicons name="qr-code" size={14} color={black} />
                 <Text style={styles.buttonText}>QR</Text>
               </View>
             </TouchableOpacity>
@@ -85,12 +85,19 @@ export const MyProfileScreen = () => {
 
         <View style={styles.separatorLine} />
 
-        <InputField
-          label=''
-          placeholder='Search...'
-          value={search}
-          onChangeText={text => setSearch(text)}>
-        </InputField>
+
+        <View style={styles.horizontalContainer}>
+          <InputField
+            label=""
+            placeholder="Search..."
+            value={search}
+            onChangeText={text => setSearch(text)}>
+          </InputField>
+        </View>
+
+        <View style={styles.container}>
+
+        </View>
 
       </View>
 

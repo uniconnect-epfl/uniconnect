@@ -39,11 +39,10 @@ export const styles = StyleSheet.create({
   },
   profileContainer: {
     flex: 1,
-    marginTop: -35,
+    marginTop: -44,
+    padding: 10,
   },
-  searchBar: {
-    
-  },
+
   separatorLine: {
     backgroundColor: black,
     height: 1,
