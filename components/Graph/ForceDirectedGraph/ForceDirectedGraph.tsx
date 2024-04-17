@@ -66,7 +66,6 @@ const ANIMATION_DURATION = 500 // Duration of the animation in milliseconds
 const FPS = 60 // Number of frames per second for smooth animation
 const TOTAL_FRAMES = FPS * (ANIMATION_DURATION / 1000) // Total number of frames
 
-
 /**
  *
  * @description Force-directed graph component
@@ -87,7 +86,7 @@ const ForceDirectedGraph: React.FC<{
   // State to store the total offset when dragging the graph
   const [totalOffset, setTotalOffset] = useState({ x: 0, y: 0 })
   const [clickedNodeID, setClickedNodeID] = useState<string>(
-    DEFAULT_CLICKED_NODE_ID
+    DEFAULT_CLICKED_NODE_ID,
   ) // Node ID of clicked node
   const [scale, setScale] = useState(1)
   const [lastScale, setLastScale] = useState(1) // Add state to keep track of last scale
@@ -116,8 +115,8 @@ const ForceDirectedGraph: React.FC<{
         constrainedNodeId,
         WIDTH,
         HEIGHT,
-        MAX_ITERATIONS
-      )
+        MAX_ITERATIONS,
+      ),
     )
     setSizes(initialSizes)
     setLoad(true)
@@ -148,7 +147,7 @@ const ForceDirectedGraph: React.FC<{
           ...node,
           x: coordX(node),
           y: coordY(node),
-        }))
+        })),
       )
 
       setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
@@ -180,14 +179,15 @@ const ForceDirectedGraph: React.FC<{
   const handlePressOut = (shortPressCallback = () => {}) => {
     if (
       Date.now() - pressStartRef.current < SHORT_PRESS_DURATION &&
-      Date.now() - pressStartRef.current > VERY_SHORT_PRESS_DURATION
-    ) {
+      Date.now() - pressStartRef.current > VERY_SHORT_PRESS_DURATION){
       shortPressCallback()
     }
   }
 
   const nodeZoomIn = (clickedNode: Node) => {
+
     setGestureEnabled(false) // Set animation started to true
+    setModalVisible(true)
 
     let currentFrame = 0
 
@@ -202,7 +202,6 @@ const ForceDirectedGraph: React.FC<{
     const targetOffsetY = initialOffsetY - (coordY(clickedNode) - CENTER_HEIGHT) // Target offset Y after zooming
 
     const animateZoom = () => {
-      setModalVisible(true)
 
       if (currentFrame <= TOTAL_FRAMES) {
         const newScale = initialScale + scaleIncrement * currentFrame
@@ -220,22 +219,11 @@ const ForceDirectedGraph: React.FC<{
         currentFrame++
 
         requestAnimationFrame(animateZoom)
-      } else {
-        setLastScale(TARGET_SCALE) // Set last scale to the target scale
-        setScale(TARGET_SCALE) // Set scale to the target scale
-        setTotalOffset({ x: 0, y: 0 }) // Reset the total offset
-        setNodes(
-          nodes.map((node) => ({
-            ...node,
-            x: coordX(node) - (coordX(clickedNode) - CENTER_WIDTH),
-            y: coordY(node) - (coordY(clickedNode) - CENTER_HEIGHT),
-          }))
-        )
-        setGestureEnabled(true)
       }
     }
 
     animateZoom()
+    
   }
 
   // Functions to get the X and Y coordinates of the nodes and the fill color of the nodes
@@ -272,7 +260,7 @@ const ForceDirectedGraph: React.FC<{
           id: link.source,
           dx: 0,
           dy: 0,
-        }
+        },
       )}
       y1={coordY(
         nodes.find((node) => node.id === link.source) ?? {
@@ -281,7 +269,7 @@ const ForceDirectedGraph: React.FC<{
           id: link.source,
           dx: 0,
           dy: 0,
-        }
+        },
       )}
       x2={coordX(
         nodes.find((node) => node.id === link.target) ?? {
@@ -290,7 +278,7 @@ const ForceDirectedGraph: React.FC<{
           id: link.target,
           dx: 0,
           dy: 0,
-        }
+        },
       )}
       y2={coordY(
         nodes.find((node) => node.id === link.target) ?? {
@@ -299,7 +287,7 @@ const ForceDirectedGraph: React.FC<{
           id: link.target,
           dx: 0,
           dy: 0,
-        }
+        },
       )}
       stroke={DEFAULT_LINK_COLOR}
     />
@@ -319,20 +307,36 @@ const ForceDirectedGraph: React.FC<{
         key={node.id + "circle"}
         cx={coordX(node)}
         cy={coordY(node)}
-        r={(sizes.get(node.id) ?? DEFAULT_NODE_SIZE) + NODE_HITBOX_SIZE * 1/scale}
+        r={
+          (sizes.get(node.id) ?? DEFAULT_NODE_SIZE) +
+          (NODE_HITBOX_SIZE * 1) / scale
+        }
         fill={"transparent"}
-        onPressIn={() =>
+        onPressIn={() => {
           handlePressIn(() => {
             pressStartRef.current = Date.now()
             setClickedNodeID(node.id)
           })
         }
-        onPressOut={() =>
+        }
+        onPressOut={() =>{
           handlePressOut(() => {
             nodeZoomIn(node)
+            setGestureEnabled(true)
+        setLastScale(TARGET_SCALE) // Set last scale to the target scale
+        setScale(TARGET_SCALE) // Set scale to the target scale
+        setTotalOffset({ x: 0, y: 0 }) // Reset the total offset
+        setNodes(
+          nodes.map((node2) => ({
+            ...node2,
+            x: coordX(node2) - (coordX(node) - CENTER_WIDTH),
+            y: coordY(node2) - (coordY(node) - CENTER_HEIGHT),
+          })),
+        )
           })
         }
-        testID={"node-"+node.id}
+        }
+        testID={"node-" + node.id}
       />
       <SVGText
         key={node.id + "text"}
@@ -355,11 +359,7 @@ const ForceDirectedGraph: React.FC<{
         animationType="fade"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(false)
-        }}
         testID="modal"
-        key={clickedNodeID}
       >
         <TouchableWithoutFeedback
           onPress={() => {
@@ -417,7 +417,12 @@ const ForceDirectedGraph: React.FC<{
           >
             <View style={styles.container}>
               <Svg width={WIDTH} height={HEIGHT}>
-                <G scale={scale} originX={CENTER_WIDTH} originY={CENTER_HEIGHT} testID="group">
+                <G
+                  scale={scale}
+                  originX={CENTER_WIDTH}
+                  originY={CENTER_HEIGHT}
+                  testID="group"
+                >
                   {LINES}
                   {CIRCLES}
                 </G>
@@ -447,7 +452,7 @@ function setNodesSizes(links: Link[]): Map<string, number> {
     [link.source, link.target].forEach((id) => {
       sizes.set(
         id,
-        (sizes.get(id) ?? DEFAULT_NODE_SIZE) + DEFAULT_NODE_SIZE_INCREMENT
+        (sizes.get(id) ?? DEFAULT_NODE_SIZE) + DEFAULT_NODE_SIZE_INCREMENT,
       )
     })
   }
