@@ -331,6 +331,7 @@ const ForceDirectedGraph: React.FC<{
             nodeZoomIn(node)
           })
         }
+        testID={"node-"+node.id}
       />
       <SVGText
         key={node.id + "text"}
@@ -398,6 +399,7 @@ const ForceDirectedGraph: React.FC<{
           onHandlerStateChange={handlePinchHandlerStateChange}
           simultaneousHandlers={panRef}
           enabled={gestureEnabled}
+          testID="pinch-handler"
         >
           <PanGestureHandler
             ref={panRef}
@@ -407,10 +409,11 @@ const ForceDirectedGraph: React.FC<{
             maxPointers={1}
             simultaneousHandlers={pinchRef}
             enabled={gestureEnabled}
+            testID="pan-handler"
           >
             <View style={styles.container}>
               <Svg width={WIDTH} height={HEIGHT}>
-                <G scale={scale} originX={CENTER_WIDTH} originY={CENTER_HEIGHT}>
+                <G scale={scale} originX={CENTER_WIDTH} originY={CENTER_HEIGHT} testID="group">
                   {LINES}
                   {CIRCLES}
                 </G>
