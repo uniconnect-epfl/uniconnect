@@ -60,11 +60,11 @@ describe('ContactListScreen', () => {
         )
 
         fireEvent.press(getByText('Graph View'))
-        expect(getByText('Graph View').props.style.color).toBe(black)
-        expect(getByText('Plain View').props.style.color).toBe(lightGray)
+        expect(getByText('Graph View').props.style[1].color).toBe(black)
+        expect(getByText('Plain View').props.style[1].color).toBe(lightGray)
         fireEvent.press(getByText('Plain View'))
-        expect(getByText('Graph View').props.style.color).toBe(lightGray)
-        expect(getByText('Plain View').props.style.color).toBe(black)
+        expect(getByText('Graph View').props.style[1].color).toBe(lightGray)
+        expect(getByText('Plain View').props.style[1].color).toBe(black)
     })
 
 })
