@@ -38,7 +38,7 @@ describe("MyProfileScreen", () => {
     const updateButton = getByText("Update")
     
     fireEvent.press(updateButton)
-    expect(navigateMock).toHaveBeenCalledWith("Update my profile")
+    expect(navigateMock).toHaveBeenCalledWith("UpdateProfile")
   })
 
   it("navigates to my QR code when QR button is pressed", () => {
@@ -46,6 +46,6 @@ describe("MyProfileScreen", () => {
     const qrButton = getByText("QR")
     
     fireEvent.press(qrButton)
-    expect(navigateMock).toHaveBeenCalledWith("My QR code")
+    expect(navigateMock).toHaveBeenCalledWith("MyQR")
   })
 })

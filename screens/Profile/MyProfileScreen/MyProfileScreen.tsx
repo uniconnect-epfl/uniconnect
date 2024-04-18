@@ -55,13 +55,13 @@ export const MyProfileScreen = () => {
 
             <TouchableOpacity 
               style={styles.button}
-              onPress={() => useNav.navigate("Update my profile" as never)}>
+              onPress={() => useNav.navigate("UpdateProfile" as never)}>
               <Text style={styles.buttonText}>Update</Text>
             </TouchableOpacity>
 
             <TouchableOpacity 
               style={styles.button}
-              onPress={() => useNav.navigate("My QR code" as never)}>
+              onPress={() => useNav.navigate("MyQR" as never)}>
               <View style={styles.horizontalContainer}>
                 <Ionicons name="qr-code" size={14} color={black} />
                 <Text style={styles.buttonText}>QR</Text>

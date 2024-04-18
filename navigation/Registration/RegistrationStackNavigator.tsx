@@ -47,12 +47,12 @@ const RegistrationStackNavigator: React.FC = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="My QR code"
+        name="MyQR"
         component={MyQrCodeScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Update my profile"
+        name="UpdateProfile"
         component={UpdateMyProfileScreen}
         options={{ headerShown: false }}
       />
