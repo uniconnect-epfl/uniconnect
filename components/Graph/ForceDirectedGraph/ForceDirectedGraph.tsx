@@ -387,6 +387,7 @@ const ForceDirectedGraph: React.FC<{
                     onPress={() => {
                       console.warn("Pressed")
                     }}
+                    testID="modal-profile-picture"
                   />
                 </Svg>
                 <Text style={styles.modalProfileName}>

@@ -146,6 +146,13 @@ describe("ForceDirectedGraph", () => {
 
     jest.useRealTimers()    
 
+    const modale_image = component.getByTestId("modal-profile-picture")
+    expect(modale_image).toBeTruthy()
+
+    act (() => {
+      fireEvent(modale_image, "press")
+    })
+
     const quitModal = component.getByTestId("modal-touchable")
     expect(quitModal).toBeTruthy()
 
@@ -160,9 +167,10 @@ describe("ForceDirectedGraph", () => {
     }, {timeout: 10})
 
     jest.useRealTimers()
+
   })
 
-  it("long pressing a node does not display a modal", async () => {
+  it("very short pressing a node does not display a modal", async () => {
 
     const component = render(
       <ForceDirectedGraph
@@ -179,6 +187,38 @@ describe("ForceDirectedGraph", () => {
     fireEvent(node1, "pressIn")
     fireEvent(node1, "pressOut")    
     jest.useFakeTimers()
+    await waitFor(() => {
+      expect(component.queryByTestId("modal")).toBeNull()
+    }, {timeout: 10})
+    jest.useRealTimers()
+  })
+
+
+  it("long pressing a node does not display a modal", async () => {
+
+    const component = render(
+      <ForceDirectedGraph
+        graph={graph}
+        constrainedNodeId={constrainedNodeId}
+      />,
+    )
+
+    const node1 = component.getByTestId("node-1")
+    
+    expect(node1).toBeTruthy()
+    expect(component.queryByTestId("modal")).toBeNull()
+
+    fireEvent(node1, "pressIn")
+
+    jest.useFakeTimers()
+    act(() => {
+    jest.advanceTimersByTime(100)
+    })
+
+    act (() => {
+      fireEvent(node1, "pressOut")
+    })
+
     await waitFor(() => {
       expect(component.queryByTestId("modal")).toBeNull()
     }, {timeout: 10})
