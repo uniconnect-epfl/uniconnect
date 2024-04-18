@@ -7,6 +7,7 @@ import { black } from "../../../assets/colors/colors"
 import InputField from "../../../components/InputField/InputField"
 import { useState } from "react"
 import { useNavigation } from "@react-navigation/native"
+import { globalStyles } from "../../../assets/global/globalStyles"
 
 type Contact = {
   uid: string
@@ -56,7 +57,7 @@ export const MyProfileScreen = () => {
             <TouchableOpacity 
               style={styles.button}
               onPress={() => useNav.navigate("UpdateProfile" as never)}>
-              <Text style={styles.buttonText}>Update</Text>
+              <Text style={[globalStyles.boldText, styles.buttonText]}>Update</Text>
             </TouchableOpacity>
 
             <TouchableOpacity 
@@ -64,7 +65,7 @@ export const MyProfileScreen = () => {
               onPress={() => useNav.navigate("MyQR" as never)}>
               <View style={styles.horizontalContainer}>
                 <Ionicons name="qr-code" size={14} color={black} />
-                <Text style={styles.buttonText}>QR</Text>
+                <Text style={[globalStyles.boldText, styles.buttonText]}>QR</Text>
               </View>
             </TouchableOpacity>
 

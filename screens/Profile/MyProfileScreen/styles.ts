@@ -16,7 +16,6 @@ export const styles = StyleSheet.create({
   buttonText: {
     alignItems: "center",
     fontSize: 12,
-    fontWeight: "bold",
     justifyContent: "center",
     margin: 1,
   },
@@ -24,9 +23,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
-  },
-  descriptionStyle: {
-    width: "100%"
   },
   horizontalContainer: {
     alignItems: "center",
