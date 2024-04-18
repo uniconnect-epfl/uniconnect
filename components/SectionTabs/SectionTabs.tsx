@@ -4,36 +4,36 @@ import { styles } from "./styles"
 import { globalStyles } from "../../assets/global/globalStyles"
 
 interface SectionTabsProps {
-  choices: string[]
-  startingChoice: string
-  selectBarWidth?: number
-  onChoiceChange: (newChoice: string) => void
+  tabs: string[]
+  startingTab: string
+  barWidth?: number
+  onTabChange: (newTab: string) => void
 }
 
 const SectionTabs: React.FC<SectionTabsProps> = ({
-    choices,
-    startingChoice,
-    selectBarWidth = 80,
-    onChoiceChange
+    tabs,
+    startingTab,
+    barWidth = 80,
+    onTabChange
 }) => {
-    const [currentChoice, setCurrentChoice] = useState(startingChoice)
+    const [currentTab, setCurrentTab] = useState(startingTab)
 
-    const RenderOneSection = ({ choice, index } : {choice : string, index: number}) => (
+    const RenderOneSection = ({ tab, index } : {tab : string, index: number}) => (
         <TouchableOpacity
             key={index}  // Ensure unique key for each child
             style={styles.tabContainer}
             onPress={() => {
-                setCurrentChoice(choice)
-                onChoiceChange(choice)
+                setCurrentTab(tab)
+                onTabChange(tab)
             }}>
             <Text 
-                style={[globalStyles.boldText, choice === currentChoice ? styles.black : styles.lightGray]}>
-                {choice}
+                style={[globalStyles.boldText, tab === currentTab ? styles.black : styles.lightGray]}>
+                {tab}
             </Text>
             <View 
                 style={[
-                    choice === currentChoice ? styles.selectedBar : styles.unselectedBar, 
-                    {width: selectBarWidth}
+                    tab === currentTab ? styles.selectedBar : styles.unselectedBar, 
+                    {width: barWidth}
                 ]}
             />
         </TouchableOpacity>
@@ -42,7 +42,7 @@ const SectionTabs: React.FC<SectionTabsProps> = ({
     return (
         <View style={styles.tabsContainer}>
             <View/>
-            {choices.map((choice, index) => RenderOneSection({ choice, index }))}
+            {tabs.map((tab, index) => RenderOneSection({ tab, index }))}
             <View/>
         </View>
     )

@@ -210,9 +210,9 @@ export const ContactListScreen = () => {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       
       <SectionTabs 
-        choices={["Plain View", "Graph View"]}
-        startingChoice="Plain View"
-        onChoiceChange={choice => {setSelectedTab(choice)}}
+        tabs={["Plain View", "Graph View"]}
+        startingTab="Plain View"
+        onTabChange={tab => {setSelectedTab(tab)}}
       />
 
       <View style={styles.separationBar} />
