@@ -1,15 +1,16 @@
 import React, { useState } from "react"
 import { View, Text, TouchableOpacity } from "react-native"
 import { styles } from "./styles"
+import { globalStyles } from "../../assets/global/globalStyles"
 
-interface SelectableChoicesProps {
+interface SectionTabsProps {
   choices: string[]
   startingChoice: string
   selectBarWidth?: number
   onChoiceChange: (newChoice: string) => void
 }
 
-const SelectableChoices: React.FC<SelectableChoicesProps> = ({
+const SectionTabs: React.FC<SectionTabsProps> = ({
     choices,
     startingChoice,
     selectBarWidth = 80,
@@ -17,16 +18,16 @@ const SelectableChoices: React.FC<SelectableChoicesProps> = ({
 }) => {
     const [currentChoice, setCurrentChoice] = useState(startingChoice)
 
-    const RenderOneChoice = ({ choice, index } : {choice : string, index: number}) => (
+    const RenderOneSection = ({ choice, index } : {choice : string, index: number}) => (
         <TouchableOpacity
             key={index}  // Ensure unique key for each child
-            style={styles.choiceContainer}
+            style={styles.tabContainer}
             onPress={() => {
                 setCurrentChoice(choice)
                 onChoiceChange(choice)
             }}>
             <Text 
-                style={choice === currentChoice ? styles.selectedText : styles.unselectedText}>
+                style={[globalStyles.boldText, choice === currentChoice ? styles.black : styles.lightGray]}>
                 {choice}
             </Text>
             <View 
@@ -39,12 +40,12 @@ const SelectableChoices: React.FC<SelectableChoicesProps> = ({
     )
 
     return (
-        <View style={styles.choicesContainer}>
+        <View style={styles.tabsContainer}>
             <View/>
-            {choices.map((choice, index) => RenderOneChoice({ choice, index }))}
+            {choices.map((choice, index) => RenderOneSection({ choice, index }))}
             <View/>
         </View>
     )
 }
 
-export default SelectableChoices
+export default SectionTabs

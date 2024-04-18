@@ -3,7 +3,7 @@ import { View, Text, FlatList, Image, TextInput} from 'react-native'
 import { styles } from './styles' 
 import { Ionicons } from '@expo/vector-icons'
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import SelectableChoices from '../../components/SelectableChoices/SelectableChoices'
+import SectionTabs from '../../components/SectionTabs/SectionTabs'
 
 type Contact = {
   uid: string
@@ -209,7 +209,7 @@ export const ContactListScreen = () => {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       
-      <SelectableChoices 
+      <SectionTabs 
         choices={["Plain View", "Graph View"]}
         startingChoice="Plain View"
         onChoiceChange={choice => {setSelectedTab(choice)}}
