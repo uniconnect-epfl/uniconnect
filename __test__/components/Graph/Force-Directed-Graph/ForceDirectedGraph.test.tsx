@@ -8,6 +8,7 @@ import {
 } from "@testing-library/react-native"
 import ForceDirectedGraph from "../../../../components/Graph/ForceDirectedGraph/ForceDirectedGraph"
 import Graph from "../../../../components/Graph/Graph"
+import { State } from "react-native-gesture-handler"
 
 jest.mock("react-native-gesture-handler", () => {
   // eslint-disable-next-line
@@ -71,13 +72,13 @@ describe("ForceDirectedGraph", () => {
 
     act(() => {
       panHandler.props.onGestureEvent({
-        nativeEvent: { state: "BEGIN", translationX: 0, translationY: 0 },
+        nativeEvent: {translationX: 0, translationY: 0 },
       })
     })
 
     act(() => {
       panHandler.props.onGestureEvent({
-        nativeEvent: { state: "ACTIVE", translationX: 10, translationY: 10 },
+        nativeEvent: {translationX: 10, translationY: 10 },
       })
     })
 
@@ -85,6 +86,7 @@ describe("ForceDirectedGraph", () => {
     expect(node1.props.cy).toBe(initialY_A + 10)
 
     expect(node2.props.cx).toBe(initialX_B + 10)
+
     expect(node2.props.cy).toBe(initialY_B + 10)
 
     expect(node3.props.cx).toBe(initialX_C + 10)
@@ -92,7 +94,7 @@ describe("ForceDirectedGraph", () => {
 
     act(() => {
       panHandler.props.onHandlerStateChange({
-        nativeEvent: { state: "END" },
+        nativeEvent: { state: State.END },
       })
     })
 
@@ -122,11 +124,19 @@ describe("ForceDirectedGraph", () => {
     expect(panHandler).toBeTruthy()
     expect(panHandler.props.enabled).toBe(true)
 
+    act(() => {
     fireEvent(node1, "pressIn")
+    })
 
     jest.useFakeTimers()
+    act(() => {
     jest.advanceTimersByTime(50)
-    fireEvent(node1, "pressOut")
+    })
+
+    act (() => {
+      fireEvent(node1, "pressOut")
+      jest.advanceTimersByTime(500)
+    })
 
     await waitFor(() => {
       const modal = component.getByTestId("modal")
@@ -138,7 +148,10 @@ describe("ForceDirectedGraph", () => {
 
     const quitModal = component.getByTestId("modal-touchable")
     expect(quitModal).toBeTruthy()
+
+    act(() => {
     fireEvent(quitModal, "press")
+    })
 
     jest.useFakeTimers()
 
@@ -148,4 +161,77 @@ describe("ForceDirectedGraph", () => {
 
     jest.useRealTimers()
   })
+
+  it("long pressing a node does not display a modal", async () => {
+
+    const component = render(
+      <ForceDirectedGraph
+        graph={graph}
+        constrainedNodeId={constrainedNodeId}
+      />,
+    )
+
+    const node1 = component.getByTestId("node-1")
+    
+    expect(node1).toBeTruthy()
+    expect(component.queryByTestId("modal")).toBeNull()
+
+    fireEvent(node1, "pressIn")
+    fireEvent(node1, "pressOut")    
+    jest.useFakeTimers()
+    await waitFor(() => {
+      expect(component.queryByTestId("modal")).toBeNull()
+    }, {timeout: 10})
+    jest.useRealTimers()
+  })
+
+  it("pinching zooms the graph", async () => {
+
+    const component = render(
+      <ForceDirectedGraph
+        graph={graph}
+        constrainedNodeId={constrainedNodeId}
+      />,
+    )
+    
+    expect(component).toBeTruthy()
+
+    const pinchHandler = component.getByTestId("pinch-handler")
+
+    expect(pinchHandler).toBeTruthy()
+
+    const node1 = component.getByTestId("node-1")
+
+    expect(node1).toBeTruthy()
+
+    const initialRadius = node1.props.r
+
+    act(() => {
+      pinchHandler.props.onGestureEvent({
+        nativeEvent: { scale: 2 },
+      })
+    })
+
+    jest.useFakeTimers()
+
+    await waitFor(() => {
+      expect(node1.props.r).toBe(initialRadius)
+    }, {timeout: 10})
+
+    jest.useRealTimers()
+    act(() => {
+      pinchHandler.props.onHandlerStateChange({
+        nativeEvent: { state: State.END },
+      })
+    })
+
+    jest.useFakeTimers()
+    await waitFor(() => {
+      expect(node1.props.r).toBeLessThan(initialRadius)
+    }, {timeout: 10})
+
+    jest.useRealTimers()
+
+  })
+
 })

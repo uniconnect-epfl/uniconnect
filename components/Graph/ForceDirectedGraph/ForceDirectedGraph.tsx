@@ -322,7 +322,7 @@ const ForceDirectedGraph: React.FC<{
         cy={coordY(node)}
         r={
           (sizes.get(node.id) ?? DEFAULT_NODE_SIZE) +
-          (NODE_HITBOX_SIZE * 1) / scale
+          (NODE_HITBOX_SIZE) / lastScale
         }
         fill={"transparent"}
         onPressIn={() => {
