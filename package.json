@@ -26,6 +26,7 @@
     "expo-splash-screen": "~0.26.4",
     "expo-status-bar": "~1.11.1",
     "firebase": "^10.9.0",
+    "graphql": "^15.8.0",
     "jest": "^29.3.1",
     "jest-expo": "~50.0.4",
     "react": "18.2.0",
