@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native' 
+import { StyleSheet } from "react-native"
 import {
   peach,
   black,
@@ -7,26 +7,26 @@ import {
   white,
   lightGray,
   gray,
-} from '../../../assets/colors/colors'
+} from "../../../assets/colors/colors"
 
-import { BUTTON_HEIGHT, BUTTON_RADIUS } from '../../../assets/global/constants' 
+import { BUTTON_HEIGHT, BUTTON_RADIUS } from "../../../assets/global/constants"
 
 const styles = StyleSheet.create({
   button: {
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: BUTTON_RADIUS,
     borderWidth: 2,
     elevation: 8, //
     height: BUTTON_HEIGHT,
-    justifyContent: 'center',
+    justifyContent: "center",
     marginHorizontal: 30,
     shadowColor,
     shadowOffset: { width: 0, height: 2.5 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
-    width: 'auto',
+    width: "auto",
   },
 
   buttonContainer: {
@@ -35,15 +35,15 @@ const styles = StyleSheet.create({
   },
 
   buttonSmall: {
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: BUTTON_RADIUS,
     borderWidth: 2,
-    display: 'flex',
+    display: "flex",
     elevation: 8,
     height: 40,
-    justifyContent: 'center',
+    justifyContent: "center",
     marginHorizontal: 5,
     shadowColor,
     shadowOffset: { width: 0, height: 2 },
@@ -65,30 +65,32 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    justifyContent: 'space-around',
+    justifyContent: "space-around",
   },
+
   date: {
     color: gray,
   },
+
   description: {
-    alignSelf: 'center',
+    alignSelf: "center",
     borderColor: peach,
     borderRadius: 10,
     borderWidth: 2,
-    display: 'flex',
-    flexDirection: 'column',
-    height: '17%',
-    justifyContent: 'space-between',
+    display: "flex",
+    flexDirection: "column",
+    height: "17%",
+    justifyContent: "space-between",
     padding: 5,
-    width: '70%',
+    width: "70%",
   },
 
   footer: {
-    width: '100%',
+    width: "100%",
   },
 
   image: {
-    alignSelf: 'center',
+    alignSelf: "center",
     height: 75,
     marginRight: 10,
     width: 75,
@@ -98,22 +100,22 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     borderWidth: 1,
     height: 50,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: 30,
-    width: '100%',
+    width: "100%",
   },
   label: {
     color: black,
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
     marginTop: 10,
     paddingLeft: 20,
   },
 
   locationButton: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     height: 25,
     marginBottom: 20,
     marginLeft: 20,
@@ -121,31 +123,31 @@ const styles = StyleSheet.create({
   },
 
   locationText: {
-    alignSelf: 'baseline',
+    alignSelf: "baseline",
     paddingLeft: 5,
   },
 
   nextBar: {
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: BUTTON_RADIUS,
     borderWidth: 2,
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     height: 60,
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     marginHorizontal: 20,
     marginTop: 100,
   },
   section: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
     paddingHorizontal: 20,
     paddingTop: 10,
-    width: '100%',
+    width: "100%",
   },
 })
 
-export default styles 
+export default styles

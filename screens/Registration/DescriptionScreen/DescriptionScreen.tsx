@@ -13,8 +13,7 @@ import { useNavigation } from "@react-navigation/native"
 import styles from "./styles"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import { TextInput } from "react-native-gesture-handler"
-import { Ionicons } from "@expo/vector-icons"
-import { peach } from "../../../assets/colors/colors"
+
 
 const DescriptionScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
@@ -40,12 +39,15 @@ const DescriptionScreen: React.FC = () => {
           onChangeText={setDescription}
           value={description}
           placeholder="Enter your description here..."
-        ></TextInput>
+        />
 
         <TouchableOpacity
-          onPress={() => navigation.navigate("Interests" as never)}
+          onPress={() => navigation.goBack()}
+          style={styles.validation}
         >
-          <Ionicons name="send-outline" color={peach} size={50} />
+            <Text style={globalStyles.boldText}>
+                Validate
+            </Text>
         </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
