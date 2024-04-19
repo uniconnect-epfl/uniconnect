@@ -1,35 +1,41 @@
 import { StyleSheet } from "react-native"
-import { black, white } from "../../assets/colors/colors"
+import { black, lightPeach, peach } from "../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
   backArrow: {
-    color: black,
+    color: peach,
     fontSize: 24,
     marginRight: 10,
   },
   container: {
-    backgroundColor: white,
+    backgroundColor: lightPeach,
     flex: 1,
+  },
+  firstMenuItem: {
+    borderTopWidth: 0.75,
   },
   header: {
     alignItems: "center",
-    borderBottomWidth: 2,
-    borderColor: black,
     flexDirection: "row",
-    padding: 10,
+    marginHorizontal: 20,
+    marginVertical: 40,
   },
   headerTitle: {
     color: black,
     fontSize: 18,
   },
+  itemsContainer: {
+    paddingHorizontal: 20
+  },
   menuItem: {
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.75,
     borderColor: black,
     paddingLeft: 10,
     paddingVertical: 15,
   },
   menuItemText: {
-    color: black,
+    color: peach,
+    fontFamily: 'JetBrainsMono_400Regular',
     fontSize: 16,
   },
 })
