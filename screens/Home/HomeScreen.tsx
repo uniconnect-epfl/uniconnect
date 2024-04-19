@@ -47,9 +47,32 @@ const HomeScreen = () => {
 
   const insets = useSafeAreaInsets()
   //const navigation = useNavigation() Later for the redirection to a specific event page
-  
-  const [filteredEvents, setFilteredEvents] = React.useState(events)
+  //const [title, setTitle] = React.useState("Future")
 
+  const [searchQuery, setSearchQuery] = React.useState('')
+
+  // Filter events based on the current date and search query
+  const getFilteredEvents = (isFutureEvent: boolean) => {
+    const currentDate = new Date()
+
+    // Filter events based on date
+    const eventsFilteredByDate = events.filter((event) => {
+      const eventDate = new Date(event.date)
+      return isFutureEvent ? eventDate >= currentDate : eventDate < currentDate
+    })
+
+    // Further filter by search query if there is one
+    return eventsFilteredByDate.filter((event) =>
+      event.title.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  }
+
+  const futureEvents = getFilteredEvents(true)
+  const pastEvents = getFilteredEvents(false)
+
+  const handleSearch = (search: string) => {
+    setSearchQuery(search)
+  }
   // Can be replaced by EventCardProps later
   const renderEvents = ( event: { title: string; location: string; description: string; date: string; imageUrl: string }  ) => (
     <TouchableOpacity>
@@ -63,11 +86,6 @@ const HomeScreen = () => {
     />
     </TouchableOpacity>
   )
-
-  const handleSearch = (search: string) => {
-    const filtered = events.filter((event) => event.title.toLowerCase().includes(search.toLowerCase()))
-    setFilteredEvents(filtered)
-  }
 
 
   return (
@@ -92,21 +110,15 @@ const HomeScreen = () => {
       </View>
 
       <View style={styles.containerEvent}>
-        <Text style={styles.title}>Future Events</Text>
+        <Text style={styles.title}>Futur Events</Text>
         <ScrollView style={styles.eventList}>
           {/* Add the event card component */}
-          {filteredEvents.map((event) => (
+          {futureEvents.map((event) => (
             renderEvents(event)
           ))}
-      </ScrollView>
-      </View>
-
-      <View style={styles.containerEvent}>
-          
-      <Text style={styles.title}>Future Events</Text>
-      <ScrollView style={styles.eventList}>
+        <Text style={styles.title} >Past Events </Text>
         {/* Add the events card component Need a way to differentiate from past and futur event */}
-        {filteredEvents.map((event) => (
+        {pastEvents.map((event) => (
           renderEvents(event)
         ))}
       </ScrollView>
