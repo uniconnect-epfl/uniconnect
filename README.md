@@ -1,3 +1,7 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=uniconnect-epfl_uniconnect&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=uniconnect-epfl_uniconnect)
+
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=uniconnect-epfl_uniconnect&metric=coverage)](https://sonarcloud.io/summary/new_code?id=uniconnect-epfl_uniconnect)
+
 # Project description
 
 Uniconnect is a social app that facilitates peer-to-peer connections between students and helps to easily find people who have same
@@ -38,11 +42,19 @@ Here is a rough overview of the architecture of the app:
 
 ![Untitled-2024-04-12-1348(2)](https://github.com/uniconnect-epfl/uniconnect/assets/93329823/b640cb56-4c61-4046-a38a-f1eaff065923)
 
-The entry file is `App.tsx`. You could think of it as a main function that is launched upon execution of the app. There is an `assets` folder for images and other assets. Another folder `components` is for the components such as buttons, list items, bottom bars, search bars, cards etc. Components will be used in `screens` where a screen can be `LoginScreen`, `HomeScreen`, `OptionsScreen` or any other screen that is used in the app. There are also config files and folders such as `.husky`, `app.json`, `tsconfig.json` or `node_modules` where node modules are the source files for all the libraries that are installed as listed by `package.json`.
+- The entry file is `App.tsx`. You could think of it as a main function that is launched upon execution of the app.
+- There is an `assets` folder for images and other assets. Another folder `components` is for the components such as buttons, list items, bottom bars, search bars, cards etc.
+- Components will be used in `screens` where a screen can be `LoginScreen`, `HomeScreen`, `OptionsScreen` or any other screen that is used in the app.
+- Navigation stacks and tabs are defined in the `navigation` folder.
+- Unit tests and end-to-end tests are sotred in `__tests__`.
+- All firebase config files and files containing firebase API are contained in `firebase` folder. This is how we intend to keep it in the future - code logic containing calls to firebase functionalities should be contained in files stored under `firebase`. E.g. `Login.ts` which contains a function that calls the firebase API to authenticate a user.
+- There are also config files and folders such as `.husky`, `app.json`, `tsconfig.json` or `node_modules` where node modules are the source files for all the libraries that are installed as listed by `package.json`.
+- `.github` folder contains CI workflows that you can inspect and manage.
+
 
 # Testing
 
-More to come on this part. We will use local tests as well as Sonar tools.
+SonarCloud automatically performs code analysis whenever a new PR is opened. Each member is responsible to fix or acknowledge issues raised by SonarCloud. It will not be possible to merge into `main` until SonarCloud allows to.
 
 ## Unit testing
 
@@ -52,15 +64,27 @@ In order to run all tests you can run `npm run test`.
 
 The test will always run with coverage report on. You can see the coverage report in terminal but you can also go see them afterwards by navigating to `coverage/lcov-report` and opening the file `index.html` with a web browser.
 
+## End-to-end testing
+
+End-to-end testing is performed using a `maestro` framework. In order to test, you will need to build and have a working Android APK.
+
+1. Run `npm start`.
+2. Select either Android or iOS Simulator
+3. In another terminal, run `maestro test flow.yaml`
+
+More information on how to use maestro can be found [here](https://maestro.mobile.dev/platform-support/react-native).
+
 # Build
 
 ## Building the APK
 
 It is taken care by Expo Application Services (EAS). We will create an EAS account for the project. Install EAS locally with `npm install -g expo-cli` and then build with `eas build`. The application will be built on-cloud and an APK will be downloaded from the EAS Dashboard.
 
+*Note: an automatic CI workflow is set up to build a new APK each time `main` branch is updated.*
+
 # Backend
 
-More to come on this part.
+Firebase and it's functionalities are used: authentication, database and cloud functions.
 
 # Resources
 

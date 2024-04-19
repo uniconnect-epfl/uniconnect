@@ -71,7 +71,8 @@
       "!**/jest.setup.js",
       "!**/.expo/**",
       "!**/.eslintrc.js",
-      "!**.config.js"
+      "!**.config.js",
+      "!**/__test__/**"
     ]
   },
   "private": true

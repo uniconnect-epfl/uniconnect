@@ -238,7 +238,7 @@ const ForceDirectedGraph: React.FC<{
         y={coordY(node) - (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
         width={2 * (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
         height={2 * (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
-        href={require("../../assets/graph-template-profile-picture.png")} // Replace with your image path
+        href={require("../../../assets/graph-template-profile-picture.png")} // Replace with your image path
         clipPath={"url(#clip" + node.id + ")"}
       />
       <SVGText
