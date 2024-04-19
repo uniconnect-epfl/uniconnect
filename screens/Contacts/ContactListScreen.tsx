@@ -1,8 +1,9 @@
 import { useState } from 'react' 
-import { View, Text, FlatList, Image, TextInput, TouchableOpacity} from 'react-native' 
+import { View, Text, FlatList, Image, TextInput} from 'react-native' 
 import { styles } from './styles' 
 import { Ionicons } from '@expo/vector-icons'
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import SectionTabs from '../../components/SectionTabs/SectionTabs'
 
 type Contact = {
   uid: string
@@ -189,49 +190,32 @@ export const ContactListScreen = () => {
     </View>
   )
 
+  const RenderContactList = () => (
+    <View style={styles.container}>
+        <FlatList
+          data={filteredContacts}
+          renderItem={RenderOneContact}
+          keyExtractor={(contact) => contact.uid}
+        />
+      </View>
+  )
+
+  const RenderContactGraph = () => (
+    <View style={styles.container}>
+      <Text>Here will be the contact graph</Text>
+    </View>
+  )
+
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <View style={styles.viewChoiceContainer}>
-        <TouchableOpacity
-          style={styles.contactList}
-          onPress={() => setSelectedTab("Plain View")}
-        >
-          <Text
-            style={[
-              styles.greyLightText,
-              selectedTab === "Plain View" && styles.darkBoldText,
-            ]}
-          >
-            Plain View
-          </Text>
-          <View
-            style={[
-              styles.viewCHoiceUnderLine,
-              selectedTab === "Graph View" && styles.invisibleBackground,
-            ]}
-          />
-        </TouchableOpacity>
+      
+      <SectionTabs 
+        tabs={["Plain View", "Graph View"]}
+        startingTab="Plain View"
+        onTabChange={tab => {setSelectedTab(tab)}}
+      />
 
-        <TouchableOpacity
-          style={styles.contactList}
-          onPress={() => setSelectedTab("Graph View")}
-        >
-          <Text
-            style={[
-              styles.greyLightText,
-              selectedTab === "Graph View" && styles.darkBoldText,
-            ]}
-          >
-            Graph View
-          </Text>
-          <View
-            style={[
-              styles.viewCHoiceUnderLine,
-              selectedTab === "Plain View" && styles.invisibleBackground,
-            ]}
-          />
-        </TouchableOpacity>
-      </View>
+      <View style={styles.separationBar} />
 
       <View>
         <TextInput
@@ -242,13 +226,8 @@ export const ContactListScreen = () => {
         />
       </View>
 
-      <View style={styles.container}>
-        <FlatList
-          data={filteredContacts}
-          renderItem={RenderOneContact}
-          keyExtractor={(contact) => contact.uid}
-        />
-      </View>
+      {selectedTab === "Plain View" ? RenderContactList() : RenderContactGraph()}
+      
     </View>
   )
 }

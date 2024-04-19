@@ -2,6 +2,7 @@ import React from 'react'
 import { render, fireEvent } from '@testing-library/react-native'
 import { ContactListScreen } from '../../../screens/Contacts/ContactListScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { black, lightGray } from '../../../assets/colors/colors'
 
 jest.mock('react-native-safe-area-context', () => {
   const inset = {top: 0, right: 0, bottom: 0, left: 0}
@@ -59,11 +60,11 @@ describe('ContactListScreen', () => {
         )
 
         fireEvent.press(getByText('Graph View'))
-        expect(getByText('Graph View').props.style[1].fontWeight).toBe('bold')
-        expect(getByText('Plain View').props.style[1]).not.toHaveProperty('fontWeight')
+        expect(getByText('Graph View').props.style[1].color).toBe(black)
+        expect(getByText('Plain View').props.style[1].color).toBe(lightGray)
         fireEvent.press(getByText('Plain View'))
-        expect(getByText('Graph View').props.style[1]).not.toHaveProperty('fontWeight')
-        expect(getByText('Plain View').props.style[1].fontWeight).toBe('bold')
+        expect(getByText('Graph View').props.style[1].color).toBe(lightGray)
+        expect(getByText('Plain View').props.style[1].color).toBe(black)
     })
 
 })
