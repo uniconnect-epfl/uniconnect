@@ -1,9 +1,8 @@
-import { View, Text, TouchableOpacity } from "react-native"
+import { View, Text, TouchableOpacity, Alert  } from "react-native"
 import { styles } from "./styles"
 import { useNavigation } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
 import { peach } from "../../assets/colors/colors"
-import { Alert } from "react-native"
 
 export const SettingsScreen = () => {
   const navigation = useNavigation()
@@ -33,7 +32,7 @@ export const SettingsScreen = () => {
       </View>
       <View style={styles.itemsContainer}>
         {menuItems.map((menuItem, index) => (
-          <TouchableOpacity onPress={menuItem.action} style={[styles.menuItem, index === 0 && styles.firstMenuItem]} key={index}>
+          <TouchableOpacity onPress={menuItem.action} style={[styles.menuItem, index === 0 && styles.firstMenuItem]} key={menuItem.title}>
             <Text style={styles.menuItemText}>{menuItem.title}</Text>
           </TouchableOpacity>
         ))}
