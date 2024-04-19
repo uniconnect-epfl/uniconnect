@@ -4,7 +4,12 @@ export const styles = StyleSheet.create({
     button:{
         alignItems: 'center'
     },
-    text:{
-        fontSize: 12,
+    container: {
+        alignItems: 'center',
+        flex: 1,
+        justifyContent: 'center',
     },
+    text: {
+        minWidth: "100%",
+    }
 })

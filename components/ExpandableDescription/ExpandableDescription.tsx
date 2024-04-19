@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { black } from '../../assets/colors/colors'
 import { styles } from './styles'
+import { globalStyles } from '../../assets/global/globalStyles'
 
 interface ExpandableDescriptionProps {
   description: string;
@@ -13,9 +14,9 @@ const ExpandableDescription: React.FC<ExpandableDescriptionProps> = ({ descripti
   const [limitNbLines, setLimitNbLines] = useState(true)
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text 
-          style={styles.text}
+          style={[globalStyles.smallText, styles.text]}
           numberOfLines={limitNbLines ? initialNbLines : undefined}>
           {description}
         </Text>

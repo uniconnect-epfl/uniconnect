@@ -3,17 +3,13 @@ import { peach } from '../../assets/colors/colors'
 
 export const styles = StyleSheet.create({
     container: {
+        alignContent: 'center',
+        flex: 1,
         justifyContent: 'center',
     },
     horizontalContainer: {
+        flex: 1,
         flexDirection: 'row'
-    },
-    location: {
-        fontSize: 11,
-    },
-    name: {
-        fontSize: 13,
-        fontWeight: 'bold',
     },
     profilePicture: {
         alignItems: 'center',

@@ -37,29 +37,23 @@ export const MyProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-
       <View style={styles.topBackground} />
-
       <View style={styles.profileContainer}>
 
-        <View style={styles.horizontalContainer}>
+        <View style={styles.topProfileContainer}>
 
-          <View style={styles.leftAlign}>
-            <GeneralProfile
-              name={dummyProfile.firstName}
-              surname={dummyProfile.lastName}
-              location={dummyProfile.location}
-            />
-          </View>
-
-          <View style={styles.horizontalContainer}>
-
+          <GeneralProfile
+            name={dummyProfile.firstName}
+            surname={dummyProfile.lastName}
+            location={dummyProfile.location}
+          />
+          
+          <View style={styles.buttonsContainer}>
             <TouchableOpacity 
               style={styles.button}
               onPress={() => useNav.navigate("UpdateProfile" as never)}>
               <Text style={[globalStyles.boldText, styles.buttonText]}>Update</Text>
             </TouchableOpacity>
-
             <TouchableOpacity 
               style={styles.button}
               onPress={() => useNav.navigate("MyQR" as never)}>
@@ -68,7 +62,6 @@ export const MyProfileScreen = () => {
                 <Text style={[globalStyles.boldText, styles.buttonText]}>QR</Text>
               </View>
             </TouchableOpacity>
-
           </View>
 
         </View>
@@ -79,7 +72,6 @@ export const MyProfileScreen = () => {
 
         <View style={styles.separatorLine} />
 
-
         <View style={styles.horizontalContainer}>
           <InputField
             label=""
@@ -88,13 +80,12 @@ export const MyProfileScreen = () => {
             onChangeText={text => setSearch(text)}>
           </InputField>
         </View>
-
+      
         <View style={styles.container}>
 
         </View>
 
       </View>
-
     </View>
   )
 }

@@ -3,6 +3,7 @@ import { View, Image, Text } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { styles } from './styles'
 import { black } from '../../assets/colors/colors'
+import { globalStyles } from '../../assets/global/globalStyles'
 
 interface GeneralProfileProps {
     name: string,
@@ -31,11 +32,11 @@ const GeneralProfile: React.FC<GeneralProfileProps> = ({
             </View>
         )}
 
-        <Text style={styles.name}>{name} {surname}</Text>
+        <Text style={globalStyles.boldText}>{name} {surname}</Text>
 
         <View style={styles.horizontalContainer}>
             <Ionicons name='location-outline' size={13} color={black} />
-            <Text style={styles.location}>{location}</Text>
+            <Text style={globalStyles.smallText}>{location}</Text>
         </View>
 
     </View>

@@ -8,16 +8,22 @@ export const styles = StyleSheet.create({
     borderColor: peach,
     borderRadius: 10,
     borderWidth: 2,
-    height: 38,
+    elevation: 6,
+    height: "33%",
     justifyContent: "center",
-    marginLeft: 14,
-    width: 90,
+    width: "45%",
   },
   buttonText: {
     alignItems: "center",
-    fontSize: 12,
+    fontSize: 13,
     justifyContent: "center",
     margin: 1,
+  },
+  buttonsContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "55%",
   },
   container: {
     alignItems: "center",
@@ -26,19 +32,16 @@ export const styles = StyleSheet.create({
   },
   horizontalContainer: {
     alignItems: "center",
+    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  leftAlign: {
-    alignSelf: "flex-start",
-    flex: 1,
-  },
   profileContainer: {
     flex: 1,
-    marginTop: -44,
-    padding: 10,
+    marginHorizontal: 10,
+    position: "absolute",
+    top: 0,
   },
-
   separatorLine: {
     backgroundColor: black,
     height: 1,
@@ -46,8 +49,16 @@ export const styles = StyleSheet.create({
   },
   topBackground: {
     backgroundColor: lightPeach,
-    height: 160,
+    height: "20%",
+    position: "absolute",
+    top: 0,
     width: "100%"
+  },
+  topProfileContainer: {
+    flexDirection: "row",
+    flex: 1,
+    marginBottom: 4,
+    marginTop: "35%",
   },
   
 })
