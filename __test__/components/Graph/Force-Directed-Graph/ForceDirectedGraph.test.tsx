@@ -259,6 +259,20 @@ describe("ForceDirectedGraph", () => {
     }, {timeout: 10})
 
     jest.useRealTimers()
+
+    act(() => {
+      pinchHandler.props.onHandlerStateChange({
+        nativeEvent: { state: State.ACTIVE },
+      })
+    })
+
+    jest.useFakeTimers()
+    await waitFor(() => {
+      expect(node1.props.r).toBe(initialRadius)
+    }, {timeout: 10})
+
+    jest.useRealTimers()
+
     act(() => {
       pinchHandler.props.onHandlerStateChange({
         nativeEvent: { state: State.END },
