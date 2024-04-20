@@ -6,6 +6,36 @@ import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import { Contact, dummyData } from "../../Contacts/ContactListScreen"
 
+const RenderOneContact = ({ item }: { item: Contact }) => (
+  <View style={styles.contactCard}>
+
+    <View style={styles.horizontalContainer}>
+      {item.profilePictureUrl ? (
+        <Image
+          style={styles.profilePicture}
+          source={{ uri: item.profilePictureUrl }}
+        />
+      ) : (
+        <View style={styles.profilePicture}>
+          <Ionicons name="person" size={30} color="black" />
+        </View>
+      )}
+      <Text 
+        style={[globalStyles.smallText, styles.description]} 
+        numberOfLines={4}
+        ellipsizeMode="tail">
+        {item.description}
+      </Text>
+    </View>
+
+    <View style={styles.nameContainer}>
+      <Text style={globalStyles.boldText}>{item.firstName}</Text>
+      <Text style={globalStyles.text}>friend</Text>
+    </View>
+
+  </View>
+)
+
 export const ProfileNetwork = () => {
   const [filteredContacts, setFilteredContacts] = useState(dummyData)
   const [searchText, setSearchText] = useState("")
@@ -23,36 +53,6 @@ export const ProfileNetwork = () => {
       setFilteredContacts(dummyData)
     }
   }
-
-  const RenderOneContact = ({ item }: { item: Contact }) => (
-    <View style={styles.contactCard}>
-
-      <View style={styles.horizontalContainer}>
-        {item.profilePictureUrl ? (
-          <Image
-            style={styles.profilePicture}
-            source={{ uri: item.profilePictureUrl }}
-          />
-        ) : (
-          <View style={styles.profilePicture}>
-            <Ionicons name="person" size={30} color="black" />
-          </View>
-        )}
-        <Text 
-          style={[globalStyles.smallText, styles.description]} 
-          numberOfLines={4}
-          ellipsizeMode="tail">
-          {item.description}
-        </Text>
-      </View>
-
-      <View style={styles.nameContainer}>
-        <Text style={globalStyles.boldText}>{item.firstName}</Text>
-        <Text style={globalStyles.text}>friend</Text>
-      </View>
-
-    </View>
-  )
 
   return (
     <View style={styles.container}>

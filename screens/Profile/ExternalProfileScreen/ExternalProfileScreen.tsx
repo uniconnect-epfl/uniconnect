@@ -33,6 +33,9 @@ const dummyProfile: Contact = {
 }
 
 /*
+* These lines are commented to not have an error with eslint, uncomment them to get the uid of the profile screen
+*/
+/*
 type RootStackParamList = {
   ExternalProfile: {
       uid: string;
