@@ -27,7 +27,7 @@ jest.mock('firebase/app', () => {
 
   jest.mock('/Users/gustavecharles/Documents/epfl/ba6/SwEnt/uniconnect/firebase/firebaseConfig.ts', () => ({
     loginEmailPassword: jest.fn(() => Promise.resolve(true)), // Assuming loginEmailPassword returns true on successful login
-  }));
+  }))
 
   return {
     initializeApp,
