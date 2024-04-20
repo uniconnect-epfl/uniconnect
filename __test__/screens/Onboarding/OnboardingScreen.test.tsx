@@ -85,6 +85,7 @@ describe('OnboardingScreen', () => {
     )
     const googleButton = getByText('Continue with google')
 
+    fireEvent.press(googleButton)
     expect(googleButton).toBeTruthy()
   })
 
