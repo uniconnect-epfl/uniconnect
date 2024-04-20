@@ -26,6 +26,10 @@ jest.mock('react-native-safe-area-context', () => {
   }
 })
 
+beforeAll(() => {
+  global.alert = jest.fn()
+})
+
 describe('ContactListScreen', () => {
 
     it('renders the screen', () => {
