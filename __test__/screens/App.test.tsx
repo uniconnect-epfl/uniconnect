@@ -1,5 +1,5 @@
 import React from 'react'
-import { render } from '@testing-library/react-native'
+import { render , waitFor} from '@testing-library/react-native'
 import App from '../../App'
 
 jest.mock('@react-native-google-signin/google-signin', () => {
@@ -22,9 +22,11 @@ jest.mock('@react-native-google-signin/google-signin', () => {
 
 describe('App', () => {
   
-  it('renders correctly', () => {
+  it('renders correctly', async () => {
+    await waitFor(async () => {
     const component = render(<App />)
     expect(component).toBeTruthy()
+    })
   })
   
 })
