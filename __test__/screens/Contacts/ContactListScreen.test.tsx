@@ -3,7 +3,6 @@ import { render, fireEvent } from '@testing-library/react-native'
 import { ContactListScreen } from '../../../screens/Contacts/ContactListScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { black, lightGray } from '../../../assets/colors/colors'
-import { NavigationContainer } from '@react-navigation/native'
 
 jest.mock('react-native-safe-area-context', () => {
   const inset = {top: 0, right: 0, bottom: 0, left: 0}
@@ -20,9 +19,7 @@ describe('ContactListScreen', () => {
     it('renders the screen', () => {
         const component = render(
         <SafeAreaProvider>
-          <NavigationContainer>
-            <ContactListScreen />
-          </NavigationContainer>
+          <ContactListScreen />
         </SafeAreaProvider>
         )
         expect(component).toBeTruthy()
@@ -31,11 +28,9 @@ describe('ContactListScreen', () => {
     it('filters contacts based on search input', () => {
         const { getByText, getByPlaceholderText, queryByText } = render(
           <SafeAreaProvider>
-            <NavigationContainer>
-              <ContactListScreen />
-            </NavigationContainer>
+            <ContactListScreen />
           </SafeAreaProvider>
-          )
+        )
 
         fireEvent.changeText(getByPlaceholderText('Search...'), 'Jocovi')
         expect(getByText('Jocović')).toBeTruthy()
@@ -50,11 +45,9 @@ describe('ContactListScreen', () => {
     it('displays correct contact details', () => {
         const { getByText } = render(
           <SafeAreaProvider>
-            <NavigationContainer>
-              <ContactListScreen />
-            </NavigationContainer>
+            <ContactListScreen />
           </SafeAreaProvider>
-          )
+        )
         expect(getByText('Jocović')).toBeTruthy()
         expect(getByText('This guy is very weird')).toBeTruthy()
     })
@@ -62,11 +55,9 @@ describe('ContactListScreen', () => {
     it('updates tab selection on button press', () => {
         const { getByText } = render(
           <SafeAreaProvider>
-            <NavigationContainer>
-              <ContactListScreen />
-            </NavigationContainer>
+            <ContactListScreen />
           </SafeAreaProvider>
-          )
+        )
 
         fireEvent.press(getByText('Graph View'))
         expect(getByText('Graph View').props.style[1].color).toBe(black)
@@ -77,6 +68,5 @@ describe('ContactListScreen', () => {
     })
 
 })
-
 
 
