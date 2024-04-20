@@ -15,6 +15,24 @@ jest.mock('@react-navigation/native', () => {
   }
 })
 
+jest.mock('@react-native-google-signin/google-signin', () => {
+  return {
+    GoogleSignin: {
+      configure: jest.fn(),
+      signIn: jest.fn(() => Promise.resolve({
+        idToken: 'mock-id-token',
+        accessToken: 'mock-access-token',
+        user: {
+          email: 'test@example.com',
+          id: '123',
+          name: 'Test User'
+        }
+      })),
+      signOut: jest.fn(),
+    }
+  }
+})
+
 jest.mock('react-native-safe-area-context', () => {
   const inset = {top: 0, right: 0, bottom: 0, left: 0}
   return {
