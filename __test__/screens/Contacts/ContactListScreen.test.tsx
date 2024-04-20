@@ -87,6 +87,19 @@ describe('ContactListScreen', () => {
         expect(getByText('Plain View').props.style[1].color).toBe(black)
     })
 
+    it('navigates to profile screen when clicking on contact', () => {
+      const { getByText } = render(
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <ContactListScreen />
+          </NavigationContainer>
+        </SafeAreaProvider>
+      )
+      const signUpButton = getByText('Jocović')
+      fireEvent.press(signUpButton)
+      expect(mockNavigate).toHaveBeenCalledWith({"name": "ExternalProfile", "params": {"uid": "1"}})
+    })
+
 })
 
 
