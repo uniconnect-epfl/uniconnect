@@ -4,7 +4,6 @@ import OnboardingScreen from '../../../screens/Onboarding/OnboardingScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 // Import Firebase modules
-import firebase from 'firebase/app'
 import 'firebase/auth'
 
 const mockNavigate = jest.fn()
@@ -20,19 +19,23 @@ jest.mock('firebase/app', () => {
     })),
     signOut: jest.fn(() => Promise.resolve()),
     onAuthStateChanged: jest.fn()
-  };
+  }
 
   const initializeApp = jest.fn(() => {
-    return { auth: () => auth };
-  });
+    return { auth: () => auth }
+  })
+
+  jest.mock('/Users/gustavecharles/Documents/epfl/ba6/SwEnt/uniconnect/firebase/firebaseConfig.ts', () => ({
+    loginEmailPassword: jest.fn(() => Promise.resolve(true)), // Assuming loginEmailPassword returns true on successful login
+  }));
 
   return {
     initializeApp,
     auth,
     apps: [], // Mimic the apps array to avoid "no-app" initialization errors
     getApps: jest.fn(() => []),
-  };
-});
+  }
+})
 
 jest.mock('firebase/auth', () => ({
   getAuth: jest.fn(() => ({
@@ -40,7 +43,7 @@ jest.mock('firebase/auth', () => ({
     signOut: jest.fn(),
     onAuthStateChanged: jest.fn(),
   })),
-}));
+}))
 
 jest.mock('@react-navigation/native', () => {
   return {
@@ -113,10 +116,10 @@ describe('OnboardingScreen', () => {
       fireEvent.press(loginButton)
     })
 
-    // await waitFor(() => {
-    //   //expect navigation to be called'
-    //   expect(mockNavigate).toHaveBeenCalledWith('HomeTabs')
-    // });
+    await waitFor(() => {
+      //expect navigation to be called'
+      expect(mockNavigate).toHaveBeenCalledWith('HomeTabs')
+    })
     
 
     expect(loginButton).toBeTruthy()
@@ -135,6 +138,12 @@ describe('OnboardingScreen', () => {
     await act(async () => {
       fireEvent.press(googleButton)
     })
+
+    await waitFor(() => {
+      //expect navigation to be called'
+      expect(mockNavigate).toHaveBeenCalledWith('HomeTabs')
+    })
+    
     expect(googleButton).toBeTruthy()
 
   })
