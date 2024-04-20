@@ -61,7 +61,7 @@ const AuthenticationScreen: React.FC = () => {
 
       storeEmail(email)
         .then(() => console.log('Email stored successfully'))
-        .catch((error: Error) => console.error('Failed to store email:', error));
+        .catch((error: Error) => console.error('Failed to store email:', error))
     } else {
       alert("Please check your data")
     }

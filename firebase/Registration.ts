@@ -25,13 +25,13 @@ export async function storeEmail(email: string): Promise<void> {
       const docRef = await addDoc(collection(FIRESTORE_DB, "emails"), {
         email: email,
         createdAt: serverTimestamp() // Use server timestamp for consistency
-      });
+      })
   
-      console.log("Document written with ID: ", docRef.id);
+      console.log("Document written with ID: ", docRef.id)
     } catch (error) {
       if (error instanceof Error) {
-        console.error("Error adding document: ", error.message);
-        throw new Error("Failed to store email: " + error.message);
+        console.error("Error adding document: ", error.message)
+        throw new Error("Failed to store email: " + error.message)
       }
     }
   }
