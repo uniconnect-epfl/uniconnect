@@ -26,7 +26,11 @@ const MyDateInputComponent: React.FC<MyDateInputComponentProps> = ({
   }
 
   return (
-    <Pressable style={styles.absView} onPress={() => setDateModal(false)}>
+    <Pressable
+      style={styles.absView}
+      onPress={() => setDateModal(false)}
+      testID="backdropPressable"
+    >
       <View style={styles.dateContainer}>
         <DateTimePicker
           // minimumDate={}
