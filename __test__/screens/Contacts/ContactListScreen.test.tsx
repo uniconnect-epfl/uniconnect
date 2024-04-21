@@ -3,15 +3,27 @@ import { render, fireEvent } from '@testing-library/react-native'
 import { ContactListScreen } from '../../../screens/Contacts/ContactListScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { black, lightGray } from '../../../assets/colors/colors'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, NavigationProp, ParamListBase } from '@react-navigation/native'
 
-const mockNavigate = jest.fn()
+const mockNavigation = {
+  navigate: jest.fn(),
+  goBack: jest.fn(),
+  addListener: jest.fn(),
+  removeListener: jest.fn(),
+  reset: jest.fn(),
+  setParams: jest.fn(),
+  dispatch: jest.fn(),
+  isFocused: jest.fn(),
+  canGoBack: jest.fn(),
+  dangerouslyGetParent: jest.fn(),
+  dangerouslyGetState: jest.fn()
+} as unknown as NavigationProp<ParamListBase>
 
 jest.mock('@react-navigation/native', () => {
   return {
     ...jest.requireActual('@react-navigation/native'),
     useNavigation: () => ({
-      navigate: mockNavigate,
+      navigate: mockNavigation,
     }),
   }
 })
@@ -36,7 +48,7 @@ describe('ContactListScreen', () => {
         const component = render(
         <SafeAreaProvider>
           <NavigationContainer>
-            <ContactListScreen />
+            <ContactListScreen navigation={mockNavigation}/>
           </NavigationContainer>
         </SafeAreaProvider>
         )
@@ -47,7 +59,7 @@ describe('ContactListScreen', () => {
         const { getByText, getByPlaceholderText, queryByText } = render(
           <SafeAreaProvider>
             <NavigationContainer>
-              <ContactListScreen />
+              <ContactListScreen navigation={mockNavigation}/>
             </NavigationContainer>
           </SafeAreaProvider>
           )
@@ -66,7 +78,7 @@ describe('ContactListScreen', () => {
         const { getByText } = render(
           <SafeAreaProvider>
             <NavigationContainer>
-              <ContactListScreen />
+              <ContactListScreen navigation={mockNavigation}/>
             </NavigationContainer>
           </SafeAreaProvider>
           )
@@ -78,7 +90,7 @@ describe('ContactListScreen', () => {
         const { getByText } = render(
           <SafeAreaProvider>
             <NavigationContainer>
-              <ContactListScreen />
+              <ContactListScreen navigation={mockNavigation}/>
             </NavigationContainer>
           </SafeAreaProvider>
           )
@@ -95,13 +107,13 @@ describe('ContactListScreen', () => {
       const { getByText } = render(
         <SafeAreaProvider>
           <NavigationContainer>
-            <ContactListScreen />
+            <ContactListScreen navigation={mockNavigation}/>
           </NavigationContainer>
         </SafeAreaProvider>
       )
       const signUpButton = getByText('Jocović')
       fireEvent.press(signUpButton)
-      expect(mockNavigate).toHaveBeenCalledWith({"name": "ExternalProfile", "params": {"uid": "1"}})
+      expect(mockNavigation.navigate).toHaveBeenCalledWith("ExternalProfile", {"uid": "1"})
     })
 
 })
