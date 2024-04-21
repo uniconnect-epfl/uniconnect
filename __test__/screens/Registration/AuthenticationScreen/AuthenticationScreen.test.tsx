@@ -30,8 +30,8 @@ global.alert = jest.fn() // Mock global alert
 describe('AuthenticationScreen', () => {
   beforeEach(() => {
     // Clear all mocks before each test
-    jest.clearAllMocks()
-    (registration.createAccount as jest.Mock).mockResolvedValue(void 0)
+    jest.clearAllMocks();
+    (registration.createAccount as jest.Mock).mockResolvedValue(void 0);
     (registration.storeEmail as jest.Mock).mockResolvedValue(void 0)
 
   })
