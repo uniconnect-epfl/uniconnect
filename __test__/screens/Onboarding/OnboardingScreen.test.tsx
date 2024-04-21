@@ -15,7 +15,6 @@ jest.mock('../../../firebase/Login', () => ({
 
 const mockNavigate = jest.fn()
 global.alert = jest.fn()
-let setLoadingMock = jest.fn();
 
 
 jest.mock('@react-navigation/native', () => {
@@ -60,7 +59,7 @@ describe('OnboardingScreen', () => {
   beforeEach(() => {
     // Clear all mocks before each test
     jest.clearAllMocks();
-    (login.loginEmailPassword as jest.Mock).mockResolvedValue(true);
+    (login.loginEmailPassword as jest.Mock).mockResolvedValue(true)
   })
 
   it('renders the onboarding screen', () => {
@@ -81,7 +80,7 @@ describe('OnboardingScreen', () => {
   })
 
   it('on log in press, login successful navigates to the home screen', async () => {
-    (login.loginEmailPassword as jest.Mock).mockResolvedValue(true);
+    (login.loginEmailPassword as jest.Mock).mockResolvedValue(true)
 
     const { getByText, getByPlaceholderText } = render(
       <SafeAreaProvider>
@@ -100,9 +99,9 @@ describe('OnboardingScreen', () => {
     })
 
     await waitFor(() => {
-      expect(login.loginEmailPassword).toHaveBeenCalled();
-      expect(mockNavigate).toHaveBeenCalledWith('HomeTabs');
-      expect(alert).not.toHaveBeenCalled();
+      expect(login.loginEmailPassword).toHaveBeenCalled()
+      expect(mockNavigate).toHaveBeenCalledWith('HomeTabs')
+      expect(alert).not.toHaveBeenCalled()
     })
     
 
@@ -134,7 +133,7 @@ describe('OnboardingScreen', () => {
 
   //on log in press, login failed alert is called
   it('on log in press, login failed alert is called',async () => {
-    (login.loginEmailPassword as jest.Mock).mockResolvedValue(false);
+    (login.loginEmailPassword as jest.Mock).mockResolvedValue(false)
 
     const { getByText, getByPlaceholderText } = render(
       <SafeAreaProvider>
@@ -161,7 +160,7 @@ describe('OnboardingScreen', () => {
   })
 
   it('alerts "An error occurred during login." on login exception',async () => {
-    (login.loginEmailPassword as jest.Mock).mockRejectedValue(new Error('Network error')); // Simulate an error
+    (login.loginEmailPassword as jest.Mock).mockRejectedValue(new Error('Network error')) // Simulate an error
 
 
     const { getByText, getByPlaceholderText } = render(
@@ -181,7 +180,7 @@ describe('OnboardingScreen', () => {
     })
 
     await waitFor(() => {
-      expect(alert).toHaveBeenCalledWith("An error occurred during login.");
+      expect(alert).toHaveBeenCalledWith("An error occurred during login.")
     })
 
     expect(loginButton).toBeTruthy()
