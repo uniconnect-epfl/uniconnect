@@ -1,49 +1,22 @@
 import React from 'react'
+import 'firebase/auth'
 import { render, fireEvent, act, waitFor } from '@testing-library/react-native'
 import OnboardingScreen from '../../../screens/Onboarding/OnboardingScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-// Import Firebase modules
-import 'firebase/auth'
+import * as login from '../../../firebase/Login'
+
+// Mocking modules
+jest.mock('../../../firebase/Login', () => ({
+  loginEmailPassword: jest.fn(),
+}))
+
+
 
 const mockNavigate = jest.fn()
 global.alert = jest.fn()
+let setLoadingMock = jest.fn();
 
-jest.mock('firebase/app', () => {
-  const auth = {
-    signInWithEmailAndPassword: jest.fn(() => Promise.resolve({
-      user: {
-        uid: '123',
-        email: 'test@example.com'
-      }
-    })),
-    signOut: jest.fn(() => Promise.resolve()),
-    onAuthStateChanged: jest.fn()
-  }
-
-  const initializeApp = jest.fn(() => {
-    return { auth: () => auth }
-  })
-
-  jest.mock('/Users/gustavecharles/Documents/epfl/ba6/SwEnt/uniconnect/firebase/firebaseConfig.ts', () => ({
-    loginEmailPassword: jest.fn(() => Promise.resolve(true)), // Assuming loginEmailPassword returns true on successful login
-  }))
-
-  return {
-    initializeApp,
-    auth,
-    apps: [], // Mimic the apps array to avoid "no-app" initialization errors
-    getApps: jest.fn(() => []),
-  }
-})
-
-jest.mock('firebase/auth', () => ({
-  getAuth: jest.fn(() => ({
-    signInWithEmailAndPassword: jest.fn(),
-    signOut: jest.fn(),
-    onAuthStateChanged: jest.fn(),
-  })),
-}))
 
 jest.mock('@react-navigation/native', () => {
   return {
@@ -84,6 +57,12 @@ jest.mock('react-native-safe-area-context', () => {
 
 
 describe('OnboardingScreen', () => {
+  beforeEach(() => {
+    // Clear all mocks before each test
+    jest.clearAllMocks();
+    (login.loginEmailPassword as jest.Mock).mockResolvedValue(true);
+  })
+
   it('renders the onboarding screen', () => {
     const { getByPlaceholderText, getByText } = render(
       <SafeAreaProvider>
@@ -102,8 +81,9 @@ describe('OnboardingScreen', () => {
   })
 
   it('on log in press, login successful navigates to the home screen', async () => {
+    (login.loginEmailPassword as jest.Mock).mockResolvedValue(true);
 
-    const { getByText } = render(
+    const { getByText, getByPlaceholderText } = render(
       <SafeAreaProvider>
         <NavigationContainer>
           <OnboardingScreen />
@@ -112,13 +92,17 @@ describe('OnboardingScreen', () => {
     )
     const loginButton = getByText('Log In')
 
+    fireEvent.changeText(getByPlaceholderText("Username or email"), 'test@example.com')
+    fireEvent.changeText(getByPlaceholderText("Password"), 'password123')
+
     await act(async () => {
       fireEvent.press(loginButton)
     })
 
     await waitFor(() => {
-      //expect navigation to be called'
-      expect(mockNavigate).toHaveBeenCalledWith('HomeTabs')
+      expect(login.loginEmailPassword).toHaveBeenCalled();
+      expect(mockNavigate).toHaveBeenCalledWith('HomeTabs');
+      expect(alert).not.toHaveBeenCalled();
     })
     
 
@@ -150,7 +134,9 @@ describe('OnboardingScreen', () => {
 
   //on log in press, login failed alert is called
   it('on log in press, login failed alert is called',async () => {
-    const { getByText } = render(
+    (login.loginEmailPassword as jest.Mock).mockResolvedValue(false);
+
+    const { getByText, getByPlaceholderText } = render(
       <SafeAreaProvider>
         <NavigationContainer>
           <OnboardingScreen />
@@ -159,15 +145,50 @@ describe('OnboardingScreen', () => {
     )
     const loginButton = getByText('Log In')
 
+    fireEvent.changeText(getByPlaceholderText("Username or email"), 'test@example.com')
+    fireEvent.changeText(getByPlaceholderText("Password"), 'password123')
+
     await act(async () => {
       fireEvent.press(loginButton)
     })
-    expect(loginButton).toBeTruthy()
 
     await waitFor(() => {
-    expect(alert).toHaveBeenCalledWith('Login failed!')
+      expect(alert).toHaveBeenCalledWith('Login failed!')
     })
+
+    expect(loginButton).toBeTruthy()
+
   })
+
+  it('alerts "An error occurred during login." on login exception',async () => {
+    (login.loginEmailPassword as jest.Mock).mockRejectedValue(new Error('Network error')); // Simulate an error
+
+
+    const { getByText, getByPlaceholderText } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <OnboardingScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+    const loginButton = getByText('Log In')
+
+    fireEvent.changeText(getByPlaceholderText("Username or email"), 'test@example.com')
+    fireEvent.changeText(getByPlaceholderText("Password"), 'password123')
+
+    await act(async () => {
+      fireEvent.press(loginButton)
+    })
+
+    await waitFor(() => {
+      expect(alert).toHaveBeenCalledWith("An error occurred during login.");
+    })
+
+    expect(loginButton).toBeTruthy()
+
+  })
+
+
 
   it('navigates to sign up screen on footer press',async () => {
     const { getByText } = render(
