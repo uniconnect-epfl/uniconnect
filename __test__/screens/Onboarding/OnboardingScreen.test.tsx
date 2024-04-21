@@ -5,13 +5,12 @@ import OnboardingScreen from '../../../screens/Onboarding/OnboardingScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import * as login from '../../../firebase/Login'
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
 
 // Mocking modules
 jest.mock('../../../firebase/Login', () => ({
   loginEmailPassword: jest.fn(),
 }))
-
-
 
 const mockNavigate = jest.fn()
 global.alert = jest.fn()
@@ -26,23 +25,23 @@ jest.mock('@react-navigation/native', () => {
   }
 })
 
-jest.mock('@react-native-google-signin/google-signin', () => {
-  return {
-    GoogleSignin: {
-      configure: jest.fn(),
-      signIn: jest.fn(() => Promise.resolve({
-        idToken: 'mock-id-token',
-        accessToken: 'mock-access-token',
-        user: {
-          email: 'test@example.com',
-          id: '123',
-          name: 'Test User'
-        }
-      })),
-      signOut: jest.fn(),
-    }
+// Setting up the Jest mock for GoogleSignin
+jest.mock('@react-native-google-signin/google-signin', () => ({
+  GoogleSignin: {
+    configure: jest.fn(),
+    signIn: jest.fn(() => Promise.resolve({
+      idToken: 'mock-id-token',
+      accessToken: 'mock-access-token',
+      user: {
+        email: 'test@example.com',
+        id: '123',
+        name: 'Test User'
+      }
+    })),
+    signOut: jest.fn(),
+    hasPlayServices: jest.fn(() => Promise.resolve(true)), // Make sure to mock this if it's being called
   }
-})
+}))
 
 jest.mock('react-native-safe-area-context', () => {
   const inset = { top: 0, right: 0, bottom: 0, left: 0 }
@@ -124,6 +123,7 @@ describe('OnboardingScreen', () => {
 
     await waitFor(() => {
       //expect navigation to be called'
+      expect(GoogleSignin.signIn).toHaveBeenCalled()
       expect(mockNavigate).toHaveBeenCalledWith('HomeTabs')
     })
     
