@@ -1,11 +1,12 @@
 import { useState } from 'react' 
-import { View, Text, FlatList, Image, TextInput} from 'react-native' 
+import { View, Text, FlatList, Image, TextInput, TouchableOpacity} from 'react-native' 
 import { styles } from './styles' 
 import { Ionicons } from '@expo/vector-icons'
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import SectionTabs from '../../components/SectionTabs/SectionTabs'
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
 
-type Contact = {
+export type Contact = {
   uid: string
   firstName: string
   lastName: string
@@ -15,7 +16,7 @@ type Contact = {
   qualifications: string[]
 }
 
-const dummyData: Contact[] = [
+export const dummyData: Contact[] = [
   {
     uid: "1",
     firstName: "Jocović",
@@ -146,7 +147,11 @@ const dummyData: Contact[] = [
   },
 ]
 
-export const ContactListScreen = () => {
+interface ContactListScreenProps{
+  navigation: NavigationProp<ParamListBase>
+}
+
+export const ContactListScreen = ({navigation} : ContactListScreenProps ) => {
   const [filteredContacts, setFilteredContacts] = useState(dummyData)
   const [searchText, setSearchText] = useState("")
   const [selectedTab, setSelectedTab] = useState("Plain View")
@@ -167,7 +172,9 @@ export const ContactListScreen = () => {
   }
 
   const RenderOneContact = ({ item }: { item: Contact }) => (
-    <View style={styles.cardContainer}>
+    <TouchableOpacity 
+      style={styles.cardContainer}
+      onPress={() => navigation.navigate("ExternalProfile", {uid: item.uid})}>
       {item.profilePictureUrl ? (
         <Image
           style={styles.profilePicture}
@@ -187,7 +194,7 @@ export const ContactListScreen = () => {
           <Text style={styles.contactFriendType}>friend</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 
   const RenderContactList = () => (
