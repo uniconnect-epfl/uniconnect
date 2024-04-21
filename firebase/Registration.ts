@@ -3,7 +3,7 @@ import { FIREBASE_AUTH, FIRESTORE_DB } from "./firebaseConfig"
 import { createUserWithEmailAndPassword } from "firebase/auth"
 
 
-export const createAccount = async (email: string, password: string) => {
+export async function createAccount(email: string, password: string) : Promise<void> {
  try {
   await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
   alert("Account created. Check email")
