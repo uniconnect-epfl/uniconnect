@@ -4,7 +4,7 @@ import { styles } from './styles'
 import { Ionicons } from '@expo/vector-icons'
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import SectionTabs from '../../components/SectionTabs/SectionTabs'
-import { useNavigation } from '@react-navigation/native'
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
 
 export type Contact = {
   uid: string
@@ -147,12 +147,15 @@ export const dummyData: Contact[] = [
   },
 ]
 
-export const ContactListScreen = () => {
+interface ContactListScreenProps{
+  navigation: NavigationProp<ParamListBase>
+}
+
+export const ContactListScreen = ({navigation} : ContactListScreenProps ) => {
   const [filteredContacts, setFilteredContacts] = useState(dummyData)
   const [searchText, setSearchText] = useState("")
   const [selectedTab, setSelectedTab] = useState("Plain View")
   const insets = useSafeAreaInsets()
-  const useNav = useNavigation()
 
   const handleSearch = (text: string) => {
     setSearchText(text)
@@ -171,7 +174,7 @@ export const ContactListScreen = () => {
   const RenderOneContact = ({ item }: { item: Contact }) => (
     <TouchableOpacity 
       style={styles.cardContainer}
-      onPress={() => useNav.navigate({name: "ExternalProfile", params: {uid: item.uid}} as never)}>
+      onPress={() => navigation.navigate("ExternalProfile", {uid: item.uid})}>
       {item.profilePictureUrl ? (
         <Image
           style={styles.profilePicture}
