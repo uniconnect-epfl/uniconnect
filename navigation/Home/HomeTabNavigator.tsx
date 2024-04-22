@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { ContactListScreen } from '../../screens/Contacts/ContactListScreen'
+import { ContactListScreen } from '../../screens/Contacts/ExploreScreen'
 import HomeScreen from '../../screens/Home/HomeScreen'
 import { TabBar } from '../../components/TabBar/TabBar'
 import { Header } from '../../components/Header/Header'

@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native" 
-import { peach, lightGray, lightPeach, black } from "../../assets/colors/colors" 
+import { lightGray, lightPeach, peach } from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
     cardContainer: {
@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        marginHorizontal: "3%",
     },
     descriptionContainer: {
         height: "50%",
@@ -48,11 +47,6 @@ export const styles = StyleSheet.create({
         margin: 10,
         padding: 20,
     }, 
-    separationBar: {
-        backgroundColor: black,
-        borderRadius: 1,
-        height: 1,
-        marginTop: 8,
-    },
+
 })
   

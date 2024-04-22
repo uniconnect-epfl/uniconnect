@@ -2,11 +2,8 @@ import { useState } from 'react'
 import { View, Text, FlatList, Image, TextInput, TouchableOpacity} from 'react-native' 
 import { styles } from './styles' 
 import { Ionicons } from '@expo/vector-icons'
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-import SectionTabs from '../../components/SectionTabs/SectionTabs'
-import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import { globalStyles } from '../../assets/global/globalStyles'
-import { black } from '../../assets/colors/colors'
+import { globalStyles } from '../../../assets/global/globalStyles'
+import { black } from '../../../assets/colors/colors'
 
 export type Contact = {
   uid: string
@@ -149,15 +146,13 @@ export const dummyData: Contact[] = [
   },
 ]
 
-interface ContactListScreenProps{
-  navigation: NavigationProp<ParamListBase>
+interface ContactListProps{
+  onContactPress: (uid : string) => void
 }
 
-export const ContactListScreen = ({navigation} : ContactListScreenProps ) => {
+const ContactList = ({onContactPress} : ContactListProps ) => {
   const [filteredContacts, setFilteredContacts] = useState(dummyData)
   const [searchText, setSearchText] = useState("")
-  const [selectedTab, setSelectedTab] = useState("Plain View")
-  const insets = useSafeAreaInsets()
 
   const handleSearch = (text: string) => {
     setSearchText(text)
@@ -176,7 +171,7 @@ export const ContactListScreen = ({navigation} : ContactListScreenProps ) => {
   const RenderOneContact = ({ item }: { item: Contact }) => (
     <TouchableOpacity 
       style={styles.cardContainer}
-      onPress={() => navigation.navigate("ExternalProfile", {uid: item.uid})}>
+      onPress={() => onContactPress(item.uid)}>
       {item.profilePictureUrl ? (
         <Image
           style={styles.profilePicture}
@@ -188,9 +183,11 @@ export const ContactListScreen = ({navigation} : ContactListScreenProps ) => {
         </View>
       )}
       <View style={styles.informationsContainer}>
-        <Text style={globalStyles.smallText} numberOfLines={3}>
-          {item.description}
-        </Text>
+        <View style={styles.descriptionContainer}>
+          <Text style={globalStyles.smallText} numberOfLines={3}>
+            {item.description}
+          </Text>
+        </View>
         <View>
           <Text style={globalStyles.boldText}>{item.firstName}</Text>
           <Text style={globalStyles.text}>friend</Text>
@@ -199,8 +196,8 @@ export const ContactListScreen = ({navigation} : ContactListScreenProps ) => {
     </TouchableOpacity>
   )
 
-  const RenderContactList = () => (
-    <View>
+  return (
+    <View style={styles.container}>
 
       <TextInput
         style={styles.searchBar}
@@ -217,26 +214,6 @@ export const ContactListScreen = ({navigation} : ContactListScreenProps ) => {
 
     </View>
   )
-
-  const RenderContactGraph = () => (
-    <View>
-      <Text>Here will be the contact graph</Text>
-    </View>
-  )
-
-  return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
-      
-      <SectionTabs 
-        tabs={["Plain View", "Graph View"]}
-        startingTab="Plain View"
-        onTabChange={tab => {setSelectedTab(tab)}}
-      />
-
-      <View style={styles.separationBar} />
-
-      {selectedTab === "Plain View" ? RenderContactList() : RenderContactGraph()}
-      
-    </View>
-  )
 }
+
+export default ContactList

@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react-native'
-import { ContactListScreen } from '../../../screens/Contacts/ContactListScreen'
+import { ContactListScreen } from '../../../screens/Contacts/ExploreScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { black, lightGray } from '../../../assets/colors/colors'
 import { NavigationContainer, NavigationProp, ParamListBase } from '@react-navigation/native'
