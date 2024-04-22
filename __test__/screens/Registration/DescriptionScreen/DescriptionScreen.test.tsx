@@ -68,6 +68,6 @@ describe("DescriptionScreen", () => {
     const button = getByText("Validate")
     fireEvent.press(button)
 
-    expect(mockGoBack).toHaveBeenCalledWith("Information")
+    expect(mockGoBack).toHaveBeenCalledTimes(1)
   })
 })

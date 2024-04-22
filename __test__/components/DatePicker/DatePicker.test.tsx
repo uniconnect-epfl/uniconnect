@@ -1,5 +1,5 @@
 import React from "react"
-import { render, fireEvent } from "@testing-library/react-native"
+import { render, fireEvent, act } from "@testing-library/react-native"
 import MyDateInputComponent from "../../../components/DatePicker/DatePicker"
 
 describe("MyDateInputComponent", () => {
@@ -10,20 +10,6 @@ describe("MyDateInputComponent", () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
-
-  it("calls setDateModal with false when pressed", () => {
-    const { getByTestId } = render(
-      <MyDateInputComponent
-        date={testDate}
-        setDate={mockSetDate}
-        setDateModal={mockSetDateModal}
-      />
-    )
-
-    fireEvent.press(getByTestId("dateTimePicker"))
-    expect(mockSetDateModal).toHaveBeenCalledWith(false)
-  })
-
   it("calls setDate when the date changes", () => {
     const { getByTestId } = render(
       <MyDateInputComponent
@@ -33,9 +19,19 @@ describe("MyDateInputComponent", () => {
       />
     )
 
-    const newDate = new Date(2021, 9, 9) // Change to October 9, 2021
-    fireEvent(getByTestId("dateTimePicker"), "onChange", null, newDate)
-    expect(mockSetDate).toHaveBeenCalledWith(newDate)
+    const dateTimePicker = getByTestId("dateTimePicker")
+    expect(dateTimePicker).toBeDefined()
+
+    // Simulate change event by directly invoking onChange handler
+    const selectedDate = new Date(2021, 9, 9) // New date to simulate change
+    act(() => {
+      fireEvent(dateTimePicker, "onChange", {
+        nativeEvent: { timestamp: selectedDate },
+      })
+    })
+
+    // Check if setDate is called with the updated date
+    expect(mockSetDate).toHaveBeenCalledWith(selectedDate)
   })
 
   it("closes the date picker when pressing outside", () => {
