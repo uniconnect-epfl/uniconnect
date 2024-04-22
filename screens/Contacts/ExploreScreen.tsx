@@ -1,11 +1,11 @@
-import { useState } from 'react' 
-import { View } from 'react-native' 
-import { styles } from './styles' 
+import { useState } from "react" 
+import { View } from "react-native" 
+import { styles } from "./styles" 
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import SectionTabs from '../../components/SectionTabs/SectionTabs'
-import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import ContactList from './ContactList/ContactList'
-import ContactGraph from './ContactGraph/ContactGraph'
+import SectionTabs from "../../components/SectionTabs/SectionTabs"
+import { NavigationProp, ParamListBase } from "@react-navigation/native"
+import ContactList from "./ContactList/ContactList"
+import ContactGraph from "./ContactGraph/ContactGraph"
 
 interface ContactListScreenProps{
   navigation: NavigationProp<ParamListBase>

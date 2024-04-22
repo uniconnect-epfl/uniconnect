@@ -4,7 +4,7 @@ import { styles } from "./styles"
 const ContactGraph = () => {
   return (
     <View style={styles.container}>
-      <Text>profile interests</Text>
+      <Text>Graph view</Text>
     </View>
   )
 }

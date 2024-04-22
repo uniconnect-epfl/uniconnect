@@ -1,9 +1,9 @@
-import { useState } from 'react' 
-import { View, Text, FlatList, Image, TextInput, TouchableOpacity} from 'react-native' 
-import { styles } from './styles' 
-import { Ionicons } from '@expo/vector-icons'
-import { globalStyles } from '../../../assets/global/globalStyles'
-import { black } from '../../../assets/colors/colors'
+import { useState } from "react" 
+import { View, Text, FlatList, Image, TextInput, TouchableOpacity} from "react-native" 
+import { styles } from "./styles" 
+import { Ionicons } from "@expo/vector-icons"
+import { globalStyles } from "../../../assets/global/globalStyles"
+import { black } from "../../../assets/colors/colors"
 
 export type Contact = {
   uid: string
@@ -113,7 +113,7 @@ export const dummyData: Contact[] = [
     firstName: "Lala",
     lastName: "Famille",
     profilePictureUrl: "",
-    description: "I'm doing university for fun",
+    description: "I m doing university for fun",
     interests: ["a", "b", "c", "d", "e", "f", "h"],
     qualifications: ["a", "b", "c", "d", "e", "f", "h"],
   },
@@ -122,7 +122,7 @@ export const dummyData: Contact[] = [
     firstName: "Abc",
     lastName: "Onu",
     profilePictureUrl: "",
-    description: "Didn't want a description",
+    description: "Didn t want a description",
     interests: [],
     qualifications: ["a", "b", "c", "d", "e", "f", "h"],
   },
