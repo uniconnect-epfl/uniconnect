@@ -3,12 +3,14 @@ import { Ionicons } from "@expo/vector-icons"
 import ExpandableDescription from "../../../components/ExpandableDescription/ExpandableDescription"
 import GeneralProfile from "../../../components/GeneralProfile/GeneralProfile"
 import { black } from "../../../assets/colors/colors"
-import InputField from "../../../components/InputField/InputField"
-import { useState } from "react"
-import { useNavigation } from "@react-navigation/native"
+import { NavigationProp, ParamListBase } from "@react-navigation/native"
 import { profileStyles } from "../profileStyles"
 import { styles } from "./styles"
 import { globalStyles } from "../../../assets/global/globalStyles"
+import SectionTabs from "../../../components/SectionTabs/SectionTabs"
+import { useState } from "react"
+import { ProfileEvents } from "../ProfileEvents/ProfileEvents"
+import { ProfileInterests } from "../ProfileInterests/ProfileInterests"
 
 type Contact = {
   uid: string
@@ -32,9 +34,12 @@ const dummyProfile: Contact = {
   location: "EPFL Ecublens"
 }
 
-export const MyProfileScreen = () => {
-  const [search, setSearch] = useState("")
-  const useNav = useNavigation()
+interface MyProfileScreenProps{
+  navigation: NavigationProp<ParamListBase>
+}
+
+export const MyProfileScreen = ({navigation} : MyProfileScreenProps) => {
+  const [selectedTab, setSelectedTab] = useState("Events")
 
   return (
     <View style={styles.container}>
@@ -52,12 +57,12 @@ export const MyProfileScreen = () => {
           <View style={profileStyles.buttonsContainer}>
             <TouchableOpacity 
               style={profileStyles.button}
-              onPress={() => useNav.navigate("UpdateProfile" as never)}>
+              onPress={() => navigation.navigate("UpdateProfile")}>
               <Text style={[globalStyles.boldText, profileStyles.buttonText]}>Update</Text>
             </TouchableOpacity>
             <TouchableOpacity 
               style={profileStyles.button}
-              onPress={() => useNav.navigate("MyQR" as never)}>
+              onPress={() => navigation.navigate("MyQR")}>
               <View style={profileStyles.horizontalContainer}>
                 <Ionicons name="qr-code" size={14} color={black} />
                 <Text style={[globalStyles.boldText, profileStyles.buttonText]}>QR</Text>
@@ -71,20 +76,16 @@ export const MyProfileScreen = () => {
           description={dummyProfile.description}
         />
 
+        <SectionTabs 
+          tabs={["Events", "Interests"]}
+          startingTab="Events"
+          onTabChange={setSelectedTab}
+          />
+
         <View style={styles.separatorLine} />
 
-        <View style={profileStyles.horizontalContainer}>
-          <InputField
-            label=""
-            placeholder="Search..."
-            value={search}
-            onChangeText={text => setSearch(text)}>
-          </InputField>
-        </View>
-      
-        <View style={styles.container}>
-
-        </View>
+        {selectedTab === "Events" && <ProfileEvents/>}
+        {selectedTab === "Interests" && <ProfileInterests/>}
 
       </View>
     </View>

@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
   separatorLine: {
     backgroundColor: black,
     height: 1,
+    marginTop: 5,
     width: "auto",
-  },
+},
 })
