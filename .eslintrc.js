@@ -34,17 +34,6 @@ module.exports = {
     'semi': ['error', 'never'],
     // Adjust rules based on your project needs
   },
-  overrides: [
-    {
-      files: [
-        "components/Graph/ForceDirectedGraph/ForceDirectedGraph.tsx",
-        "__test__/components/Graph/Force-Directed-Graph/ForceDirectedGraph.test.tsx"
-      ],
-      rules: {
-        '@typescript-eslint/no-var-requires': 'off'
-      }
-    }
-  ],
   settings: {
     react: {
       version: 'detect', // Automatically detect the React version

@@ -11,14 +11,13 @@ import Graph from "../../../../components/Graph/Graph"
 import { State } from "react-native-gesture-handler"
 
 jest.mock("react-native-gesture-handler", () => {
-  const View = require("react-native").View
   return {
     State: {
       END: 5,
     },
-    PanGestureHandler: View,
-    PinchGestureHandler: View,
-    GestureHandlerRootView: View,
+    PanGestureHandler: 'View',
+    PinchGestureHandler: 'View',
+    GestureHandlerRootView: 'View',
   }
 })
 

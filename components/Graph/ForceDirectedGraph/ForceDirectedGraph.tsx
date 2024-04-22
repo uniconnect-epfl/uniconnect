@@ -20,13 +20,13 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler"
 
-const profile_picture_0 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-0.png")
-const profile_picture_1 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-1.png")
-const profile_picture_2 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-2.png")
-const profile_picture_3 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-3.png")
-const profile_picture_4 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-4.png")
-const profile_picture_5 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-5.png")
-const profile_picture_6 = require("../../../assets/graph-template-profile-pictures/graph-template-profile-picture-6.png")
+import profile_picture_0 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-0.png"
+import profile_picture_1 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-1.png"
+import profile_picture_2 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-2.png"
+import profile_picture_3 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-3.png"
+import profile_picture_4 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-4.png"
+import profile_picture_5 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-5.png"
+import profile_picture_6 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-6.png"
 
 const PROFILE_PICTURES = [
   profile_picture_0,
