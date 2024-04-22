@@ -3,6 +3,7 @@ import { styles } from "./styles"
 import { useNavigation } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
 import { peach } from "../../assets/colors/colors"
+import { Logout } from "../../firebase/Logout"
 
 export const SettingsScreen = () => {
   const navigation = useNavigation()
@@ -20,7 +21,7 @@ export const SettingsScreen = () => {
     { title: "NOTIFICATIONS", action: pressPlaceholder },
     { title: "HELP",  action: pressPlaceholder },
     { title: "ABOUT", action: pressPlaceholder },
-    { title: "LOG OUT",  action: pressPlaceholder }
+    { title: "LOG OUT",  action: Logout }
   ]
 
   return (
