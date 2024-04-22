@@ -1,9 +1,9 @@
-import React from 'react'
-import { render, fireEvent } from '@testing-library/react-native'
-import ExploreScreen from '../../../screens/Contacts/ExploreScreen'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
-import { black, lightGray } from '../../../assets/colors/colors'
-import { NavigationContainer, NavigationProp, ParamListBase } from '@react-navigation/native'
+import React from "react"
+import { render, fireEvent } from "@testing-library/react-native"
+import ExploreScreen from "../../../screens/Contacts/ExploreScreen"
+import { SafeAreaProvider } from "react-native-safe-area-context"
+import { black, lightGray } from "../../../assets/colors/colors"
+import { NavigationContainer, NavigationProp, ParamListBase } from "@react-navigation/native"
 
 const mockNavigation = {
   navigate: jest.fn(),
@@ -19,16 +19,16 @@ const mockNavigation = {
   dangerouslyGetState: jest.fn()
 } as unknown as NavigationProp<ParamListBase>
 
-jest.mock('@react-navigation/native', () => {
+jest.mock("@react-navigation/native", () => {
   return {
-    ...jest.requireActual('@react-navigation/native'),
+    ...jest.requireActual("@react-navigation/native"),
     useNavigation: () => ({
       navigate: mockNavigation,
     }),
   }
 })
 
-jest.mock('react-native-safe-area-context', () => {
+jest.mock("react-native-safe-area-context", () => {
   const inset = {top: 0, right: 0, bottom: 0, left: 0}
   return {
     SafeAreaProvider: jest.fn(({children}) => children),
@@ -42,9 +42,9 @@ beforeAll(() => {
   global.alert = jest.fn()
 })
 
-describe('ExploreScreen', () => {
+describe("ExploreScreen", () => {
 
-    it('renders the screen', () => {
+    it("renders the screen", () => {
         const component = render(
         <SafeAreaProvider>
           <NavigationContainer>
@@ -55,7 +55,7 @@ describe('ExploreScreen', () => {
         expect(component).toBeTruthy()
     })
     
-    it('updates tab selection on button press', () => {
+    it("updates tab selection on button press", () => {
         const { getByText } = render(
           <SafeAreaProvider>
             <NavigationContainer>
@@ -64,15 +64,15 @@ describe('ExploreScreen', () => {
           </SafeAreaProvider>
           )
 
-        fireEvent.press(getByText('Graph View'))
-        expect(getByText('Graph View').props.style[1].color).toBe(black)
-        expect(getByText('Plain View').props.style[1].color).toBe(lightGray)
-        fireEvent.press(getByText('Plain View'))
-        expect(getByText('Graph View').props.style[1].color).toBe(lightGray)
-        expect(getByText('Plain View').props.style[1].color).toBe(black)
+        fireEvent.press(getByText("Graph View"))
+        expect(getByText("Graph View").props.style[1].color).toBe(black)
+        expect(getByText("Plain View").props.style[1].color).toBe(lightGray)
+        fireEvent.press(getByText("Plain View"))
+        expect(getByText("Graph View").props.style[1].color).toBe(lightGray)
+        expect(getByText("Plain View").props.style[1].color).toBe(black)
     })
 
-    it('navigates to profile screen when clicking on contact', () => {
+    it("navigates to profile screen when clicking on contact", () => {
       const { getByText } = render(
         <SafeAreaProvider>
           <NavigationContainer>
@@ -80,7 +80,7 @@ describe('ExploreScreen', () => {
           </NavigationContainer>
         </SafeAreaProvider>
       )
-      const button = getByText('Jocović')
+      const button = getByText("Jocović")
       fireEvent.press(button)
       expect(mockNavigation.navigate).toHaveBeenCalledWith("ExternalProfile", {"uid": "1"})
     })
