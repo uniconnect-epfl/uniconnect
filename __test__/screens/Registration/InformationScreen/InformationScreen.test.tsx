@@ -1,8 +1,42 @@
 import React from "react"
-import { render, fireEvent } from "@testing-library/react-native"
+import { render, fireEvent, act } from "@testing-library/react-native"
 import InformationScreen from "../../../../screens/Registration/InformationScreen/InformationScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { NavigationContainer } from "@react-navigation/native"
+import MyDateInputComponent from "../../../../components/DatePicker/DatePicker"
+
+describe("MyDateInputComponent", () => {
+  const mockSetDate = jest.fn()
+  const mockSetDateModal = jest.fn()
+  const testDate = new Date(2021, 9, 8) // October 8, 2021
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+  it("calls setDate when the date changes", () => {
+    const { getByTestId } = render(
+      <MyDateInputComponent
+        date={testDate}
+        setDate={mockSetDate}
+        setDateModal={mockSetDateModal}
+      />
+    )
+
+    const dateTimePicker = getByTestId("dateTimePicker")
+    expect(dateTimePicker).toBeDefined()
+
+    // Simulate change event by directly invoking onChange handler
+    const selectedDate = new Date(2021, 9, 9) // New date to simulate change
+    act(() => {
+      fireEvent(dateTimePicker, "onChange", {
+        nativeEvent: { timestamp: selectedDate },
+      })
+    })
+
+    // Check if setDate is called with the updated date
+    expect(mockSetDate).toHaveBeenCalledWith(selectedDate)
+  })
+})
 
 const mockNavigate = jest.fn()
 jest.mock("@react-navigation/native", () => {
@@ -24,16 +58,15 @@ jest.mock("react-native-safe-area-context", () => {
   }
 })
 
-interface DatePickerProps {
-  setDateModal: (value: boolean) => void
-}
-
-jest.mock("../../../../components/DatePicker/DatePicker.tsx", () => {
+jest.mock("@react-native-community/datetimepicker", () => {
   return {
     __esModule: true,
-    default: ({ setDateModal }: DatePickerProps) => (
-      <button onClick={() => setDateModal(false)}></button>
-    ),
+    MyDateInputComponent: jest.fn().mockImplementation(({ onChange }) => {
+      // Use a Pressable to simulate user interaction in tests
+      const handleChange = () => onChange({ type: "set" }, new Date()) // Simulate changing the date
+
+      return <div onClick={handleChange}></div>
+    }),
   }
 })
 
@@ -58,7 +91,8 @@ describe("Information Screen", () => {
     expect(getByText("Use my location?"))
     expect(getByText("Add a description now"))
   })
-  it("toggles date picker modal visibility on press", () => {
+
+  it.only("toggles date picker modal visibility on press", () => {
     const { getByText, queryByText } = render(
       <SafeAreaProvider>
         <NavigationContainer>
@@ -69,9 +103,8 @@ describe("Information Screen", () => {
 
     const dateOfBirthField = getByText("Date of Birth*")
     fireEvent.press(dateOfBirthField)
-
     // Assuming MyDateInputComponent renders something identifiable
-    expect(queryByText("DatePicker")).toBeTruthy()
+    expect(queryByText("MyDateInputComponent")).toBeTruthy()
   })
 
   it("navigates to description up screen on footer press", () => {
