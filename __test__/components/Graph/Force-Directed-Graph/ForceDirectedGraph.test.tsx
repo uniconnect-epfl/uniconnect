@@ -11,7 +11,6 @@ import Graph from "../../../../components/Graph/Graph"
 import { State } from "react-native-gesture-handler"
 
 jest.mock("react-native-gesture-handler", () => {
-  // eslint-disable-next-line
   const View = require("react-native").View
   return {
     State: {
