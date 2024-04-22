@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons'
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import SectionTabs from '../../components/SectionTabs/SectionTabs'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
+import { globalStyles } from '../../assets/global/globalStyles'
+import { black } from '../../assets/colors/colors'
 
 export type Contact = {
   uid: string
@@ -182,33 +184,42 @@ export const ContactListScreen = ({navigation} : ContactListScreenProps ) => {
         />
       ) : (
         <View style={styles.profilePicture}>
-          <Ionicons name="person" size={50} color="black" />
+          <Ionicons name="person" size={50} color={black} />
         </View>
       )}
-      <View style={styles.container}>
-        <Text style={styles.contactDescription} numberOfLines={3}>
+      <View style={styles.informationsContainer}>
+        <Text style={globalStyles.smallText} numberOfLines={3}>
           {item.description}
         </Text>
-        <View style={styles.container}>
-          <Text style={styles.contactName}>{item.firstName}</Text>
-          <Text style={styles.contactFriendType}>friend</Text>
+        <View>
+          <Text style={globalStyles.boldText}>{item.firstName}</Text>
+          <Text style={globalStyles.text}>friend</Text>
         </View>
       </View>
     </TouchableOpacity>
   )
 
   const RenderContactList = () => (
-    <View style={styles.container}>
-        <FlatList
-          data={filteredContacts}
-          renderItem={RenderOneContact}
-          keyExtractor={(contact) => contact.uid}
-        />
-      </View>
+    <View>
+
+      <TextInput
+        style={styles.searchBar}
+        placeholder="Search..."
+        value={searchText}
+        onChangeText={handleSearch}
+      />
+
+      <FlatList
+        data={filteredContacts}
+        renderItem={RenderOneContact}
+        keyExtractor={(contact) => contact.uid}
+      />
+
+    </View>
   )
 
   const RenderContactGraph = () => (
-    <View style={styles.container}>
+    <View>
       <Text>Here will be the contact graph</Text>
     </View>
   )
@@ -223,15 +234,6 @@ export const ContactListScreen = ({navigation} : ContactListScreenProps ) => {
       />
 
       <View style={styles.separationBar} />
-
-      <View>
-        <TextInput
-          style={styles.searchBar}
-          placeholder="Search..."
-          value={searchText}
-          onChangeText={handleSearch}
-        />
-      </View>
 
       {selectedTab === "Plain View" ? RenderContactList() : RenderContactGraph()}
       
