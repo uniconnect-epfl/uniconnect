@@ -2,11 +2,12 @@ import { Text, View, TouchableOpacity } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import ExpandableDescription from "../../../components/ExpandableDescription/ExpandableDescription"
 import GeneralProfile from "../../../components/GeneralProfile/GeneralProfile"
-import { styles } from "./styles"
 import { black } from "../../../assets/colors/colors"
 import InputField from "../../../components/InputField/InputField"
 import { useState } from "react"
 import { useNavigation } from "@react-navigation/native"
+import { profileStyles } from "../profileStyles"
+import { styles } from "./styles"
 import { globalStyles } from "../../../assets/global/globalStyles"
 
 type Contact = {
@@ -37,10 +38,10 @@ export const MyProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topBackground} />
-      <View style={styles.profileContainer}>
+      <View style={profileStyles.topBackground} />
+      <View style={profileStyles.profileContainer}>
 
-        <View style={styles.topProfileContainer}>
+        <View style={profileStyles.topProfileContainer}>
 
           <GeneralProfile
             name={dummyProfile.firstName}
@@ -48,18 +49,18 @@ export const MyProfileScreen = () => {
             location={dummyProfile.location}
           />
           
-          <View style={styles.buttonsContainer}>
+          <View style={profileStyles.buttonsContainer}>
             <TouchableOpacity 
-              style={styles.button}
+              style={profileStyles.button}
               onPress={() => useNav.navigate("UpdateProfile" as never)}>
-              <Text style={[globalStyles.boldText, styles.buttonText]}>Update</Text>
+              <Text style={[globalStyles.boldText, profileStyles.buttonText]}>Update</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-              style={styles.button}
+              style={profileStyles.button}
               onPress={() => useNav.navigate("MyQR" as never)}>
-              <View style={styles.horizontalContainer}>
+              <View style={profileStyles.horizontalContainer}>
                 <Ionicons name="qr-code" size={14} color={black} />
-                <Text style={[globalStyles.boldText, styles.buttonText]}>QR</Text>
+                <Text style={[globalStyles.boldText, profileStyles.buttonText]}>QR</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -72,7 +73,7 @@ export const MyProfileScreen = () => {
 
         <View style={styles.separatorLine} />
 
-        <View style={styles.horizontalContainer}>
+        <View style={profileStyles.horizontalContainer}>
           <InputField
             label=""
             placeholder="Search..."
