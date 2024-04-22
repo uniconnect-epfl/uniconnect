@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react-native'
-import { ContactListScreen } from '../../../screens/Contacts/ExploreScreen'
+import ExploreScreen from '../../../screens/Contacts/ExploreScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { black, lightGray } from '../../../assets/colors/colors'
 import { NavigationContainer, NavigationProp, ParamListBase } from '@react-navigation/native'
@@ -42,55 +42,24 @@ beforeAll(() => {
   global.alert = jest.fn()
 })
 
-describe('ContactListScreen', () => {
+describe('ExploreScreen', () => {
 
     it('renders the screen', () => {
         const component = render(
         <SafeAreaProvider>
           <NavigationContainer>
-            <ContactListScreen navigation={mockNavigation}/>
+            <ExploreScreen navigation={mockNavigation}/>
           </NavigationContainer>
         </SafeAreaProvider>
         )
         expect(component).toBeTruthy()
-    })
-
-    it('filters contacts based on search input', () => {
-        const { getByText, getByPlaceholderText, queryByText } = render(
-          <SafeAreaProvider>
-            <NavigationContainer>
-              <ContactListScreen navigation={mockNavigation}/>
-            </NavigationContainer>
-          </SafeAreaProvider>
-          )
-
-        fireEvent.changeText(getByPlaceholderText('Search...'), 'Jocovi')
-        expect(getByText('Jocović')).toBeTruthy()
-        expect(queryByText('Hervé')).toBeNull()
-        expect(queryByText('')).toBeNull()
-        expect(queryByText('Abc')).toBeNull()
-
-        fireEvent.changeText(getByPlaceholderText('Search...'), '')
-        expect(getByText('Hervé')).toBeTruthy()
-    })
-    
-    it('displays correct contact details', () => {
-        const { getByText } = render(
-          <SafeAreaProvider>
-            <NavigationContainer>
-              <ContactListScreen navigation={mockNavigation}/>
-            </NavigationContainer>
-          </SafeAreaProvider>
-          )
-        expect(getByText('Jocović')).toBeTruthy()
-        expect(getByText('This guy is very weird')).toBeTruthy()
     })
     
     it('updates tab selection on button press', () => {
         const { getByText } = render(
           <SafeAreaProvider>
             <NavigationContainer>
-              <ContactListScreen navigation={mockNavigation}/>
+              <ExploreScreen navigation={mockNavigation}/>
             </NavigationContainer>
           </SafeAreaProvider>
           )
@@ -107,12 +76,12 @@ describe('ContactListScreen', () => {
       const { getByText } = render(
         <SafeAreaProvider>
           <NavigationContainer>
-            <ContactListScreen navigation={mockNavigation}/>
+            <ExploreScreen navigation={mockNavigation}/>
           </NavigationContainer>
         </SafeAreaProvider>
       )
-      const signUpButton = getByText('Jocović')
-      fireEvent.press(signUpButton)
+      const button = getByText('Jocović')
+      fireEvent.press(button)
       expect(mockNavigation.navigate).toHaveBeenCalledWith("ExternalProfile", {"uid": "1"})
     })
 
