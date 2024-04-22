@@ -11,11 +11,11 @@ export const Header = () => {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <Pressable onPress={() => navigation.navigate("Profile" as never)}>
+      <Pressable testID="profile-button" onPress={() => navigation.navigate("Profile" as never)}>
         <Ionicons name="person" size={26} color={peach}/>
       </Pressable>
       <Image source={require("../../assets/icon.png")} style={styles.image}/>
-      <Pressable onPress={() => navigation.navigate("Settings" as never)}>
+      <Pressable testID="settings-button" onPress={() => navigation.navigate("Settings" as never)}>
         <Ionicons name="settings" size={26} color={peach}/>
       </Pressable>
     </View>
