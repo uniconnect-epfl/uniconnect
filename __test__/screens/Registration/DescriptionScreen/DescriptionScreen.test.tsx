@@ -4,6 +4,7 @@ import DescriptionScreen from "../../../../screens/Registration/DescriptionScree
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 const mockNavigate = jest.fn()
+const mockGoBack = jest.fn()
 
 jest.mock("react-native-safe-area-context", () => {
   const inset = { top: 0, right: 0, bottom: 0, left: 0 }
@@ -20,6 +21,7 @@ jest.mock("@react-navigation/native", () => {
     ...jest.requireActual("@react-navigation/native"),
     useNavigation: () => ({
       navigate: mockNavigate,
+      goBack: mockGoBack,
     }),
   }
 })
@@ -66,6 +68,6 @@ describe("DescriptionScreen", () => {
     const button = getByText("Validate")
     fireEvent.press(button)
 
-    expect(mockNavigate).toHaveBeenCalledWith("Information")
+    expect(mockGoBack).toHaveBeenCalledWith("Information")
   })
 })
