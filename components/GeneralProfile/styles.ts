@@ -1,29 +1,22 @@
-import { StyleSheet } from 'react-native'
-import { peach } from '../../assets/colors/colors'
+import { StyleSheet } from "react-native"
+import { peach } from "../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
     container: {
-        justifyContent: 'center',
-        left: 10,
-        margin: 10,
+        alignContent: "center",
+        flex: 1,
+        justifyContent: "center",
     },
     horizontalContainer: {
-        flexDirection: 'row'
-    },
-    location: {
-        fontSize: 11,
-    },
-    name: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        marginVertical: 5,
+        flex: 1,
+        flexDirection: "row"
     },
     profilePicture: {
-        alignItems: 'center',
+        alignItems: "center",
         backgroundColor: peach,
         borderRadius: 40, // to make it circular
         height: 80,
-        justifyContent: 'center',
+        justifyContent: "center",
         width: 80,
     },
 

@@ -7,6 +7,9 @@ import HomeTabNavigator from "../../navigation/Home/HomeTabNavigator"
 import { MyProfileScreen } from "../../screens/Profile/MyProfileScreen/MyProfileScreen"
 import { SettingsScreen } from "../../screens/Settings/SettingsScreen"
 import AuthenticationScreen from "../../screens/Registration/AuthenticationScreen/AuthenticationScreen"
+import { MyQrCodeScreen } from "../../screens/Profile/MyQrCode/MyQrCodeScreen"
+import { UpdateMyProfileScreen } from "../../screens/Profile/UpdateMyProfile/UpdateMyProfileScreen"
+import ExternalProfileScreen from "../../screens/Profile/ExternalProfileScreen/ExternalProfileScreen"
 
 const Stack = createStackNavigator()
 
@@ -42,6 +45,21 @@ const RegistrationStackNavigator: React.FC = () => {
       <Stack.Screen
         name="Profile"
         component={MyProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MyQR"
+        component={MyQrCodeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="UpdateProfile"
+        component={UpdateMyProfileScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ExternalProfile"
+        component={ExternalProfileScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen

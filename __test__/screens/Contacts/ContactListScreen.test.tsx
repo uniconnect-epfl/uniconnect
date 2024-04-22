@@ -2,6 +2,31 @@ import React from 'react'
 import { render, fireEvent } from '@testing-library/react-native'
 import { ContactListScreen } from '../../../screens/Contacts/ContactListScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { black, lightGray } from '../../../assets/colors/colors'
+import { NavigationContainer, NavigationProp, ParamListBase } from '@react-navigation/native'
+
+const mockNavigation = {
+  navigate: jest.fn(),
+  goBack: jest.fn(),
+  addListener: jest.fn(),
+  removeListener: jest.fn(),
+  reset: jest.fn(),
+  setParams: jest.fn(),
+  dispatch: jest.fn(),
+  isFocused: jest.fn(),
+  canGoBack: jest.fn(),
+  dangerouslyGetParent: jest.fn(),
+  dangerouslyGetState: jest.fn()
+} as unknown as NavigationProp<ParamListBase>
+
+jest.mock('@react-navigation/native', () => {
+  return {
+    ...jest.requireActual('@react-navigation/native'),
+    useNavigation: () => ({
+      navigate: mockNavigation,
+    }),
+  }
+})
 
 jest.mock('react-native-safe-area-context', () => {
   const inset = {top: 0, right: 0, bottom: 0, left: 0}
@@ -13,12 +38,18 @@ jest.mock('react-native-safe-area-context', () => {
   }
 })
 
+beforeAll(() => {
+  global.alert = jest.fn()
+})
+
 describe('ContactListScreen', () => {
 
     it('renders the screen', () => {
         const component = render(
         <SafeAreaProvider>
-          <ContactListScreen />
+          <NavigationContainer>
+            <ContactListScreen navigation={mockNavigation}/>
+          </NavigationContainer>
         </SafeAreaProvider>
         )
         expect(component).toBeTruthy()
@@ -27,9 +58,11 @@ describe('ContactListScreen', () => {
     it('filters contacts based on search input', () => {
         const { getByText, getByPlaceholderText, queryByText } = render(
           <SafeAreaProvider>
-            <ContactListScreen />
+            <NavigationContainer>
+              <ContactListScreen navigation={mockNavigation}/>
+            </NavigationContainer>
           </SafeAreaProvider>
-        )
+          )
 
         fireEvent.changeText(getByPlaceholderText('Search...'), 'Jocovi')
         expect(getByText('Jocović')).toBeTruthy()
@@ -44,9 +77,11 @@ describe('ContactListScreen', () => {
     it('displays correct contact details', () => {
         const { getByText } = render(
           <SafeAreaProvider>
-            <ContactListScreen />
+            <NavigationContainer>
+              <ContactListScreen navigation={mockNavigation}/>
+            </NavigationContainer>
           </SafeAreaProvider>
-        )
+          )
         expect(getByText('Jocović')).toBeTruthy()
         expect(getByText('This guy is very weird')).toBeTruthy()
     })
@@ -54,19 +89,33 @@ describe('ContactListScreen', () => {
     it('updates tab selection on button press', () => {
         const { getByText } = render(
           <SafeAreaProvider>
-            <ContactListScreen />
+            <NavigationContainer>
+              <ContactListScreen navigation={mockNavigation}/>
+            </NavigationContainer>
           </SafeAreaProvider>
-        )
+          )
 
         fireEvent.press(getByText('Graph View'))
-        expect(getByText('Graph View').props.style[1].fontWeight).toBe('bold')
-        expect(getByText('Plain View').props.style[1]).not.toHaveProperty('fontWeight')
+        expect(getByText('Graph View').props.style[1].color).toBe(black)
+        expect(getByText('Plain View').props.style[1].color).toBe(lightGray)
         fireEvent.press(getByText('Plain View'))
-        expect(getByText('Graph View').props.style[1]).not.toHaveProperty('fontWeight')
-        expect(getByText('Plain View').props.style[1].fontWeight).toBe('bold')
+        expect(getByText('Graph View').props.style[1].color).toBe(lightGray)
+        expect(getByText('Plain View').props.style[1].color).toBe(black)
+    })
+
+    it('navigates to profile screen when clicking on contact', () => {
+      const { getByText } = render(
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <ContactListScreen navigation={mockNavigation}/>
+          </NavigationContainer>
+        </SafeAreaProvider>
+      )
+      const signUpButton = getByText('Jocović')
+      fireEvent.press(signUpButton)
+      expect(mockNavigation.navigate).toHaveBeenCalledWith("ExternalProfile", {"uid": "1"})
     })
 
 })
-
 
 
