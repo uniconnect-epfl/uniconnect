@@ -11,7 +11,7 @@ interface ContactListScreenProps{
   navigation: NavigationProp<ParamListBase>
 }
 
-export const ContactListScreen = ({navigation} : ContactListScreenProps ) => {
+const ExploreScreen = ({navigation} : ContactListScreenProps ) => {
   const [selectedTab, setSelectedTab] = useState("Plain View")
   const insets = useSafeAreaInsets()
 
@@ -39,3 +39,5 @@ export const ContactListScreen = ({navigation} : ContactListScreenProps ) => {
     </View>
   )
 }
+
+export default ExploreScreen
