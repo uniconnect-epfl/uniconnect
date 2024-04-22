@@ -1,42 +1,48 @@
-import React from "react"
+import React, { useEffect, useState }from "react"
 import { createStackNavigator } from "@react-navigation/stack"
 import OnboardingScreen from "../../screens/Onboarding/OnboardingScreen"
 import InformationScreen from "../../screens/Registration/InformationScreen/InformationScreen"
 import InterestsScreen from "../../screens/Registration/InterestsScreen/InterestsScreen"
-import HomeTabNavigator from "../../navigation/Home/HomeTabNavigator"
+import HomeTabNavigator from "../Home/HomeTabNavigator"
 import { MyProfileScreen } from "../../screens/Profile/MyProfileScreen/MyProfileScreen"
 import { SettingsScreen } from "../../screens/Settings/SettingsScreen"
 import AuthenticationScreen from "../../screens/Registration/AuthenticationScreen/AuthenticationScreen"
 import { MyQrCodeScreen } from "../../screens/Profile/MyQrCode/MyQrCodeScreen"
 import { UpdateMyProfileScreen } from "../../screens/Profile/UpdateMyProfile/UpdateMyProfileScreen"
 import ExternalProfileScreen from "../../screens/Profile/ExternalProfileScreen/ExternalProfileScreen"
+import { auth } from "../../firebase/firebaseConfig"
+import { User, onAuthStateChanged } from "firebase/auth"
+import LoadingScreen from "../../screens/Loading/LoadingScreen"
 
 const Stack = createStackNavigator()
 
 // return  the StackNavigation that will be called in the app to allow the user to Login/Register
 const RegistrationStackNavigator: React.FC = () => {
+  const [user, setUser] = useState<User|null>(null)
+  const [loading, setLoading] = useState(true)
+  
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if(user){
+        setUser(user)
+      }
+      else{
+        setUser(null)
+      }
+      setLoading(false)
+    })
+    return unsubscribe
+  },[])
+
+  if(loading){
+    return (
+      <LoadingScreen/>
+    )
+  }
   return (
-    <Stack.Navigator initialRouteName="Onboarding">
-      <Stack.Screen
-        name="Onboarding"
-        component={OnboardingScreen}
-        options={{ headerShown: false }} // Set options as needed, i.e hiding the header
-      />
-      <Stack.Screen
-        name="Information"
-        component={InformationScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Interests"
-        component={InterestsScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Authentication"
-        component={AuthenticationScreen}
-        options={{ headerShown: false }}
-      />
+    <Stack.Navigator>
+      {user?
+      <>
       <Stack.Screen
         name="HomeTabs"
         component={HomeTabNavigator}
@@ -67,6 +73,31 @@ const RegistrationStackNavigator: React.FC = () => {
         component={SettingsScreen}
         options={{ headerShown: false }}
       />
+      </>
+      :
+      <>
+       <Stack.Screen
+        name="Onboarding"
+        component={OnboardingScreen}
+        options={{ headerShown: false }} // Set options as needed, i.e hiding the header
+      />
+      <Stack.Screen
+        name="Information"
+        component={InformationScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Interests"
+        component={InterestsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Authentication"
+        component={AuthenticationScreen}
+        options={{ headerShown: false }}
+      />
+      </>
+      }
     </Stack.Navigator>
   )
 }
