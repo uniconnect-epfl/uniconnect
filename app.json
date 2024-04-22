@@ -1,10 +1,8 @@
-export default {
+{
   "expo": {
-    "plugins": [
-      "@react-native-google-signin/google-signin"
-    ],
     "name": "uni-connect",
     "slug": "uniconnect",
+    "scheme" : "uniconnect",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -19,10 +17,9 @@ export default {
     ],
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.epfl.uniconnect"
     },
     "android": {
-      
-      "googleServicesFile": process.env.GOOGLE_SERVICES_JSON,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

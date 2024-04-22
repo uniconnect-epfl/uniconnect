@@ -1,7 +1,7 @@
 import React from 'react'
 import { render } from '@testing-library/react-native'
 import { NavigationContainer } from '@react-navigation/native'
-import RegistrationStackNavigator from '../../../navigation/Registration/RegistrationStackNavigator'
+import MainStackNavigator from '../../../navigation/Main/MainStackNavigator'
 
 jest.mock('@react-native-google-signin/google-signin', () => {
     return {
@@ -26,7 +26,7 @@ describe('RegistrationStackNavigator', () => {
     it('renders the stack navigator with expected initial route', () => {
         const component = render(
             <NavigationContainer>
-                <RegistrationStackNavigator />
+                <MainStackNavigator/>
             </NavigationContainer>
         )
         expect(component).toBeTruthy()
