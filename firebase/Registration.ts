@@ -1,11 +1,11 @@
 import { addDoc, collection, serverTimestamp } from "firebase/firestore"
-import { FIREBASE_AUTH, FIRESTORE_DB } from "./firebaseConfig"
+import { auth, db } from "./firebaseConfig"
 import { createUserWithEmailAndPassword } from "firebase/auth"
 
 
 export async function createAccount(email: string, password: string) : Promise<void> {
  try {
-  await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
+  await createUserWithEmailAndPassword(auth, email, password)
   alert("Account created. Check email")
  } catch (error) {
   if (error instanceof Error) {
@@ -22,7 +22,7 @@ export async function createAccount(email: string, password: string) : Promise<v
  */
 export async function storeEmail(email: string): Promise<void> {
   try {
-    const docRef = await addDoc(collection(FIRESTORE_DB, "emails"), {
+    const docRef = await addDoc(collection(db, "emails"), {
       email: email,
       createdAt: serverTimestamp() // Use server timestamp for consistency
     })

@@ -1,12 +1,12 @@
 import { User } from "firebase/auth"
-import { FIREBASE_AUTH } from "./firebaseConfig"
+import { auth } from "./firebaseConfig"
 import { signInWithEmailAndPassword } from "firebase/auth"
 
 export const loginEmailPassword = async ( email: string, password: string): Promise<User | null> => {
   let user = null
   try {
     const userCredential = await signInWithEmailAndPassword(
-    FIREBASE_AUTH,
+    auth,
     email,
     password
     )
