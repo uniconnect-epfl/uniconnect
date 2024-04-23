@@ -23,7 +23,11 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 
 jest.mock("firebase/auth", () => ({
   getReactNativePersistence: jest.fn(() => ({} as Auth)),
-  initializeAuth: jest.fn(() => ({} as Auth)),
+  initializeAuth: jest.fn(() => ({ signOut: jest.fn() })),
+}))
+
+jest.mock("../../../firebase/firebaseConfig", () => ({
+  auth: { signOut: jest.fn(() => Promise.resolve()) }
 }))
 
 describe("SettingsScreen", () => {
@@ -77,5 +81,16 @@ describe("SettingsScreen", () => {
     fireEvent.press(menuItem)
 
     expect(alertSpy).toHaveBeenCalledWith("Coming soon")
+  })
+
+  test("calls the correct action when the logout menu item is pressed", () => {
+    const { getByText } = render(
+      <NavigationContainer>
+        <SettingsScreen />
+      </NavigationContainer>
+    )
+
+    const menuItem = getByText("LOG OUT")
+    fireEvent.press(menuItem)
   })
 })
