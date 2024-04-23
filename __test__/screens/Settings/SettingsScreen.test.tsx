@@ -3,6 +3,7 @@ import { render, fireEvent } from "@testing-library/react-native"
 import { SettingsScreen } from "../../../screens/Settings/SettingsScreen"
 import { NavigationContainer } from "@react-navigation/native"
 import { Alert } from 'react-native'
+import { Auth } from 'firebase/auth'
 
 
 const mockGoBack = jest.fn()
@@ -15,6 +16,15 @@ jest.mock("@react-navigation/native", () => {
     }),
   }
 })
+
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+)
+
+jest.mock("firebase/auth", () => ({
+  getReactNativePersistence: jest.fn(() => ({} as Auth)),
+  initializeAuth: jest.fn(() => ({} as Auth)),
+}))
 
 describe("SettingsScreen", () => {
   test("renders correctly", () => {
