@@ -4,7 +4,7 @@ import { useState } from "react"
 import { FlatList, TextInput } from "react-native-gesture-handler"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../../assets/global/globalStyles"
-import { Contact, dummyData } from "../../Contacts/ContactListScreen"
+import { Contact, dummyData } from "../../Contacts/ContactList/ContactList"
 
 const RenderOneContact = ({ item }: { item: Contact }) => (
   <View style={styles.contactCard}>
