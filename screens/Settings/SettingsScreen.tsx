@@ -10,7 +10,7 @@ export const SettingsScreen = () => {
 
   type MenuItem = {
     title: string;
-    action: () => void;
+    action: () => Promise<void>|void;
   };
 
   const pressPlaceholder = () => Alert.alert("Coming soon")
