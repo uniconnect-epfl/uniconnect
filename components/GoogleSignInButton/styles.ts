@@ -3,8 +3,7 @@ import {
   white,
   black,
   shadowColor,
-} from '../../assets/colors/colors' 
-
+} from '../../assets/colors/colors'
 import {
   BUTTON_HEIGHT,
   BUTTON_RADIUS,
