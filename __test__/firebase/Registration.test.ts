@@ -10,8 +10,14 @@ jest.mock("firebase/auth", () => ({
     } else {
       return Promise.reject(new Error("Failed to create account"))
     }
-  })
+  }),
+  getReactNativePersistence: jest.fn(() => ({} as Auth)),
+  initializeAuth: jest.fn(() => ({} as Auth)),
 }))
+
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+)
 
 jest.mock("firebase/firestore", () => ({
   getFirestore: jest.fn(() => ({} as Firestore)),
