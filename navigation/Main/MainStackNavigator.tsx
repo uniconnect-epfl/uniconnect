@@ -17,7 +17,7 @@ import LoadingScreen from "../../screens/Loading/LoadingScreen"
 const Stack = createStackNavigator()
 
 // return  the StackNavigation that will be called in the app to allow the user to Login/Register
-const RegistrationStackNavigator: React.FC = () => {
+const MainStackNavigator: React.FC = () => {
   const [user, setUser] = useState<User|null>(null)
   const [loading, setLoading] = useState(true)
   
@@ -102,4 +102,4 @@ const RegistrationStackNavigator: React.FC = () => {
   )
 }
 
-export default RegistrationStackNavigator
+export default MainStackNavigator

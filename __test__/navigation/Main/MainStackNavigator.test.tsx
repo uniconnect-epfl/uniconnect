@@ -2,25 +2,68 @@ import React from 'react'
 import { render } from '@testing-library/react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import MainStackNavigator from '../../../navigation/Main/MainStackNavigator'
-import { Auth, User } from 'firebase/auth'
+import { Auth, User, onAuthStateChanged } from 'firebase/auth'
 
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 )
 
-jest.mock("firebase/auth", () => ({
+jest.mock('firebase/auth', () => ({
   getReactNativePersistence: jest.fn(() => ({} as Auth)),
   initializeAuth: jest.fn(() => ({} as Auth)),
-  onAuthStateChanged: jest.fn(() => ({uid: '123'} as User)),
+  onAuthStateChanged: jest.fn()
 }))
 
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+)
+
+jest.mock("../../../components/GoogleSignInButton/GoogleSignInButton", () => {
+  return {
+    GoogleSignInButton: () => {"Continue with google"}
+  }
+})
+
 describe('RegistrationStackNavigator', () => {
-    it('renders the stack navigator with expected initial route', () => {
-        const component = render(
-            <NavigationContainer>
-                <MainStackNavigator/>
-            </NavigationContainer>
-        )
-        expect(component).toBeTruthy()
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('renders the stack navigator with HomeTabs when user is logged in', () => {
+    const mockUser: User = { uid: '123' } as User
+    const mockOnAuthStateChanged = jest.fn((auth, callback) => {
+      callback(mockUser)
+      return jest.fn()
     })
+
+    const mockFunction = onAuthStateChanged as jest.Mock
+    mockFunction.mockImplementation(mockOnAuthStateChanged)
+
+    const { getByText } = render(
+      <NavigationContainer>
+        <MainStackNavigator />
+      </NavigationContainer>
+    )
+
+    expect(getByText('Home')).toBeTruthy()
+    expect(mockOnAuthStateChanged).toHaveBeenCalledTimes(1)
+  })
+
+  it('renders the stack navigator with Onboarding when user is not logged in', () => {
+    const mockOnAuthStateChanged = jest.fn((auth, callback) => {
+      callback(null)
+      return jest.fn()
+    })
+    const mockFunction = onAuthStateChanged as jest.Mock
+    mockFunction.mockImplementation(mockOnAuthStateChanged)
+
+    const { getByText } = render(
+      <NavigationContainer>
+        <MainStackNavigator />
+      </NavigationContainer>
+    )
+
+    expect(getByText('Log In')).toBeTruthy()
+    expect(mockOnAuthStateChanged).toHaveBeenCalledTimes(1)
+  })
 })
