@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import {
   Text,
   View,
@@ -7,39 +7,70 @@ import {
   Image,
   Keyboard,
   TouchableWithoutFeedback,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
-import styles from './styles' 
-import { globalStyles } from '../../assets/global/globalStyles' 
+import styles from './styles'
+import { globalStyles } from '../../assets/global/globalStyles'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
 import { loginEmailPassword } from "../../firebase/Login"
+import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { User } from '@react-native-google-signin/google-signin'
+import { Ionicons } from '@expo/vector-icons'
+
+
+
 
 const OnboardingScreen: React.FC = () => {
   const navigation = useNavigation()
   const insets = useSafeAreaInsets()
   const nextRef = useRef<TextInput>(null)
 
+  //States for Firebase auth
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+
+  //state for Google Sign In
+  const [error, setError] = useState<string | null>("")
+  const [userInfo, setUserInfo] = useState<User | null>(null)
+
+
+  useEffect(() => {
+    GoogleSignin.configure({ webClientId: "618676460374-5h642avt17te1uj9qo8imr233gb6n3qj.apps.googleusercontent.com" })
+  }, []
+  )
+
+  const googleSignin = async ()  : Promise<User> => {
+    try {
+      await GoogleSignin.hasPlayServices()
+      const user: User = await GoogleSignin.signIn()
+      setUserInfo(user)
+      setError(null)
+      navigation.navigate("HomeTabs" as never)
+    } catch (e) {
+      setError((e as string))
+      alert("An error occurred during Google Sign In." + error)
+    }
+    return userInfo as User
+  }
+
 
   const loginUser = async () => {
     setLoading(true)
 
     try {
-    const val = await loginEmailPassword(email, password)
+      const val = await loginEmailPassword(email, password)
 
-    if (val) {
-      navigation.navigate("HomeTabs" as never)
-    } else {
-      alert("Login failed!")
-    }
+      if (val) {
+        navigation.navigate("HomeTabs" as never)
+      } else {
+        alert("Login failed!")
+      }
     } catch (error) {
-    alert("An error occurred during login.")
+      alert("An error occurred during login.")
     } finally {
-    setLoading(false)
+      setLoading(false)
     }
   }
 
@@ -85,9 +116,9 @@ const OnboardingScreen: React.FC = () => {
           disabled={loading}
         >
           {loading ? (
-          <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
-          <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
+            <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
           )}
         </TouchableOpacity>
 
@@ -99,8 +130,8 @@ const OnboardingScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Continue with Google */}
-        <TouchableOpacity style={styles.buttonGoogle}>
+        <TouchableOpacity style={styles.buttonGoogle}
+          onPress={googleSignin}>
           <View style={styles.buttonPlaceholder}>
             <Ionicons
               name="logo-google"
