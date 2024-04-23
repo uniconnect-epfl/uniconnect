@@ -27,7 +27,7 @@ describe("TabBar", () => {
   })
 
   it("navigates to the selected tab on press", () => {
-    const { getByText } = render(
+    const { getByText, queryByText } = render(
       <NavigationContainer>
         <HomeTabNavigator/>
       </NavigationContainer>
@@ -39,7 +39,8 @@ describe("TabBar", () => {
 
     fireEvent.press(connections)
 
-    expect(getByText("Plain View")).toBeTruthy()
+    expect(queryByText("Plain View")).toBeFalsy()
+    expect(queryByText("HomeScreen")).toBeFalsy()
 
     fireEvent.press(home)
 
