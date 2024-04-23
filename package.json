@@ -38,7 +38,8 @@
     "react-native-screens": "~3.29.0",
     "react-native-svg": "^15.1.0",
     "react-native-ui-datepicker": "^2.0.2",
-    "react-native-web": "~0.19.6"
+    "react-native-web": "~0.19.6",
+    "react-native-qrcode-svg": "~6.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
