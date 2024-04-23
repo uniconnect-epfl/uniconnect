@@ -1,7 +1,13 @@
 export default {
   "expo": {
     "plugins": [
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
+        }
+      ]
     ],
     "name": "uni-connect",
     "slug": "uniconnect",
