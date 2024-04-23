@@ -24,7 +24,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.epfl.uniconnect"
+      "package": "com.epfl.uniconnect",
+      "googleServicesFile": "./google-services.json"
     },
     "owner": "uniconnect-epfl",
     "web": {

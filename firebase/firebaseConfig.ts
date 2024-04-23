@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app"
+//@ts-expect-error - getReatNativePersistence is not a named export
 import { initializeAuth, getReactNativePersistence } from "firebase/auth"
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage'
 
