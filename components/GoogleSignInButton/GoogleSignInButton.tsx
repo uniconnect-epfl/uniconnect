@@ -22,13 +22,13 @@ export const GoogleSignInButton = () => {
           console.log(userCredential.user)
         })
         .catch((error) => {
-          console.log(error)
+          alert("An error occurred while signing in with Google." + error.message)
         })
     }
   },[response])
 
   return (
-    <TouchableOpacity style={styles.buttonGoogle} onPress={() => promptAsync()} disabled={!request}>
+    <TouchableOpacity testID="google-sign-in-button" style={styles.buttonGoogle} onPress={() => promptAsync()} disabled={!request}>
     <View style={styles.buttonPlaceholder}>
       <Ionicons
         name="logo-google"

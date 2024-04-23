@@ -14,10 +14,6 @@ jest.mock('firebase/auth', () => ({
   onAuthStateChanged: jest.fn()
 }))
 
-jest.mock('@react-native-async-storage/async-storage', () =>
-  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
-)
-
 jest.mock("../../../components/GoogleSignInButton/GoogleSignInButton", () => {
   return {
     GoogleSignInButton: () => {"Continue with google"}
