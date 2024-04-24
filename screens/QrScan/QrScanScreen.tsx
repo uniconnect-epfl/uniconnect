@@ -1,14 +1,25 @@
-import { View, Text, TouchableOpacity, Alert } from "react-native"
+import { View, Text, TouchableOpacity, Alert, ActivityIndicator } from "react-native"
 import { BarCodeScanningResult, Camera } from "expo-camera"
 import { styles } from "./styles"
 import { globalStyles } from "../../assets/global/globalStyles"
+import { useEffect, useState } from "react"
 import { useIsFocused } from "@react-navigation/native"
-import { useState } from "react"
+import { peach } from "../../assets/colors/colors"
 
 const QrScanScreen = () => {
   const isFocused = useIsFocused()
   const [permission, requestPermission] = Camera.useCameraPermissions()
+  const [showCamera, setShowCamera] = useState(false)
   const [qrScanned, setQrScanned] = useState(false)
+
+  // to allow mounting and unmounting the camera without slowing navigation
+  useEffect(() => {
+    if (isFocused) {
+      setShowCamera(true)
+    } else {
+      setShowCamera(false)
+    }
+  }, [isFocused])
 
   const handleBarCodeScanned = ({ type, data }: BarCodeScanningResult): void => {
     if(!qrScanned){
@@ -53,14 +64,21 @@ const QrScanScreen = () => {
     )
   }
 
+  // we have camera permissions, we show the camera
   return (
     <View style={styles.container}>
 
       <Text style={[globalStyles.text, styles.scanAQrText]}>Scan a QR code</Text>
-      {isFocused && <Camera 
-        style={styles.camera}
-        onBarCodeScanned={handleBarCodeScanned}
-      />}
+      {showCamera ? (
+        <Camera 
+          style={styles.camera}
+          onBarCodeScanned={handleBarCodeScanned}
+        />
+      ) : (
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color={peach} />
+        </View>
+      )}
 
     </View>
   )
