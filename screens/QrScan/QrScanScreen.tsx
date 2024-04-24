@@ -1,10 +1,31 @@
-import { View, Text, TouchableOpacity } from "react-native"
-import { Camera } from "expo-camera"
+import { View, Text, TouchableOpacity, Alert } from "react-native"
+import { BarCodeScanningResult, Camera } from "expo-camera"
 import { styles } from "./styles"
 import { globalStyles } from "../../assets/global/globalStyles"
+import { useIsFocused } from "@react-navigation/native"
+import { useState } from "react"
 
 const QrScanScreen = () => {
+  const isFocused = useIsFocused()
   const [permission, requestPermission] = Camera.useCameraPermissions()
+  const [qrScanned, setQrScanned] = useState(false)
+
+  const handleBarCodeScanned = ({ type, data }: BarCodeScanningResult): void => {
+    if(!qrScanned){
+      setQrScanned(true)
+      Alert.alert(
+        "QR scanned", 
+        `type: ${type}\ndata:${data}`,
+        [
+          { 
+            text: "OK", 
+            onPress: () => setQrScanned(false)
+          },
+        ],
+        { cancelable: false }
+      )
+    }
+  }
 
   if (!permission) {
     // Camera permissions are still loading
@@ -34,8 +55,13 @@ const QrScanScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Scan Qr</Text>
-      <Camera />
+
+      <Text style={[globalStyles.text, styles.scanAQrText]}>Scan a QR code</Text>
+      {isFocused && <Camera 
+        style={styles.camera}
+        onBarCodeScanned={handleBarCodeScanned}
+      />}
+
     </View>
   )
 }
