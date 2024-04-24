@@ -1,12 +1,24 @@
 import React from 'react'
-import { render } from '@testing-library/react-native'
+import { render , waitFor} from '@testing-library/react-native'
 import App from '../../App'
+import { Auth } from 'firebase/auth'
+
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+)
+
+jest.mock("firebase/auth", () => ({
+  getReactNativePersistence: jest.fn(() => ({} as Auth)),
+  initializeAuth: jest.fn(() => ({} as Auth)),
+}))
 
 describe('App', () => {
   
-  it('renders correctly', () => {
+  it('renders correctly', async () => {
+    await waitFor(async () => {
     const component = render(<App />)
     expect(component).toBeTruthy()
+    })
   })
   
 })

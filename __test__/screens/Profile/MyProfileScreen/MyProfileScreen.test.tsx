@@ -31,6 +31,10 @@ jest.mock("../../../../components/ExpandableDescription/ExpandableDescription", 
 jest.mock("../../../../components/InputField/InputField", () => "InputField")
 jest.mock("@expo/vector-icons/Ionicons", () => "Ionicons")
 
+//mock an alert with jest
+global.alert = jest.fn()
+
+
 describe("MyProfileScreen", () => {
 
   it("renders correctly", () => {
