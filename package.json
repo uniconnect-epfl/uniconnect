@@ -27,6 +27,7 @@
     "expo-dev-client": "~3.3.11",
     "expo-splash-screen": "~0.26.4",
     "expo-status-bar": "~1.11.1",
+    "expo-linking": "~6.2.2",
     "graphql": "^15.8.0",
     "expo-web-browser": "~12.8.2",
     "expo-application": "~5.8.4",

@@ -4,6 +4,7 @@ import { styles } from "./styles"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import QRCode from "react-native-qrcode-svg"
 import { black, lightPeach, peach } from "../../../assets/colors/colors"
+import * as Linking from 'expo-linking'
 
 interface ContactData {
   uid: string,
@@ -18,7 +19,7 @@ const dummyData : ContactData = {
 }
 
 const generateLink = (contactData : ContactData) => {
-  return "Uniconnect/contact/" + contactData.uid
+  return Linking.createURL("Uniconnect/contact/" + contactData.uid)
 }
 
 export const MyQrCodeScreen = () => {
