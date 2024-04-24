@@ -20,6 +20,8 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler"
 
+import { peach } from "../../../assets/colors/colors"
+
 import profile_picture_0 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-0.png"
 import profile_picture_1 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-1.png"
 import profile_picture_2 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-2.png"
@@ -309,6 +311,13 @@ const ForceDirectedGraph: React.FC<{
 
   const CIRCLES = nodes.map((node) => (
     <G key={node.id + "group"}>
+      <Circle
+        key={node.id + "highlight"}
+        cx={coordX(node)}
+        cy={coordY(node)}
+        r={(sizes.get(node.id) ?? DEFAULT_NODE_SIZE) * (node.selected ? 1.3 : 1)}
+        fill={peach} 
+      />
       <Image
         key={node.id + "image"}
         x={coordX(node) - (sizes.get(node.id) ?? DEFAULT_NODE_SIZE)}
@@ -348,7 +357,7 @@ const ForceDirectedGraph: React.FC<{
         y={
           coordY(node) +
           (sizes.get(node.id) ?? DEFAULT_NODE_SIZE) +
-          DEFAULT_NODE_SIZE
+          1.5 * DEFAULT_NODE_SIZE
         } // Position below the circle adjust 10 as needed
         textAnchor="middle" // Center the text under the circle
       >

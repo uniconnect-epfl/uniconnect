@@ -7,10 +7,10 @@ import { useState } from "react"
 
 
 const graph = new Graph(
-  ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
-  ["0", "2", "3", "4", "5", "6", "7", "8", "9"],
-  ["1", "1", "1", "1", "1", "1", "2", "2", "3"],
-  [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
+  ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+  ["0", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
+  ["1", "1", "1", "1", "1", "1", "2", "2", "3", "3"],
+  [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
 )
 const constrainedNodeId = "1"
 
@@ -35,6 +35,7 @@ const ContactGraph = ({onContactPress} : ContactGraphProps) => {
           handleSearch(text, graph)
          }
         }
+        onSubmitEditing={() => handleQuery(onContactPress)}
       />
     <View style={styles.graphContainer}>
     <ForceDirectedGraph graph={graph} constrainedNodeId={constrainedNodeId} onContactPress={onContactPress} />
@@ -48,6 +49,29 @@ export default ContactGraph
 
 function handleSearch(text: string, graph: Graph): void {
   // TODO: Implement regex search for tags and names and update the graph accordingly
-  console.log(text)
-  console.log(graph)
+  if (text === "") {
+    const nodes = graph.getNodes()
+    for (const node of nodes) {
+      node.selected = false
+    }
+    return
+  }
+  const nodes = graph.getNodes()
+  for (const node of nodes) {
+    if (node.id.includes(text)) {
+      node.selected = true
+    }
+    else {
+      node.selected = false
+    }
+  }
+}
+
+function handleQuery(callback: (uid: string) => void): void {
+  for (const node of graph.getNodes()) {
+    if (node.selected) {
+      callback(node.id)
+      return
+    }
+  }
 }

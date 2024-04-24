@@ -7,6 +7,7 @@ interface Node {
   y: number  // y-coordinate
   dx: number  // x-velocity
   dy: number  // y-velocity
+  selected?: boolean  // Is the node selected?
 }
 
 /**
