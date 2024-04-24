@@ -19,7 +19,7 @@ const dummyData : ContactData = {
 }
 
 const generateLink = (contactData : ContactData) => {
-  return Linking.createURL("Uniconnect/contact/" + contactData.uid)
+  return Linking.createURL("uniconnect/contact/" + contactData.uid)
 }
 
 export const MyQrCodeScreen = () => {
