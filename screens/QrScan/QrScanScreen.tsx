@@ -1,6 +1,7 @@
-import { View, Text, Button } from "react-native"
+import { View, Text, TouchableOpacity } from "react-native"
 import { Camera } from "expo-camera"
 import { styles } from "./styles"
+import { globalStyles } from "../../assets/global/globalStyles"
 
 const QrScanScreen = () => {
   const [permission, requestPermission] = Camera.useCameraPermissions()
@@ -14,8 +15,19 @@ const QrScanScreen = () => {
     // Camera permissions are not granted yet
     return (
       <View style={styles.container}>
-        <Text style={styles.container}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <View style={styles.requestAuthorizationContainer}>
+          <Text style={[globalStyles.boldText, styles.authorizationText]}>
+            We need your permission to show the camera
+          </Text>
+          <TouchableOpacity
+            style={styles.requestAuthorizationsButton}
+            onPress={requestPermission}
+          >
+            <Text style={globalStyles.text}>
+              Authorize
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     )
   }
