@@ -46,7 +46,7 @@ const DEFAULT_NODE_SIZE_INCREMENT = 2 // Increment in the size of the nodes
 
 const DEFAULT_LINK_COLOR = "black" // Default color of the links
 const DEFAULT_CLICKED_NODE_ID = ""
-
+const INITIAL_SCALE = 1 // Initial scale of the graph
 const MAX_ITERATIONS = 1000 // Maximum number of iterations for the used algorithn
 
 const WIDTH = Dimensions.get("window").width // Width of the screen
@@ -69,7 +69,9 @@ const TOTAL_FRAMES = FPS * (ANIMATION_DURATION / 1000) // Total number of frames
 const ForceDirectedGraph: React.FC<{
   graph: Graph
   constrainedNodeId: string
-}> = ({ graph, constrainedNodeId }) => {
+  onContactPress: (uid: string) => void
+}> = ({ graph, constrainedNodeId, onContactPress}) => {
+
   // States to store the nodes, links, sizes and loading status
   const [nodes, setNodes] = useState<Node[]>([])
   const [links, setLinks] = useState<Link[]>([])
@@ -81,8 +83,8 @@ const ForceDirectedGraph: React.FC<{
   const [clickedNodeID, setClickedNodeID] = useState<string>(
     DEFAULT_CLICKED_NODE_ID,
   ) // Node ID of clicked node
-  const [scale, setScale] = useState(1)
-  const [lastScale, setLastScale] = useState(1) // Add state to keep track of last scale
+  const [scale, setScale] = useState(INITIAL_SCALE)
+  const [lastScale, setLastScale] = useState(INITIAL_SCALE) // Add state to keep track of last scale
 
   const [gestureEnabled, setGestureEnabled] = useState(true) // Add state to keep track of animation start
 
@@ -96,23 +98,31 @@ const ForceDirectedGraph: React.FC<{
   // Use effect to update the graph
   useEffect(() => {
     // Get the initial links, nodes and sizes
+    
     const initialLinks = graph.getLinks()
     const initialNodes = graph.getNodes()
-    const initialSizes = setNodesSizes([...initialLinks])
+    const initialSizes = setNodesSizes(initialLinks)
     // Set the links, nodes and sizes
-    setLinks([...initialLinks])
-    setNodes(
-      fruchtermanReingold(
-        [...initialNodes],
-        initialLinks,
-        constrainedNodeId,
-        WIDTH,
-        HEIGHT,
-        MAX_ITERATIONS,
-      ),
-    )
+    setLinks(initialLinks)
+    if (graph.getInitialized() === false) {
+      setNodes(
+        fruchtermanReingold(
+          initialNodes,
+          initialLinks,
+          constrainedNodeId,
+          WIDTH,
+          HEIGHT,
+          MAX_ITERATIONS,
+        ),
+      )
+      graph.setInitialized(true)
+    }
+    else {
+      setNodes(initialNodes)
+    }
     setSizes(initialSizes)
     setLoad(true)
+
   }, [graph, constrainedNodeId])
 
   // If the graph is not loaded, display an activity indicator
@@ -142,7 +152,6 @@ const ForceDirectedGraph: React.FC<{
           y: coordY(node),
         })),
       )
-
       setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
       setTotalOffset({ x: 0, y: 0 })
     }
@@ -180,7 +189,6 @@ const ForceDirectedGraph: React.FC<{
   const nodeZoomIn = (clickedNode: Node) => {
 
     setGestureEnabled(false) // Set animation started to true
-    setModalVisible(true)
 
     let currentFrame = 0
 
@@ -327,6 +335,7 @@ const ForceDirectedGraph: React.FC<{
         }
         onPressOut={() =>{
           handlePressOut(() => {
+            setModalVisible(true)
             nodeZoomIn(node)
           })
         }
@@ -378,7 +387,10 @@ const ForceDirectedGraph: React.FC<{
                       ]
                     }
                     onPress={() => {
-                      console.warn("Pressed")
+                      setModalVisible(false)
+                      setGestureEnabled(true)
+                      onContactPress(clickedNodeID)
+                      setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
                     }}
                     testID="modal-profile-picture"
                   />
@@ -430,6 +442,7 @@ const ForceDirectedGraph: React.FC<{
     </View>
   )
 }
+
 
 export default ForceDirectedGraph
 

@@ -33,7 +33,9 @@ const ExploreScreen = ({navigation} : ContactListScreenProps ) => {
       }
 
       {selectedTab === "Graph View" && 
-        <ContactGraph />
+        <ContactGraph 
+          onContactPress={(uid) => navigation.navigate("ExternalProfile", {uid: uid})} 
+        />
       }
       
     </View>

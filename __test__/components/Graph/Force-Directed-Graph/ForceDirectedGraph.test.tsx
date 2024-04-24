@@ -25,6 +25,12 @@ describe("ForceDirectedGraph", () => {
   let graph: Graph
   let constrainedNodeId: string
 
+  const mockFunc = jest.fn()
+
+    beforeEach(() => {
+        mockFunc.mockClear()
+    })
+
   beforeEach(() => {
     graph = new Graph(["1", "2", "3"], ["1", "2"], ["2", "3"], [1, 2])
     constrainedNodeId = "2"
@@ -39,6 +45,7 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
+        onContactPress={mockFunc}
       />,
     )
     expect(component).toBeTruthy()
@@ -49,6 +56,7 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
+        onContactPress={mockFunc}
       />,
     )
 
@@ -111,6 +119,7 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
+        onContactPress={mockFunc}
       />,
     )
 
@@ -147,10 +156,6 @@ describe("ForceDirectedGraph", () => {
     const modale_image = component.getByTestId("modal-profile-picture")
     expect(modale_image).toBeTruthy()
 
-    act (() => {
-      fireEvent(modale_image, "press")
-    })
-
     const quitModal = component.getByTestId("modal-touchable")
     expect(quitModal).toBeTruthy()
 
@@ -174,6 +179,7 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
+        onContactPress={mockFunc}
       />,
     )
 
@@ -198,6 +204,7 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
+        onContactPress={mockFunc}
       />,
     )
 
@@ -229,6 +236,7 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
+        onContactPress={mockFunc}
       />,
     )
     
