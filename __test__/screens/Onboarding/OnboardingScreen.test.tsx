@@ -105,32 +105,6 @@ describe('OnboardingScreen', () => {
     expect(loginButton).toBeTruthy()
   })
 
-  /*
-  it('on Google Login press, login succesful navigates to the home screen', async () => {
-    const { getByText } = render(
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <OnboardingScreen />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    )
-    const googleButton = getByText('Continue with google')
-
-    await act(async () => {
-      fireEvent.press(googleButton)
-    })
-
-    await waitFor(() => {
-      //expect navigation to be called'
-      //expect(GoogleSignin.signIn).toHaveBeenCalled()
-      expect(mockNavigate).toHaveBeenCalledWith('HomeTabs')
-    })
-    
-    expect(googleButton).toBeTruthy()
-
-  })
-  */
-
   //on log in press, login failed alert is called
   it('on log in press, login failed alert is called',async () => {
     (login.loginEmailPassword as jest.Mock).mockResolvedValue(false)
