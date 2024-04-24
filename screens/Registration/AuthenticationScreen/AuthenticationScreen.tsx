@@ -149,7 +149,7 @@ const AuthenticationScreen: React.FC = () => {
           <Text style={globalStyles.boldText}>Send confirmation e-mail</Text>
         </TouchableOpacity>
 
-        <LowBar nextScreen="HomeTabs" />
+        <LowBar nextScreen="HomeTabs" buttonText="Finish"/>
       </View>
     </TouchableWithoutFeedback>
   )
