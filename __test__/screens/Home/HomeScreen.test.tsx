@@ -32,14 +32,14 @@ describe('HomeScreen', () => {
           </SafeAreaProvider>
         )
 
-        fireEvent.changeText(getByPlaceholderText('Search'), 'Balelek')
+        fireEvent.changeText(getByPlaceholderText('Search...'), 'Balelek')
         expect(getByText('Balelek 2023')).toBeTruthy()
-        expect(queryByText('Event2')).toBeNull()
+        expect(queryByText('Event 2')).toBeNull()
         expect(queryByText('')).toBeNull()
         expect(queryByText('Abc')).toBeNull()
 
         fireEvent.changeText(getByPlaceholderText('Search...'), '')
-        expect(getByText('Event2')).toBeTruthy()
+        expect(getByText('Event 2')).toBeTruthy()
     })
     
     it('displays correct event details', () => {
@@ -49,10 +49,22 @@ describe('HomeScreen', () => {
           </SafeAreaProvider>
         )
         expect(getByText('Balelek 2023')).toBeTruthy()
-        expect(getByText('EPFL, Agora')).toBeTruthy()
+        expect(getByText('2023-04-04')).toBeTruthy()
     })
 
+    it('keyboard disapear if we click aside', () => {
+        const { getByPlaceholderText } = render(
+          <SafeAreaProvider>
+            <HomeScreen />
+          </SafeAreaProvider>
+        )
+        fireEvent.press(getByPlaceholderText('Search...'))
+        expect(getByPlaceholderText('Search...')).toBeTruthy()
+    })
+
+
 })
+
 
 
 

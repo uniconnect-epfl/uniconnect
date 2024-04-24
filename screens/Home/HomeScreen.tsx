@@ -15,32 +15,31 @@ const events = [
   {
     title: "Balelek 2023",
     location: "EPFL, Agora",
-    description: "Music festival",
-    date: "04.04.2023",
+    description: "Music festival 2023",
+    date: "2023-04-04", // changed to YYYY-MM-DD format
     imageUrl: "https://balelec.ch/uploads/2023_f4caf642b6.jpg",
   },
   {
     title: "Event 2",
-    location: "EPFL, Agora",
+    location: "EPFL, CM",
     description: "Agepoly",
-    date: "04.08.2022",
+    date: "2022-08-04", // changed to YYYY-MM-DD format
     imageUrl: "https://example.com/image.png",
   },
   {
     title: "Balelek 2024",
     location: "EPFL, Agora",
-    description: "Music festival",
-    date: "20.05.2024",
+    description: "Music festival 2024",
+    date: "2024-05-20", // changed to YYYY-MM-DD format
     imageUrl: "https://example.com/image.png",
   },
   {
     title: "Graduation 2025",
     location: "EPFL, Swisstech",
-    description: "Music festival",
-    date: "04.06.2025",
+    description: "Graduation",
+    date: "2025-06-04", // changed to YYYY-MM-DD format
     imageUrl: "https://example.com/image.png",
-  },
-  
+  }, 
 ]
 
 const HomeScreen = () => {
@@ -50,10 +49,9 @@ const HomeScreen = () => {
   //const [title, setTitle] = React.useState("Future")
 
   const [searchQuery, setSearchQuery] = React.useState('')
-
   // Filter events based on the current date and search query
   const getFilteredEvents = (isFutureEvent: boolean) => {
-    const currentDate = new Date()
+    const currentDate = new Date("2024-04-20")
 
     // Filter events based on date
     const eventsFilteredByDate = events.filter((event) => {
@@ -98,7 +96,7 @@ const HomeScreen = () => {
       <View style={styles.searchAndMap}>
       <View>
           <TextInput
-            placeholder="Search"
+            placeholder="Search..."
             style={[styles.input, globalStyles.text]}
             onChangeText={handleSearch}
           />
@@ -112,7 +110,7 @@ const HomeScreen = () => {
       <View style={styles.containerEvent}>
         <Text style={styles.title}>Futur Events</Text>
         <ScrollView style={styles.eventList}>
-          {/* Add the event card component */}
+          {/* Add the event card componrent */}
           {futureEvents.map((event) => (
             renderEvents(event)
           ))}

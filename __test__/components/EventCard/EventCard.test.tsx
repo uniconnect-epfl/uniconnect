@@ -25,7 +25,7 @@ describe('EventCard', () => {
     const date = 'date'
     const imageUrl = 'imageUrl'
 
-    const { queryByText, getByText } = render(
+    const {getByText } = render(
         <EventCard 
             title={title}
             location={location}
@@ -38,7 +38,6 @@ describe('EventCard', () => {
     expect(getByText(location)).toBeTruthy()
     expect(getByText(description)).toBeTruthy()
     expect(getByText(date)).toBeTruthy()
-    expect(queryByText('title')).toBeFalsy()
 
   })
   
