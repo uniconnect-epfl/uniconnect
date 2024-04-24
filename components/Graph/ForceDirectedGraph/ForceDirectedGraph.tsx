@@ -2,10 +2,7 @@ import React, { useEffect, useRef, useState } from "react"
 import {
   ActivityIndicator,
   View,
-  Dimensions,
-  Modal,
-  Text,
-  TouchableWithoutFeedback,
+  Dimensions
 } from "react-native"
 import Svg, { Circle, G, Line, Text as SVGText, Image } from "react-native-svg"
 
@@ -20,7 +17,7 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler"
 
-import { peach } from "../../../assets/colors/colors"
+import { black, peach } from "../../../assets/colors/colors"
 
 import profile_picture_0 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-0.png"
 import profile_picture_1 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-1.png"
@@ -46,7 +43,7 @@ const NODE_HITBOX_SIZE = 20 // Hitbox size of the nodes
 const DEFAULT_NODE_SIZE = 10 // Default size of the nodes
 const DEFAULT_NODE_SIZE_INCREMENT = 2 // Increment in the size of the nodes
 
-const DEFAULT_LINK_COLOR = "black" // Default color of the links
+const DEFAULT_LINK_COLOR = black // Default color of the links
 const DEFAULT_CLICKED_NODE_ID = ""
 const INITIAL_SCALE = 1 // Initial scale of the graph
 const MAX_ITERATIONS = 1000 // Maximum number of iterations for the used algorithn
@@ -71,8 +68,8 @@ const TOTAL_FRAMES = FPS * (ANIMATION_DURATION / 1000) // Total number of frames
 const ForceDirectedGraph: React.FC<{
   graph: Graph
   constrainedNodeId: string
-  onContactPress: (uid: string) => void
-}> = ({ graph, constrainedNodeId, onContactPress}) => {
+  onModalPress: (uid: string) => void
+}> = ({ graph, constrainedNodeId, onModalPress}) => {
 
   // States to store the nodes, links, sizes and loading status
   const [nodes, setNodes] = useState<Node[]>([])
@@ -89,8 +86,6 @@ const ForceDirectedGraph: React.FC<{
   const [lastScale, setLastScale] = useState(INITIAL_SCALE) // Add state to keep track of last scale
 
   const [gestureEnabled, setGestureEnabled] = useState(true) // Add state to keep track of animation start
-
-  const [modalVisible, setModalVisible] = useState(false)
 
   const pressStartRef = useRef(0)
 
@@ -344,7 +339,8 @@ const ForceDirectedGraph: React.FC<{
         }
         onPressOut={() =>{
           handlePressOut(() => {
-            setModalVisible(true)
+            onModalPress(node.id)
+            setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
             nodeZoomIn(node)
           })
         }
@@ -368,51 +364,6 @@ const ForceDirectedGraph: React.FC<{
 
   return (
     <View style={styles.container}>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        testID="modal"
-      >
-        <TouchableWithoutFeedback
-          onPress={() => {
-            setModalVisible(false)
-            setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-            setGestureEnabled(true)
-          }}
-          testID="modal-touchable"
-        >
-          <View style={styles.modalContainer}>
-            <TouchableWithoutFeedback>
-              <View style={styles.modalView}>
-                <Svg style={styles.modalProfilePicture}>
-                  <Image
-                    key={clickedNodeID + "modalimage"}
-                    width={80}
-                    height={80}
-                    href={
-                      PROFILE_PICTURES[
-                        parseInt(clickedNodeID) % PROFILE_PICTURES.length
-                      ]
-                    }
-                    onPress={() => {
-                      setModalVisible(false)
-                      setGestureEnabled(true)
-                      onContactPress(clickedNodeID)
-                      setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-                    }}
-                    testID="modal-profile-picture"
-                  />
-                </Svg>
-                <Text style={styles.modalProfileName}>
-                  Node ID: {clickedNodeID}
-                </Text>
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-
       <GestureHandlerRootView style={styles.container}>
         <PinchGestureHandler
           ref={pinchRef}

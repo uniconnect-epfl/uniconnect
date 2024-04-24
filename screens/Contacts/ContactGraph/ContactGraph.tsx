@@ -5,6 +5,9 @@ import Graph from "../../../components/Graph/Graph"
 import ForceDirectedGraph from "../../../components/Graph/ForceDirectedGraph/ForceDirectedGraph"
 import { useState } from "react"
 
+import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
+
+import {Node} from "../../../components/Graph/Graph"
 
 const graph = new Graph(
   ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
@@ -22,6 +25,21 @@ const ContactGraph = ({onContactPress} : ContactGraphProps) => {
 
   const [searchText, setSearchText] = useState("")
 
+  const [clickedNode, setClickedNode] = useState<Node >(graph.getNodes()[0])
+
+  const [modalVisible, setModalVisible] = useState(false)
+  const onModalPress = (uid: string) => {
+    const node = graph.getNodeById(uid)
+    if (node) {
+      setClickedNode(node)
+      setModalVisible(true)
+      console.log(modalVisible)
+    }
+  }
+
+  const onPressOut = () => {
+    setModalVisible(false)
+  }
   return (
     
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -37,8 +55,11 @@ const ContactGraph = ({onContactPress} : ContactGraphProps) => {
         }
         onSubmitEditing={() => handleQuery(onContactPress)}
       />
+    
+    <NodeModal node={clickedNode} visible={modalVisible} onPressOut={onPressOut} onContactPress={onContactPress} />
     <View style={styles.graphContainer}>
-    <ForceDirectedGraph graph={graph} constrainedNodeId={constrainedNodeId} onContactPress={onContactPress} />
+
+    <ForceDirectedGraph graph={graph} constrainedNodeId={constrainedNodeId} onModalPress={onModalPress} />
     </View>
     </View>
     </TouchableWithoutFeedback>

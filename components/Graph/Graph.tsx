@@ -181,6 +181,13 @@ export default class Graph {
     }) 
     this.setInitialized(false)
   }
+
+
+  getNodeById(id: string): Node | undefined {
+    return this.nodes.find((node: Node): boolean => {
+      return node.id === id 
+    }) 
+  }
 }
 
 export type { Node, Link } 

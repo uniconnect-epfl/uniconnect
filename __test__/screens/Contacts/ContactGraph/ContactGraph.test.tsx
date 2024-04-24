@@ -27,10 +27,85 @@ describe("ContactGraph", () => {
         })
 
         act(() => {
-        fireEvent.changeText(searchBar, "Machine Learning")
+        fireEvent.changeText(searchBar, "")
         })
 
-        expect(searchBar.props.value).toBe("Machine Learning")
+        expect(searchBar.props.value).toBe("")
+
+        act(() => {
+        fireEvent.changeText(searchBar, "0")
+        })
+
+        expect(searchBar.props.value).toBe("0")
+
+        act (() => {
+        fireEvent(searchBar, "submitEditing")
+        })
+    })
+
+    it("clicking a node opens a modal", () => {
+        const component = render(<ContactGraph onContactPress={() => mockFunc} />)
+        expect(component).toBeTruthy()
+
+        const node = component.getByTestId("node-0")
+        expect(node).toBeTruthy()
+
+        act(() => {
+            fireEvent(node, "pressIn")
+            })
+        
+            jest.useFakeTimers()
+            act(() => {
+            jest.advanceTimersByTime(50)
+            })
+        
+            act (() => {
+              fireEvent(node, "pressOut")
+              jest.advanceTimersByTime(500)
+            })
+        
+            
+            jest.useRealTimers()  
+
+        const modal = component.getByTestId("modal")
+        expect(modal).toBeTruthy()
     })
   
+    it("clicking outside the modal closes it", () => {
+        const component = render(<ContactGraph onContactPress={() => mockFunc} />)
+        expect(component).toBeTruthy()
+
+        const node = component.getByTestId("node-0")
+        expect(node).toBeTruthy()
+
+        act(() => {
+            fireEvent(node, "pressIn")
+            })
+        
+            jest.useFakeTimers()
+            act(() => {
+            jest.advanceTimersByTime(50)
+            })
+        
+            act (() => {
+              fireEvent(node, "pressOut")
+              jest.advanceTimersByTime(500)
+            })
+        
+            
+            jest.useRealTimers()  
+
+        const modal = component.getByTestId("modal")
+        expect(modal).toBeTruthy()
+
+        const modalTouchable = component.getByTestId("modal-touchable")
+        expect(modalTouchable).toBeTruthy()
+
+        act(() => {
+            fireEvent(modalTouchable, "press")
+            })
+
+        expect(component.queryByTestId("modal")).toBeNull()
+    })
+
 })
