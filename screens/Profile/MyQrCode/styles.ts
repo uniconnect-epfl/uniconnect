@@ -2,6 +2,14 @@ import { StyleSheet } from "react-native"
 import { lightPeach } from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
+    contactContainer: {
+        alignItems: "center",
+        backgroundColor: lightPeach,
+        borderRadius: 30,
+        height: "50%",
+        justifyContent: "center",
+        width: "80%",
+    },
     container: {
         alignItems: "center",
         flex: 1,
@@ -9,10 +17,8 @@ export const styles = StyleSheet.create({
     },
     qrContainer: {
         alignItems: "center",
-        backgroundColor: lightPeach,
-        height: "40%",
+        height: "70%",
         justifyContent: "center",
-        width: "80%",
     },
     textContainer: {
         alignItems: "center",
