@@ -7,10 +7,12 @@ import { useNavigation } from "@react-navigation/native"
 
 interface LowBarProps {
   nextScreen?: string
+  buttonText?: string
 }
 
-const LowBar: React.FC<LowBarProps> = ({ nextScreen }) => {
+const LowBar: React.FC<LowBarProps> = ({ nextScreen, buttonText }) => {
   const navigation = useNavigation()
+  const textB = buttonText ? buttonText : "Next"
 
   return (
     <View style={styles.nextBar}>
@@ -25,7 +27,7 @@ const LowBar: React.FC<LowBarProps> = ({ nextScreen }) => {
         style={styles.buttonSmall}
         onPress={() => navigation.navigate(nextScreen as never)}
       >
-        <Text style={[styles.buttonText, globalStyles.text]}>Next</Text>
+        <Text style={[styles.buttonText, globalStyles.text]}>{textB}</Text>
       </TouchableOpacity>
     </View>
   )
