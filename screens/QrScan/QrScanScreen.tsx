@@ -1,8 +1,8 @@
+import React, { useEffect, useState } from "react"
 import { View, Text, TouchableOpacity, Alert, ActivityIndicator } from "react-native"
 import { BarCodeScanningResult, Camera } from "expo-camera"
 import { styles } from "./styles"
 import { globalStyles } from "../../assets/global/globalStyles"
-import { useEffect, useState } from "react"
 import { useIsFocused } from "@react-navigation/native"
 import { peach } from "../../assets/colors/colors"
 
