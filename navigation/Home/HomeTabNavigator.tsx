@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { ContactListScreen } from '../../screens/Contacts/ContactListScreen'
 import HomeScreen from '../../screens/Home/HomeScreen'
 import { TabBar } from '../../components/TabBar/TabBar'
 import { Header } from '../../components/Header/Header'
+import ExploreScreen from '../../screens/Contacts/ExploreScreen'
 
 const Tab = createBottomTabNavigator()
 
@@ -18,8 +18,8 @@ const HomeTabNavigator = () => {
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen}/>
-      <Tab.Screen name="Connections" component={ContactListScreen}/>
-      <Tab.Screen name="Explore" component={ContactListScreen}/>
+      <Tab.Screen name="Connections" component={ExploreScreen}/>
+      <Tab.Screen name="Explore" component={ExploreScreen}/>
     </Tab.Navigator>
   )
 }

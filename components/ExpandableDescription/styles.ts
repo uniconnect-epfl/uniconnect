@@ -1,11 +1,14 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
     button:{
-        alignItems: 'center'
+        alignItems: "center"
     },
-    text:{
-        fontSize: 12,
-        paddingHorizontal: 10,
+    container: {
+        alignItems: "center",
+        justifyContent: "center",
     },
+    text: {
+        minWidth: "100%",
+    }
 })

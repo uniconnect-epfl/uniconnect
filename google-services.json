@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "618676460374",
+    "project_id": "uniconnect-4f311",
+    "storage_bucket": "uniconnect-4f311.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:618676460374:android:d607b67cd8f4eb531fd4f7",
+        "android_client_info": {
+          "package_name": "com.epfl.uniconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "618676460374-hoqqpkp3k8j3psq88fmkdlvle4n2aa1s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.epfl.uniconnect",
+            "certificate_hash": "2779ce91a84c226537ae6f66d689e33d6ce83a97"
+          }
+        },
+        {
+          "client_id": "618676460374-5h642avt17te1uj9qo8imr233gb6n3qj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEa0nvfzrdPLhvWzvMKogKQuA33IiqnUU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "618676460374-5h642avt17te1uj9qo8imr233gb6n3qj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "618676460374-9lv7cou7heq4l43tlth9tonkp0l7b007.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.epfl.uniconnect"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

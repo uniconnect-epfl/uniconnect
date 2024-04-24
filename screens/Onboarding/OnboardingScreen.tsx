@@ -7,20 +7,24 @@ import {
   Image,
   Keyboard,
   TouchableWithoutFeedback,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native'
-import { Ionicons } from '@expo/vector-icons'
-import styles from './styles' 
-import { globalStyles } from '../../assets/global/globalStyles' 
+import styles from './styles'
+import { globalStyles } from '../../assets/global/globalStyles'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
 import { loginEmailPassword } from "../../firebase/Login"
+import { GoogleSignInButton } from '../../components/GoogleSignInButton/GoogleSignInButton'
+
+
+
 
 const OnboardingScreen: React.FC = () => {
   const navigation = useNavigation()
   const insets = useSafeAreaInsets()
   const nextRef = useRef<TextInput>(null)
 
+  //States for Firebase auth
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -29,17 +33,16 @@ const OnboardingScreen: React.FC = () => {
     setLoading(true)
 
     try {
-    const val = await loginEmailPassword(email, password)
-
-    if (val) {
-      navigation.navigate("HomeTabs" as never)
-    } else {
-      alert("Login failed!")
-    }
+      const val = await loginEmailPassword(email, password)
+      if (val) {
+        navigation.navigate("HomeTabs" as never)
+      } else {
+        alert("Login failed!")
+      }
     } catch (error) {
-    alert("An error occurred during login.")
+      alert("An error occurred during login.")
     } finally {
-    setLoading(false)
+      setLoading(false)
     }
   }
 
@@ -85,9 +88,9 @@ const OnboardingScreen: React.FC = () => {
           disabled={loading}
         >
           {loading ? (
-          <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
-          <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
+            <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
           )}
         </TouchableOpacity>
 
@@ -99,20 +102,7 @@ const OnboardingScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        {/* Continue with Google */}
-        <TouchableOpacity style={styles.buttonGoogle}>
-          <View style={styles.buttonPlaceholder}>
-            <Ionicons
-              name="logo-google"
-              size={30}
-              color="black"
-              style={styles.icon}
-            />
-            <Text style={[styles.buttonText, globalStyles.boldText]}>
-              Continue with google
-            </Text>
-          </View>
-        </TouchableOpacity>
+        <GoogleSignInButton/>
 
         <TouchableOpacity
           style={[styles.footer, { bottom: insets.bottom }]}
