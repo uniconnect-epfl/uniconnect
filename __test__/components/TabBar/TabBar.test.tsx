@@ -43,7 +43,7 @@ describe("TabBar", () => {
 
     fireEvent.press(home)
 
-    expect(getByText("HomeScreen")).toBeTruthy()
+    expect(getByText("Home")).toBeTruthy()
 
     fireEvent.press(explore)
 

@@ -60,13 +60,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
-  icon_container: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingTop: 20,
-    width: '100%',
-  },
 
   image: {
     alignSelf: 'center',

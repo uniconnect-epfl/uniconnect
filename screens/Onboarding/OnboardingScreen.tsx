@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState } from 'react'
 import {
   Text,
   View,
@@ -14,9 +14,7 @@ import { globalStyles } from '../../assets/global/globalStyles'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
 import { loginEmailPassword } from "../../firebase/Login"
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
-import { User } from '@react-native-google-signin/google-signin'
-import { Ionicons } from '@expo/vector-icons'
+import { GoogleSignInButton } from '../../components/GoogleSignInButton/GoogleSignInButton'
 
 
 
@@ -31,37 +29,11 @@ const OnboardingScreen: React.FC = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
-  //state for Google Sign In
-  const [error, setError] = useState<string | null>("")
-  const [userInfo, setUserInfo] = useState<User | null>(null)
-
-
-  useEffect(() => {
-    GoogleSignin.configure({ webClientId: "618676460374-5h642avt17te1uj9qo8imr233gb6n3qj.apps.googleusercontent.com" })
-  }, []
-  )
-
-  const googleSignin = async ()  : Promise<User> => {
-    try {
-      await GoogleSignin.hasPlayServices()
-      const user: User = await GoogleSignin.signIn()
-      setUserInfo(user)
-      setError(null)
-      navigation.navigate("HomeTabs" as never)
-    } catch (e) {
-      setError((e as string))
-      alert("An error occurred during Google Sign In." + error)
-    }
-    return userInfo as User
-  }
-
-
   const loginUser = async () => {
     setLoading(true)
 
     try {
       const val = await loginEmailPassword(email, password)
-
       if (val) {
         navigation.navigate("HomeTabs" as never)
       } else {
@@ -130,20 +102,7 @@ const OnboardingScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.buttonGoogle}
-          onPress={googleSignin}>
-          <View style={styles.buttonPlaceholder}>
-            <Ionicons
-              name="logo-google"
-              size={30}
-              color="black"
-              style={styles.icon}
-            />
-            <Text style={[styles.buttonText, globalStyles.boldText]}>
-              Continue with google
-            </Text>
-          </View>
-        </TouchableOpacity>
+        <GoogleSignInButton/>
 
         <TouchableOpacity
           style={[styles.footer, { bottom: insets.bottom }]}

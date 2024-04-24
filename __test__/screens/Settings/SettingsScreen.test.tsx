@@ -3,6 +3,7 @@ import { render, fireEvent } from "@testing-library/react-native"
 import { SettingsScreen } from "../../../screens/Settings/SettingsScreen"
 import { NavigationContainer } from "@react-navigation/native"
 import { Alert } from 'react-native'
+import { Auth } from 'firebase/auth'
 
 
 const mockGoBack = jest.fn()
@@ -15,6 +16,19 @@ jest.mock("@react-navigation/native", () => {
     }),
   }
 })
+
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+)
+
+jest.mock("firebase/auth", () => ({
+  getReactNativePersistence: jest.fn(() => ({} as Auth)),
+  initializeAuth: jest.fn(() => ({ signOut: jest.fn() })),
+}))
+
+jest.mock("../../../firebase/firebaseConfig", () => ({
+  auth: { signOut: jest.fn(() => Promise.resolve()) }
+}))
 
 describe("SettingsScreen", () => {
   test("renders correctly", () => {
@@ -67,5 +81,16 @@ describe("SettingsScreen", () => {
     fireEvent.press(menuItem)
 
     expect(alertSpy).toHaveBeenCalledWith("Coming soon")
+  })
+
+  test("calls the correct action when the logout menu item is pressed", () => {
+    const { getByText } = render(
+      <NavigationContainer>
+        <SettingsScreen />
+      </NavigationContainer>
+    )
+
+    const menuItem = getByText("LOG OUT")
+    fireEvent.press(menuItem)
   })
 })

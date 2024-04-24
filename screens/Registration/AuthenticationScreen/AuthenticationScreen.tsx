@@ -21,6 +21,7 @@ import LowBar from "../../../components/LowBar/LowBar"
 import { Entypo } from "@expo/vector-icons"
 import { AntDesign } from "@expo/vector-icons"
 import { red, green } from "../../../assets/colors/colors"
+import { createAccount, storeEmail } from "../../../firebase/Registration"
 
 const AuthenticationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
@@ -52,11 +53,17 @@ const AuthenticationScreen: React.FC = () => {
   /**
    * Function that submits the user data to the DB
    */
-  const submitForm = () => {
+  const submitForm = async () => {
     if (isPassword() && doPasswordsMatch() && isEmail() && doEmailsMatch()) {
-      return true
+      createAccount(email, password)
+        .then(() => console.log('Account created. Check email'))
+        .catch((error: Error) => console.error('There was an error', error))
+
+      storeEmail(email)
+        .then(() => console.log('Email stored successfully'))
+        .catch((error: Error) => console.error('Failed to store email:', error))
     } else {
-      return false
+      alert("Please check your data")
     }
   }
 
@@ -142,7 +149,7 @@ const AuthenticationScreen: React.FC = () => {
           <Text style={globalStyles.boldText}>Send confirmation e-mail</Text>
         </TouchableOpacity>
 
-        <LowBar nextScreen="HomeTabs" />
+        <LowBar nextScreen="HomeTabs" buttonText="Finish"/>
       </View>
     </TouchableWithoutFeedback>
   )
