@@ -1,13 +1,11 @@
 import { View, TextInput, TouchableWithoutFeedback, Keyboard } from "react-native"
 import { styles } from "./styles"
-import Graph from "../../../components/Graph/Graph"
+import Graph, { Node } from "../../../components/Graph/Graph"
 
 import ForceDirectedGraph from "../../../components/Graph/ForceDirectedGraph/ForceDirectedGraph"
 import { useState } from "react"
 
 import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
-
-import {Node} from "../../../components/Graph/Graph"
 
 const graph = new Graph(
   ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
@@ -69,13 +67,10 @@ const ContactGraph = ({onContactPress} : ContactGraphProps) => {
 export default ContactGraph
 
 function handleSearch(text: string, graph: Graph): void {
-  // TODO: Implement regex search for tags and names and update the graph accordingly
   if (text === "") {
     for (const node of graph.getNodes()) {
       node.selected = false
-
     }
-    return
   }
   else {
     for (const node of graph.getNodes()) {
