@@ -1,5 +1,5 @@
 import React from "react"
-import { render, fireEvent } from "@testing-library/react-native"
+import { render, fireEvent, act, waitFor } from "@testing-library/react-native"
 import ExploreScreen from "../../../screens/Contacts/ExploreScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { black, lightGray } from "../../../assets/colors/colors"
@@ -35,6 +35,17 @@ jest.mock("react-native-safe-area-context", () => {
     SafeAreaConsumer: jest.fn(({children}) => children(inset)),
     useSafeAreaInsets: jest.fn(() => inset),
     useSafeAreaFrame: jest.fn(() => ({x: 0, y: 0, width: 390, height: 844})),
+  }
+})
+
+jest.mock("react-native-gesture-handler", () => {
+  return {
+    State: {
+      END: 5,
+    },
+    PanGestureHandler: 'View',
+    PinchGestureHandler: 'View',
+    GestureHandlerRootView: 'View',
   }
 })
 
@@ -84,6 +95,61 @@ describe("ExploreScreen", () => {
       fireEvent.press(button)
       expect(mockNavigation.navigate).toHaveBeenCalledWith("ExternalProfile", {"uid": "1"})
     })
+
+    it ("navigates to profile screen when clicking on contact in graph view", async () => {
+      const { getByText, getByTestId, queryByTestId } = render(
+        <SafeAreaProvider>
+          <NavigationContainer>
+            <ExploreScreen navigation={mockNavigation}/>
+          </NavigationContainer>
+        </SafeAreaProvider>
+      )
+      fireEvent.press(getByText("Graph View"))
+
+      const panHandler = getByTestId("pan-handler")
+      const node1 = getByTestId("node-1")
+
+    expect(node1).toBeTruthy()
+    expect(panHandler).toBeTruthy()
+    expect(panHandler.props.enabled).toBe(true)
+
+    act(() => {
+    fireEvent(node1, "pressIn")
+    })
+
+    jest.useFakeTimers()
+    act(() => {
+    jest.advanceTimersByTime(50)
+    })
+
+    act (() => {
+      fireEvent(node1, "pressOut")
+      jest.advanceTimersByTime(500)
+    })
+
+    await waitFor(() => {
+      const modal = getByTestId("modal")
+      expect(modal).toBeTruthy()
+      expect(modal.props.visible).toBe(true)
+    }, {timeout: 10})
+
+    jest.useRealTimers()    
+
+    const modale_image = getByTestId("modal-profile-picture")
+    expect(modale_image).toBeTruthy()
+
+    act(() => {
+    fireEvent(modale_image, "press")
+    })
+
+    await waitFor(() => {
+      expect(queryByTestId("modal")).toBeNull()
+    }, {timeout: 10})
+
+    jest.useRealTimers()
+
+    expect(mockNavigation.navigate).toHaveBeenCalledWith("ExternalProfile", {"uid": "1"})
+      })
 
 })
 

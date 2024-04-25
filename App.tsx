@@ -11,14 +11,25 @@ import {
   JetBrainsMono_700Bold,
 } from "@expo-google-fonts/jetbrains-mono"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { StatusBar } from 'expo-status-bar'
+import { StatusBar } from "expo-status-bar"
 import * as WebBrowser from "expo-web-browser"
+import * as Linking from "expo-linking"
+import HomeScreen from "./screens/Home/HomeScreen"
 
 SplashScreen.preventAutoHideAsync()
 
 WebBrowser.maybeCompleteAuthSession()
 
 export default function App() {
+  const linking = {
+    prefixes: [Linking.createURL("/")],
+    config: {
+      screens: {
+        AddContact: "uniconnect/contact/:uid",
+      },
+    },
+  }
+
   const [fontsLoaded] = useFonts({
     JetBrainsMono_100Thin_Italic,
     JetBrainsMono_400Regular,
@@ -40,11 +51,11 @@ export default function App() {
   return (
     <GestureHandlerRootView style={styles.gestureHandler}>
       <StatusBar style="dark" />
-      <NavigationContainer>
-        <SafeAreaProvider>
+      <SafeAreaProvider>
+        <NavigationContainer linking={linking} fallback={<HomeScreen/>}>
           <MainStackNavigator/>
-        </SafeAreaProvider>
-      </NavigationContainer>
+        </NavigationContainer>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   )
 }

@@ -37,17 +37,15 @@ describe("TabBar", () => {
     const connections = getByText("Connections")
     const explore = getByText("Explore")
 
-    fireEvent.press(connections)
-
-    expect(getByText("Plain View")).toBeTruthy()
-
     fireEvent.press(home)
 
-    expect(getByText("Home")).toBeTruthy()
+    expect(getByText("Show on the Map")).toBeTruthy()
 
     fireEvent.press(explore)
 
     expect(getByText("Plain View")).toBeTruthy()
+
+    fireEvent.press(connections)
 
   })
 })

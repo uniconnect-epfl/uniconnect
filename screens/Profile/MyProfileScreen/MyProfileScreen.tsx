@@ -1,13 +1,16 @@
+import React, { useState } from "react"
 import { Text, View, TouchableOpacity } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import ExpandableDescription from "../../../components/ExpandableDescription/ExpandableDescription"
 import GeneralProfile from "../../../components/GeneralProfile/GeneralProfile"
-import { styles } from "./styles"
 import { black } from "../../../assets/colors/colors"
-import InputField from "../../../components/InputField/InputField"
-import { useState } from "react"
-import { useNavigation } from "@react-navigation/native"
+import { NavigationProp, ParamListBase } from "@react-navigation/native"
+import { profileStyles } from "../profileStyles"
+import { styles } from "./styles"
 import { globalStyles } from "../../../assets/global/globalStyles"
+import SectionTabs from "../../../components/SectionTabs/SectionTabs"
+import { ProfileEvents } from "../ProfileEvents/ProfileEvents"
+import { ProfileInterests } from "../ProfileInterests/ProfileInterests"
 
 type Contact = {
   uid: string
@@ -31,16 +34,19 @@ const dummyProfile: Contact = {
   location: "EPFL Ecublens"
 }
 
-export const MyProfileScreen = () => {
-  const [search, setSearch] = useState("")
-  const useNav = useNavigation()
+interface MyProfileScreenProps{
+  navigation: NavigationProp<ParamListBase>
+}
+
+export const MyProfileScreen = ({navigation} : MyProfileScreenProps) => {
+  const [selectedTab, setSelectedTab] = useState("Events")
 
   return (
     <View style={styles.container}>
-      <View style={styles.topBackground} />
-      <View style={styles.profileContainer}>
+      <View style={profileStyles.topBackground} />
+      <View style={profileStyles.profileContainer}>
 
-        <View style={styles.topProfileContainer}>
+        <View style={profileStyles.topProfileContainer}>
 
           <GeneralProfile
             name={dummyProfile.firstName}
@@ -48,18 +54,18 @@ export const MyProfileScreen = () => {
             location={dummyProfile.location}
           />
           
-          <View style={styles.buttonsContainer}>
+          <View style={profileStyles.buttonsContainer}>
             <TouchableOpacity 
-              style={styles.button}
-              onPress={() => useNav.navigate("UpdateProfile" as never)}>
-              <Text style={[globalStyles.boldText, styles.buttonText]}>Update</Text>
+              style={profileStyles.button}
+              onPress={() => navigation.navigate("UpdateProfile")}>
+              <Text style={[globalStyles.boldText, profileStyles.buttonText]}>Update</Text>
             </TouchableOpacity>
             <TouchableOpacity 
-              style={styles.button}
-              onPress={() => useNav.navigate("MyQR" as never)}>
-              <View style={styles.horizontalContainer}>
+              style={profileStyles.button}
+              onPress={() => navigation.navigate("MyQR")}>
+              <View style={profileStyles.horizontalContainer}>
                 <Ionicons name="qr-code" size={14} color={black} />
-                <Text style={[globalStyles.boldText, styles.buttonText]}>QR</Text>
+                <Text style={[globalStyles.boldText, profileStyles.buttonText]}>QR</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -70,20 +76,16 @@ export const MyProfileScreen = () => {
           description={dummyProfile.description}
         />
 
+        <SectionTabs 
+          tabs={["Events", "Interests"]}
+          startingTab="Events"
+          onTabChange={setSelectedTab}
+          />
+
         <View style={styles.separatorLine} />
 
-        <View style={styles.horizontalContainer}>
-          <InputField
-            label=""
-            placeholder="Search..."
-            value={search}
-            onChangeText={text => setSearch(text)}>
-          </InputField>
-        </View>
-      
-        <View style={styles.container}>
-
-        </View>
+        {selectedTab === "Events" && <ProfileEvents/>}
+        {selectedTab === "Interests" && <ProfileInterests/>}
 
       </View>
     </View>

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native' 
+import { StyleSheet } from "react-native"
 import {
   lightGray,
   peach,
@@ -6,20 +6,20 @@ import {
   lightPeach,
   white,
   shadowColor,
-} from '../../../assets/colors/colors' 
-import { BUTTON_HEIGHT, BUTTON_RADIUS } from '../../../assets/global/constants' 
+} from "../../../assets/colors/colors"
+import { BUTTON_HEIGHT, BUTTON_RADIUS } from "../../../assets/global/constants"
 
 const styles = StyleSheet.create({
   buttonSmall: {
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: BUTTON_RADIUS,
     borderWidth: 2,
-    display: 'flex',
+    display: "flex",
     elevation: 8,
     height: 40,
-    justifyContent: 'center',
+    justifyContent: "center",
     marginHorizontal: 5,
     shadowColor,
     shadowOffset: { width: 0, height: 2 },
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-    width: '100%',
+    width: "100%",
   },
 
   footerButton: {
@@ -57,36 +57,35 @@ const styles = StyleSheet.create({
   },
   footerButtonText: {
     color: black,
-    textAlign: 'center',
+    textAlign: "center",
   },
 
-
   image: {
-    alignSelf: 'center',
-    height: 75,
+    alignSelf: "center",
+    height: "10%",
     marginRight: 10,
-    width: 75,
+    width: "15%",
   },
 
   input: {
-    alignSelf: 'center',
+    alignSelf: "center",
     borderColor: lightGray,
     borderRadius: BUTTON_RADIUS,
     borderWidth: 1,
     height: BUTTON_HEIGHT,
-    marginBottom: 25,
+    marginBottom: 10,
     paddingHorizontal: 30,
-    width: '95%',
+    width: "95%",
   },
 
   interestButton: {
-    alignContent: 'center',
+    alignContent: "center",
     borderColor: lightGray,
     borderRadius: 10,
     borderWidth: 2,
-    display: 'flex',
+    display: "flex",
     height: 110,
-    justifyContent: 'center',
+    justifyContent: "center",
     marginBottom: 10,
     marginHorizontal: 10,
     padding: 10,
@@ -97,11 +96,29 @@ const styles = StyleSheet.create({
     color: lightGray,
     left: 0,
     right: 0,
-    textAlign: 'center',
+    textAlign: "center",
   },
 
   interestsGrid: {
-    alignSelf: 'center',
+    alignSelf: "center",
+  },
+
+  labelContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexGrow: 1,
+    flexWrap: "wrap",
+  },
+
+  labelView: {
+    display: "flex",
+    flexDirection: "column",
+    flexWrap: "wrap",
+    height: "20%",
+    marginBottom: 10,
+    marginHorizontal: 20,
+    overflow: "hidden",
+    paddingHorizontal: 10,
   },
 
   selectedInterestButton: {
@@ -116,9 +133,9 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+
     paddingBottom: 10,
-    textAlign: 'center',
+    textAlign: "center",
   },
-}) 
-export default styles 
+})
+export default styles
