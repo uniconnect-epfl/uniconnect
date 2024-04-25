@@ -15,6 +15,8 @@ import { auth } from "../../firebase/firebaseConfig"
 import { User, onAuthStateChanged } from "firebase/auth"
 import LoadingScreen from "../../screens/Loading/LoadingScreen"
 
+import MapsScreen from "../../screens/Maps/Maps"
+
 const Stack = createStackNavigator()
 
 // return  the StackNavigation that will be called in the app to allow the user to Login/Register
@@ -99,6 +101,11 @@ const MainStackNavigator: React.FC = () => {
           <Stack.Screen
             name="Authentication"
             component={AuthenticationScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Maps"
+            component={MapsScreen}
             options={{ headerShown: false }}
           />
         </>

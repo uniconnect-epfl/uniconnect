@@ -1,12 +1,13 @@
-/* eslint-disable react/prop-types */
 
-import React = require('react');
 import { View, Text, Image } from 'react-native'
 import { styles } from './styles'
+import React from 'react'
 
-interface EventCardProps {
+export interface EventCardProps {
   title: string;
   location: string;
+  latitude: number;
+  longitude: number;
   description: string;
   date: string;
   imageUrl: string; // Assuming you pass the URL of the PNG image here
@@ -16,6 +17,8 @@ interface EventCardProps {
 const EventCard: React.FC<EventCardProps> = ({
   title,
   location,
+  latitude,
+  longitude,
   description,
   date,
   imageUrl,
@@ -28,6 +31,8 @@ const EventCard: React.FC<EventCardProps> = ({
         <Text>{date}</Text>
         <View style={styles.locationContainer}>
           <Text style={styles.location}>{location}</Text>
+          <Text>{latitude}</Text>
+          <Text>{longitude}</Text>
         </View>
         <Text style={styles.description}>{description}</Text>
       </View>
