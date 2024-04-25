@@ -15,6 +15,7 @@ import "../../../assets/global/globalStyles"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import LowBar from "../../../components/LowBar/LowBar"
+import Label from "../../../components/Label/Label"
 
 interface InterestButtonProps {
   title: string
@@ -67,6 +68,8 @@ const InterestsScreen = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [filterdedInterests, setFilteredInterests] = useState(interests)
   const [selectedInterests, setSelectedInterests] = useState(new Set())
+  //array of selected interests
+  const [labelArray, setLabelArray] = useState([] as string[])
 
   const renderItem = ({ item }: ListRenderItemInfo<string>) => (
     <InterestButton
@@ -81,8 +84,11 @@ const InterestsScreen = () => {
       const newSelectedInterests = new Set(prev)
       if (newSelectedInterests.has(interest)) {
         newSelectedInterests.delete(interest)
+        // Build a new array without the interest
+        setLabelArray((prev) => prev.filter((label) => label !== interest))
       } else {
         newSelectedInterests.add(interest)
+        setLabelArray([...labelArray, interest])
       }
       return newSelectedInterests
     })
@@ -122,6 +128,18 @@ const InterestsScreen = () => {
             style={[styles.input, globalStyles.text]}
             onChangeText={handleSearch}
           />
+        </View>
+
+        <View style={styles.labelView}>
+          {labelArray.map((label) => (
+            <Label
+              key={label}
+              text={label}
+              onClick={() =>
+                setLabelArray((prev) => prev.filter((l) => l !== label))
+              }
+            />
+          ))}
         </View>
 
         <FlatList
