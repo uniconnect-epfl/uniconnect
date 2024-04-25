@@ -73,6 +73,11 @@ const MainStackNavigator: React.FC = () => {
             component={SettingsScreen}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="EventMap"
+            component={MapsScreen}
+            options={{ headerShown: false }}
+          />
         </>
       ) : (
         <>
@@ -103,11 +108,7 @@ const MainStackNavigator: React.FC = () => {
             component={AuthenticationScreen}
             options={{ headerShown: false }}
           />
-          <Stack.Screen
-            name="Maps"
-            component={MapsScreen}
-            options={{ headerShown: false }}
-          />
+          
         </>
       )}
     </Stack.Navigator>

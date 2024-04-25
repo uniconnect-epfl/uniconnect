@@ -39,8 +39,8 @@ const events = [
   {
     title: "Event 2",
     location: "EPFL, CM",
-    latitude: 46.51858962578904,
-    longitude: 6.566048509782951,
+    latitude: 46.51859297638995, 
+    longitude: 6.563141941352757,
     description: "Agepoly",
     date: "2022-08-04", // changed to YYYY-MM-DD format
     imageUrl: "https://example.com/image.png",
@@ -48,8 +48,8 @@ const events = [
   {
     title: "Balelek 2024",
     location: "EPFL, Agora",
-    latitude: 46.51858962578904,
-    longitude: 6.566048509782951,
+    latitude: 46.51992048733761,
+    longitude: 6.565926796074852,
     description: "Music festival 2024",
     date: "2024-05-20", // changed to YYYY-MM-DD format
     imageUrl: "https://example.com/image.png",
@@ -57,8 +57,8 @@ const events = [
   {
     title: "Graduation 2025",
     location: "EPFL, Swisstech",
-    latitude: 46.51858962578904,
-    longitude: 6.566048509782951,
+    latitude: 46.52277976263842,
+    longitude: 6.565209257647138,
     description: "Graduation",
     date: "2025-06-04", // changed to YYYY-MM-DD format
     imageUrl: "https://example.com/image.png",
@@ -137,7 +137,7 @@ const HomeScreen = () => {
           <TouchableOpacity
             style={styles.map}
             onPress={() =>
-              navigation.navigate(["MapsScreen", { events }] as never)
+              navigation.navigate("EventMap", { events })
             }
           >
             <Text> Show on the Map</Text>

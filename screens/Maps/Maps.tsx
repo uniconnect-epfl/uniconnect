@@ -7,10 +7,10 @@ import { View, Text } from 'react-native'
 import styles from './styles' // Import styles
 
 const INITIAL_REGION = {
-    latitude: 37.33,
-    longitude: -122,
-    latitudeDelta: 2,
-    longitudeDelta: 2,
+    latitude: 46.51858962578904,
+    longitude: 6.566048509782951,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
 }
 
 type MapScreenRouteProp = RouteProp<{ params: { events: event[] } }, 'params'>;
@@ -22,6 +22,7 @@ export default function Map() {
     return (
         <View style={styles.container}>
             <MapView
+				style={styles.map}
                 initialRegion={INITIAL_REGION}
                 showsUserLocation
                 showsMyLocationButton
@@ -32,12 +33,13 @@ export default function Map() {
                         key={index}
                         title={event.title}
                         coordinate={{ latitude: event.latitude, longitude: event.longitude }}
-                        onPress={() => alert(event.title)}
+                        
                     >
                         <Callout onPress={() => console.log("Callout pressed:", event.title)}>
                             <View style={styles.calloutView}>
                                 <Text style={styles.calloutTextTitle}>{event.title}</Text>
                                 <Text style={styles.calloutTextLocation}>{event.location}</Text>
+								<Text>{event.date}</Text>
                             </View>
                         </Callout>
                     </Marker>
