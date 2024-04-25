@@ -71,12 +71,17 @@ const QrScanScreen = () => {
       <Text style={[globalStyles.text, styles.scanAQrText]}>Scan a QR code</Text>
       {showCamera ? (
         <Camera 
+          testID="camera"
           style={styles.camera}
           onBarCodeScanned={handleBarCodeScanned}
         />
       ) : (
         <View style={styles.container}>
-          <ActivityIndicator size="large" color={peach} />
+          <ActivityIndicator
+            testID="activity-indicator" 
+            size="large" 
+            color={peach} 
+          />
         </View>
       )}
 
