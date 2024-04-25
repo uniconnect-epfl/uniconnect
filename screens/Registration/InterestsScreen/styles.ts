@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
 
   image: {
     alignSelf: "center",
-    height: 75,
+    height: "10%",
     marginRight: 10,
-    width: 75,
+    width: "15%",
   },
 
   input: {
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     flexWrap: "wrap",
-    height: 120,
+    height: "20%",
     marginBottom: 10,
     marginHorizontal: 20,
     overflow: "hidden",
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+
     paddingBottom: 10,
     textAlign: "center",
   },

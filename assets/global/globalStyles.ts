@@ -1,15 +1,13 @@
-import { StyleSheet } from 'react-native' 
+import { StyleSheet } from "react-native"
 
 export const globalStyles = StyleSheet.create({
   boldText: {
-    fontFamily: 'JetBrainsMono_700Bold',
+    fontFamily: "JetBrainsMono_700Bold",
   },
   smallText: {
     fontSize: 10,
   },
   text: {
-    fontFamily: 'JetBrainsMono_400Regular',
+    fontFamily: "JetBrainsMono_400Regular",
   },
-
-
-}) 
+})
