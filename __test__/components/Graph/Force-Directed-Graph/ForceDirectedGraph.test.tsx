@@ -25,12 +25,6 @@ describe("ForceDirectedGraph", () => {
   let graph: Graph
   let constrainedNodeId: string
 
-  const mockFunc = jest.fn()
-
-    beforeEach(() => {
-        mockFunc.mockClear()
-    })
-
   beforeEach(() => {
     graph = new Graph(["1", "2", "3"], ["1", "2"], ["2", "3"], [1, 2])
     constrainedNodeId = "2"
@@ -45,7 +39,6 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
-        onModalPress={mockFunc}
       />,
     )
     expect(component).toBeTruthy()
@@ -56,7 +49,6 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
-        onModalPress={mockFunc}
       />,
     )
 
@@ -119,7 +111,6 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
-        onModalPress={mockFunc}
       />,
     )
 
@@ -145,9 +136,35 @@ describe("ForceDirectedGraph", () => {
       jest.advanceTimersByTime(500)
     })
 
-    
+    await waitFor(() => {
+      const modal = component.getByTestId("modal")
+      expect(modal).toBeTruthy()
+      expect(modal.props.visible).toBe(true)
+    }, {timeout: 10})
+
     jest.useRealTimers()    
-    expect(mockFunc).toHaveBeenCalled()
+
+    const modale_image = component.getByTestId("modal-profile-picture")
+    expect(modale_image).toBeTruthy()
+
+    act (() => {
+      fireEvent(modale_image, "press")
+    })
+
+    const quitModal = component.getByTestId("modal-touchable")
+    expect(quitModal).toBeTruthy()
+
+    act(() => {
+    fireEvent(quitModal, "press")
+    })
+
+    jest.useFakeTimers()
+
+    await waitFor(() => {
+      expect(component.queryByTestId("modal")).toBeNull()
+    }, {timeout: 10})
+
+    jest.useRealTimers()
 
   })
 
@@ -157,7 +174,6 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
-        onModalPress={mockFunc}
       />,
     )
 
@@ -182,14 +198,29 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
-        onModalPress={mockFunc}
       />,
     )
 
     const node1 = component.getByTestId("node-1")
     
     expect(node1).toBeTruthy()
-    expect(mockFunc).not.toHaveBeenCalled()
+    expect(component.queryByTestId("modal")).toBeNull()
+
+    fireEvent(node1, "pressIn")
+
+    jest.useFakeTimers()
+    act(() => {
+    jest.advanceTimersByTime(100)
+    })
+
+    act (() => {
+      fireEvent(node1, "pressOut")
+    })
+
+    await waitFor(() => {
+      expect(component.queryByTestId("modal")).toBeNull()
+    }, {timeout: 10})
+    jest.useRealTimers()
   })
 
   it("pinching zooms the graph", async () => {
@@ -198,7 +229,6 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
-        onModalPress={mockFunc}
       />,
     )
     

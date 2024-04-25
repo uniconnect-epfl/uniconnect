@@ -7,7 +7,6 @@ interface Node {
   y: number  // y-coordinate
   dx: number  // x-velocity
   dy: number  // y-velocity
-  selected?: boolean  // Is the node selected?
 }
 
 /**
@@ -30,10 +29,6 @@ export default class Graph {
 
   // Links in the graph
   links: Link[] 
-
-  // Are the node positions initialized?
-  initialized: boolean
-
 
   /**
    *
@@ -90,17 +85,6 @@ export default class Graph {
         strength: strengths[index],
       } 
     }) 
-
-    // Set the node positions to be uninitialized
-    this.initialized = false
-  }
-
-  getInitialized(): boolean {
-    return this.initialized 
-  }
-
-  setInitialized(initialized: boolean): void {
-    this.initialized = initialized 
   }
 
   /**
@@ -134,7 +118,6 @@ export default class Graph {
       dx: 0,
       dy: 0,
     }) 
-    this.setInitialized(false)
   }
 
   /**
@@ -149,8 +132,7 @@ export default class Graph {
       source: source,
       target: target,
       strength: strength,
-    })
-    this.setInitialized(false)
+    }) 
   }
 
   /**
@@ -166,7 +148,6 @@ export default class Graph {
     this.links = this.links.filter((link: Link): boolean => {
       return link.source !== id && link.target !== id 
     }) 
-    this.setInitialized(false)
   }
 
   /**
@@ -178,14 +159,6 @@ export default class Graph {
   removeLink(source: string, target: string): void {
     this.links = this.links.filter((link: Link): boolean => {
       return link.source !== source || link.target !== target 
-    }) 
-    this.setInitialized(false)
-  }
-
-
-  getNodeById(id: string): Node | undefined {
-    return this.nodes.find((node: Node): boolean => {
-      return node.id === id 
     }) 
   }
 }
