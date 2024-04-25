@@ -14,7 +14,7 @@ const INITIAL_REGION = {
 
 type MapScreenRouteProp = RouteProp<{ params: { events: event[] } }, "params">
 
-export default function Map() {
+export default function EventMap() {
   const route = useRoute<MapScreenRouteProp>()
   const events = route.params.events
   //const navigation = useNavigation()

@@ -15,7 +15,7 @@ import { auth } from "../../firebase/firebaseConfig"
 import { User, onAuthStateChanged } from "firebase/auth"
 import LoadingScreen from "../../screens/Loading/LoadingScreen"
 
-import MapsScreen from "../../screens/Maps/Maps"
+import MapsScreen from "../../screens/Maps/EventMap"
 import { AddContactScreen } from "../../screens/AddContact/AddContactScreen"
 
 const Stack = createStackNavigator()

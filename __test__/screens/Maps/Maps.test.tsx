@@ -1,5 +1,5 @@
 import { fireEvent, render } from '@testing-library/react-native'
-import Map from '../../../screens/Maps/Maps' 
+import Map from '../../../screens/Maps/EventMap' 
 import React from 'react'
 
 jest.mock('@react-navigation/native', () => {

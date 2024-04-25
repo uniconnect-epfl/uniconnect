@@ -1,18 +1,16 @@
-
-import { View, Text, Image } from 'react-native'
-import { styles } from './styles'
-import React from 'react'
+import { View, Text, Image } from "react-native"
+import { styles } from "./styles"
+import React from "react"
 
 export interface EventCardProps {
-  title: string;
-  location: string;
-  latitude: number;
-  longitude: number;
-  description: string;
-  date: string;
-  imageUrl: string; // Assuming you pass the URL of the PNG image here
+  title: string
+  location: string
+  latitude: number
+  longitude: number
+  description: string
+  date: string
+  imageUrl: string // Assuming you pass the URL of the PNG image here
 }
-
 
 const EventCard: React.FC<EventCardProps> = ({
   title,
