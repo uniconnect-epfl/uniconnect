@@ -12,6 +12,10 @@ jest.mock("firebase/auth", () => ({
   initializeAuth: jest.fn(() => ({} as Auth)),
 }))
 
+jest.mock("expo-linking", () => ({
+  createURL: jest.fn().mockImplementation((path) => `uniconnect://${path}`),
+}))
+
 describe('App', () => {
   
   it('renders correctly', async () => {
