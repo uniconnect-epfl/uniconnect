@@ -43,6 +43,7 @@ const NODE_HITBOX_SIZE = 20 // Hitbox size of the nodes
 const DEFAULT_NODE_SIZE = 10 // Default size of the nodes
 const DEFAULT_NODE_SIZE_INCREMENT = 2 // Increment in the size of the nodes
 const NODE_HIGHLIGHT_RATIO = 1.3
+const NODE_TEXT_OFFSET = 1.5
 
 const DEFAULT_LINK_COLOR = black // Default color of the links
 const DEFAULT_CLICKED_NODE_ID = ""
@@ -353,7 +354,7 @@ const ForceDirectedGraph: React.FC<{
         y={
           coordY(node) +
           (sizes.get(node.id) ?? DEFAULT_NODE_SIZE) +
-          1.5 * DEFAULT_NODE_SIZE
+          NODE_TEXT_OFFSET * DEFAULT_NODE_SIZE
         } // Position below the circle adjust 10 as needed
         textAnchor="middle" // Center the text under the circle
       >

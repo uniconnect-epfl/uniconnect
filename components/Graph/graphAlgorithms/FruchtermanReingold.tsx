@@ -20,7 +20,7 @@ export const fruchtermanReingold = (
   iterations: number
 ) => {
   // Maximum distance between nodes
-  const k = 100
+  const k = Math.sqrt((width * height) / nodes.length)/2
 
   // Randomly initialize node positions
   initializePositions(nodes, width, height)

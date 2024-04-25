@@ -7,14 +7,7 @@ import { useState } from "react"
 
 import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
 
-const graph = new Graph(
-  ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
-  ["0", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
-  ["1", "1", "1", "1", "1", "1", "2", "2", "3", "3"],
-  [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5]
-)
-const constrainedNodeId = "1"
-
+import { graph, constrainedNodeId } from "./mockGraph"
 interface ContactGraphProps{
   onContactPress: (uid : string) => void
 }
