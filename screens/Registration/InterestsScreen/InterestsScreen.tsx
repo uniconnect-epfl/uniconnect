@@ -32,6 +32,7 @@ const InterestButton: React.FC<InterestButtonProps> = ({
   <TouchableOpacity
     style={[styles.interestButton, selected && styles.selectedInterestButton]}
     onPress={onSelect}
+    testID={`interestButton-${title}`}
   >
     <Text
       style={[
