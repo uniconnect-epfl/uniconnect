@@ -97,14 +97,13 @@ const ForceDirectedGraph: React.FC<{
     // Get the initial links, nodes and sizes
     
     const initialLinks = graph.getLinks()
-    const initialNodes = graph.getNodes()
     const initialSizes = setNodesSizes(initialLinks)
     // Set the links, nodes and sizes
     setLinks(initialLinks)
     if (graph.getInitialized() === false) {
       setNodes(
         fruchtermanReingold(
-          initialNodes,
+          graph.getNodes(),
           initialLinks,
           constrainedNodeId,
           WIDTH,
@@ -115,7 +114,7 @@ const ForceDirectedGraph: React.FC<{
       graph.setInitialized(true)
     }
     else {
-      setNodes(initialNodes)
+      setNodes(graph.getNodes())
     }
     setSizes(initialSizes)
     setLoad(true)
@@ -310,7 +309,7 @@ const ForceDirectedGraph: React.FC<{
         key={node.id + "highlight"}
         cx={coordX(node)}
         cy={coordY(node)}
-        r={(sizes.get(node.id) ?? DEFAULT_NODE_SIZE) * (node.selected ? 1.3 : 1)}
+        r={(sizes.get(node.id) ?? DEFAULT_NODE_SIZE) * (graph.getNodeById(node.id)?.selected ? 1.3 : 1)}
         fill={peach} 
       />
       <Image

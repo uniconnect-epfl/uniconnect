@@ -56,7 +56,7 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
-        onContactPress={mockFunc}
+        onModalPress={mockFunc}
       />,
     )
 

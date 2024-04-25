@@ -28,12 +28,12 @@ const ContactGraph = ({onContactPress} : ContactGraphProps) => {
   const [clickedNode, setClickedNode] = useState<Node >(graph.getNodes()[0])
 
   const [modalVisible, setModalVisible] = useState(false)
+
   const onModalPress = (uid: string) => {
     const node = graph.getNodeById(uid)
     if (node) {
       setClickedNode(node)
       setModalVisible(true)
-      console.log(modalVisible)
     }
   }
 
@@ -71,19 +71,20 @@ export default ContactGraph
 function handleSearch(text: string, graph: Graph): void {
   // TODO: Implement regex search for tags and names and update the graph accordingly
   if (text === "") {
-    const nodes = graph.getNodes()
-    for (const node of nodes) {
+    for (const node of graph.getNodes()) {
       node.selected = false
+
     }
     return
   }
-  const nodes = graph.getNodes()
-  for (const node of nodes) {
-    if (node.id.includes(text)) {
-      node.selected = true
-    }
-    else {
-      node.selected = false
+  else {
+    for (const node of graph.getNodes()) {
+      if (node.id.includes(text) || text.includes(node.id)) {
+        node.selected = true
+      }
+      else {
+        node.selected = false
+      }
     }
   }
 }
@@ -96,3 +97,4 @@ function handleQuery(callback: (uid: string) => void): void {
     }
   }
 }
+
