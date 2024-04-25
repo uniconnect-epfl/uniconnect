@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Text, View, TouchableOpacity } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import ExpandableDescription from "../../../components/ExpandableDescription/ExpandableDescription"
@@ -9,7 +9,6 @@ import { profileStyles } from "../profileStyles"
 import { styles } from "./styles"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import SectionTabs from "../../../components/SectionTabs/SectionTabs"
-import { useState } from "react"
 import { ProfileEvents } from "../ProfileEvents/ProfileEvents"
 import { ProfileInterests } from "../ProfileInterests/ProfileInterests"
 
