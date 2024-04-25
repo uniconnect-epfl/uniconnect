@@ -17,7 +17,7 @@ import {
   GestureHandlerRootView,
 } from "react-native-gesture-handler"
 
-import { black, peach } from "../../../assets/colors/colors"
+import { black, peach, transparent } from "../../../assets/colors/colors"
 
 import profile_picture_0 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-0.png"
 import profile_picture_1 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-1.png"
@@ -42,6 +42,7 @@ const SHORT_PRESS_DURATION = 100
 const NODE_HITBOX_SIZE = 20 // Hitbox size of the nodes
 const DEFAULT_NODE_SIZE = 10 // Default size of the nodes
 const DEFAULT_NODE_SIZE_INCREMENT = 2 // Increment in the size of the nodes
+const NODE_HIGHLIGHT_RATIO = 1.3
 
 const DEFAULT_LINK_COLOR = black // Default color of the links
 const DEFAULT_CLICKED_NODE_ID = ""
@@ -123,7 +124,7 @@ const ForceDirectedGraph: React.FC<{
 
   // If the graph is not loaded, display an activity indicator
   if (!load) {
-    return <ActivityIndicator size="large" color="#0000ff" />
+    return <ActivityIndicator size="large" color={peach} />
   }
 
   // Handle Dragging
@@ -309,7 +310,7 @@ const ForceDirectedGraph: React.FC<{
         key={node.id + "highlight"}
         cx={coordX(node)}
         cy={coordY(node)}
-        r={(sizes.get(node.id) ?? DEFAULT_NODE_SIZE) * (graph.getNodeById(node.id)?.selected ? 1.3 : 1)}
+        r={(sizes.get(node.id) ?? DEFAULT_NODE_SIZE) * (graph.getNodeById(node.id)?.selected ? NODE_HIGHLIGHT_RATIO : 1)}
         fill={peach} 
       />
       <Image
@@ -328,7 +329,7 @@ const ForceDirectedGraph: React.FC<{
           (sizes.get(node.id) ?? DEFAULT_NODE_SIZE) +
           (NODE_HITBOX_SIZE) / lastScale
         }
-        fill={"transparent"}
+        fill={transparent}
         onPressIn={() => {
           handlePressIn(() => {
             pressStartRef.current = Date.now()

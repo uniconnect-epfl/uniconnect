@@ -50,8 +50,8 @@ const NodeModal: React.FC<{
                 <Svg style={styles.modalProfilePicture}>
                 <Image
                     key={node.id + "modalimage"}
-                    width={80}
-                    height={80}
+                    width={styles.modalProfilePicture.width}
+                    height={styles.modalProfilePicture.height}
                     href={
                         PROFILE_PICTURES[
                             parseInt(node.id) % PROFILE_PICTURES.length

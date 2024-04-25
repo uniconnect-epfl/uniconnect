@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native"
-import { white, black } from "../../../assets/colors/colors"
+import { black, lightPeach, peach } from "../../../assets/colors/colors"
+import { globalStyles } from "../../../assets/global/globalStyles"
 
 const styles = StyleSheet.create({
   container: {
@@ -13,7 +14,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   modalProfileName: {
-    fontFamily: "JetBrainsMono_700Bold",
+    fontFamily: globalStyles.text.fontFamily,
     fontSize: 20,
     left: 20,
     position: "absolute",
@@ -30,8 +31,10 @@ const styles = StyleSheet.create({
   },
   modalView: {
     alignItems: "center",
-    backgroundColor: white,
+    backgroundColor: peach,
+    borderColor: lightPeach,
     borderRadius: 20,
+    borderWidth: 3,
     elevation: 5,
     height: "40%",
     justifyContent: "center",
