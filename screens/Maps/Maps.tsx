@@ -27,13 +27,14 @@ export default function Map() {
                 showsUserLocation
                 showsMyLocationButton
                 provider={PROVIDER_GOOGLE}
+				testID='mapView'
             >
                 {events.map((event, index) => (
                     <Marker
                         key={index}
                         title={event.title}
                         coordinate={{ latitude: event.latitude, longitude: event.longitude }}
-                        
+                        testID={`marker-${index}`}
                     >
                         <Callout onPress={() => console.log("Callout pressed:", event.title)}>
                             <View style={styles.calloutView}>
