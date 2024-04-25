@@ -2,7 +2,8 @@
 import { render, fireEvent } from '@testing-library/react-native'
 import HomeScreen from '../../../screens/Home/HomeScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
-import React = require('react')
+import React from 'react'
+
 
 jest.mock('react-native-safe-area-context', () => {
   const inset = {top: 0, right: 0, bottom: 0, left: 0}
@@ -11,6 +12,17 @@ jest.mock('react-native-safe-area-context', () => {
     SafeAreaConsumer: jest.fn(({children}) => children(inset)),
     useSafeAreaInsets: jest.fn(() => inset),
     useSafeAreaFrame: jest.fn(() => ({x: 0, y: 0, width: 390, height: 844})),
+  }
+})
+
+const mockNavigation = {
+  navigate: jest.fn(),
+} 
+
+jest.mock('@react-navigation/native', () => {
+  return {
+    ...jest.requireActual('@react-navigation/native'), // keep all the original implementations
+    useNavigation: () => mockNavigation,
   }
 })
 

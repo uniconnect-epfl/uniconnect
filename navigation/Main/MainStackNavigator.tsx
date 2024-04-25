@@ -14,6 +14,8 @@ import DescriptionScreen from "../../screens/Registration/DescriptionScreen/Desc
 import { auth } from "../../firebase/firebaseConfig"
 import { User, onAuthStateChanged } from "firebase/auth"
 import LoadingScreen from "../../screens/Loading/LoadingScreen"
+
+import MapsScreen from "../../screens/Maps/EventMap"
 import { AddContactScreen } from "../../screens/AddContact/AddContactScreen"
 
 const Stack = createStackNavigator()
@@ -73,6 +75,11 @@ const MainStackNavigator: React.FC = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
+            name="EventMap"
+            component={MapsScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
             name="AddContact"
             component={AddContactScreen}
             options={{ headerShown: false }}
@@ -107,6 +114,7 @@ const MainStackNavigator: React.FC = () => {
             component={AuthenticationScreen}
             options={{ headerShown: false }}
           />
+          
         </>
       )}
     </Stack.Navigator>
