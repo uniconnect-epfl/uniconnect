@@ -4,6 +4,7 @@ import HomeScreen from '../../screens/Home/HomeScreen'
 import { TabBar } from '../../components/TabBar/TabBar'
 import { Header } from '../../components/Header/Header'
 import ExploreScreen from '../../screens/Contacts/ExploreScreen'
+import QrScanScreen from '../../screens/QrScan/QrScanScreen'
 
 const Tab = createBottomTabNavigator()
 
@@ -18,7 +19,7 @@ const HomeTabNavigator = () => {
       }}
     >
       <Tab.Screen name="Home" component={HomeScreen}/>
-      <Tab.Screen name="Connections" component={ExploreScreen}/>
+      <Tab.Screen name="Connections" component={QrScanScreen}/>
       <Tab.Screen name="Explore" component={ExploreScreen}/>
     </Tab.Navigator>
   )
