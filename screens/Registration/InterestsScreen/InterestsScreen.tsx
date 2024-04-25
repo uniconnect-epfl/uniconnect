@@ -9,6 +9,7 @@ import {
   ListRenderItemInfo,
   Keyboard,
   TouchableWithoutFeedback,
+  ScrollView,
 } from "react-native"
 import styles from "./styles"
 import "../../../assets/global/globalStyles"
@@ -79,6 +80,15 @@ const InterestsScreen = () => {
     />
   )
 
+  const handleRemoveInterest = (interest: string) => {
+    setSelectedInterests((prev) => {
+      const newSelectedInterests = new Set(prev)
+      newSelectedInterests.delete(interest)
+      return newSelectedInterests
+    })
+    setLabelArray((prev) => prev.filter((label) => label !== interest))
+  }
+
   const toggleInterest = (interest: string) => {
     setSelectedInterests((prev) => {
       const newSelectedInterests = new Set(prev)
@@ -122,25 +132,28 @@ const InterestsScreen = () => {
           Select your interests
         </Text>
 
-        <View>
-          <TextInput
-            placeholder="Search"
-            style={[styles.input, globalStyles.text]}
-            onChangeText={handleSearch}
-          />
-        </View>
+        <TextInput
+          placeholder="Search"
+          style={[styles.input, globalStyles.text]}
+          onChangeText={handleSearch}
+        />
 
-        <View style={styles.labelView}>
-          {labelArray.map((label) => (
-            <Label
-              key={label}
-              text={label}
-              onClick={() =>
-                setLabelArray((prev) => prev.filter((l) => l !== label))
-              }
-            />
-          ))}
-        </View>
+        {selectedInterests.size !== 0 && (
+          <ScrollView
+            horizontal={false}
+            style={styles.labelView}
+            showsHorizontalScrollIndicator={true}
+            contentContainerStyle={styles.labelContainer}
+          >
+            {labelArray.map((label) => (
+              <Label
+                key={label}
+                text={label}
+                onClick={() => handleRemoveInterest(label)}
+              />
+            ))}
+          </ScrollView>
+        )}
 
         <FlatList
           data={filterdedInterests}

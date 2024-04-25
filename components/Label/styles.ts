@@ -3,19 +3,22 @@ import { StyleSheet } from "react-native"
 import { peach } from "../../assets/colors/colors"
 
 const styles = StyleSheet.create({
-  container: {
+  buttonView: {
     alignItems: "center",
-    borderColor: peach,
-    borderRadius: 20,
-    borderWidth: 2,
     display: "flex",
     flexDirection: "row",
-    margin: 3,
-    padding: 3,
-    width: "30%",
+    justifyContent: "flex-start",
+    width: "100%",
+  },
+  container: { 
+    borderColor: peach,
+    borderRadius: 10, 
+    borderWidth: 1, 
+    margin: 3, 
+    padding: 5, 
   },
   text: {
-    fontSize: 8,
+    fontSize: 12,
   },
 })
 

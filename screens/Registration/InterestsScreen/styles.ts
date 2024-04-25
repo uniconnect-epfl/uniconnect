@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     borderRadius: BUTTON_RADIUS,
     borderWidth: 1,
     height: BUTTON_HEIGHT,
-    marginBottom: 25,
+    marginBottom: 10,
     paddingHorizontal: 30,
     width: "95%",
   },
@@ -103,16 +103,22 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 
+  labelContainer: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexGrow: 1,
+    flexWrap: "wrap",
+  },
+
   labelView: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     flexWrap: "wrap",
-    justifyContent: 'space-around',
+    height: 120,
     marginBottom: 10,
-    paddingLeft: 7,
-    paddingRight:7,
-
-
+    marginHorizontal: 20,
+    overflow: "hidden",
+    paddingHorizontal: 10,
   },
 
   selectedInterestButton: {

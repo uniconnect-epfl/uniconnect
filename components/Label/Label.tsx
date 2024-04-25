@@ -13,9 +13,11 @@ interface LabelProps {
 const Label: React.FC<LabelProps> = ({ text, onClick }) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onClick}>
-        <Entypo name="cross" color={black} />
-        <Text style={[globalStyles.text, styles.text]}>{text}</Text>
+      <TouchableOpacity onPress={onClick} style={styles.buttonView}>
+        <Entypo name="cross" color={black} size={16} />
+        <Text style={styles.text}>
+          <Text style={[globalStyles.text, styles.text]}>{text}</Text>
+        </Text>
       </TouchableOpacity>
     </View>
   )
