@@ -3,8 +3,9 @@ import Map from '../../../screens/Maps/EventMap'
 import React from 'react'
 
 jest.mock('@react-navigation/native', () => {
+    const actualNav = jest.requireActual('@react-navigation/native')
     return {
-      ...jest.requireActual('@react-navigation/native'),
+      ...actualNav,
       useRoute: () => ({
         params: {
           events: [
@@ -12,6 +13,10 @@ jest.mock('@react-navigation/native', () => {
             { title: "Event 2", location: "EPFL, CM", latitude: 46.51858962578904, longitude: 6.566048509782951, date: "2022-08-04" }
           ]
         }
+      }),
+      useNavigation: () => ({
+        navigate: jest.fn(),
+        goBack: jest.fn()
       })
     }
   })
@@ -61,6 +66,13 @@ describe('Map', () => {
         fireEvent.press(calloutText)
         expect(console.log).toHaveBeenCalledWith("Callout pressed:", "Balelek 2023")
     })
+
+
+  it('should navigate back when the back button is pressed', () => {
+    const { getByTestId } = render(<Map />)
+    const backButton = getByTestId('back-button') 
+    fireEvent.press(backButton)
+  })
    
 })
 

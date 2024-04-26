@@ -14,7 +14,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import * as WebBrowser from "expo-web-browser"
 import * as Linking from "expo-linking"
-import HomeScreen from "./screens/Home/HomeScreen"
+// import HomeScreen from "./screens/Home/HomeScreen"
 
 SplashScreen.preventAutoHideAsync()
 
@@ -52,7 +52,7 @@ export default function App() {
     <GestureHandlerRootView style={styles.gestureHandler}>
       <StatusBar style="dark" />
       <SafeAreaProvider>
-        <NavigationContainer linking={linking} fallback={<HomeScreen/>}>
+        <NavigationContainer linking={linking}>
           <MainStackNavigator/>
         </NavigationContainer>
       </SafeAreaProvider>
