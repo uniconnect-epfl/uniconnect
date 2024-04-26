@@ -22,7 +22,7 @@ describe("fruchtermanReingold", () => {
       { source: "node3", target: "node1", strength: 1 },
     ]
     constrainedNodeId = "someNodeId"
-    width = 800
+    width = 900
     height = 600
     iterations = 100
   })
