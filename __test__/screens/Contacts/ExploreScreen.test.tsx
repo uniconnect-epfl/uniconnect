@@ -149,7 +149,6 @@ describe("ExploreScreen", () => {
 
     await act(async () => {
       fireEvent(node1, "pressOut")
-      jest.advanceTimersByTime(500)
     })
 
     await waitFor(() => {

@@ -51,8 +51,8 @@ export const mockContacts: Contact[] = [
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwzqBOQU8-rmsHcEGZ1imKdw5fefN4G0gkyZdM6ydMNg&s",
     "Suspendisse potenti. Nullam dictum, velit a eleifend convallis, nibh turpis aliquam neque, a dictum urna orci quis dolor.",
     "San Francisco",
-    ["1", "2"],
-    ["1", "2"]
+    ["1", "2", "7", "8", "9", "10", "11"],
+    ["1", "2", "11", "12"]
   ),
   new Contact(
     "5",
@@ -61,8 +61,8 @@ export const mockContacts: Contact[] = [
     "https://t3.ftcdn.net/jpg/03/62/40/80/360_F_362408093_AlwyWJQbyc6edRlXGaGz3xquwzLGXhkX.jpg",
     "Donec tempus quam vitae felis ullamcorper, eget fringilla nulla commodo.",
     "Seattle",
-    ["1", "2"],
-    ["1", "2"]
+    ["1", "2", "7", "8", "9"],
+    ["1", "2", "7", "8"]
   ),
   new Contact(
     "6",
@@ -71,8 +71,8 @@ export const mockContacts: Contact[] = [
     "https://media.licdn.com/dms/image/C5603AQG5Ex3k-bgPLw/profile-displayphoto-shrink_400_400/0/1621833595761?e=2147483647&v=beta&t=y2rONxfxxg-yKW5D1LqzHoeHFu7p_E3R6kHgTxcv0pc",
     "Praesent eleifend dapibus odio, nec commodo est aliquet vitae.",
     "Dallas",
-    ["1", "2"],
-    ["1", "2"]
+    [],
+    ["1", "2", "7", "8"]
   ),
   new Contact(
     "7",
@@ -81,8 +81,8 @@ export const mockContacts: Contact[] = [
     "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp",
     "Fusce rhoncus nunc eu arcu feugiat tincidunt. Proin vulputate tellus ac fermentum bibendum.",
     "Atlanta",
-    ["1", "2"],
-    ["1", "2"]
+    ["17", "18"],
+    []
   ),
   new Contact(
     "8",
@@ -91,8 +91,8 @@ export const mockContacts: Contact[] = [
     "https://i.pinimg.com/236x/da/fd/f2/dafdf25168edcb2f0e1d8702797946cc.jpg",
     "Integer vel ultricies lorem. Curabitur sit amet quam non nisl eleifend convallis at non elit.",
     "Phoenix",
-    ["1", "2"],
-    ["1", "2"]
+    ["1"],
+    ["1"]
   ),
   new Contact(
     "9",
@@ -102,6 +102,6 @@ export const mockContacts: Contact[] = [
     "Nam nec ullamcorper libero. Vestibulum in turpis in nunc fringilla pharetra.",
     "Denver",
     ["1", "2"],
-    ["1", "2"]
+    ["1", "78", "9", "10"]
   ),
 ]
