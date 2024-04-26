@@ -28,9 +28,9 @@ const EventCard: React.FC<EventCardProps> = ({
         <Text style={styles.title}>{title}</Text>
         <Text>{date}</Text>
         <View style={styles.locationContainer}>
-          <Text style={styles.location}>{location}</Text>
-          <Text>{latitude}</Text>
-          <Text>{longitude}</Text>
+          <Text style={styles.location}>{location +  "  "}</Text>
+          <Text>{Number(latitude).toFixed(2) + "  "}</Text>
+          <Text>{Number(longitude).toFixed(2)}</Text>
         </View>
         <Text style={styles.description}>{description}</Text>
       </View>

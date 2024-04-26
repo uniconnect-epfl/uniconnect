@@ -1,17 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable react-native/sort-styles */
 // MapStyles.ts
 import { StyleSheet } from "react-native"
 import { white } from "../../assets/colors/colors"
 
 export default StyleSheet.create({
-  backButton: {
-    backgroundColor: white, // Change as needed
-    borderRadius: 5,
-    left: 10,
-    padding: 10,
-    position: "absolute",
-    top: 10,
-    zIndex: 10, // Make sure the button is above the map
-  },
   calloutTextLocation: {
     fontSize: 14,
   },
@@ -30,4 +23,20 @@ export default StyleSheet.create({
     height: "100%",
     width: "100%",
   },
+  navigationBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingTop: 10,
+    height: 100,
+    // Include other styling such as background color, height, etc.
+  },
+  backButton: {
+    marginRight: 10, // Provide some spacing between the back button and the title
+  },
+  screenTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    // Include other styling as needed for the screen title
+  },
+
 })

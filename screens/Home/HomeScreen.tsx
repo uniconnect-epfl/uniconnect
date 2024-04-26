@@ -1,8 +1,6 @@
 import {
   View,
   Text,
-  TouchableWithoutFeedback,
-  Keyboard,
   TextInput,
 } from "react-native"
 
@@ -25,6 +23,7 @@ export interface event {
   date: string
   imageUrl: string
 }
+
 
 const events = [
   {
@@ -103,7 +102,7 @@ const HomeScreen = () => {
     date: string
     imageUrl: string
   }) => (
-    <TouchableOpacity>
+    <TouchableOpacity >
       <EventCard
         title={event.title}
         location={event.location}
@@ -118,7 +117,7 @@ const HomeScreen = () => {
   )
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+    //<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View
         style={[
           styles.view,
@@ -126,6 +125,7 @@ const HomeScreen = () => {
         ]}
       >
         {/* Add the choose tab component from Gael pull request */}
+        
         <View style={styles.searchAndMap}>
           <View>
             <TextInput
@@ -134,6 +134,7 @@ const HomeScreen = () => {
               onChangeText={handleSearch}
             />
           </View>
+          {/* Need to style the opacity to render it smaller*/}
           <TouchableOpacity
             style={styles.map}
             onPress={() =>
@@ -155,7 +156,7 @@ const HomeScreen = () => {
           </ScrollView>
         </View>
       </View>
-    </TouchableWithoutFeedback>
+    //</TouchableWithoutFeedback>
   )
 }
 
