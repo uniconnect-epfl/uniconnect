@@ -24,7 +24,7 @@ export default function EventMap() {
     <View style={styles.container}>
       {/* Navigation Bar */}
       <View style={styles.navigationBar}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity testID='back-button' onPress={() => navigation.goBack()} style={styles.backButton}>
           {/* Using Ionicons for the back button icon */}
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>

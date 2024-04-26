@@ -66,6 +66,13 @@ describe('Map', () => {
         fireEvent.press(calloutText)
         expect(console.log).toHaveBeenCalledWith("Callout pressed:", "Balelek 2023")
     })
+
+
+  it('should navigate back when the back button is pressed', () => {
+    const { getByTestId } = render(<Map />)
+    const backButton = getByTestId('back-button') 
+    fireEvent.press(backButton)
+  })
    
 })
 
