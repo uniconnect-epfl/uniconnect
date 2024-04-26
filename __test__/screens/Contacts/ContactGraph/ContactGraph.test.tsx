@@ -61,7 +61,7 @@ describe("ContactGraph", () => {
     })
   })
 
-  it("clicking a node opens a modal", () => {
+  it("clicking a node opens a modal", async () => {
     const component = render(
       <ContactGraph
         onContactPress={() => mockFunc}
@@ -74,16 +74,16 @@ describe("ContactGraph", () => {
     const node = component.getByTestId("node-0")
     expect(node).toBeTruthy()
 
-    act(() => {
+    await act(() => {
       fireEvent(node, "pressIn")
     })
 
     jest.useFakeTimers()
-    act(() => {
+    await act(() => {
       jest.advanceTimersByTime(50)
     })
 
-    act(() => {
+    await act(() => {
       fireEvent(node, "pressOut")
       jest.advanceTimersByTime(500)
     })
@@ -94,7 +94,7 @@ describe("ContactGraph", () => {
     expect(modal).toBeTruthy()
   })
 
-  it("clicking outside the modal closes it", () => {
+  it("clicking outside the modal closes it", async () => {
     const component = render(
       <ContactGraph
         onContactPress={() => mockFunc}
@@ -107,16 +107,16 @@ describe("ContactGraph", () => {
     const node = component.getByTestId("node-0")
     expect(node).toBeTruthy()
 
-    act(() => {
+    await act(() => {
       fireEvent(node, "pressIn")
     })
 
     jest.useFakeTimers()
-    act(() => {
+    await act(() => {
       jest.advanceTimersByTime(50)
     })
 
-    act(() => {
+    await act(() => {
       fireEvent(node, "pressOut")
       jest.advanceTimersByTime(500)
     })
@@ -129,7 +129,7 @@ describe("ContactGraph", () => {
     const modalTouchable = component.getByTestId("modal-touchable")
     expect(modalTouchable).toBeTruthy()
 
-    act(() => {
+    await act(() => {
       fireEvent(modalTouchable, "press")
     })
 
