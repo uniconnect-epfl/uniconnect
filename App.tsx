@@ -16,6 +16,30 @@ import * as WebBrowser from "expo-web-browser"
 import * as Linking from "expo-linking"
 // import HomeScreen from "./screens/Home/HomeScreen"
 
+import AsyncStorage from "@react-native-async-storage/async-storage"
+
+const GRAPH_STORAGE_KEY = "graph"
+const GRAPH_EXISTENCE_FLAG_KEY = "graph_exists"
+
+// Function to destroy the graph file if it exists
+const destroyGraphFileIfExists = async () => {
+  try {
+    // Check if the graph file exists
+    const graphExists = await AsyncStorage.getItem(GRAPH_EXISTENCE_FLAG_KEY)
+    if (graphExists === "true") {
+      // If the graph file exists, delete it
+      await AsyncStorage.removeItem(GRAPH_STORAGE_KEY)
+      // Reset the flag to indicate that the graph file no longer exists
+      await AsyncStorage.setItem(GRAPH_EXISTENCE_FLAG_KEY, "false")
+    }
+  } catch (error) {
+    console.error("Error destroying graph file:", error)
+  }
+}
+
+// Call the function to destroy the graph file when the app launches
+destroyGraphFileIfExists()
+
 SplashScreen.preventAutoHideAsync()
 
 WebBrowser.maybeCompleteAuthSession()
@@ -35,7 +59,7 @@ export default function App() {
     JetBrainsMono_400Regular,
     JetBrainsMono_700Bold,
   })
- 
+
   useEffect(() => {
     async function hideSplashScreen() {
       if (fontsLoaded) {
@@ -53,7 +77,7 @@ export default function App() {
       <StatusBar style="dark" />
       <SafeAreaProvider>
         <NavigationContainer linking={linking}>
-          <MainStackNavigator/>
+          <MainStackNavigator />
         </NavigationContainer>
       </SafeAreaProvider>
     </GestureHandlerRootView>

@@ -22,6 +22,9 @@ const styles = StyleSheet.create({
   },
   modalProfilePicture: {
     alignItems: "center",
+    borderColor: peach,
+    borderRadius: 100,
+    borderWidth: 2,
     height: 80,
     justifyContent: "center",
     left: 20,
@@ -31,8 +34,8 @@ const styles = StyleSheet.create({
   },
   modalView: {
     alignItems: "center",
-    backgroundColor: peach,
-    borderColor: lightPeach,
+    backgroundColor: lightPeach,
+    borderColor: peach,
     borderRadius: 20,
     borderWidth: 3,
     elevation: 5,

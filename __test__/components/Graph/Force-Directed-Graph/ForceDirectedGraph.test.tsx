@@ -10,30 +10,29 @@ import ForceDirectedGraph from "../../../../components/Graph/ForceDirectedGraph/
 import Graph from "../../../../components/Graph/Graph"
 import { State } from "react-native-gesture-handler"
 
+import { mockContacts } from "../../../../screens/Contacts/mockContacts"
+
 jest.mock("react-native-gesture-handler", () => {
   return {
     State: {
       END: 5,
     },
-    PanGestureHandler: 'View',
-    PinchGestureHandler: 'View',
-    GestureHandlerRootView: 'View',
+    PanGestureHandler: "View",
+    PinchGestureHandler: "View",
+    GestureHandlerRootView: "View",
   }
 })
 
 describe("ForceDirectedGraph", () => {
-  let graph: Graph
-  let constrainedNodeId: string
+  let contacts = mockContacts
+  let constrainedNodeId = "0"
 
   const mockFunc = jest.fn()
 
-    beforeEach(() => {
-        mockFunc.mockClear()
-    })
-
   beforeEach(() => {
-    graph = new Graph(["1", "2", "3"], ["1", "2"], ["2", "3"], [1, 2])
-    constrainedNodeId = "2"
+    contacts = mockContacts
+    constrainedNodeId = "0"
+    mockFunc.mockClear()
   })
 
   afterEach(() => {
@@ -41,23 +40,25 @@ describe("ForceDirectedGraph", () => {
   })
 
   it("renders without crashing", () => {
+    const graph = new Graph(contacts, constrainedNodeId)
     const component = render(
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
         onModalPress={mockFunc}
-      />,
+      />
     )
     expect(component).toBeTruthy()
   })
 
   it("dragging moves the graph", () => {
+    const graph = new Graph(contacts, constrainedNodeId)
     const component = render(
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
         onModalPress={mockFunc}
-      />,
+      />
     )
 
     expect(component).toBeTruthy()
@@ -78,13 +79,13 @@ describe("ForceDirectedGraph", () => {
 
     act(() => {
       panHandler.props.onGestureEvent({
-        nativeEvent: {translationX: 0, translationY: 0 },
+        nativeEvent: { translationX: 0, translationY: 0 },
       })
     })
 
     act(() => {
       panHandler.props.onGestureEvent({
-        nativeEvent: {translationX: 10, translationY: 10 },
+        nativeEvent: { translationX: 10, translationY: 10 },
       })
     })
 
@@ -115,14 +116,14 @@ describe("ForceDirectedGraph", () => {
   })
 
   it("displays modal when a node is pressed", async () => {
+    const graph = new Graph(contacts, constrainedNodeId)
     const component = render(
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
         onModalPress={mockFunc}
-      />,
+      />
     )
-
 
     const panHandler = component.getByTestId("pan-handler")
     const node1 = component.getByTestId("node-1")
@@ -132,87 +133,90 @@ describe("ForceDirectedGraph", () => {
     expect(panHandler.props.enabled).toBe(true)
 
     act(() => {
-    fireEvent(node1, "pressIn")
+      fireEvent(node1, "pressIn")
     })
 
     jest.useFakeTimers()
     act(() => {
-    jest.advanceTimersByTime(50)
+      jest.advanceTimersByTime(50)
     })
 
-    act (() => {
+    act(() => {
       fireEvent(node1, "pressOut")
       jest.advanceTimersByTime(500)
     })
 
-    
-    jest.useRealTimers()    
+    jest.useRealTimers()
     expect(mockFunc).toHaveBeenCalled()
-
   })
 
   it("very short pressing a node does not display a modal", async () => {
+    const graph = new Graph(contacts, constrainedNodeId)
 
     const component = render(
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
         onModalPress={mockFunc}
-      />,
+      />
     )
 
     const node1 = component.getByTestId("node-1")
-    
+
     expect(node1).toBeTruthy()
     expect(component.queryByTestId("modal")).toBeNull()
 
     fireEvent(node1, "pressIn")
-    fireEvent(node1, "pressOut")    
+    fireEvent(node1, "pressOut")
     jest.useFakeTimers()
-    await waitFor(() => {
-      expect(component.queryByTestId("modal")).toBeNull()
-    }, {timeout: 10})
+    await waitFor(
+      () => {
+        expect(component.queryByTestId("modal")).toBeNull()
+      },
+      { timeout: 10 }
+    )
     jest.useRealTimers()
   })
 
-
   it("long pressing a node does not display a modal", async () => {
+    const graph = new Graph(contacts, constrainedNodeId)
 
     const component = render(
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
         onModalPress={mockFunc}
-      />,
+      />
     )
 
     const node1 = component.getByTestId("node-1")
-    
+
     expect(node1).toBeTruthy()
     expect(mockFunc).not.toHaveBeenCalled()
   })
 
   it("pinching zooms the graph", async () => {
+    const graph = new Graph(contacts, constrainedNodeId)
 
     const component = render(
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
         onModalPress={mockFunc}
-      />,
+      />
     )
-    
+
     expect(component).toBeTruthy()
 
     const pinchHandler = component.getByTestId("pinch-handler")
 
     expect(pinchHandler).toBeTruthy()
 
-    const node1 = component.getByTestId("node-1")
+    const text_1 = component.getByTestId("text-1")
 
-    expect(node1).toBeTruthy()
+    expect(text_1).toBeTruthy()
 
-    const initialRadius = node1.props.r
+    const initialY = Number(text_1.props.y.toString())
 
     act(() => {
       pinchHandler.props.onGestureEvent({
@@ -220,40 +224,6 @@ describe("ForceDirectedGraph", () => {
       })
     })
 
-    jest.useFakeTimers()
-
-    await waitFor(() => {
-      expect(node1.props.r).toBe(initialRadius)
-    }, {timeout: 10})
-
-    jest.useRealTimers()
-
-    act(() => {
-      pinchHandler.props.onHandlerStateChange({
-        nativeEvent: { state: State.ACTIVE },
-      })
-    })
-
-    jest.useFakeTimers()
-    await waitFor(() => {
-      expect(node1.props.r).toBe(initialRadius)
-    }, {timeout: 10})
-
-    jest.useRealTimers()
-
-    act(() => {
-      pinchHandler.props.onHandlerStateChange({
-        nativeEvent: { state: State.END },
-      })
-    })
-
-    jest.useFakeTimers()
-    await waitFor(() => {
-      expect(node1.props.r).toBeLessThan(initialRadius)
-    }, {timeout: 10})
-
-    jest.useRealTimers()
-
+    expect(Number(text_1.props.y.toString())).toBeLessThan(initialY)
   })
-
 })

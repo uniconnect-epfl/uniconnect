@@ -1,27 +1,9 @@
 import React from "react"
-import { Modal, TouchableWithoutFeedback, View, Text } from "react-native"
-import Svg, { Image } from "react-native-svg"
+import { Modal, TouchableWithoutFeedback, View, Text, Image } from "react-native"
 import { Node } from "../Graph"
 
 import styles from "./styles"
 
-import profile_picture_0 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-0.png"
-import profile_picture_1 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-1.png"
-import profile_picture_2 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-2.png"
-import profile_picture_3 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-3.png"
-import profile_picture_4 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-4.png"
-import profile_picture_5 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-5.png"
-import profile_picture_6 from "../../../assets/graph-template-profile-pictures/graph-template-profile-picture-6.png"
-
-const PROFILE_PICTURES = [
-  profile_picture_0,
-  profile_picture_1,
-  profile_picture_2,
-  profile_picture_3,
-  profile_picture_4,
-  profile_picture_5,
-  profile_picture_6,
-]
 
 const NodeModal: React.FC<{
     node: Node
@@ -47,25 +29,20 @@ const NodeModal: React.FC<{
           <View style={styles.modalContainer}>
             <TouchableWithoutFeedback>
               <View style={styles.modalView}>
-                <Svg style={styles.modalProfilePicture}>
+                <TouchableWithoutFeedback
+                onPress={() => {
+                  onPressOut()
+                  onContactPress(node.id)
+                }}>
                 <Image
-                    key={node.id + "modalimage"}
-                    width={styles.modalProfilePicture.width}
-                    height={styles.modalProfilePicture.height}
-                    href={
-                        PROFILE_PICTURES[
-                            parseInt(node.id) % PROFILE_PICTURES.length
-                        ]
-                    }
-                    onPress={() => {
-                        onPressOut()
-                        onContactPress(node.id)
-                    }}
-                    testID="modal-profile-picture"
+                key={node.id + "modalimage"}
+                source={{ uri: node.contact.profilePictureUrl }}
+                style={styles.modalProfilePicture}
+                testID="modal-profile-picture"
                 />
-                </Svg>
+              </TouchableWithoutFeedback>
                 <Text style={styles.modalProfileName}>
-                  Node ID: {node.id}
+                  {node.contact.firstName} {node.contact.lastName}
                 </Text>
               </View>
             </TouchableWithoutFeedback>

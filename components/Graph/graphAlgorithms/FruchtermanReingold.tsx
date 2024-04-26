@@ -20,14 +20,14 @@ export const fruchtermanReingold = (
   iterations: number
 ) => {
   // Maximum distance between nodes
-  const k = Math.sqrt((width * height) / nodes.length)/2
+  const k = Math.sqrt((width * height) / nodes.length) / 2
 
   // Randomly initialize node positions
   initializePositions(nodes, width, height)
 
   // Initialize temperature and cooling rate
   let temperature = width / 10
-  const cooling = temperature / (iterations)
+  const cooling = temperature / iterations
 
   // Perform iterations
   for (let i = 0; i < iterations; i++) {
@@ -162,7 +162,6 @@ const updatePositions = (
       // Update node position
       node.x += node.dx * ratio
       node.y += node.dy * ratio
-
     }
   }
 }

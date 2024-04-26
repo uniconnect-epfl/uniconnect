@@ -1,193 +1,166 @@
-/**
- * Node interface
- */
+import Contact from "../../screens/Contacts/Contact"
+
 interface Node {
-  id: string  // Unique identifier
-  x: number  // x-coordinate
-  y: number  // y-coordinate
-  dx: number  // x-velocity
-  dy: number  // y-velocity
-  selected?: boolean  // Is the node selected?
+  id: string
+  x: number
+  y: number
+  dx: number
+  dy: number
+  selected?: boolean
+  contact: Contact
+  level: number
 }
 
-/**
- * Link interface
- */
 interface Link {
-  source: string  // Source node identifier
-  target: string  // Target node identifier
-  strength: number  // Strength of the link
+  source: string
+  target: string
 }
 
-/**
- *
- * @class Graph
- * @description Graph representation of the form (V, E) where V is a set of nodes and E is a set of links (edges)
- */
 export default class Graph {
-  // Nodes in the graph
-  nodes: Node[] 
-
-  // Links in the graph
-  links: Link[] 
-
-  // Are the node positions initialized?
+  nodes: Node[]
+  links: Link[]
   initialized: boolean
 
-
-  /**
-   *
-   * @constructor
-   * @param ids - Unique identifiers for the nodes
-   * @param sources - Source node identifiers for the links
-   * @param targets - Target node identifiers for the links
-   * @param strengths - Strengths of the links
-   */
-  constructor(
-    ids: string[],
-    sources: string[],
-    targets: string[],
-    strengths: number[]
-  ) {
-    /**
-     * @description Validate the inputs
-     * @throws {Error} - If ids is empty
-     * @throws {Error} - If sources is empty
-     * @throws {Error} - If sources, targets, and strengths have different lengths
-     */
-
-    if (ids.length === 0) {
-      throw new Error("ids must not be empty") 
-    }
-    if (sources.length === 0) {
-      throw new Error("sources must not be empty") 
-    }
-    if (
-      sources.length !== targets.length ||
-      targets.length !== strengths.length
-    ) {
-      throw new Error(
-        "sources, targets, and strengths must have the same length"
-      ) 
-    }
-
-    // Initialize the nodes
-    this.nodes = ids.map((id: string): Node => {
-      return {
-        id: id,
-        x: 0,
-        y: 0,
-        dx: 0,
-        dy: 0,
-      } 
-    }) 
-
-    // Initialize the links
-    this.links = sources.map((source: string, index: number): Link => {
-      return {
-        source: source,
-        target: targets[index],
-        strength: strengths[index],
-      } 
-    }) 
-
-    // Set the node positions to be uninitialized
+  constructor(contacts: Contact[], userId: string) {
+    this.nodes = []
+    this.links = []
     this.initialized = false
-  }
 
-  getInitialized(): boolean {
-    return this.initialized 
-  }
-
-  setInitialized(initialized: boolean): void {
-    this.initialized = initialized 
-  }
-
-  /**
-   *
-   * @description Retrieve the nodes in the graph
-   * @returns - The nodes in the graph
-   */
-  getNodes(): Node[] {
-    return this.nodes 
-  }
-
-  /**
-   *
-   * @description Retrieve the links in the graph
-   * @returns - The links in the graph
-   */
-  getLinks(): Link[] {
-    return this.links 
-  }
-
-  /**
-   *
-   * @description Add a node to the graph
-   * @param id - Unique identifier for the node to be added
-   */
-  addNode(id: string): void {
+    // Add the user node
+    const user = contacts.find((contact) => contact.uid === userId) as Contact
+    if (!user) {
+      throw new Error("User not found in contacts")
+    }
     this.nodes.push({
-      id: id,
+      id: userId,
       x: 0,
       y: 0,
       dx: 0,
       dy: 0,
-    }) 
-    this.setInitialized(false)
-  }
-
-  /**
-   *
-   * @description Add a link to the graph
-   * @param source - Source node identifier for the link to be added
-   * @param target - Target node identifier for the link to be added
-   * @param strength - Strength of the link to be added
-   */
-  addLink(source: string, target: string, strength: number): void {
-    this.links.push({
-      source: source,
-      target: target,
-      strength: strength,
+      contact: user,
+      level: 1,
     })
-    this.setInitialized(false)
-  }
 
-  /**
-   *
-   * @description Remove a node from the graph and all links connected to it
-   * @param id - Unique identifier for the node to be removed
-   */
-  removeNode(id: string): void {
-    this.nodes = this.nodes.filter((node: Node): boolean => {
-      return node.id !== id 
-    }) 
+    const visited = new Set<string>()
+    // Add the user's friends
+    for (const friendId of user.friends) {
+      const friend = contacts.find(
+        (contact) => contact.uid === friendId
+      ) as Contact
+      if (!friend) {
+        continue
+      }
+      visited.add(friendId)
+      this.nodes.push({
+        id: friendId,
+        x: 0,
+        y: 0,
+        dx: 0,
+        dy: 0,
+        contact: friend,
+        level: 2,
+      })
+      this.links.push({
+        source: userId,
+        target: friendId,
+      })
+    }
 
-    this.links = this.links.filter((link: Link): boolean => {
-      return link.source !== id && link.target !== id 
-    }) 
-    this.setInitialized(false)
-  }
-
-  /**
-   *
-   * @description Remove a link from the graph
-   * @param source - Source node identifier for the link to be removed
-   * @param target - Target node identifier for the link to be removed
-   */
-  removeLink(source: string, target: string): void {
-    this.links = this.links.filter((link: Link): boolean => {
-      return link.source !== source || link.target !== target 
-    }) 
-    this.setInitialized(false)
-  }
-
-
-  getNodeById(id: string): Node | undefined {
-    return this.nodes.find((node: Node): boolean => {
-      return node.id === id 
-    }) 
+    // Add the friends of the user's friends
+    for (const friendId of user.friends) {
+      const friend = contacts.find(
+        (contact) => contact.uid === friendId
+      ) as Contact
+      if (!friend) {
+        continue
+      }
+      for (const friendOfFriendId of friend.friends) {
+        if (visited.has(friendOfFriendId)) {
+          continue
+        }
+        const friendOfFriend = contacts.find(
+          (contact) => contact.uid === friendOfFriendId
+        ) as Contact
+        if (!friendOfFriend) {
+          continue
+        }
+        visited.add(friendOfFriendId)
+        this.nodes.push({
+          id: friendOfFriendId,
+          x: 0,
+          y: 0,
+          dx: 0,
+          dy: 0,
+          contact: friendOfFriend,
+          level: 3,
+        })
+        this.links.push({
+          source: friendId,
+          target: friendOfFriendId,
+        })
+      }
+    }
   }
 }
 
-export type { Node, Link } 
+function addNode(graph: Graph, node: Node): void {
+  graph.nodes.push(node)
+}
+
+function addLink(graph: Graph, source: string, target: string): void {
+  graph.links.push({ source, target })
+}
+
+function getNodeById(graph: Graph, id: string): Node {
+  return graph.nodes.find((node) => node.id === id) as Node
+}
+
+function getNodes(graph: Graph): Node[] {
+  return graph.nodes
+}
+
+function deleteNode(graph: Graph, id: string) {
+  graph.nodes = graph.nodes.filter((node) => node.id !== id)
+  graph.links = graph.links.filter(
+    (link) => link.source !== id && link.target !== id
+  )
+}
+
+function deleteLink(graph: Graph, source: string, target: string) {
+  graph.links = graph.links.filter(
+    (link) => link.source !== source || link.target !== target
+  )
+}
+
+function getLink(graph: Graph, source: string, target: string): Link {
+  return graph.links.find(
+    (link) => link.source === source && link.target === target
+  ) as Link
+}
+
+function getLinks(graph: Graph): Link[] {
+  return graph.links
+}
+
+function getInitialized(graph: Graph): boolean {
+  return graph.initialized
+}
+
+function setInitialized(graph: Graph, initialized: boolean) {
+  graph.initialized = initialized
+}
+
+export {
+  Node,
+  Link,
+  addNode,
+  addLink,
+  getNodeById,
+  getNodes,
+  deleteNode,
+  deleteLink,
+  getLink,
+  getLinks,
+  getInitialized,
+  setInitialized,
+}
