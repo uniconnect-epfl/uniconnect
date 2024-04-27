@@ -1,6 +1,9 @@
 import { User } from "firebase/auth"
 import { auth } from "./firebaseConfig"
 import { signInWithEmailAndPassword } from "firebase/auth"
+import { FirebaseError } from "firebase/app"
+import { showErrorToast, showSuccessToast } from "../components/ToastMessage/toast"
+import { codeToMessage } from "./Errors"
 
 export const loginEmailPassword = async ( email: string, password: string): Promise<User | null> => {
   let user = null
@@ -11,12 +14,14 @@ export const loginEmailPassword = async ( email: string, password: string): Prom
     password
     )
     user = userCredential.user
-    console.log(user)
   } catch (error) {
-    if (error instanceof Error) {
-    // Type-guard check
+    let errorMessage : string = "An error has occured: " + error
+    if (error instanceof FirebaseError) {
+      errorMessage = codeToMessage(error.code)
     }
-    alert("There was an error" + error)
+    showErrorToast(errorMessage)
+    return null
   }
+  showSuccessToast("Welcome back 👋")
   return user
 }
