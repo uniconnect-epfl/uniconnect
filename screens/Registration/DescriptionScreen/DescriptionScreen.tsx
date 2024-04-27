@@ -1,5 +1,4 @@
-import React, { useState } from "react"
-
+import React, { useContext } from "react"
 import {
   View,
   Text,
@@ -9,17 +8,17 @@ import {
 } from "react-native"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { useNavigation } from "@react-navigation/native"
-
 import styles from "./styles"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import { TextInput } from "react-native-gesture-handler"
-
+import { RegistrationContext } from "../../../contexts/RegistrationContext"
 
 const DescriptionScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
-  const [description, setDescription] = useState("")
   const navigation = useNavigation()
 
+  const { description, setDescription } = useContext(RegistrationContext)
+ 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View

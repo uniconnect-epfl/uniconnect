@@ -1,19 +1,14 @@
 import React, { useState, useRef } from "react"
-
 import {
   Text,
   Image,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
   Keyboard,
   TextInput,
 } from "react-native"
-
 import InputField from "../../../components/InputField/InputField"
-
 import styles from "./styles"
-
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import Divider from "../../../components/Divider/Divider"
@@ -21,7 +16,7 @@ import LowBar from "../../../components/LowBar/LowBar"
 import { Entypo } from "@expo/vector-icons"
 import { AntDesign } from "@expo/vector-icons"
 import { red, green } from "../../../assets/colors/colors"
-import { createAccount, storeEmail } from "../../../firebase/Registration"
+import { createAccount } from "../../../firebase/Registration"
 
 const AuthenticationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
@@ -43,7 +38,7 @@ const AuthenticationScreen: React.FC = () => {
   }
 
   const isEmail = () => {
-    return true
+    return email.includes("@") && email.includes(".")
   }
 
   const doEmailsMatch = () => {
@@ -55,15 +50,7 @@ const AuthenticationScreen: React.FC = () => {
    */
   const submitForm = async () => {
     if (isPassword() && doPasswordsMatch() && isEmail() && doEmailsMatch()) {
-      createAccount(email, password)
-        .then(() => console.log('Account created. Check email'))
-        .catch((error: Error) => console.error('There was an error', error))
-
-      storeEmail(email)
-        .then(() => console.log('Email stored successfully'))
-        .catch((error: Error) => console.error('Failed to store email:', error))
-    } else {
-      alert("Please check your data")
+      await createAccount(email, password)
     }
   }
 
@@ -145,11 +132,7 @@ const AuthenticationScreen: React.FC = () => {
           ref={thirdRef}
         ></InputField>
 
-        <TouchableOpacity style={styles.button} onPress={submitForm}>
-          <Text style={globalStyles.boldText}>Send confirmation e-mail</Text>
-        </TouchableOpacity>
-
-        <LowBar nextScreen="HomeTabs" buttonText="Finish"/>
+        <LowBar nextScreen="HomeTabs" buttonText="Confirm" authenticate={submitForm} />
       </View>
     </TouchableWithoutFeedback>
   )
