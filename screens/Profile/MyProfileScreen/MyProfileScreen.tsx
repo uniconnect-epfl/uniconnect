@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Text, View, TouchableOpacity } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import ExpandableDescription from "../../../components/ExpandableDescription/ExpandableDescription"
@@ -11,28 +11,10 @@ import { globalStyles } from "../../../assets/global/globalStyles"
 import SectionTabs from "../../../components/SectionTabs/SectionTabs"
 import { ProfileEvents } from "../ProfileEvents/ProfileEvents"
 import { ProfileInterests } from "../ProfileInterests/ProfileInterests"
-
-type Contact = {
-  uid: string
-  firstName: string
-  lastName: string
-  profilePictureUrl?: string
-  description: string
-  interests: string[]
-  qualifications: string[],
-  location: string
-}
-
-const dummyProfile: Contact = {
-  uid: "4",
-  firstName: "Hervé",
-  lastName: "DelaMontagne",
-  profilePictureUrl: "",
-  description: "Description, description, descrc hdsjklaf hel fhj fdj bjhd vbfdhj vbdjhl vdjlh vdhj vfdjh hvdu vdh vdfj vdfs hfdj fdj vdfjl d grei hrj heiua fjispd jis gjdrkl gjreks reksl grei gril nrsj njiption, loooooooooong descriiiiiiiiiiption, this is a veeeeeeeeeeeeeeeeeeeeeery loooooooooooooooooooooooooooooooooooooooooooong descriiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiption alala",
-  interests: ["running"],
-  qualifications: ["bowling"],
-  location: "EPFL Ecublens"
-}
+import { getAuth } from "firebase/auth"
+import { User } from "../../../types/User"
+import { getUserData } from "../../../firebase/User"
+import LoadingScreen from "../../Loading/LoadingScreen"
 
 interface MyProfileScreenProps{
   navigation: NavigationProp<ParamListBase>
@@ -40,7 +22,24 @@ interface MyProfileScreenProps{
 
 export const MyProfileScreen = ({navigation} : MyProfileScreenProps) => {
   const [selectedTab, setSelectedTab] = useState("Events")
+  const userId = getAuth().currentUser?.uid
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
 
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true)
+      if(userId){
+        setUser(await getUserData(userId))
+      }
+      setLoading(false)
+    }
+    fetchData()
+  }, [userId])
+
+  if(loading || !user){
+    return <LoadingScreen/>
+  }
   return (
     <View style={styles.container}>
       <View style={profileStyles.topBackground} />
@@ -49,9 +48,9 @@ export const MyProfileScreen = ({navigation} : MyProfileScreenProps) => {
         <View style={profileStyles.topProfileContainer}>
 
           <GeneralProfile
-            name={dummyProfile.firstName}
-            surname={dummyProfile.lastName}
-            location={dummyProfile.location}
+            name={user.firstName}
+            surname={user.lastName}
+            location={user.location}
           />
           
           <View style={profileStyles.buttonsContainer}>
@@ -73,7 +72,7 @@ export const MyProfileScreen = ({navigation} : MyProfileScreenProps) => {
         </View>
 
         <ExpandableDescription
-          description={dummyProfile.description}
+          description={user.description}
         />
 
         <SectionTabs 
