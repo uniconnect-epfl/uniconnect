@@ -18,8 +18,8 @@ import * as Linking from "expo-linking"
 
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
-const GRAPH_STORAGE_KEY = "graph"
-const GRAPH_EXISTENCE_FLAG_KEY = "graph_exists"
+const GRAPH_STORAGE_KEY = "graph" // Key used by AsyncStorage to store and retrieve the graph file
+const GRAPH_EXISTENCE_FLAG_KEY = "graph_exists" // Key used by AsyncStorage to store a flag indicating whether the graph file exists
 
 // Function to destroy the graph file if it exists
 const destroyGraphFileIfExists = async () => {

@@ -68,14 +68,14 @@ describe("ForceDirectedGraph", () => {
     const node2 = component.getByTestId("node-2")
     const node3 = component.getByTestId("node-3")
 
-    const initialX_A = node1.props.cx
-    const initialY_A = node1.props.cy
+    const initialX_A = node1.props.x
+    const initialY_A = node1.props.y
 
-    const initialX_B = node2.props.cx
-    const initialY_B = node2.props.cy
+    const initialX_B = node2.props.x
+    const initialY_B = node2.props.y
 
-    const initialX_C = node3.props.cx
-    const initialY_C = node3.props.cy
+    const initialX_C = node3.props.x
+    const initialY_C = node3.props.y
 
     act(() => {
       panHandler.props.onGestureEvent({
@@ -89,15 +89,15 @@ describe("ForceDirectedGraph", () => {
       })
     })
 
-    expect(node1.props.cx).toBe(initialX_A + 10)
-    expect(node1.props.cy).toBe(initialY_A + 10)
+    expect(node1.props.x).toBe(initialX_A + 10)
+    expect(node1.props.y).toBe(initialY_A + 10)
 
-    expect(node2.props.cx).toBe(initialX_B + 10)
+    expect(node2.props.x).toBe(initialX_B + 10)
 
-    expect(node2.props.cy).toBe(initialY_B + 10)
+    expect(node2.props.y).toBe(initialY_B + 10)
 
-    expect(node3.props.cx).toBe(initialX_C + 10)
-    expect(node3.props.cy).toBe(initialY_C + 10)
+    expect(node3.props.x).toBe(initialX_C + 10)
+    expect(node3.props.y).toBe(initialY_C + 10)
 
     act(() => {
       panHandler.props.onHandlerStateChange({
@@ -105,14 +105,14 @@ describe("ForceDirectedGraph", () => {
       })
     })
 
-    expect(node1.props.cx).toBe(initialX_A + 10)
-    expect(node1.props.cy).toBe(initialY_A + 10)
+    expect(node1.props.x).toBe(initialX_A + 10)
+    expect(node1.props.y).toBe(initialY_A + 10)
 
-    expect(node2.props.cx).toBe(initialX_B + 10)
-    expect(node2.props.cy).toBe(initialY_B + 10)
+    expect(node2.props.x).toBe(initialX_B + 10)
+    expect(node2.props.y).toBe(initialY_B + 10)
 
-    expect(node3.props.cx).toBe(initialX_C + 10)
-    expect(node3.props.cy).toBe(initialY_C + 10)
+    expect(node3.props.x).toBe(initialX_C + 10)
+    expect(node3.props.y).toBe(initialY_C + 10)
   })
 
   it("displays modal when a node is pressed", async () => {

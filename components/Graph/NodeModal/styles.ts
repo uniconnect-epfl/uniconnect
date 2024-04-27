@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     elevation: 5,
     height: "40%",
-    justifyContent: "center",
+    justifyContent: "flex-end",
     margin: 20,
     padding: 35,
     shadowColor: black,

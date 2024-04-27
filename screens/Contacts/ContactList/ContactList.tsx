@@ -1,18 +1,24 @@
-import React, { useState } from "react" 
-import { View, Text, FlatList, Image, TextInput, TouchableOpacity} from "react-native" 
-import { styles } from "./styles" 
+import React, { useState } from "react"
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TextInput,
+  TouchableOpacity,
+} from "react-native"
+import { styles } from "./styles"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import { black } from "../../../assets/colors/colors"
 import Contact from "../Contact"
 
-
-interface ContactListProps{
-  onContactPress: (uid : string) => void
+interface ContactListProps {
+  onContactPress: (uid: string) => void
   contacts: Contact[]
 }
 
-const ContactList = ({onContactPress, contacts} : ContactListProps ) => {
+const ContactList = ({ onContactPress, contacts }: ContactListProps) => {
   const [filteredContacts, setFilteredContacts] = useState(contacts)
   const [searchText, setSearchText] = useState("")
 
@@ -31,9 +37,10 @@ const ContactList = ({onContactPress, contacts} : ContactListProps ) => {
   }
 
   const RenderOneContact = ({ item }: { item: Contact }) => (
-    <TouchableOpacity 
+    <TouchableOpacity
       style={styles.cardContainer}
-      onPress={() => onContactPress(item.uid)}>
+      onPress={() => onContactPress(item.uid)}
+    >
       {item.profilePictureUrl ? (
         <Image
           style={styles.profilePicture}
@@ -51,7 +58,9 @@ const ContactList = ({onContactPress, contacts} : ContactListProps ) => {
           </Text>
         </View>
         <View>
-          <Text style={globalStyles.boldText}>{item.firstName + " " + item.lastName} </Text>
+          <Text style={globalStyles.boldText}>
+            {item.firstName + " " + item.lastName}{" "}
+          </Text>
           <Text style={globalStyles.text}>Friend</Text>
         </View>
       </View>
@@ -60,7 +69,6 @@ const ContactList = ({onContactPress, contacts} : ContactListProps ) => {
 
   return (
     <View style={styles.container}>
-
       <TextInput
         style={styles.searchBar}
         placeholder="Search..."
@@ -73,7 +81,6 @@ const ContactList = ({onContactPress, contacts} : ContactListProps ) => {
         renderItem={RenderOneContact}
         keyExtractor={(contact) => contact.uid}
       />
-
     </View>
   )
 }

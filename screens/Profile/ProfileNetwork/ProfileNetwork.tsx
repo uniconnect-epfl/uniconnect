@@ -1,12 +1,11 @@
 import { View, Text, Image } from "react-native"
 import { styles } from "./styles"
-import { useState } from "react"
+import React, { useState } from "react"
 import { FlatList, TextInput } from "react-native-gesture-handler"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import { mockContacts } from "../../Contacts/mockContacts"
 import Contact from "../../Contacts/Contact"
-import React from "react"
 
 const RenderOneContact = ({ item }: { item: Contact }) => (
   <View style={styles.contactCard}>

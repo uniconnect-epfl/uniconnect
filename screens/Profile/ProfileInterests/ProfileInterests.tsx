@@ -1,6 +1,6 @@
-
 import { View, Text } from "react-native"
 import { styles } from "./styles"
+import React from "react"
 
 export const ProfileInterests = () => {
   return (

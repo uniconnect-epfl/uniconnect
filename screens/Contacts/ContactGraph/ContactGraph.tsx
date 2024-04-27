@@ -15,21 +15,33 @@ import ForceDirectedGraph from "../../../components/Graph/ForceDirectedGraph/For
 import React, { useState } from "react"
 
 import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
+
 interface ContactGraphProps {
   onContactPress: (uid: string) => void
   graph: Graph
   userId: string
 }
 
+/**
+ * ContactGraph component
+ * @param onContactPress - Function to call when the contact is pressed
+ * @param graph - The graph to display
+ * @param userId - The unique identifier of the user
+ * @returns The ContactGraph component
+ */
 const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
+  // State to store the text of the search bar
   const [searchText, setSearchText] = useState("")
 
+  // State to store the node that was clicked for the modal
   const [clickedNode, setClickedNode] = useState<Node>(
     getNodeById(graph, userId)
   )
 
+  // State to store whether the modal is visible
   const [modalVisible, setModalVisible] = useState(false)
 
+  // Function to call when the modal is pressed
   const onModalPress = (uid: string) => {
     const node = getNodeById(graph, uid)
     if (node) {
@@ -38,10 +50,13 @@ const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
     }
   }
 
-  const onPressOut = () => {
+  // Function to call when the modal is pressed out
+  const onModalPressOut = () => {
     setModalVisible(false)
   }
+
   return (
+    // Dismiss the keyboard when the user taps outside of the search bar
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <TextInput
@@ -54,11 +69,10 @@ const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
           }}
           onSubmitEditing={() => handleQuery(onContactPress, graph)}
         />
-
         <NodeModal
           node={clickedNode}
           visible={modalVisible}
-          onPressOut={onPressOut}
+          onPressOut={onModalPressOut}
           onContactPress={onContactPress}
         />
         <View style={styles.graphContainer}>
@@ -75,12 +89,19 @@ const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
 
 export default ContactGraph
 
+/**
+ * Function to handle the search input
+ * @param text - The text in the search bar
+ * @param graph - The graph to search
+ */
 function handleSearch(text: string, graph: Graph): void {
   if (text === "") {
+    // If the search bar is empty, deselect all nodes
     for (const node of getNodes(graph)) {
       node.selected = false
     }
   } else {
+    // If the search bar is not empty, select the nodes that match the search text
     for (const node of getNodes(graph)) {
       const fullname = `${node.contact.firstName} ${node.contact.lastName}`
       if (
@@ -95,6 +116,11 @@ function handleSearch(text: string, graph: Graph): void {
   }
 }
 
+/**
+ * Function to handle the query input from the search bar when submitted
+ * @param callback - The function to call with the selected node's unique identifier
+ * @param graph - The graph to query
+ */
 function handleQuery(callback: (uid: string) => void, graph: Graph): void {
   for (const node of getNodes(graph)) {
     if (node.selected) {
