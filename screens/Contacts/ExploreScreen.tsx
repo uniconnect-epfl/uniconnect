@@ -93,8 +93,26 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
   )
 }
 
-export default ExploreScreen
-
 function createGraphfromContacts(contacts: Contact[], uid: string): Graph {
   return new Graph(contacts, uid)
 }
+
+// Function to destroy the graph file if it exists
+const destroyGraphFileIfExists = async () => {
+  try {
+    // Check if the graph file exists
+    const graphExists = await AsyncStorage.getItem(GRAPH_EXISTENCE_FLAG_KEY)
+    if (graphExists === "true") {
+      // If the graph file exists, delete it
+      await AsyncStorage.removeItem(GRAPH_STORAGE_KEY)
+      // Reset the flag to indicate that the graph file no longer exists
+      await AsyncStorage.setItem(GRAPH_EXISTENCE_FLAG_KEY, "false")
+    }
+  } catch (error) {
+    console.error("Error destroying graph file:", error)
+  }
+}
+
+export default ExploreScreen
+
+export { destroyGraphFileIfExists }
