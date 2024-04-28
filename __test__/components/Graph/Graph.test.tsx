@@ -6,7 +6,6 @@ import Graph, {
   getLinks,
   getNodes,
 } from "../../../components/Graph/Graph"
-import Contact from "../../../screens/Contacts/Contact"
 
 import { mockContacts } from "../../../screens/Contacts/mockContacts"
 
@@ -36,7 +35,17 @@ describe("Graph", () => {
       y: 0,
       dx: 0,
       dy: 0,
-      contact: new Contact("10", "John", "Doe", "", "", "", [], [], []),
+      contact: {
+        uid: "10",
+        firstName: "John",
+        lastName: "Doe",
+        profilePictureUrl: "",
+        description: "",
+        location: "",
+        interests: [],
+        events: [],
+        friends: [],
+      },
       level: 1,
     }
     addNode(graph, newNode)

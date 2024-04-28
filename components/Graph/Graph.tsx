@@ -1,4 +1,4 @@
-import Contact from "../../screens/Contacts/Contact"
+import { Contact } from "../../screens/Contacts/Contact"
 
 /**
  * Interface for a node in the graph
@@ -76,89 +76,94 @@ export default class Graph {
     visited.add(userId)
 
     // Add the friends of the user
-    for (const friendId of user.friends) {
-      // If the friend has already been visited, skip to the next friend
-      if (visited.has(friendId)) {
-        continue
-      }
-
-      // Find the friend in the provided contacts
-      const friend = contacts.find(
-        (contact) => contact.uid === friendId
-      ) as Contact
-
-      // If the friend is not found, skip to the next friend
-      if (!friend) continue
-
-      // Mark the friend as visited
-      visited.add(friendId)
-
-      // Add the friend to the graph
-      this.nodes.push({
-        id: friendId,
-        x: 0,
-        y: 0,
-        dx: 0,
-        dy: 0,
-        contact: friend,
-        level: 2,
-      })
-
-      // Add a link between the user and the friend
-      this.links.push({
-        source: userId,
-        target: friendId,
-      })
-    }
-
-    // Add the friends of the friends of the user
-    for (const friendId of user.friends) {
-      // Find the friend in the provided contacts
-      const friend = contacts.find(
-        (contact) => contact.uid === friendId
-      ) as Contact
-
-      // If the friend is not found, skip to the next friend
-      if (!friend) {
-        continue
-      }
-
-      // For each friend of the friend, add the friend to the graph and a link between the friend and the friend of the friend
-      for (const friendOfFriendId of friend.friends) {
-        // If the friend of the friend has already been visited, skip to the next friend of the friend
-        if (visited.has(friendOfFriendId)) {
+    if (user.friends) {
+      for (const friendId of user.friends) {
+        // If the friend has already been visited, skip to the next friend
+        if (visited.has(friendId)) {
           continue
         }
 
-        // Find the friend of the friend in the provided contacts
-        const friendOfFriend = contacts.find(
-          (contact) => contact.uid === friendOfFriendId
+        // Find the friend in the provided contacts
+        const friend = contacts.find(
+          (contact) => contact.uid === friendId
         ) as Contact
 
-        // If the friend of the friend is not found, skip to the next friend of the friend
-        if (!friendOfFriend) {
-          continue
-        }
+        // If the friend is not found, skip to the next friend
+        if (!friend) continue
 
-        // Mark the friend of the friend as visited
-        visited.add(friendOfFriendId)
+        // Mark the friend as visited
+        visited.add(friendId)
 
-        // Add the friend of the friend to the graph
+        // Add the friend to the graph
         this.nodes.push({
-          id: friendOfFriendId,
+          id: friendId,
           x: 0,
           y: 0,
           dx: 0,
           dy: 0,
-          contact: friendOfFriend,
-          level: 3,
+          contact: friend,
+          level: 2,
         })
 
-        // Add a link between the friend and the friend of the friend
+        // Add a link between the user and the friend
         this.links.push({
-          source: friendId,
-          target: friendOfFriendId,
+          source: userId,
+          target: friendId,
         })
+      }
+
+      // Add the friends of the friends of the user
+      for (const friendId of user.friends) {
+        // Find the friend in the provided contacts
+        const friend = contacts.find(
+          (contact) => contact.uid === friendId
+        ) as Contact
+
+        // If the friend is not found, skip to the next friend
+        if (!friend) {
+          continue
+        }
+
+        if (!friend.friends) {
+          continue
+        }
+        // For each friend of the friend, add the friend to the graph and a link between the friend and the friend of the friend
+        for (const friendOfFriendId of friend.friends) {
+          // If the friend of the friend has already been visited, skip to the next friend of the friend
+          if (visited.has(friendOfFriendId)) {
+            continue
+          }
+
+          // Find the friend of the friend in the provided contacts
+          const friendOfFriend = contacts.find(
+            (contact) => contact.uid === friendOfFriendId
+          ) as Contact
+
+          // If the friend of the friend is not found, skip to the next friend of the friend
+          if (!friendOfFriend) {
+            continue
+          }
+
+          // Mark the friend of the friend as visited
+          visited.add(friendOfFriendId)
+
+          // Add the friend of the friend to the graph
+          this.nodes.push({
+            id: friendOfFriendId,
+            x: 0,
+            y: 0,
+            dx: 0,
+            dy: 0,
+            contact: friendOfFriend,
+            level: 3,
+          })
+
+          // Add a link between the friend and the friend of the friend
+          this.links.push({
+            source: friendId,
+            target: friendOfFriendId,
+          })
+        }
       }
     }
   }
