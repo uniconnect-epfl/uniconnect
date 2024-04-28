@@ -10,14 +10,6 @@ import { Node } from "../Graph"
 
 import styles from "./styles"
 
-/**
- * NodeModal component
- * @param node - The node to display
- * @param visible - Whether the modal is visible
- * @param onPressOut - Function to call when the modal is pressed out
- * @param onContactPress - Function to call when the contact is pressed
- * @returns The NodeModal component
- */
 const NodeModal: React.FC<{
   node: Node
   visible: boolean
