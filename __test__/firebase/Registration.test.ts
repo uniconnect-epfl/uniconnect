@@ -1,5 +1,5 @@
-import { Firestore } from "firebase/firestore"
-import { createAccount, storeInitialUserData } from "../../firebase/Registration"
+import { Firestore, getDoc } from "firebase/firestore"
+import { createAccount, isNewUser, storeInitialUserData } from "../../firebase/Registration"
 import { Auth } from "firebase/auth"
 import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
 
@@ -16,13 +16,34 @@ jest.mock("firebase/auth", () => ({
   initializeAuth: jest.fn(() => ({} as Auth)),
 }))
 
+jest.mock("../../firebase/firebaseConfig", () => ({
+  auth: jest.fn(() => ({} as Auth)),
+  db: jest.fn(() => ({} as Firestore))
+}))
+
 const mockSetDoc = jest.fn()
 
 jest.mock("firebase/firestore", () => ({
   getFirestore: jest.fn(() => ({} as Firestore)),
-  getDoc: jest.fn(() => ({})),
   doc: jest.fn(() => ({})),
-  addDoc: jest.fn(),
+  getDoc: jest.fn((uid) => {
+    if (uid === "123") {
+      return Promise.resolve({ exists: jest.fn(() => false)})
+    }
+    else if (uid === "456") {
+      return Promise.resolve({ exists: jest.fn(() => true)})
+    }
+    else {
+      return Promise.reject()
+    }
+  }),
+  addDoc: jest.fn().mockImplementation((collectionRef, data) => {
+    if (data.email === "test@example.com") {
+      return Promise.resolve({ id: "123" })
+    } else {
+      return Promise.reject(new Error("Failed to store email"))
+    }
+  }),
   collection: jest.fn(() => ({})),
   serverTimestamp: jest.fn(() => ({})),
   setDoc: mockSetDoc
@@ -36,19 +57,6 @@ jest.mock("../../components/ToastMessage/toast", () => ({
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 )
-
-jest.mock("firebase/firestore", () => ({
-  getFirestore: jest.fn(() => ({} as Firestore)),
-  addDoc: jest.fn().mockImplementation((collectionRef, data) => {
-    if (data.email === "test@example.com") {
-      return Promise.resolve({ id: "123" })
-    } else {
-      return Promise.reject(new Error("Failed to store email"))
-    }
-  }),
-  collection: jest.fn(() => ({})),
-  serverTimestamp: jest.fn(() => ({}))
-}))
 
 describe("createAccount", () => {
   afterEach(() => {
@@ -72,6 +80,36 @@ describe("createAccount", () => {
     await createAccount(email, password)
 
     expect(showErrorToast).toHaveBeenCalledWith("There was a problem creating an account: " + error)
+  })
+
+  it("should return false if user exists", async () => {
+    const uid = "456"
+    const mockGetDoc = getDoc as jest.Mock
+    mockGetDoc.mockResolvedValue({ exists: jest.fn(() => true)})
+
+    const result = await isNewUser(uid)
+
+    expect(result).toBe(false)
+  })
+
+  it("should return true if user is new", async () => {
+    const uid = "123"
+    const mockGetDoc = getDoc as jest.Mock
+    mockGetDoc.mockResolvedValue({ exists: jest.fn(() => false)})
+
+    const result = await isNewUser(uid)
+
+    expect(result).toBe(true)
+  })
+
+  it("should return false if an error occurs", async () => {
+    const uid = "789"
+    const mockGetDoc = getDoc as jest.Mock
+    mockGetDoc.mockRejectedValue(new Error("whatever"))
+
+    const result = await isNewUser(uid)
+
+    expect(result).toBe(false)
   })
 
   it("should store initial user data", async () => {
