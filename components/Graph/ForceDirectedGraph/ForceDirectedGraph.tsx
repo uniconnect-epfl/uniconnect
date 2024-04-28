@@ -84,12 +84,10 @@ const ForceDirectedGraph: React.FC<{
   // State to store the total offset when dragging the graph
   const [totalOffset, setTotalOffset] = useState({ x: 0, y: 0 })
 
-  // State to store the clicked node ID
   const [clickedNodeID, setClickedNodeID] = useState<string>(
     DEFAULT_CLICKED_NODE_ID
   )
 
-  // State to store the scale of the graph
   const [scale, setScale] = useState(INITIAL_SCALE)
   const [lastScale, setLastScale] = useState(INITIAL_SCALE) // Add state to keep track of last scale
 
@@ -157,7 +155,7 @@ const ForceDirectedGraph: React.FC<{
     })
   }
 
-  // Handle Dragging State Change
+  // Handle Dragging State Change (i.e. when we are done dragging the graph or a node)
   const handlePanHandlerStateChange = (event: {
     nativeEvent: { state: number }
   }) => {
@@ -182,6 +180,7 @@ const ForceDirectedGraph: React.FC<{
     setScale(Number(event.nativeEvent.scale) * Number(lastScale))
   }
 
+  // Handle Zooming State Change (i.e. when we are done zooming)
   const handlePinchHandlerStateChange = (event: {
     nativeEvent: { state: number }
   }) => {
@@ -191,12 +190,10 @@ const ForceDirectedGraph: React.FC<{
     }
   }
 
-  // Handle PRESS IN
   const handlePressIn = (onPressCallback = () => {}) => {
     onPressCallback()
   }
 
-  // Handle PRESS OUT
   const handlePressOut = (shortPressCallback = () => {}) => {
     // If the press is shorter than 50ms, we don't consider it as an actual click
     // If the press is more longer than 100ms, we consider that it is intended for dragging a node
@@ -212,22 +209,21 @@ const ForceDirectedGraph: React.FC<{
   const nodeZoomIn = (clickedNode: Node) => {
     setGestureEnabled(false) // Disable gestures while animating
 
-    const initialScale = lastScale // Initial scale before zooming
-    const scaleIncrement = (TARGET_SCALE - initialScale) / TOTAL_FRAMES // Incremental change in scale per frame
+    const initialScale = lastScale
+    const scaleIncrement = (TARGET_SCALE - initialScale) / TOTAL_FRAMES
 
-    const initialOffsetX = totalOffset.x // Initial offset X before zooming
-    const initialOffsetY = totalOffset.y // Initial offset Y before zooming
+    const initialOffsetX = totalOffset.x
+    const initialOffsetY = totalOffset.y
 
-    const targetOffsetX = initialOffsetX - (coordX(clickedNode) - CENTER_WIDTH) // Target offset X after zooming
-    const targetOffsetY = initialOffsetY - (coordY(clickedNode) - CENTER_HEIGHT) // Target offset Y after zooming
+    const targetOffsetX = initialOffsetX - (coordX(clickedNode) - CENTER_WIDTH)
+    const targetOffsetY = initialOffsetY - (coordY(clickedNode) - CENTER_HEIGHT)
 
     let currentFrame = 0
 
     const animateZoom = () => {
       if (currentFrame <= TOTAL_FRAMES) {
-        const newScale = initialScale + scaleIncrement * currentFrame // Calculate the new scale
+        const newScale = initialScale + scaleIncrement * currentFrame
 
-        // Calculate the new offset based on the current frame
         const newOffsetX =
           initialOffsetX +
           ((targetOffsetX - initialOffsetX) * currentFrame) / TOTAL_FRAMES
@@ -236,14 +232,11 @@ const ForceDirectedGraph: React.FC<{
           initialOffsetY +
           ((targetOffsetY - initialOffsetY) * currentFrame) / TOTAL_FRAMES
 
-        // Update the scale and offset
         setScale(newScale)
         setTotalOffset({ x: newOffsetX, y: newOffsetY })
 
-        // Increment the frame count
         currentFrame++
 
-        // Request the next frame
         requestAnimationFrame(animateZoom)
       } else {
         // When the animation is over do the following:
@@ -270,7 +263,6 @@ const ForceDirectedGraph: React.FC<{
     requestAnimationFrame(animateZoom)
   }
 
-  // Functions to get the X and Y coordinates of the nodes and the fill color of the nodes
   const coordX = (node: Node): number => {
     // If gesture is not enabled the animation is running and therefore the whole graph is moving
     if (!gestureEnabled) {

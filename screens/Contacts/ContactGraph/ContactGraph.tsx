@@ -22,26 +22,13 @@ interface ContactGraphProps {
   userId: string
 }
 
-/**
- * ContactGraph component
- * @param onContactPress - Function to call when the contact is pressed
- * @param graph - The graph to display
- * @param userId - The unique identifier of the user
- * @returns The ContactGraph component
- */
 const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
-  // State to store the text of the search bar
   const [searchText, setSearchText] = useState("")
-
-  // State to store the node that was clicked for the modal
+  const [modalVisible, setModalVisible] = useState(false)
   const [clickedNode, setClickedNode] = useState<Node>(
     getNodeById(graph, userId)
   )
 
-  // State to store whether the modal is visible
-  const [modalVisible, setModalVisible] = useState(false)
-
-  // Function to call when the modal is pressed
   const onModalPress = (uid: string) => {
     const node = getNodeById(graph, uid)
     if (node) {
@@ -50,7 +37,6 @@ const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
     }
   }
 
-  // Function to call when the modal is pressed out
   const onModalPressOut = () => {
     setModalVisible(false)
   }
