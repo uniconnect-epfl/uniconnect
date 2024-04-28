@@ -32,14 +32,18 @@ const MainStackNavigator: React.FC = () => {
   const [selectedInterests, setSelectedInterests] = useState<string[]>([])
   const [fillOutProfile, setFillOutProfile] = useState(false)
 
+  // Check the current auth status
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUser(user)
+        // If the user is new, check if they have filled out their profile
         if(await isNewUser(user.uid)) {
+          // If they haven't (it means that they were using Google to sign in), should prompt them to fill it out
           if(firstName === "" || lastName === "") {
             setFillOutProfile(true)
           }
+          // Otherwise, fill out the profile with the data that was already provided  
           else {
             const email = user.email || ""
             await storeInitialUserData(user.uid, email, firstName, lastName, date, location, description, selectedInterests)

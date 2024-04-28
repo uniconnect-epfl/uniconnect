@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-type RegistrationContextType = {
+export type RegistrationContextType = {
   firstName: string,
   setFirstName: (firstName: string) => void,
   lastName: string,

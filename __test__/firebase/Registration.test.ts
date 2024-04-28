@@ -1,6 +1,7 @@
 import { Firestore } from "firebase/firestore"
 import { createAccount } from "../../firebase/Registration"
 import { Auth } from "firebase/auth"
+import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
 
 jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(() => ({} as Auth)),
@@ -13,6 +14,11 @@ jest.mock("firebase/auth", () => ({
   }),
   getReactNativePersistence: jest.fn(() => ({} as Auth)),
   initializeAuth: jest.fn(() => ({} as Auth)),
+}))
+
+jest.mock("../../components/ToastMessage/toast", () => ({
+  showErrorToast: jest.fn(),
+  showSuccessToast: jest.fn()
 }))
 
 jest.mock('@react-native-async-storage/async-storage', () =>
@@ -32,8 +38,6 @@ jest.mock("firebase/firestore", () => ({
   serverTimestamp: jest.fn(() => ({}))
 }))
 
-global.alert = jest.fn()
-
 describe("createAccount", () => {
   afterEach(() => {
     jest.clearAllMocks()
@@ -45,7 +49,7 @@ describe("createAccount", () => {
 
     await createAccount(email, password)
 
-    expect(global.alert).toHaveBeenCalledWith("Account created. Check email")
+    expect(showSuccessToast).toHaveBeenCalledWith("Account succesfully created!")
   })
 
   it("should handle error and display error message", async () => {
@@ -55,6 +59,6 @@ describe("createAccount", () => {
 
     await createAccount(email, password)
 
-    expect(global.alert).toHaveBeenCalledWith("There was an error" + error)
+    expect(showErrorToast).toHaveBeenCalledWith("There was a problem creating an account: " + error)
   })
 })

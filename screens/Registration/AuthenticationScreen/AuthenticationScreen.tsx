@@ -17,6 +17,7 @@ import { Entypo } from "@expo/vector-icons"
 import { AntDesign } from "@expo/vector-icons"
 import { red, green } from "../../../assets/colors/colors"
 import { createAccount } from "../../../firebase/Registration"
+import { showErrorToast } from "../../../components/ToastMessage/toast"
 
 const AuthenticationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
@@ -45,12 +46,12 @@ const AuthenticationScreen: React.FC = () => {
     return email == confirmEmail
   }
 
-  /**
-   * Function that submits the user data to the DB
-   */
   const submitForm = async () => {
     if (isPassword() && doPasswordsMatch() && isEmail() && doEmailsMatch()) {
       await createAccount(email, password)
+    }
+    else {
+      showErrorToast("Please fill in the form correctly and try again")
     }
   }
 

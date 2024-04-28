@@ -4,6 +4,7 @@ import AuthenticationScreen from '../../../../screens/Registration/Authenticatio
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { NavigationContainer } from '@react-navigation/native'
 import * as registration from '../../../../firebase/Registration'
+import { showErrorToast } from '../../../../components/ToastMessage/toast'
 
 
 jest.mock('react-native-safe-area-context', () => {
@@ -23,7 +24,10 @@ jest.mock('../../../../firebase/Registration', () => ({
 }))
 
 
-global.alert = jest.fn() // Mock global alert
+jest.mock("../../../../components/ToastMessage/toast", () => ({
+  showErrorToast: jest.fn(),
+  showSuccessToast: jest.fn()
+}))
 
 
 
@@ -31,8 +35,7 @@ describe('AuthenticationScreen', () => {
   beforeEach(() => {
     // Clear all mocks before each test
     jest.clearAllMocks();
-    (registration.createAccount as jest.Mock).mockResolvedValue(void 0);
-    (registration.storeEmail as jest.Mock).mockResolvedValue(void 0)
+    (registration.createAccount as jest.Mock).mockResolvedValue(void 0)
 
   })
 
@@ -97,14 +100,13 @@ describe('AuthenticationScreen', () => {
     fireEvent.changeText(getByPlaceholderText("E-mail"), 'test@example.com')
     fireEvent.changeText(getByPlaceholderText("Confirm your e-mail"), 'test@example.com')
 
-    const submitButton = getByText('Send confirmation e-mail')
+    const submitButton = getByText('Confirm')
     await  act(async () => {  
     fireEvent.press(submitButton)
     }) 
 
     await waitFor(() => {
       expect(registration.createAccount).toHaveBeenCalled()
-      expect(registration.storeEmail).toHaveBeenCalled()
     })
 
   })
@@ -124,7 +126,7 @@ describe('AuthenticationScreen', () => {
     fireEvent.changeText(getByPlaceholderText("E-mail"), 'test@example.com')
     fireEvent.changeText(getByPlaceholderText("Confirm your e-mail"), 'test@example.com')
 
-    const submitButton = getByText('Send confirmation e-mail')
+    const submitButton = getByText('Confirm')
 
     // Assuming the function to check data validity returns false
     // You might need to mock these if they are not part of the component's direct logic
@@ -133,7 +135,7 @@ describe('AuthenticationScreen', () => {
       fireEvent.press(submitButton)
       }) 
     await waitFor(() => {
-      expect(global.alert).toHaveBeenCalledWith("Please check your data")
+      expect(showErrorToast).toHaveBeenCalledWith("Please fill in the form correctly and try again")
     })
   })
 

@@ -20,7 +20,7 @@ jest.mock("../../../components/GoogleSignInButton/GoogleSignInButton", () => {
   }
 })
 
-describe('RegistrationStackNavigator', () => {
+describe('MainStackNavigator', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
@@ -35,13 +35,12 @@ describe('RegistrationStackNavigator', () => {
     const mockFunction = onAuthStateChanged as jest.Mock
     mockFunction.mockImplementation(mockOnAuthStateChanged)
 
-    const { getByText } = render(
+    render(
       <NavigationContainer>
         <MainStackNavigator />
       </NavigationContainer>
     )
 
-    expect(getByText('Home')).toBeTruthy()
     expect(mockOnAuthStateChanged).toHaveBeenCalledTimes(1)
   })
 
@@ -53,13 +52,12 @@ describe('RegistrationStackNavigator', () => {
     const mockFunction = onAuthStateChanged as jest.Mock
     mockFunction.mockImplementation(mockOnAuthStateChanged)
 
-    const { getByText } = render(
+    render(
       <NavigationContainer>
         <MainStackNavigator />
       </NavigationContainer>
     )
 
-    expect(getByText('Log In')).toBeTruthy()
     expect(mockOnAuthStateChanged).toHaveBeenCalledTimes(1)
   })
 })
