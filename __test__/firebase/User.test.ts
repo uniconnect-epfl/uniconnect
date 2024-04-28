@@ -36,19 +36,6 @@ jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 )
 
-jest.mock("firebase/firestore", () => ({
-  getFirestore: jest.fn(() => ({} as Firestore)),
-  addDoc: jest.fn().mockImplementation((collectionRef, data) => {
-    if (data.email === "test@example.com") {
-      return Promise.resolve({ id: "123" })
-    } else {
-      return Promise.reject(new Error("Failed to store email"))
-    }
-  }),
-  collection: jest.fn(() => ({})),
-  serverTimestamp: jest.fn(() => ({}))
-}))
-
 describe("User", () => {
   afterEach(() => {
     jest.clearAllMocks()
