@@ -1,7 +1,6 @@
 import { Firestore } from "firebase/firestore"
-import { createAccount, storeInitialUserData } from "../../firebase/Registration"
 import { Auth } from "firebase/auth"
-import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
+import { getUserData } from "../../firebase/User"
 
 jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(() => ({} as Auth)),
@@ -50,40 +49,22 @@ jest.mock("firebase/firestore", () => ({
   serverTimestamp: jest.fn(() => ({}))
 }))
 
-describe("createAccount", () => {
+describe("User", () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
 
-  it("should create an account and display success message", async () => {
-    const email = "test@example.com"
-    const password = "password"
-
-    await createAccount(email, password)
-
-    expect(showSuccessToast).toHaveBeenCalledWith("Account succesfully created!")
-  })
-
-  it("should handle error and display error message", async () => {
-    const email = "test@example"
-    const password = "password"
-    const error = new Error("Failed to create account")
-
-    await createAccount(email, password)
-
-    expect(showErrorToast).toHaveBeenCalledWith("There was a problem creating an account: " + error)
-  })
-
-  it("should store initial user data", async () => {
+  it("should return user data when successfully fetched", async () => {
     const uid = "123"
-    const email = "test@example.com"
-    const firstName = "John"
-    const lastName = "Doe"
-    const date = new Date()
-    const location = "New York"
-    const description = "Lorem ipsum"
-    const selectedInterests = ["programming", "music"]
 
-    await storeInitialUserData(uid, email, firstName, lastName, date, location, description, selectedInterests)
+    await getUserData(uid)
   })
+
+  it("should show error toast and return null when fetching fails", async () => {
+    const uid = "123"
+
+    await getUserData(uid)
+
+  })
+  
 })

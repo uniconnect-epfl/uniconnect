@@ -1,7 +1,11 @@
 import { Firestore } from "firebase/firestore"
-import { createAccount, storeInitialUserData } from "../../firebase/Registration"
 import { Auth } from "firebase/auth"
 import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
+import { loginEmailPassword } from "../../firebase/Login"
+import { User } from "../../types/User"
+import { FirebaseError } from "firebase/app"
+
+const mockFirebaseError = new FirebaseError("auth/invalid-credential", "test")
 
 jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(() => ({} as Auth)),
@@ -14,18 +18,15 @@ jest.mock("firebase/auth", () => ({
   }),
   getReactNativePersistence: jest.fn(() => ({} as Auth)),
   initializeAuth: jest.fn(() => ({} as Auth)),
-}))
-
-const mockSetDoc = jest.fn()
-
-jest.mock("firebase/firestore", () => ({
-  getFirestore: jest.fn(() => ({} as Firestore)),
-  getDoc: jest.fn(() => ({})),
-  doc: jest.fn(() => ({})),
-  addDoc: jest.fn(),
-  collection: jest.fn(() => ({})),
-  serverTimestamp: jest.fn(() => ({})),
-  setDoc: mockSetDoc
+  signInWithEmailAndPassword: jest.fn().mockImplementation((auth, email, password) => {
+    if (email === "test@example.com" && password === "password") {
+      return Promise.resolve({} as User)
+    }
+    else if (email === "firebase@example.com") {
+      return Promise.reject(mockFirebaseError as FirebaseError)
+    }
+    return Promise.reject(new Error("Failed to login"))
+  })
 }))
 
 jest.mock("../../components/ToastMessage/toast", () => ({
@@ -42,48 +43,45 @@ jest.mock("firebase/firestore", () => ({
   addDoc: jest.fn().mockImplementation((collectionRef, data) => {
     if (data.email === "test@example.com") {
       return Promise.resolve({ id: "123" })
-    } else {
-      return Promise.reject(new Error("Failed to store email"))
+    }
+    else {
+      return Promise.reject(new Error("Failed to login"))
     }
   }),
   collection: jest.fn(() => ({})),
   serverTimestamp: jest.fn(() => ({}))
 }))
 
-describe("createAccount", () => {
+describe("Login", () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
 
-  it("should create an account and display success message", async () => {
+  it("should login and display success message", async () => {
     const email = "test@example.com"
     const password = "password"
 
-    await createAccount(email, password)
+    await loginEmailPassword(email, password)
 
-    expect(showSuccessToast).toHaveBeenCalledWith("Account succesfully created!")
+    expect(showSuccessToast).toHaveBeenCalledWith("Welcome back 👋")
   })
 
   it("should handle error and display error message", async () => {
     const email = "test@example"
     const password = "password"
-    const error = new Error("Failed to create account")
+    const error = new Error("Failed to login")
 
-    await createAccount(email, password)
+    await loginEmailPassword(email, password)
 
-    expect(showErrorToast).toHaveBeenCalledWith("There was a problem creating an account: " + error)
+    expect(showErrorToast).toHaveBeenCalledWith("An error has occured: " + error)
   })
 
-  it("should store initial user data", async () => {
-    const uid = "123"
-    const email = "test@example.com"
-    const firstName = "John"
-    const lastName = "Doe"
-    const date = new Date()
-    const location = "New York"
-    const description = "Lorem ipsum"
-    const selectedInterests = ["programming", "music"]
+  it("should handle a firebase error and display error message", async () => {
+    const email = "firebase@example.com"
+    const password = "password"
 
-    await storeInitialUserData(uid, email, firstName, lastName, date, location, description, selectedInterests)
+    await loginEmailPassword(email, password)
+
+    expect(showErrorToast).toHaveBeenCalledWith("An unknown error: auth/invalid-credential")
   })
 })
