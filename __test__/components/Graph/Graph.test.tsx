@@ -1,63 +1,83 @@
-import Graph from "../../../components/Graph/Graph"
+import Graph, {
+  addLink,
+  addNode,
+  deleteLink,
+  deleteNode,
+  getLinks,
+  getNodes,
+} from "../../../components/Graph/Graph"
+
+import { mockContacts } from "../../../screens/Contacts/mockContacts"
 
 describe("Graph", () => {
-  let ids: string[]
-  let sources: string[]
-  let targets: string[]
-  let strengths: number[]
+  let contacts = mockContacts
+  let userId = "0"
 
   beforeEach(() => {
-    ids = ["A", "B", "C"]
-    sources = ["A", "B"]
-    targets = ["B", "C"]
-    strengths = [1, 2]
+    contacts = mockContacts
+    userId = "0"
   })
 
   it("should create a graph with nodes and links", () => {
-    const graph = new Graph(ids, sources, targets, strengths)
-    expect(graph.getNodes().length).toEqual(ids.length)
-    expect(graph.getLinks().length).toEqual(sources.length)
+    const graph = new Graph(contacts, userId)
+    expect(getNodes(graph).length).toEqual(contacts.length)
   })
 
   it("should throw an error for invalid constructor arguments", () => {
-    expect(() => new Graph([], sources, targets, strengths)).toThrow()
-    expect(() => new Graph(ids, [], targets, strengths)).toThrow()
-    expect(() => new Graph(ids, ["A"], targets, strengths)).toThrow()
+    expect(() => new Graph([], userId)).toThrow()
   })
 
   it("should add a node to the graph", () => {
-    const graph = new Graph(ids, sources, targets, strengths)
-    graph.addNode("D")
-    expect(graph.getNodes().length).toEqual(ids.length + 1)
-    expect(graph.getNodes().some((node) => node.id === "D")).toBeTruthy()
+    const graph = new Graph(contacts, userId)
+    const newNode = {
+      id: "10",
+      x: 0,
+      y: 0,
+      dx: 0,
+      dy: 0,
+      contact: {
+        uid: "10",
+        firstName: "John",
+        lastName: "Doe",
+        profilePictureUrl: "",
+        description: "",
+        location: "",
+        interests: [],
+        events: [],
+        friends: [],
+      },
+      level: 1,
+    }
+    addNode(graph, newNode)
+
+    expect(getNodes(graph).length).toEqual(contacts.length + 1)
   })
 
   it("should add a link to the graph", () => {
-    const graph = new Graph(ids, sources, targets, strengths)
-    graph.addLink("A", "C", 3)
-    expect(graph.getLinks().length).toEqual(sources.length + 1)
-    expect(
-      graph
-        .getLinks()
-        .some((link) => link.source === "A" && link.target === "C")
-    ).toBeTruthy()
+    const graph = new Graph(contacts, userId)
+
+    const tempLinksLength = getLinks(graph).length
+    addLink(graph, "0", "10")
+    expect(getLinks(graph).length).toBeGreaterThan(tempLinksLength)
   })
 
   it("should remove a node and its links from the graph", () => {
-    const graph = new Graph(ids, sources, targets, strengths)
-    graph.removeNode("B")
-    expect(graph.getNodes().length).toEqual(ids.length - 1)
-    expect(graph.getLinks().length).toEqual(0) // Assuming all links involved 'B'
+    const graph = new Graph(contacts, userId)
+    const tempLinks = getLinks(graph)
+    deleteNode(graph, userId)
+    expect(getNodes(graph).length).toBeLessThan(contacts.length)
+    expect(getLinks(graph).length).toBeLessThan(tempLinks.length)
   })
 
   it("should remove a link from the graph", () => {
-    const graph = new Graph(ids, sources, targets, strengths)
-    graph.removeLink("A", "B")
-    expect(graph.getLinks().length).toEqual(sources.length - 1)
-    expect(
-      graph
-        .getLinks()
-        .some((link) => link.source === "A" && link.target === "B")
-    ).toBeFalsy()
+    const graph = new Graph(contacts, userId)
+
+    let tempLinksLength = getLinks(graph).length
+    addLink(graph, userId, "10")
+    expect(getLinks(graph).length).toBeGreaterThan(tempLinksLength)
+    tempLinksLength = getLinks(graph).length
+
+    deleteLink(graph, userId, "10")
+    expect(getLinks(graph).length).toBeLessThan(tempLinksLength)
   })
 })

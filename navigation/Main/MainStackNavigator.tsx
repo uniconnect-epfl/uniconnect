@@ -38,15 +38,24 @@ const MainStackNavigator: React.FC = () => {
       if (user) {
         setUser(user)
         // If the user is new, check if they have filled out their profile
-        if(await isNewUser(user.uid)) {
+        if (await isNewUser(user.uid)) {
           // If they haven't (it means that they were using Google to sign in), should prompt them to fill it out
-          if(firstName === "" || lastName === "") {
+          if (firstName === "" || lastName === "") {
             setFillOutProfile(true)
           }
-          // Otherwise, fill out the profile with the data that was already provided  
+          // Otherwise, fill out the profile with the data that was already provided
           else {
             const email = user.email || ""
-            await storeInitialUserData(user.uid, email, firstName, lastName, date, location, description, selectedInterests)
+            await storeInitialUserData(
+              user.uid,
+              email,
+              firstName,
+              lastName,
+              date,
+              location,
+              description,
+              selectedInterests
+            )
           }
         }
       } else {
@@ -61,8 +70,27 @@ const MainStackNavigator: React.FC = () => {
     return <LoadingScreen />
   }
   return (
-    <RegistrationContext.Provider value={{firstName, setFirstName, lastName, setLastName, date, setDate, location, setLocation, description, setDescription, selectedInterests, setSelectedInterests}}>
-      <Stack.Navigator initialRouteName={user ? (fillOutProfile? "UpdateProfile" : "HomeTabs") : "Onboarding"}>
+    <RegistrationContext.Provider
+      value={{
+        firstName,
+        setFirstName,
+        lastName,
+        setLastName,
+        date,
+        setDate,
+        location,
+        setLocation,
+        description,
+        setDescription,
+        selectedInterests,
+        setSelectedInterests,
+      }}
+    >
+      <Stack.Navigator
+        initialRouteName={
+          user ? (fillOutProfile ? "UpdateProfile" : "HomeTabs") : "Onboarding"
+        }
+      >
         {user ? (
           <>
             <Stack.Screen
@@ -136,7 +164,6 @@ const MainStackNavigator: React.FC = () => {
               component={AuthenticationScreen}
               options={{ headerShown: false }}
             />
-            
           </>
         )}
       </Stack.Navigator>
