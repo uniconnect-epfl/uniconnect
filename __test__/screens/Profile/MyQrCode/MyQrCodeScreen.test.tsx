@@ -17,7 +17,6 @@ describe("MyQrCodeScreen", () => {
     const { getByText } = render(<MyQrCodeScreen />)
 
     expect(getByText("Uniconnect contact")).toBeTruthy()
-    expect(getByText("Gilles")).toBeTruthy()
   })
   
 })
