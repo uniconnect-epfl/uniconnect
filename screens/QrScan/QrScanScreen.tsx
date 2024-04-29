@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from "react"
-import { View, Text, TouchableOpacity, Alert, ActivityIndicator } from "react-native"
+import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native"
 import { BarCodeScanningResult, Camera } from "expo-camera"
 import { styles } from "./styles"
 import { globalStyles } from "../../assets/global/globalStyles"
-import { useIsFocused } from "@react-navigation/native"
+import { NavigationProp, ParamListBase, useIsFocused } from "@react-navigation/native"
 import { peach } from "../../assets/colors/colors"
+import { getAuth } from "firebase/auth"
+import { showErrorToast } from "../../components/ToastMessage/toast"
+import { getUserData } from "../../firebase/User"
+import * as Linking from "expo-linking"
 
-const QrScanScreen = () => {
+interface ScanQrScreenProps{
+  navigation: NavigationProp<ParamListBase>
+}
+
+const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
   const isFocused = useIsFocused()
   const [permission, requestPermission] = Camera.useCameraPermissions()
   const [showCamera, setShowCamera] = useState(false)
   const [qrScanned, setQrScanned] = useState(false)
+  const userId = getAuth().currentUser?.uid
 
   // to allow mounting and unmounting the camera without slowing navigation
   useEffect(() => {
@@ -21,20 +30,32 @@ const QrScanScreen = () => {
     }
   }, [isFocused])
 
-  const handleBarCodeScanned = ({ type, data }: BarCodeScanningResult): void => {
+  const handleUser = async (id : string) => {
+    if(id === userId){
+      showErrorToast("This is you !")
+    } else {
+      const scannedUser = await getUserData(id)
+      if(scannedUser === null || scannedUser === undefined){
+        showErrorToast("User not found")
+      } else {
+        navigation.navigate("AddContact", {uid: id})
+      }
+    }
+  }
+
+  const handleEvent = async (id : string) => {
+    showErrorToast("events QR codes not implemented yet, event id: " + id)
+  }
+
+  const handleBarCodeScanned = ({ data }: BarCodeScanningResult): void => {
     if(!qrScanned){
       setQrScanned(true)
-      Alert.alert(
-        "QR scanned", 
-        `type: ${type}\ndata:${data}`,
-        [
-          { 
-            text: "OK", 
-            onPress: () => setQrScanned(false)
-          },
-        ],
-        { cancelable: false }
-      )
+      const path = data.replace(Linking.createURL("/"), "")
+      const [route, id] = path.split('/')
+      if(route === "contact") handleUser(id)
+      else if (route === "event") handleEvent(id)
+      else showErrorToast("Qr code not recognized")
+      setTimeout(() => setQrScanned(false), 1500) // re-allow to scan QR in 1.5 second
     }
   }
 
