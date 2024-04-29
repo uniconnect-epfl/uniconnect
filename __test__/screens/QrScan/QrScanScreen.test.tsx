@@ -3,6 +3,7 @@ import { act, fireEvent, render } from "@testing-library/react-native"
 import QrScanScreen from "../../../screens/QrScan/QrScanScreen"
 import { NavigationContainer, NavigationProp, ParamListBase } from "@react-navigation/native"
 import { Camera } from "expo-camera"
+import * as Linking from "expo-linking"
 
 const mockNavigation = {
   navigate: jest.fn(),
@@ -116,7 +117,7 @@ describe("QrScanScreen", () => {
       )
       act(() => {
         fireEvent(getByTestId("camera"), "onBarCodeScanned", {
-          nativeEvent: { type: "qr", data: "123" }
+          nativeEvent: { type: "qr", data: Linking.createURL("/") + "contact/123" }
         })
       })
       expect(mockNavigation.navigate).not.toHaveBeenCalled()
