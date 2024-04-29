@@ -1,5 +1,5 @@
 import React from "react"
-import { render } from "@testing-library/react-native"
+import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import { AddContactScreen } from "../../../screens/AddContact/AddContactScreen"
 
 jest.mock('@react-native-async-storage/async-storage', () =>
@@ -36,6 +36,16 @@ describe("AddContactScreen", () => {
   it("renders correctly", () => {
     const component = render(<AddContactScreen />)
     expect(component).toBeTruthy()
+  })
+
+  it("adding contact", async () => {
+    const { getByText } = render(<AddContactScreen />)
+
+    await waitFor(() => {
+      const addButton = getByText("Add to contacts")
+      fireEvent.press(addButton)
+    // later test the adding
+    })
   })
   
 })
