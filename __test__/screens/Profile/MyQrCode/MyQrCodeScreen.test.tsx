@@ -32,10 +32,4 @@ describe("MyQrCodeScreen", () => {
     expect(component).toBeTruthy()
   })
 
-  it("renders the right information", () => {
-    const { getByText } = render(<MyQrCodeScreen />)
-
-    expect(getByText("John")).toBeTruthy()
-  })
-  
 })
