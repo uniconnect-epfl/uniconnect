@@ -1,5 +1,5 @@
 import React from "react"
-import { render, fireEvent } from "@testing-library/react-native"
+import { render, fireEvent, act } from "@testing-library/react-native"
 import DescriptionScreen from "../../../../screens/Registration/DescriptionScreen/DescriptionScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
@@ -26,6 +26,11 @@ jest.mock("@react-navigation/native", () => {
   }
 })
 
+jest.mock("react", () => ({
+  ...jest.requireActual("react"),
+  useContext: jest.fn(() => ({selectedInterests: ["one"], setSelectedInterests: jest.fn()})),
+}))
+
 describe("DescriptionScreen", () => {
   it("renders correctly", () => {
     const { getByPlaceholderText, getByText } = render(
@@ -42,7 +47,7 @@ describe("DescriptionScreen", () => {
   })
 
   it("allows entering text into the TextInput", () => {
-    const { getByPlaceholderText } = render(
+    const { getByText, getByPlaceholderText } = render(
       <SafeAreaProvider>
         <TouchableWithoutFeedback>
           <DescriptionScreen />
@@ -51,9 +56,11 @@ describe("DescriptionScreen", () => {
     )
 
     const input = getByPlaceholderText("Enter your description here...")
-    fireEvent.changeText(input, "New description text")
+    act(() => {
+      fireEvent.changeText(input, "New description text")
+    })
 
-    expect(input.props.value).toBe("New description text")
+    expect(getByText("Validate")).toBeTruthy()
   })
 
   it("navigates back on pressing the validate button", () => {

@@ -2,7 +2,6 @@ import React from "react"
 import { render, fireEvent } from "@testing-library/react-native"
 import InterestsScreen from "../../../../screens/Registration/InterestsScreen/InterestsScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { NavigationContainer } from "@react-navigation/native"
 
 jest.mock("react-native-safe-area-context", () => {
   const inset = { top: 0, right: 0, bottom: 0, left: 0 }
@@ -14,13 +13,16 @@ jest.mock("react-native-safe-area-context", () => {
   }
 })
 
+jest.mock("react", () => ({
+  ...jest.requireActual("react"),
+  useContext: jest.fn(() => ({selectedInterests: ["one"], setSelectedInterests: jest.fn()})),
+}))
+
 describe("InterestsScreen", () => {
   it("renders the screen with necessary components", () => {
     const { getByPlaceholderText, getAllByText } = render(
       <SafeAreaProvider>
-        <NavigationContainer>
-          <InterestsScreen />
-        </NavigationContainer>
+        <InterestsScreen />
       </SafeAreaProvider>
     )
 
@@ -33,9 +35,7 @@ describe("InterestsScreen", () => {
   it("allows searching and filters interests", () => {
     const { getByPlaceholderText, getByText } = render(
       <SafeAreaProvider>
-        <NavigationContainer>
-          <InterestsScreen />
-        </NavigationContainer>
+        <InterestsScreen />
       </SafeAreaProvider>
     )
 
@@ -48,9 +48,7 @@ describe("InterestsScreen", () => {
   it("allows selecting and deselecting interests", () => {
     const { getByText } = render(
       <SafeAreaProvider>
-        <NavigationContainer>
-          <InterestsScreen />
-        </NavigationContainer>
+        <InterestsScreen />
       </SafeAreaProvider>
     )
 
@@ -61,9 +59,7 @@ describe("InterestsScreen", () => {
   it("creates a label when an interest is selected", () => {
     const { getByTestId } = render(
       <SafeAreaProvider>
-        <NavigationContainer>
-          <InterestsScreen />
-        </NavigationContainer>
+        <InterestsScreen />
       </SafeAreaProvider>
     )
 
@@ -74,9 +70,7 @@ describe("InterestsScreen", () => {
   it("removes a label when clicked", () => {
     const { getByTestId, queryByTestId } = render(
       <SafeAreaProvider>
-        <NavigationContainer>
-          <InterestsScreen />
-        </NavigationContainer>
+        <InterestsScreen />
       </SafeAreaProvider>
     )
 

@@ -102,7 +102,7 @@ const HomeScreen = () => {
     date: string
     imageUrl: string
   }) => (
-    <TouchableOpacity >
+    <TouchableOpacity key={event.title}>
       <EventCard
         title={event.title}
         location={event.location}

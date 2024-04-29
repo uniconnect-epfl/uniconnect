@@ -14,7 +14,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import * as WebBrowser from "expo-web-browser"
 import * as Linking from "expo-linking"
-// import HomeScreen from "./screens/Home/HomeScreen"
+import Toast from "react-native-toast-message"
 
 SplashScreen.preventAutoHideAsync()
 
@@ -55,6 +55,7 @@ export default function App() {
         <NavigationContainer linking={linking}>
           <MainStackNavigator/>
         </NavigationContainer>
+        <Toast/>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   )

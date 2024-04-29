@@ -15,6 +15,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useNavigation } from '@react-navigation/native'
 import { loginEmailPassword } from "../../firebase/Login"
 import { GoogleSignInButton } from '../../components/GoogleSignInButton/GoogleSignInButton'
+import { peach } from '../../assets/colors/colors'
 
 
 
@@ -31,19 +32,8 @@ const OnboardingScreen: React.FC = () => {
 
   const loginUser = async () => {
     setLoading(true)
-
-    try {
-      const val = await loginEmailPassword(email, password)
-      if (val) {
-        navigation.navigate("HomeTabs" as never)
-      } else {
-        alert("Login failed!")
-      }
-    } catch (error) {
-      alert("An error occurred during login.")
-    } finally {
-      setLoading(false)
-    }
+    await loginEmailPassword(email, password)
+    setLoading(false)
   }
 
   return (
@@ -88,7 +78,7 @@ const OnboardingScreen: React.FC = () => {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color={peach} />
           ) : (
             <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
           )}

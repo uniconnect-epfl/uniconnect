@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import { globalStyles } from "../../../assets/global/globalStyles"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import LowBar from "../../../components/LowBar/LowBar"
 import Label from "../../../components/Label/Label"
+import { RegistrationContext } from "../../../contexts/RegistrationContext"
 
 interface InterestButtonProps {
   title: string
@@ -45,7 +46,7 @@ const InterestButton: React.FC<InterestButtonProps> = ({
   </TouchableOpacity>
 )
 
-const interests = [
+const interestsList = [
   "Machine Learning",
   "Artificial Intelligence",
   "Computer Vision",
@@ -68,52 +69,45 @@ const interests = [
 const InterestsScreen = () => {
   const insets = useSafeAreaInsets()
   const [searchTerm, setSearchTerm] = useState("")
-  const [filterdedInterests, setFilteredInterests] = useState(interests)
-  const [selectedInterests, setSelectedInterests] = useState(new Set())
-  //array of selected interests
-  const [labelArray, setLabelArray] = useState([] as string[])
+  const [filterdedInterests, setFilteredInterests] = useState(interestsList)
+  const [labelArray, setLabelArray] = useState<string[]>([])
+  const { selectedInterests, setSelectedInterests } = useContext(RegistrationContext)
 
   const renderItem = ({ item }: ListRenderItemInfo<string>) => (
     <InterestButton
       title={item}
-      selected={selectedInterests.has(item)}
+      selected={selectedInterests.includes(item)}
       onSelect={() => toggleInterest(item)}
     />
   )
 
   const handleRemoveInterest = (interest: string) => {
-    setSelectedInterests((prev) => {
-      const newSelectedInterests = new Set(prev)
-      newSelectedInterests.delete(interest)
-      return newSelectedInterests
-    })
+    setSelectedInterests(selectedInterests.filter((label) => label !== interest))
     setLabelArray((prev) => prev.filter((label) => label !== interest))
   }
 
   const toggleInterest = (interest: string) => {
-    setSelectedInterests((prev) => {
-      const newSelectedInterests = new Set(prev)
-      if (newSelectedInterests.has(interest)) {
-        newSelectedInterests.delete(interest)
-        // Build a new array without the interest
-        setLabelArray((prev) => prev.filter((label) => label !== interest))
-      } else {
-        newSelectedInterests.add(interest)
-        setLabelArray([...labelArray, interest])
-      }
-      return newSelectedInterests
-    })
+    const newSelectedInterests = [...selectedInterests]
+    if (newSelectedInterests.includes(interest)) {
+      newSelectedInterests.filter((label) => label !== interest)
+      // Build a new array without the interest
+      setLabelArray((prev) => prev.filter((label) => label !== interest))
+    } else {
+      newSelectedInterests.push(interest)
+      setLabelArray([...labelArray, interest])
+    }
+    setSelectedInterests(newSelectedInterests)
   }
 
   const handleSearch = (text: string) => {
     setSearchTerm(text)
     if (searchTerm) {
-      const filteredData = interests.filter((interest) =>
+      const filteredData = interestsList.filter((interest) =>
         interest.toLocaleLowerCase().includes(text.toLowerCase())
       )
       setFilteredInterests(filteredData)
     } else {
-      setFilteredInterests(interests)
+      setFilteredInterests(interestsList)
     }
   }
 
@@ -139,7 +133,7 @@ const InterestsScreen = () => {
           onChangeText={handleSearch}
         />
 
-        {selectedInterests.size !== 0 && (
+        {selectedInterests.length !== 0 && (
           <ScrollView
             horizontal={false}
             style={styles.labelView}
