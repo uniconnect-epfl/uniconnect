@@ -11,6 +11,7 @@ import LoadingScreen from "../../Loading/LoadingScreen"
 import { User } from "../../../types/User"
 
 const generateLink = (uid: string) => {
+  // this create the deep link that can directly redirect in the app when scanned from outside
   return Linking.createURL("contact/" + uid)
 }
 
@@ -20,6 +21,7 @@ export const MyQrCodeScreen = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // load the user data asynchronously
     const fetchData = async () => {
       setLoading(true)
       if(userId){
@@ -31,6 +33,7 @@ export const MyQrCodeScreen = () => {
   }, [userId])
 
   if(loading || !user || !userId){
+    // until the user is loaded we put the loading screen
     return <LoadingScreen/>
   }
   

@@ -9,11 +9,11 @@ import { Ionicons } from "@expo/vector-icons"
 import { black } from "../../assets/colors/colors"
 import { globalStyles } from "../../assets/global/globalStyles"
 
-const userProfilePictureUrl = ""
+const userProfilePictureUrl = "" // dummy url for the moment, until profile pictures are in the database
 
 type RootStackParamList = {
   AddContactScreen: {
-      uid: string;
+      uid: string; // uid of the contact to be added
   }
 }
 
@@ -25,6 +25,7 @@ export const AddContactScreen = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    // load the use data asynchronously
     const fetchData = async () => {
       setLoading(true)
       if(uid){
@@ -36,6 +37,7 @@ export const AddContactScreen = () => {
   }, [uid])
 
   if(loading || !user || !uid){
+    // put loading screen until the user is correctly loaded
     return <LoadingScreen/>
   }
 
@@ -44,11 +46,11 @@ export const AddContactScreen = () => {
 
       <View style={styles.profilePictureContainer}>
         {userProfilePictureUrl ? (
-          <Image
+          <Image // put a profile picture if we have one
             style={styles.profilePicture}
             source={{ uri: userProfilePictureUrl }}
           />
-        ) : (
+        ) : ( // put an icon otherwise
           <View style={styles.profilePicture}>
             <Ionicons name="person" size={130} color={black} />
           </View>
