@@ -21,6 +21,7 @@ const MyDateInputComponent: React.FC<MyDateInputComponentProps> = ({
     event: DateTimePickerEvent,
     selectedDate: Date | undefined
   ) => {
+    setDateModal(false)
     const currentDate = selectedDate || date
     setDate(currentDate)
   }
