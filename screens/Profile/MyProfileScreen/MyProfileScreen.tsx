@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Text, View, TouchableOpacity } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import ExpandableDescription from "../../../components/ExpandableDescription/ExpandableDescription"
@@ -11,24 +11,45 @@ import { globalStyles } from "../../../assets/global/globalStyles"
 import SectionTabs from "../../../components/SectionTabs/SectionTabs"
 import { ProfileEvents } from "../ProfileEvents/ProfileEvents"
 import { ProfileInterests } from "../ProfileInterests/ProfileInterests"
-import { mockContacts } from "../../Contacts/mockContacts"
 
-interface MyProfileScreenProps {
+import { getAuth } from "firebase/auth"
+import { User } from "../../../types/User"
+import { getUserData } from "../../../firebase/User"
+import LoadingScreen from "../../Loading/LoadingScreen"
+
+interface MyProfileScreenProps{
   navigation: NavigationProp<ParamListBase>
 }
 
 export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
   const [selectedTab, setSelectedTab] = useState("Events")
+  const userId = getAuth().currentUser?.uid
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
 
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true)
+      if(userId){
+        setUser(await getUserData(userId))
+      }
+      setLoading(false)
+    }
+    fetchData()
+  }, [userId])
+
+  if(loading || !user){
+    return <LoadingScreen/>
+  }
   return (
     <View style={styles.container}>
       <View style={profileStyles.topBackground} />
       <View style={profileStyles.profileContainer}>
         <View style={profileStyles.topProfileContainer}>
           <GeneralProfile
-            name={mockContacts[0].firstName}
-            surname={mockContacts[0].lastName}
-            location={mockContacts[0].location}
+            name={user.firstName}
+            surname={user.lastName}
+            location={user.location}
           />
 
           <View style={profileStyles.buttonsContainer}>
@@ -54,7 +75,10 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
           </View>
         </View>
 
-        <ExpandableDescription description={mockContacts[0].description} />
+
+        <ExpandableDescription
+          description={user.description}
+        />
 
         <SectionTabs
           tabs={["Events", "Interests"]}

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useContext } from "react"
 import {
   View,
   TouchableOpacity,
@@ -19,6 +19,7 @@ import { Entypo } from "@expo/vector-icons"
 import { AntDesign } from "@expo/vector-icons"
 import MyDateInputComponent from "../../../components/DatePicker/DatePicker"
 import { useNavigation } from "@react-navigation/native"
+import { RegistrationContext } from "../../../contexts/RegistrationContext"
 
 const InformationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
@@ -27,10 +28,10 @@ const InformationScreen: React.FC = () => {
   const thirdRef = useRef<TextInput>(null)
   const lastRef = useRef<TextInput>(null)
   const [dateModal, setDateModal] = useState(false)
-  const today = new Date()
-  const [date, setDate] = useState<Date>(today)
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
   const useNav = useNavigation()
+
+  const { firstName, setFirstName, lastName, setLastName, date, setDate, location, setLocation } = useContext(RegistrationContext)
 
   const onPress = () => {
     setDateModal(!dateModal)
@@ -56,6 +57,8 @@ const InformationScreen: React.FC = () => {
           <InputField
             label="First name*"
             placeholder="First name"
+            value={firstName}
+            onChangeText={setFirstName}
             returnKeyType="next"
             onSubmitEditing={() => firstRef.current?.focus()}
           />
@@ -63,6 +66,8 @@ const InformationScreen: React.FC = () => {
             label="Last name*"
             placeholder="Last name"
             returnKeyType="next"
+            value={lastName}
+            onChangeText={setLastName}
             ref={firstRef}
             onSubmitEditing={() => thirdRef.current?.focus()}
           />
@@ -89,6 +94,8 @@ const InformationScreen: React.FC = () => {
           <InputField
             label="Location"
             placeholder="Location"
+            value={location}
+            onChangeText={setLocation}
             returnKeyType="next"
             ref={thirdRef}
             onSubmitEditing={() => lastRef.current?.focus()}

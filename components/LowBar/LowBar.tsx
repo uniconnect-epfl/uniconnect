@@ -8,9 +8,10 @@ import { useNavigation } from "@react-navigation/native"
 interface LowBarProps {
   nextScreen?: string
   buttonText?: string
+  authenticate?: () => void
 }
 
-const LowBar: React.FC<LowBarProps> = ({ nextScreen, buttonText }) => {
+const LowBar: React.FC<LowBarProps> = ({ nextScreen, buttonText, authenticate= () => {} }) => {
   const navigation = useNavigation()
   const textB = buttonText ? buttonText : "Next"
 
@@ -25,7 +26,7 @@ const LowBar: React.FC<LowBarProps> = ({ nextScreen, buttonText }) => {
 
       <TouchableOpacity
         style={styles.buttonSmall}
-        onPress={() => navigation.navigate(nextScreen as never)}
+        onPress={() => nextScreen === "HomeTabs" ? authenticate() : navigation.navigate(nextScreen as never)}
       >
         <Text style={[styles.buttonText, globalStyles.text]}>{textB}</Text>
       </TouchableOpacity>

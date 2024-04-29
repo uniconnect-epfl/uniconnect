@@ -1,5 +1,5 @@
 import React from "react"
-import { render, fireEvent } from "@testing-library/react-native"
+import { render, fireEvent, waitFor } from "@testing-library/react-native"
 import { MyProfileScreen } from "../../../../screens/Profile/MyProfileScreen/MyProfileScreen"
 import { NavigationProp, ParamListBase } from "@react-navigation/native"
 
@@ -34,29 +34,54 @@ jest.mock("@expo/vector-icons/Ionicons", () => "Ionicons")
 //mock an alert with jest
 global.alert = jest.fn()
 
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+)
+
+jest.mock("../../../../firebase/User", () => ({
+  getUserData: jest.fn(() => ({
+    firstName: "John",
+    lastName: "Doe",
+    location: "London"
+  }))
+}))
+
+jest.mock("firebase/auth", () => ({
+  getReactNativePersistence: jest.fn(() => ({})),
+  initializeAuth: jest.fn(() => ({})),
+  onAuthStateChanged: jest.fn(() => ({uid: '123'})),
+  getAuth: jest.fn(() => ({currentUser: {uid: '123'}}))
+}))
+
 
 describe("MyProfileScreen", () => {
 
-  it("renders correctly", () => {
+  it("renders correctly", async () => {
     const { getByText } = render(<MyProfileScreen navigation={mockNavigation}/>)
     
-    expect(getByText("Update")).toBeTruthy()
-    expect(getByText("QR")).toBeTruthy()
+    await waitFor(() => {
+      expect(getByText("Update")).toBeTruthy()
+      expect(getByText("QR")).toBeTruthy()
+    })
   })
 
-  it("navigates to update profile when update button is pressed", () => {
+  it("navigates to update profile when update button is pressed", async () => {
     const { getByText } = render(<MyProfileScreen navigation={mockNavigation}/>)
-    const updateButton = getByText("Update")
-    
-    fireEvent.press(updateButton)
-    expect(mockNavigation.navigate).toHaveBeenCalledWith("UpdateProfile")
+
+    await waitFor(() => {
+      const updateButton = getByText("Update")
+      fireEvent.press(updateButton)
+      expect(mockNavigation.navigate).toHaveBeenCalledWith("UpdateProfile")
+    })
   })
 
-  it("navigates to my QR code when QR button is pressed", () => {
+  it("navigates to my QR code when QR button is pressed", async () => {
     const { getByText } = render(<MyProfileScreen navigation={mockNavigation}/>)
-    const qrButton = getByText("QR")
-    
-    fireEvent.press(qrButton)
-    expect(mockNavigation.navigate).toHaveBeenCalledWith("MyQR")
+
+    await waitFor(() => {
+      const qrButton = getByText("QR")
+      fireEvent.press(qrButton)
+      expect(mockNavigation.navigate).toHaveBeenCalledWith("MyQR")
+    })
   })
 })

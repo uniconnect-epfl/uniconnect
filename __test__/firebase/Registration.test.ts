@@ -1,6 +1,7 @@
-import { Firestore } from "firebase/firestore"
-import { createAccount, storeEmail } from "../../firebase/Registration"
+import { Firestore, getDoc } from "firebase/firestore"
+import { createAccount, isNewUser, storeInitialUserData } from "../../firebase/Registration"
 import { Auth } from "firebase/auth"
+import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
 
 jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(() => ({} as Auth)),
@@ -15,12 +16,27 @@ jest.mock("firebase/auth", () => ({
   initializeAuth: jest.fn(() => ({} as Auth)),
 }))
 
-jest.mock('@react-native-async-storage/async-storage', () =>
-  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
-)
+jest.mock("../../firebase/firebaseConfig", () => ({
+  auth: jest.fn(() => ({} as Auth)),
+  db: jest.fn(() => ({} as Firestore))
+}))
+
+const mockSetDoc = jest.fn()
 
 jest.mock("firebase/firestore", () => ({
   getFirestore: jest.fn(() => ({} as Firestore)),
+  doc: jest.fn(() => ({})),
+  getDoc: jest.fn((uid) => {
+    if (uid === "123") {
+      return Promise.resolve({ exists: jest.fn(() => false)})
+    }
+    else if (uid === "456") {
+      return Promise.resolve({ exists: jest.fn(() => true)})
+    }
+    else {
+      return Promise.reject()
+    }
+  }),
   addDoc: jest.fn().mockImplementation((collectionRef, data) => {
     if (data.email === "test@example.com") {
       return Promise.resolve({ id: "123" })
@@ -29,10 +45,18 @@ jest.mock("firebase/firestore", () => ({
     }
   }),
   collection: jest.fn(() => ({})),
-  serverTimestamp: jest.fn(() => ({}))
+  serverTimestamp: jest.fn(() => ({})),
+  setDoc: mockSetDoc
 }))
 
-global.alert = jest.fn()
+jest.mock("../../components/ToastMessage/toast", () => ({
+  showErrorToast: jest.fn(),
+  showSuccessToast: jest.fn()
+}))
+
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+)
 
 describe("createAccount", () => {
   afterEach(() => {
@@ -45,7 +69,7 @@ describe("createAccount", () => {
 
     await createAccount(email, password)
 
-    expect(global.alert).toHaveBeenCalledWith("Account created. Check email")
+    expect(showSuccessToast).toHaveBeenCalledWith("Account succesfully created!")
   })
 
   it("should handle error and display error message", async () => {
@@ -55,30 +79,49 @@ describe("createAccount", () => {
 
     await createAccount(email, password)
 
-    expect(global.alert).toHaveBeenCalledWith("There was an error" + error)
-  })
-})
-
-describe("storeEmail", () => {
-  afterEach(() => {
-    jest.clearAllMocks()
+    expect(showErrorToast).toHaveBeenCalledWith("There was a problem creating an account: " + error)
   })
 
-  it("should store an email and log success message", async () => {
+  it("should return false if user exists", async () => {
+    const uid = "456"
+    const mockGetDoc = getDoc as jest.Mock
+    mockGetDoc.mockResolvedValue({ exists: jest.fn(() => true)})
+
+    const result = await isNewUser(uid)
+
+    expect(result).toBe(false)
+  })
+
+  it("should return true if user is new", async () => {
+    const uid = "123"
+    const mockGetDoc = getDoc as jest.Mock
+    mockGetDoc.mockResolvedValue({ exists: jest.fn(() => false)})
+
+    const result = await isNewUser(uid)
+
+    expect(result).toBe(true)
+  })
+
+  it("should return false if an error occurs", async () => {
+    const uid = "789"
+    const mockGetDoc = getDoc as jest.Mock
+    mockGetDoc.mockRejectedValue(new Error("whatever"))
+
+    const result = await isNewUser(uid)
+
+    expect(result).toBe(false)
+  })
+
+  it("should store initial user data", async () => {
+    const uid = "123"
     const email = "test@example.com"
-    const docRef = { id: "123" }
+    const firstName = "John"
+    const lastName = "Doe"
+    const date = new Date()
+    const location = "New York"
+    const description = "Lorem ipsum"
+    const selectedInterests = ["programming", "music"]
 
-    await storeEmail(email)
-
-    expect(global.alert).toHaveBeenCalledWith("Document written with ID: " + docRef.id)
-  })
-
-  it("should handle error and display error message", async () => {
-    const email = "test@example"
-    const error = new Error("Failed to store email")
-
-    await storeEmail(email)
-
-    expect(global.alert).toHaveBeenCalledWith("Failed to store email: " + error)
+    await storeInitialUserData(uid, email, firstName, lastName, date, location, description, selectedInterests)
   })
 })
