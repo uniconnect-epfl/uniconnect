@@ -8,7 +8,7 @@ import ContactList from "./ContactList/ContactList"
 import ContactGraph from "./ContactGraph/ContactGraph"
 import { mockContacts } from "./mockContacts"
 import Graph from "../../components/Graph/Graph"
-import { Contact } from "./Contact"
+import { Contact } from "../../types/Contact"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 const GRAPH_STORAGE_KEY = "graph"

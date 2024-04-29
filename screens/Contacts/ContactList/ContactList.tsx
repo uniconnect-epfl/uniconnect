@@ -11,7 +11,7 @@ import { styles } from "./styles"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import { black } from "../../../assets/colors/colors"
-import { Contact } from "../Contact"
+import { Contact } from "../../../types/Contact"
 
 interface ContactListProps {
   onContactPress: (uid: string) => void

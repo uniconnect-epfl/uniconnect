@@ -23,7 +23,6 @@ destroyGraphFileIfExists()
 
 import Toast from "react-native-toast-message"
 
-
 SplashScreen.preventAutoHideAsync()
 
 WebBrowser.maybeCompleteAuthSession()
@@ -63,7 +62,7 @@ export default function App() {
         <NavigationContainer linking={linking}>
           <MainStackNavigator />
         </NavigationContainer>
-        <Toast/>
+        <Toast />
       </SafeAreaProvider>
     </GestureHandlerRootView>
   )

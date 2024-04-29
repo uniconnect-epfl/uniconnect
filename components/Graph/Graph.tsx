@@ -1,4 +1,4 @@
-import { Contact } from "../../screens/Contacts/Contact"
+import { Contact } from "../../types/Contact"
 
 /**
  * Interface for a node in the graph

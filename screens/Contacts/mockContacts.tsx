@@ -1,4 +1,4 @@
-import { Contact } from "./Contact"
+import { Contact } from "../../types/Contact"
 
 const contact_1: Contact = {
   uid: "0",
