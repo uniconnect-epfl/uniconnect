@@ -1,14 +1,14 @@
 import { View, Text, Image } from "react-native"
 import { styles } from "./styles"
-import { useState } from "react"
+import React, { useState } from "react"
 import { FlatList, TextInput } from "react-native-gesture-handler"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../../assets/global/globalStyles"
-import { Contact, dummyData } from "../../Contacts/ContactList/ContactList"
+import { mockContacts } from "../../Contacts/mockContacts"
+import { Contact } from "../../../types/Contact"
 
 const RenderOneContact = ({ item }: { item: Contact }) => (
   <View style={styles.contactCard}>
-
     <View style={styles.horizontalContainer}>
       {item.profilePictureUrl ? (
         <Image
@@ -20,10 +20,11 @@ const RenderOneContact = ({ item }: { item: Contact }) => (
           <Ionicons name="person" size={30} color="black" />
         </View>
       )}
-      <Text 
-        style={[globalStyles.smallText, styles.description]} 
+      <Text
+        style={[globalStyles.smallText, styles.description]}
         numberOfLines={4}
-        ellipsizeMode="tail">
+        ellipsizeMode="tail"
+      >
         {item.description}
       </Text>
     </View>
@@ -32,32 +33,30 @@ const RenderOneContact = ({ item }: { item: Contact }) => (
       <Text style={globalStyles.boldText}>{item.firstName}</Text>
       <Text style={globalStyles.text}>friend</Text>
     </View>
-
   </View>
 )
 
 export const ProfileNetwork = () => {
-  const [filteredContacts, setFilteredContacts] = useState(dummyData)
+  const [filteredContacts, setFilteredContacts] = useState(mockContacts)
   const [searchText, setSearchText] = useState("")
 
   const handleSearch = (text: string) => {
     setSearchText(text)
     if (text) {
-      const filtered = dummyData.filter((contact) =>
+      const filtered = mockContacts.filter((contact) =>
         `${contact.firstName} ${contact.lastName}`
           .toLowerCase()
           .includes(text.toLowerCase())
       )
       setFilteredContacts(filtered)
     } else {
-      setFilteredContacts(dummyData)
+      setFilteredContacts(mockContacts)
     }
   }
 
   return (
     <View style={styles.container}>
-
-      <TextInput 
+      <TextInput
         style={styles.searchBar}
         placeholder="Search..."
         value={searchText}
@@ -72,7 +71,6 @@ export const ProfileNetwork = () => {
         numColumns={2}
         columnWrapperStyle={styles.row}
       />
-
     </View>
   )
 }

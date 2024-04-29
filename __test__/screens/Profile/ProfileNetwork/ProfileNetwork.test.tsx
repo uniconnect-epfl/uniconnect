@@ -1,25 +1,25 @@
-import React from 'react'
-import { fireEvent, render } from '@testing-library/react-native'
-import { ProfileNetwork } from '../../../../screens/Profile/ProfileNetwork/ProfileNetwork'
+import React from "react"
+import { fireEvent, render } from "@testing-library/react-native"
+import { ProfileNetwork } from "../../../../screens/Profile/ProfileNetwork/ProfileNetwork"
 
-describe('ProfileNetwork', () => {
-  
-  it('renders correctly', () => {
+describe("ProfileNetwork", () => {
+  it("renders correctly", () => {
     const component = render(<ProfileNetwork />)
     expect(component).toBeTruthy()
   })
 
-  it('filters contacts based on search input', () => {
-    const { getByText, getByPlaceholderText, queryByText } = render(<ProfileNetwork />)
+  it("filters contacts based on search input", () => {
+    const component = render(<ProfileNetwork />)
 
-    fireEvent.changeText(getByPlaceholderText('Search...'), 'Jocovi')
-    expect(getByText('Jocović')).toBeTruthy()
-    expect(queryByText('Hervé')).toBeNull()
-    expect(queryByText('')).toBeNull()
-    expect(queryByText('Abc')).toBeNull()
+    fireEvent.changeText(
+      component.getByPlaceholderText("Search..."),
+      "Isabella"
+    )
+    expect(component.getByText("Isabella")).toBeTruthy()
+    expect(component.queryByText("Bob")).toBeNull()
+    expect(component.queryByText("Henry")).toBeNull()
 
-    fireEvent.changeText(getByPlaceholderText('Search...'), '')
-    expect(getByText('Hervé')).toBeTruthy()
-})
-  
+    fireEvent.changeText(component.getByPlaceholderText("Search..."), "")
+    expect(component.getByText("Bob")).toBeTruthy()
+  })
 })
