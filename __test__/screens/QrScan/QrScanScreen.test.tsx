@@ -3,7 +3,6 @@ import { act, fireEvent, render } from "@testing-library/react-native"
 import QrScanScreen from "../../../screens/QrScan/QrScanScreen"
 import { NavigationContainer, NavigationProp, ParamListBase } from "@react-navigation/native"
 import { Camera } from "expo-camera"
-import * as Linking from "expo-linking"
 
 const mockNavigation = {
   navigate: jest.fn(),
@@ -117,10 +116,42 @@ describe("QrScanScreen", () => {
       )
       act(() => {
         fireEvent(getByTestId("camera"), "onBarCodeScanned", {
-          nativeEvent: { type: "qr", data: Linking.createURL("/") + "contact/123" }
+          nativeEvent: { type: "qr", data: "contact/123" }
         })
       })
       expect(mockNavigation.navigate).not.toHaveBeenCalled()
+    })
+
+    it("handles barcode scanned with same id", () => {
+      (Camera.useCameraPermissions as jest.Mock).mockImplementation(() => [{
+          granted: true
+      }, jest.fn()])
+      const { getByTestId } = render(
+        <NavigationContainer>
+          <QrScanScreen navigation={mockNavigation}/>
+        </NavigationContainer>
+      )
+      act(() => {
+        fireEvent(getByTestId("camera"), "onBarCodeScanned", {
+          nativeEvent: { type: "qr", data: "event/123" }
+        })
+      })
+    })
+
+    it("handles barcode scanned with same id", () => {
+      (Camera.useCameraPermissions as jest.Mock).mockImplementation(() => [{
+          granted: true
+      }, jest.fn()])
+      const { getByTestId } = render(
+        <NavigationContainer>
+          <QrScanScreen navigation={mockNavigation}/>
+        </NavigationContainer>
+      )
+      act(() => {
+        fireEvent(getByTestId("camera"), "onBarCodeScanned", {
+          nativeEvent: { type: "qr", data: "contact/123" }
+        })
+      })
     })
   
     it("requests permission when not granted", () => {
