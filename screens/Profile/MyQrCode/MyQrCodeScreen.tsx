@@ -11,7 +11,7 @@ import LoadingScreen from "../../Loading/LoadingScreen"
 import { User } from "../../../types/User"
 
 const generateLink = (uid: string) => {
-  return Linking.createURL("uniconnect/contact/" + uid)
+  return Linking.createURL("contact/" + uid)
 }
 
 export const MyQrCodeScreen = () => {
@@ -30,7 +30,7 @@ export const MyQrCodeScreen = () => {
     fetchData()
   }, [userId])
 
-  if(loading || !user){
+  if(loading || !user || !userId){
     return <LoadingScreen/>
   }
   
@@ -50,7 +50,7 @@ export const MyQrCodeScreen = () => {
               logoBackgroundColor={peach}
               logoBorderRadius={10}
               logoSize={30}
-              value={generateLink(user.uid)}
+              value={generateLink(userId)}
             />
           </View>
         </View>

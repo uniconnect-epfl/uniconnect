@@ -25,7 +25,7 @@ export default function App() {
     prefixes: [Linking.createURL("/")],
     config: {
       screens: {
-        AddContact: "uniconnect/contact/:uid",
+        AddContact: "contact/:uid",
       },
     },
   }
