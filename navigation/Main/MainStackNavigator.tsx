@@ -18,6 +18,8 @@ import MapsScreen from "../../screens/Maps/EventMap"
 import { AddContactScreen } from "../../screens/AddContact/AddContactScreen"
 import { isNewUser, storeInitialUserData } from "../../firebase/Registration"
 import { RegistrationContext } from "../../contexts/RegistrationContext"
+import { ViewEventScreen } from "../../screens/ViewEvent/ViewEventScreen"
+import { EventQrCodeScreen } from "../../screens/EventQrCode/EventQrCodeScreen"
 
 const Stack = createStackNavigator()
 
@@ -132,6 +134,16 @@ const MainStackNavigator: React.FC = () => {
             <Stack.Screen
               name="AddContact"
               component={AddContactScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ViewEvent"
+              component={ViewEventScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="EventQr"
+              component={EventQrCodeScreen}
               options={{ headerShown: false }}
             />
           </>

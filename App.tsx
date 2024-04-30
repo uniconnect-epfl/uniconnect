@@ -33,6 +33,7 @@ export default function App() {
     config: {
       screens: {
         AddContact: "uniconnect/contact/:uid",
+        ViewEvent: "event/:uid"
       },
     },
   }
