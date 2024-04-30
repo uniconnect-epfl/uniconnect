@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
   View,
   Text,
@@ -6,7 +6,6 @@ import {
   Image,
   TextInput,
   FlatList,
-  ListRenderItemInfo,
   Keyboard,
   TouchableWithoutFeedback,
   ScrollView,
@@ -17,23 +16,24 @@ import { globalStyles } from "../../../assets/global/globalStyles"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import LowBar from "../../../components/LowBar/LowBar"
 import Label from "../../../components/Label/Label"
-import { RegistrationContext } from "../../../contexts/RegistrationContext"
+import { fetchInterests, Interest } from "../../../firebase/Interests"
+import LoadingScreen from "../../Loading/LoadingScreen"
 
 interface InterestButtonProps {
-  title: string
+  interest: Interest
   selected: boolean
-  onSelect: () => void
+  onSelect: (interest: Interest) => void
 }
 
 const InterestButton: React.FC<InterestButtonProps> = ({
-  title,
+  interest,
   selected,
   onSelect,
 }) => (
   <TouchableOpacity
     style={[styles.interestButton, selected && styles.selectedInterestButton]}
-    onPress={onSelect}
-    testID={`interestButton-${title}`}
+    onPress={() => onSelect(interest)}
+    testID={`interestButton-${interest.title}`}
   >
     <Text
       style={[
@@ -41,74 +41,82 @@ const InterestButton: React.FC<InterestButtonProps> = ({
         selected && styles.selectedInterestText,
       ]}
     >
-      {title}
+      {interest.title}
     </Text>
   </TouchableOpacity>
 )
 
-const interestsList = [
-  "Machine Learning",
-  "Artificial Intelligence",
-  "Computer Vision",
-  "Data Science",
-  "NLP",
-  "Sport",
-  "Assembly",
-  "Pawning",
-  "Cyber Security",
-  "Blockchain",
-  "Ethereum",
-  "Solana",
-  "Computer graphics",
-  "Bananas",
-  "Apples",
-  "Big tech",
-  "Finance",
-]
-
 const InterestsScreen = () => {
   const insets = useSafeAreaInsets()
   const [searchTerm, setSearchTerm] = useState("")
-  const [filterdedInterests, setFilteredInterests] = useState(interestsList)
+  const [interests, setInterests] = useState<Interest[]>([])
+  const [filterdedInterests, setFilteredInterests] = useState<Interest[]>([])
   const [labelArray, setLabelArray] = useState<string[]>([])
-  const { selectedInterests, setSelectedInterests } = useContext(RegistrationContext)
-
-  const renderItem = ({ item }: ListRenderItemInfo<string>) => (
-    <InterestButton
-      title={item}
-      selected={selectedInterests.includes(item)}
-      onSelect={() => toggleInterest(item)}
-    />
+  const [selectedInterests, setSelectedInterests] = useState<Set<string>>(
+    new Set([])
   )
+  const [isLoading, setIsLoading] = useState(true)
+
+  //fetching the interests
+  useEffect(() => {
+    fetchInterests()
+      .then((interests) => {
+        setInterests(interests)
+        setFilteredInterests(interests)
+        setIsLoading(false)
+      })
+      .catch((error) => {
+        console.error("Failed to fetch interests: ", error)
+        setIsLoading(false)
+      })
+  }, [])
 
   const handleRemoveInterest = (interest: string) => {
-    setSelectedInterests(selectedInterests.filter((label) => label !== interest))
+    setSelectedInterests(
+      (prev) => new Set([...prev].filter((label) => label !== interest))
+    )
     setLabelArray((prev) => prev.filter((label) => label !== interest))
   }
 
-  const toggleInterest = (interest: string) => {
-    const newSelectedInterests = [...selectedInterests]
-    if (newSelectedInterests.includes(interest)) {
-      newSelectedInterests.filter((label) => label !== interest)
-      // Build a new array without the interest
-      setLabelArray((prev) => prev.filter((label) => label !== interest))
-    } else {
-      newSelectedInterests.push(interest)
-      setLabelArray([...labelArray, interest])
-    }
-    setSelectedInterests(newSelectedInterests)
+  //Handle the selection of an interest
+  const toggleInterest = (interest: Interest) => {
+    setSelectedInterests((prevSelectedInterests) => {
+      const newSelected = new Set(prevSelectedInterests)
+      if (newSelected.has(interest.title)) {
+        newSelected.delete(interest.title)
+      } else {
+        newSelected.add(interest.title)
+      }
+      setLabelArray(Array.from(newSelected))
+      return newSelected
+    })
   }
 
+  //Handles the search bar
   const handleSearch = (text: string) => {
     setSearchTerm(text)
     if (searchTerm) {
-      const filteredData = interestsList.filter((interest) =>
-        interest.toLocaleLowerCase().includes(text.toLowerCase())
+      setFilteredInterests(
+        interests.filter((interest) =>
+          interest.title.toLowerCase().includes(text.toLowerCase())
+        )
       )
-      setFilteredInterests(filteredData)
     } else {
       setFilteredInterests(interestsList)
     }
+  }
+
+  const renderItem = ({ item }: { item: Interest }) => (
+    <InterestButton
+      interest={item}
+      selected={selectedInterests.has(item.title)}
+      onSelect={(interest: Interest) => toggleInterest(interest)}
+    />
+  )
+
+  //Loading screen if the interest list is not completely arrived
+  if (isLoading) {
+    return <LoadingScreen />
   }
 
   return (
@@ -153,7 +161,7 @@ const InterestsScreen = () => {
         <FlatList
           data={filterdedInterests}
           renderItem={renderItem}
-          keyExtractor={(item) => item}
+          keyExtractor={(item) => item.title}
           numColumns={2}
           style={styles.interestsGrid}
         />

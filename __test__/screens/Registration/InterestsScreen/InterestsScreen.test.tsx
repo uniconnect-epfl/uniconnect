@@ -3,6 +3,11 @@ import { render, fireEvent } from "@testing-library/react-native"
 import InterestsScreen from "../../../../screens/Registration/InterestsScreen/InterestsScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
+jest.mock("@react-native-async-storage/async-storage", () => ({
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+}))
+
 jest.mock("react-native-safe-area-context", () => {
   const inset = { top: 0, right: 0, bottom: 0, left: 0 }
   return {
