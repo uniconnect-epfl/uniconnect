@@ -88,7 +88,7 @@ const MainStackNavigator: React.FC = () => {
     >
       <Stack.Navigator
         initialRouteName={
-          user ? (fillOutProfile ? "UpdateProfile" : "HomeTabs") : "Onboarding"
+          user ? ( "HomeTabs") : "Onboarding"
         }
       >
         {user ? (
@@ -134,6 +134,17 @@ const MainStackNavigator: React.FC = () => {
               component={AddContactScreen}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="EventScreen"
+              component={AddContactScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AnnouncementScreen"
+              component={MapsScreen}
+              options={{ headerShown: false }}
+            />
+            
           </>
         ) : (
           <>

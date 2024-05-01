@@ -1,10 +1,11 @@
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps"
 import React from "react"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { event } from "../Home/HomeScreen"
+
 import { View, Text, TouchableOpacity } from "react-native"
 import styles from "./styles" // Import styles
 import { Ionicons } from "@expo/vector-icons"
+import { EventCardProps } from "../../components/EventCard/EventCard"
 
 const INITIAL_REGION = {
   latitude: 46.51858962578904,
@@ -13,7 +14,7 @@ const INITIAL_REGION = {
   longitudeDelta: 0.01,
 }
 
-type MapScreenRouteProp = RouteProp<{ params: { events: event[] } }, "params">
+type MapScreenRouteProp = RouteProp<{ params: { events: EventCardProps[] } }, "params">
 
 export default function EventMap() {
   const route = useRoute<MapScreenRouteProp>()
