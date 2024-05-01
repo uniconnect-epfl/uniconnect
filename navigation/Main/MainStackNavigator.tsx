@@ -146,6 +146,7 @@ const MainStackNavigator: React.FC = () => {
               component={EventQrCodeScreen}
               options={{ headerShown: false }}
             />
+            
           </>
         ) : (
           <>
