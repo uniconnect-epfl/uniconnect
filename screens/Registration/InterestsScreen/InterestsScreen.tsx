@@ -52,7 +52,7 @@ const InterestsScreen = () => {
   const insets = useSafeAreaInsets()
   const [searchTerm, setSearchTerm] = useState("")
   const [interests, setInterests] = useState<Interest[]>([])
-  const [filterdedInterests, setFilteredInterests] = useState<Interest[]>([])
+  const [filteredInterests, setFilteredInterests] = useState<Interest[]>([])
   const [labelArray, setLabelArray] = useState<string[]>([])
   const [selectedInterests, setSelectedInterests] = useState<Set<string>>(
     new Set([])
@@ -163,7 +163,7 @@ const InterestsScreen = () => {
         )}
 
         <FlatList
-          data={filterdedInterests}
+          data={filteredInterests}
           renderItem={renderItem}
           keyExtractor={(item) => item.title}
           numColumns={2}
