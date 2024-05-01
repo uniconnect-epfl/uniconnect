@@ -23,17 +23,19 @@ interface InterestButtonProps {
   interest: Interest
   selected: boolean
   onSelect: (interest: Interest) => void
+  testID: string
 }
 
 const InterestButton: React.FC<InterestButtonProps> = ({
   interest,
   selected,
   onSelect,
+  testID,
 }) => (
   <TouchableOpacity
     style={[styles.interestButton, selected && styles.selectedInterestButton]}
     onPress={() => onSelect(interest)}
-    testID={`interestButton-${interest.title}`}
+    testID={testID}
   >
     <Text
       style={[
@@ -102,7 +104,7 @@ const InterestsScreen = () => {
         )
       )
     } else {
-      setFilteredInterests(interestsList)
+      setFilteredInterests(interests)
     }
   }
 
@@ -111,6 +113,7 @@ const InterestsScreen = () => {
       interest={item}
       selected={selectedInterests.has(item.title)}
       onSelect={(interest: Interest) => toggleInterest(interest)}
+      testID={item.title + "ID"}
     />
   )
 
@@ -141,7 +144,7 @@ const InterestsScreen = () => {
           onChangeText={handleSearch}
         />
 
-        {selectedInterests.length !== 0 && (
+        {selectedInterests.size !== 0 && (
           <ScrollView
             horizontal={false}
             style={styles.labelView}
@@ -153,6 +156,7 @@ const InterestsScreen = () => {
                 key={label}
                 text={label}
                 onClick={() => handleRemoveInterest(label)}
+                testID={label + "IDlabel"}
               />
             ))}
           </ScrollView>

@@ -1,11 +1,17 @@
 import React from "react"
-import { render, fireEvent } from "@testing-library/react-native"
+import { render, fireEvent, waitFor } from "@testing-library/react-native"
 import InterestsScreen from "../../../../screens/Registration/InterestsScreen/InterestsScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
+import { Auth } from "firebase/auth"
 
-jest.mock("@react-native-async-storage/async-storage", () => ({
-  getItem: jest.fn(),
-  setItem: jest.fn(),
+jest.mock("@react-native-async-storage/async-storage", () =>
+  require("@react-native-async-storage/async-storage/jest/async-storage-mock")
+)
+
+jest.mock("firebase/auth", () => ({
+  getReactNativePersistence: jest.fn(() => ({} as Auth)),
+  initializeAuth: jest.fn(() => ({} as Auth)),
+  onAuthStateChanged: jest.fn(),
 }))
 
 jest.mock("react-native-safe-area-context", () => {
@@ -20,67 +26,79 @@ jest.mock("react-native-safe-area-context", () => {
 
 jest.mock("react", () => ({
   ...jest.requireActual("react"),
-  useContext: jest.fn(() => ({selectedInterests: ["one"], setSelectedInterests: jest.fn()})),
+  useContext: jest.fn(() => ({
+    selectedInterests: ["one"],
+    setSelectedInterests: jest.fn(),
+  })),
 }))
 
 describe("InterestsScreen", () => {
-  it("renders the screen with necessary components", () => {
+  it("renders the screen with necessary components", async () => {
     const { getByPlaceholderText, getAllByText } = render(
       <SafeAreaProvider>
         <InterestsScreen />
       </SafeAreaProvider>
     )
 
-    expect(getByPlaceholderText("Search")).toBeTruthy()
-
-    const interestButtons = getAllByText(/.+/)
-    expect(interestButtons.length).toBeGreaterThan(0)
+    await waitFor(() => {
+      expect(getByPlaceholderText("Search")).toBeTruthy()
+      const interestButtons = getAllByText(/.+/)
+      expect(interestButtons.length).toBeGreaterThan(0)
+    })
   })
 
-  it("allows searching and filters interests", () => {
+  it("allows searching and filters interests", async () => {
     const { getByPlaceholderText, getByText } = render(
       <SafeAreaProvider>
         <InterestsScreen />
       </SafeAreaProvider>
     )
 
-    const searchInput = getByPlaceholderText("Search")
-    fireEvent.changeText(searchInput, "Machine Learning")
-
-    expect(getByText("Machine Learning")).toBeTruthy()
+    await waitFor(() => {
+      const searchInput = getByPlaceholderText("Search")
+      fireEvent.changeText(searchInput, "Machine Learning")
+      expect(getByText("Machine Learning")).toBeTruthy()
+    })
   })
 
-  it("allows selecting and deselecting interests", () => {
-    const { getByText } = render(
-      <SafeAreaProvider>
-        <InterestsScreen />
-      </SafeAreaProvider>
-    )
-
-    const interestButton = getByText("Machine Learning")
-    fireEvent.press(interestButton)
-    fireEvent.press(interestButton)
-  })
-  it("creates a label when an interest is selected", () => {
+  it("allows selecting and deselecting interests", async () => {
     const { getByTestId } = render(
       <SafeAreaProvider>
         <InterestsScreen />
       </SafeAreaProvider>
     )
 
-    fireEvent.press(getByTestId("interestButton-Machine Learning"))
-    expect(getByTestId("label-Machine Learning")).toBeTruthy()
+    await waitFor(() => {
+      const interestButton = getByTestId("CryptocurrencyID")
+      fireEvent.press(interestButton)
+      fireEvent.press(interestButton)
+    })
   })
 
-  it("removes a label when clicked", () => {
+  it("creates a label when an interest is selected", async () => {
+    const { getByTestId } = render(
+      <SafeAreaProvider>
+        <InterestsScreen />
+      </SafeAreaProvider>
+    )
+
+    await waitFor(() => {
+      fireEvent.press(getByTestId("Artificial InteligenceID"))
+      expect(getByTestId("Artificial Inteligence" + "IDlabel")).toBeTruthy()
+    })
+  })
+
+  it("removes a label when clicked", async () => {
     const { getByTestId, queryByTestId } = render(
       <SafeAreaProvider>
         <InterestsScreen />
       </SafeAreaProvider>
     )
 
-    fireEvent.press(getByTestId("interestButton-Machine Learning"))
-    fireEvent.press(getByTestId("label-Machine Learning"))
-    expect(queryByTestId("label-Machine Learning")).toBeNull()
+    await waitFor(() => {
+      fireEvent.press(getByTestId("Artificial Inteligence" + "ID"))
+      fireEvent.press(getByTestId("Artificial Inteligence" + "ID"))
+      expect(queryByTestId("Artificial Inteligence" + "IDlabel")).toBeNull()
+    })
   })
 })

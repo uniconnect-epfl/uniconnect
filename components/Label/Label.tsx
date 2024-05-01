@@ -8,15 +8,16 @@ import { globalStyles } from "../../assets/global/globalStyles"
 interface LabelProps {
   text: string
   onClick: () => void
+  testID: string
 }
 
-const Label: React.FC<LabelProps> = ({ text, onClick }) => {
+const Label: React.FC<LabelProps> = ({ text, onClick, testID }) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
         onPress={onClick}
         style={styles.buttonView}
-        testID={`label-${text}`}
+        testID={testID}
       >
         <Entypo name="cross" color={black} size={16} testID="icon-cross" />
         <Text style={styles.text}>
