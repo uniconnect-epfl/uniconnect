@@ -1,38 +1,30 @@
 import { View, Text, Image } from "react-native"
 import { styles } from "./styles"
 import React from "react"
+import { Event } from "../../types/Event"
 
-export interface EventCardProps {
-  title: string
-  location: string
-  latitude: number
-  longitude: number
-  description: string
-  date: string
-  imageUrl: string // Assuming you pass the URL of the PNG image here
+interface EventCardProps {
+  event: Event
 }
 
-const EventCard: React.FC<EventCardProps> = ({
-  title,
-  location,
-  latitude,
-  longitude,
-  description,
-  date,
-  imageUrl,
-}) => {
+const EventCard = ({ event }: EventCardProps) => {
+
+  const displayDate = event.date instanceof Date ? event.date.toLocaleDateString("en-US", {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }) : 'Date not available'
+
   return (
     <View style={styles.cardContainer}>
-      <Image source={{ uri: imageUrl }} style={styles.image} />
+      <Image source={{ uri: event.imageUrl }} style={styles.image} />
       <View style={styles.textContainer}>
-        <Text style={styles.title}>{title}</Text>
-        <Text>{date}</Text>
+        <Text style={styles.title}>{event.title}</Text>
+        <Text>{displayDate}</Text>
         <View style={styles.locationContainer}>
-          <Text style={styles.location}>{location +  "  "}</Text>
-          <Text>{Number(latitude).toFixed(2) + "  "}</Text>
-          <Text>{Number(longitude).toFixed(2)}</Text>
+          <Text style={styles.location}>{event.location + "  "}</Text>
         </View>
-        <Text style={styles.description}>{description}</Text>
+        <Text style={styles.description}>{event.description}</Text>
       </View>
     </View>
   )
