@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native"
-import { BarCodeScanningResult, Camera } from "expo-camera"
+import { Camera } from "expo-camera"
 import { styles } from "./styles"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { NavigationProp, ParamListBase, useIsFocused } from "@react-navigation/native"
@@ -9,16 +9,18 @@ import { getAuth } from "firebase/auth"
 import { showErrorToast } from "../../components/ToastMessage/toast"
 import { getUserData } from "../../firebase/User"
 import * as Linking from "expo-linking"
+import { useDebouncedCallback } from "use-debounce"
 
 interface ScanQrScreenProps{
   navigation: NavigationProp<ParamListBase>
 }
 
 const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
+  // for the camera management
   const isFocused = useIsFocused()
   const [permission, requestPermission] = Camera.useCameraPermissions()
   const [showCamera, setShowCamera] = useState(false)
-  const [qrScanned, setQrScanned] = useState(false)
+  // current user
   const userId = getAuth().currentUser?.uid
 
   // to allow mounting and unmounting the camera without slowing navigation
@@ -47,17 +49,19 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
     showErrorToast("events QR codes not implemented yet, event id: " + id)
   }
 
-  const handleBarCodeScanned = ({ data }: BarCodeScanningResult): void => {
-    if(!qrScanned){
-      setQrScanned(true)
-      const path = data.replace(Linking.createURL("/"), "")
+  // logic for the qr code scanning wrapped in a debouncer
+  const debouncedQr = useDebouncedCallback((linkScanned) => {
+    if(linkScanned){
+      const path = linkScanned.replace(Linking.createURL("/"), "")
       const [route, id] = path.split("/")
+      console.log(path)
+      console.log(route)
+      console.log(id)
       if(route === "contact") handleUser(id)
       else if (route === "event") handleEvent(id)
       else showErrorToast("Qr code not recognized")
-      setTimeout(() => setQrScanned(false), 1500) // re-allow to scan QR in 1.5 second
     }
-  }
+  }, 300)
 
   if (!permission) {
     // Camera permissions are still loading
@@ -94,7 +98,7 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
         <Camera 
           testID="camera"
           style={styles.camera}
-          onBarCodeScanned={handleBarCodeScanned}
+          onBarCodeScanned={(result) => debouncedQr(result.data)}
         />
       ) : (
         <View style={styles.container}>
