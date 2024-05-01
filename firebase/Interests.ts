@@ -1,5 +1,6 @@
 import { collection, getDocs } from "firebase/firestore"
 import { db } from "./firebaseConfig"
+import { showErrorToast } from "../components/ToastMessage/toast"
 
 export interface Interest {
   id: string
@@ -20,7 +21,7 @@ export const fetchInterests = async (): Promise<Interest[]> => {
     //complete list of interests
     return interests
   } catch (error) {
-    console.error("Error fetching interests:", error)
+    showErrorToast("Unable to fetch interests")
     throw new Error("Unable to fetch interests")
   }
 }
