@@ -4,7 +4,7 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { View, Text, TouchableOpacity } from "react-native"
 import styles from "./styles" // Import styles
 import { Ionicons } from "@expo/vector-icons"
-import { RootStackParamList } from "../../navigation/Main/MainStackNavigator"
+import { Event } from "../../types/Event"
 
 const INITIAL_REGION = {
   latitude: 46.51858962578904,
@@ -13,12 +13,13 @@ const INITIAL_REGION = {
   longitudeDelta: 0.01,
 }
 
-type MapScreenRouteProp = RouteProp<RootStackParamList, "EventMap">;
+type MapScreenRouteProp = RouteProp<{ EventMap: { events: Event[] } }, 'EventMap'>
 
-export default function EventMap() {
-  const route = useRoute<MapScreenRouteProp>()
-  const events = route.params.events
+const EventMap = () => {
+  const route = useRoute<MapScreenRouteProp>() 
+  const events = route.params.events 
   const navigation = useNavigation()
+
 
   return (
     <View style={styles.container}>
@@ -64,3 +65,5 @@ export default function EventMap() {
     </View>
   )
 }
+
+export default EventMap

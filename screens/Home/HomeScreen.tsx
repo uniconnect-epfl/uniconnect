@@ -77,7 +77,7 @@ const HomeScreen = () => {
         <TouchableOpacity
           style={styles.map}
           onPress={() =>
-            navigation.navigate("EventMap",  { events: futureEvents })
+            navigation.navigate("EventMap",  {events: futureEvents})
           }
         >
           <Text> Show on the Map</Text>
