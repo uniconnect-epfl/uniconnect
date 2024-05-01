@@ -89,7 +89,7 @@ const MainStackNavigator: React.FC = () => {
     >
       <Stack.Navigator
         initialRouteName={
-          user ? (fillOutProfile ? "EventCreation" : "HomeTabs") : "Onboarding"
+          user ? (fillOutProfile ? "UpdateProfile" : "HomeTabs") : "Onboarding"
         }
       >
         {user ? (
