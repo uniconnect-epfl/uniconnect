@@ -1,3 +1,4 @@
+import React from "react"
 import { View, Text, TouchableOpacity, Alert  } from "react-native"
 import { styles } from "./styles"
 import { useNavigation } from "@react-navigation/native"
@@ -16,7 +17,7 @@ export const SettingsScreen = () => {
   const pressPlaceholder = () => Alert.alert("Coming soon")
 
   const menuItems: MenuItem[] = [
-    { title: "ACCOUNT CENTER", action: pressPlaceholder },
+    { title: "CREATE EVENT", action: () => navigation.navigate("EventCreation" as never) },
     { title: "LANGUAGE",  action: pressPlaceholder },
     { title: "NOTIFICATIONS", action: pressPlaceholder },
     { title: "HELP",  action: pressPlaceholder },
