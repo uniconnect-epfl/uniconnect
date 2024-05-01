@@ -3,6 +3,9 @@ import { act, fireEvent, render } from "@testing-library/react-native"
 import QrScanScreen from "../../../screens/QrScan/QrScanScreen"
 import { NavigationContainer, NavigationProp, ParamListBase } from "@react-navigation/native"
 import { Camera } from "expo-camera"
+import { useDebouncedCallback } from "use-debounce"
+import { getUserData } from "../../../firebase/User"
+import { showErrorToast } from "../../../components/ToastMessage/toast"
 
 const mockNavigation = {
   navigate: jest.fn(),
@@ -78,7 +81,6 @@ jest.mock("expo-camera", () => {
         ...actual,
         Camera: camera
     }
-
 })
 
 describe("QrScanScreen", () => {
@@ -122,7 +124,7 @@ describe("QrScanScreen", () => {
       expect(mockNavigation.navigate).not.toHaveBeenCalled()
     })
 
-    it("handles barcode scanned with same id", () => {
+    it("handles barcode scanned with event", () => {
       (Camera.useCameraPermissions as jest.Mock).mockImplementation(() => [{
           granted: true
       }, jest.fn()])
@@ -138,7 +140,7 @@ describe("QrScanScreen", () => {
       })
     })
 
-    it("handles barcode scanned with same id", () => {
+    it("handles barcode scanned with same contact id", () => {
       (Camera.useCameraPermissions as jest.Mock).mockImplementation(() => [{
           granted: true
       }, jest.fn()])
@@ -155,7 +157,7 @@ describe("QrScanScreen", () => {
     })
   
     it("requests permission when not granted", () => {
-        (Camera.useCameraPermissions as jest.Mock).mockImplementation(() => [{
+      (Camera.useCameraPermissions as jest.Mock).mockImplementation(() => [{
           granted: false
       }, jest.fn()])
       const { getByText } = render(
@@ -164,6 +166,44 @@ describe("QrScanScreen", () => {
         </NavigationContainer>
       )
       fireEvent.press(getByText("Authorize"))
+    })
+
+    it("debounces QR code scan results correctly", () => {
+      (Camera.useCameraPermissions as jest.Mock).mockImplementation(() => [{
+        granted: true
+      }, jest.fn()])
+      const { getByTestId } = render(
+        <NavigationContainer>
+          <QrScanScreen navigation={mockNavigation}/>
+        </NavigationContainer>
+      )      
+      // Simulate QR code scans
+      act(() => {
+        fireEvent(getByTestId("camera"), "onBarCodeScanned", {
+          nativeEvent: { type: "qr", data: "contact/123" }
+        })
+      })
+      act(() => {
+        fireEvent(getByTestId("camera"), "onBarCodeScanned", {
+          nativeEvent: { type: "qr", data: "contact/123" }
+        })
+      })
+  
+      // Fast forward time by 300ms
+      jest.advanceTimersByTime(300)
+
+      act(() => {
+        fireEvent(getByTestId("camera"), "onBarCodeScanned", {
+          nativeEvent: { type: "qr", data: "contact/123" }
+        })
+      })
+  
+      // Assert debounced function was called
+      expect(useDebouncedCallback).toHaveBeenCalled()
+  
+      // Optionally check calls to handleUser or showErrorToast
+      expect(getUserData).toHaveBeenCalledWith("123")
+      expect(showErrorToast).not.toHaveBeenCalledWith("User not found")
     })
     
 })
