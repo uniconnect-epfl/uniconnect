@@ -18,17 +18,17 @@ const mockNavigation = {
   dangerouslyGetState: jest.fn()
 } as unknown as NavigationProp<ParamListBase>
 
-jest.mock('@react-navigation/native', () => {
+jest.mock("@react-navigation/native", () => {
   return {
-    ...jest.requireActual('@react-navigation/native'),
+    ...jest.requireActual("@react-navigation/native"),
     useNavigation: () => ({
       navigate: mockNavigation,
     }),
   }
 })
 
-jest.mock('@react-native-async-storage/async-storage', () =>
-  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+jest.mock("@react-native-async-storage/async-storage", () =>
+  require("@react-native-async-storage/async-storage/jest/async-storage-mock")
 )
 
 jest.mock("../../../firebase/User", () => ({
@@ -42,27 +42,27 @@ jest.mock("../../../firebase/User", () => ({
 jest.mock("firebase/auth", () => ({
   getReactNativePersistence: jest.fn(() => ({})),
   initializeAuth: jest.fn(() => ({})),
-  onAuthStateChanged: jest.fn(() => ({uid: '123'})),
-  getAuth: jest.fn(() => ({currentUser: {uid: '123'}}))
+  onAuthStateChanged: jest.fn(() => ({uid: "123"})),
+  getAuth: jest.fn(() => ({currentUser: {uid: "123"}}))
 }))
 
 jest.mock("expo-linking", () => ({
   createURL: jest.fn().mockImplementation((path) => `uniconnect://${path}`),
 }))
 
-jest.mock('expo-camera', () => {
-    const actual = jest.requireActual('expo-camera')
+jest.mock("expo-camera", () => {
+    const actual = jest.requireActual("expo-camera")
 
     const camera = actual.Camera
 
     camera.useCameraPermissions = jest.fn().mockImplementation(() => {
 
         const requestPermission = () => {
-            console.log('request permission called')
-            return Promise.resolve({ status: 'denied' })
+            console.log("request permission called")
+            return Promise.resolve({ status: "denied" })
         }
 
-        const permission = 'granted' // set the value you want
+        const permission = "granted" // set the value you want
 
         return [
             permission, 
@@ -71,7 +71,7 @@ jest.mock('expo-camera', () => {
         ]
     })
 
-    console.log('camera', camera)
+    console.log("camera", camera)
 
     return {
         __esModule: true,

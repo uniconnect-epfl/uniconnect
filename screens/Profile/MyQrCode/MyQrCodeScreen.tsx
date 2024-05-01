@@ -4,7 +4,7 @@ import { styles } from "./styles"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import QRCode from "react-native-qrcode-svg"
 import { black, lightPeach, peach } from "../../../assets/colors/colors"
-import * as Linking from 'expo-linking'
+import * as Linking from "expo-linking"
 import { getAuth } from "firebase/auth"
 import { getUserData } from "../../../firebase/User"
 import LoadingScreen from "../../Loading/LoadingScreen"

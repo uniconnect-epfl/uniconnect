@@ -2,8 +2,8 @@ import React from "react"
 import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import { AddContactScreen } from "../../../screens/AddContact/AddContactScreen"
 
-jest.mock('@react-native-async-storage/async-storage', () =>
-  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+jest.mock("@react-native-async-storage/async-storage", () =>
+  require("@react-native-async-storage/async-storage/jest/async-storage-mock")
 )
 
 jest.mock("../../../firebase/User", () => ({
@@ -17,8 +17,8 @@ jest.mock("../../../firebase/User", () => ({
 jest.mock("firebase/auth", () => ({
   getReactNativePersistence: jest.fn(() => ({})),
   initializeAuth: jest.fn(() => ({})),
-  onAuthStateChanged: jest.fn(() => ({uid: '123'})),
-  getAuth: jest.fn(() => ({currentUser: {uid: '123'}}))
+  onAuthStateChanged: jest.fn(() => ({uid: "123"})),
+  getAuth: jest.fn(() => ({currentUser: {uid: "123"}}))
 }))
 
 jest.mock("@react-navigation/native", () => {

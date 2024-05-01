@@ -32,7 +32,7 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
 
   const handleUser = async (id : string) => {
     if(id === userId){
-      showErrorToast("This is you !")
+      showErrorToast("This is you!")
     } else {
       const scannedUser = await getUserData(id)
       if(scannedUser === null || scannedUser === undefined){
@@ -51,7 +51,7 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
     if(!qrScanned){
       setQrScanned(true)
       const path = data.replace(Linking.createURL("/"), "")
-      const [route, id] = path.split('/')
+      const [route, id] = path.split("/")
       if(route === "contact") handleUser(id)
       else if (route === "event") handleEvent(id)
       else showErrorToast("Qr code not recognized")
