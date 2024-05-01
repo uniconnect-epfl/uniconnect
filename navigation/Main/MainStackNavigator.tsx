@@ -18,6 +18,24 @@ import MapsScreen from "../../screens/Maps/EventMap"
 import { AddContactScreen } from "../../screens/AddContact/AddContactScreen"
 import { isNewUser, storeInitialUserData } from "../../firebase/Registration"
 import { RegistrationContext } from "../../contexts/RegistrationContext"
+import { Event } from "../../types/Event"
+
+
+export type RootStackParamList = {
+  HomeTabs: undefined;
+  Profile: undefined;
+  MyQR: undefined;
+  UpdateProfile: { fillOutProfile: boolean };
+  ExternalProfile: undefined;
+  Settings: undefined;
+  EventMap: { events: Event[] }; 
+  AddContact: undefined;
+  Onboarding: undefined;
+  Information: undefined;
+  Description: undefined;
+  Interests: undefined;
+  Authentication: undefined;
+};
 
 const Stack = createStackNavigator()
 

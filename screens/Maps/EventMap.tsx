@@ -1,10 +1,10 @@
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps"
 import React from "react"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { event } from "../Home/HomeScreen"
 import { View, Text, TouchableOpacity } from "react-native"
 import styles from "./styles" // Import styles
 import { Ionicons } from "@expo/vector-icons"
+import { RootStackParamList } from "../../navigation/Main/MainStackNavigator"
 
 const INITIAL_REGION = {
   latitude: 46.51858962578904,
@@ -13,7 +13,7 @@ const INITIAL_REGION = {
   longitudeDelta: 0.01,
 }
 
-type MapScreenRouteProp = RouteProp<{ params: { events: event[] } }, "params">
+type MapScreenRouteProp = RouteProp<RootStackParamList, "EventMap">;
 
 export default function EventMap() {
   const route = useRoute<MapScreenRouteProp>()
@@ -43,8 +43,8 @@ export default function EventMap() {
             key={index}
             title={event.title}
             coordinate={{
-              latitude: event.latitude,
-              longitude: event.longitude,
+              latitude: event.point.x,
+              longitude: event.point.y,
             }}
             testID={`marker-${index}`}
           >
@@ -55,7 +55,7 @@ export default function EventMap() {
                 {/* Next feature to add it allow to move to the Event page clicking on the event */}
                 <Text style={styles.calloutTextTitle}>{event.title}</Text>
                 <Text style={styles.calloutTextLocation}>{event.location}</Text>
-                <Text>{event.date}</Text>
+                <Text>{event.date.toLocaleDateString()}</Text>
               </View>
             </Callout>
           </Marker>
