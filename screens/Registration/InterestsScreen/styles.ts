@@ -117,6 +117,7 @@ const styles = StyleSheet.create({
     height: "20%",
     marginBottom: 10,
     marginHorizontal: 20,
+    maxHeight: 150,
     overflow: "hidden",
     paddingHorizontal: 10,
   },
