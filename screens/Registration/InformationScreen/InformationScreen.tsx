@@ -34,7 +34,7 @@ const InformationScreen: React.FC = () => {
   const { firstName, setFirstName, lastName, setLastName, date, setDate, location, setLocation } = useContext(RegistrationContext)
 
   const onPress = () => {
-    setDateModal(!dateModal)
+    setDateModal(true)
     setHasBeenTouched(true)
   }
 

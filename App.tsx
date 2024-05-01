@@ -14,6 +14,13 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 import { StatusBar } from "expo-status-bar"
 import * as WebBrowser from "expo-web-browser"
 import * as Linking from "expo-linking"
+
+// import HomeScreen from "./screens/Home/HomeScreen"
+import { destroyGraphFileIfExists } from "./screens/Contacts/ExploreScreen"
+
+// Call the function to destroy the graph file when the app launches
+destroyGraphFileIfExists()
+
 import Toast from "react-native-toast-message"
 
 SplashScreen.preventAutoHideAsync()
@@ -35,7 +42,7 @@ export default function App() {
     JetBrainsMono_400Regular,
     JetBrainsMono_700Bold,
   })
- 
+
   useEffect(() => {
     async function hideSplashScreen() {
       if (fontsLoaded) {
@@ -53,9 +60,9 @@ export default function App() {
       <StatusBar style="dark" />
       <SafeAreaProvider>
         <NavigationContainer linking={linking}>
-          <MainStackNavigator/>
+          <MainStackNavigator />
         </NavigationContainer>
-        <Toast/>
+        <Toast />
       </SafeAreaProvider>
     </GestureHandlerRootView>
   )
