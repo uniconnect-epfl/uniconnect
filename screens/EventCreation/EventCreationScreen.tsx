@@ -12,10 +12,30 @@ import { useNavigation } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { peach, white } from "../../assets/colors/colors"
+import { createEvent } from "../../firebase/ManageEvents"
+import { showErrorToast } from "../../components/ToastMessage/toast"
 
 const EventCreationScreen = () => {
   const navigation = useNavigation()
   const [isEvent, setIsEvent] = useState(false)
+  const [title, setTitle] = useState("")
+  const [description] = useState("lore ipsum")
+  const [location] = useState("Besac City")
+  // const [startDate, setStartDate] = useState<Date>()
+  // const [endDate, setEndDate] = useState("")
+  // const [imageUrl, setImageUrl] = useState("")
+//  const [point, setPoint] = useState({ x: 47.238458, y: 5.984155 })
+
+
+  const newEvent = async () => {
+    console.log("Creating event")
+    try {
+      await createEvent("uid", title, description, new Date(2025, 0, 1), { x: 47.238458, y: 5.984155 }, location, "imageUrl")
+    }
+    catch (error) {
+      showErrorToast("There was an error creating the event. Please try again.")
+    }
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -48,7 +68,7 @@ const EventCreationScreen = () => {
         </View>
         <View style={styles.form}>
           <View style={styles.tagsSepator}>
-            <TextInput style={[styles.input, globalStyles.text]} placeholder="Title" />
+            <TextInput style={[styles.input, globalStyles.text]} placeholder="Title" onChangeText={setTitle}/>
             <Text style={[styles.tagsTitle, globalStyles.text]}>Choose up to three tags</Text>
             <View style={styles.tags}>
               <View style={styles.addTag}>
@@ -76,7 +96,7 @@ const EventCreationScreen = () => {
             <Text onPress={() => Alert.alert("SOON^TM")} style={globalStyles.boldText}>Add a description</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.buttonBase, styles.buttonValidate]}>
-            <Text onPress={() => Alert.alert("SOON^TM")} style={globalStyles.boldText}>Validate</Text>
+            <Text onPress={newEvent} style={globalStyles.boldText}>Validate</Text>
           </TouchableOpacity>
         </View>
         </View>
