@@ -28,6 +28,15 @@ jest.mock("firebase/firestore", () => {
                 return Promise.reject(new Error("Failed to store event"))
             }
         }),
+        getDocs: jest.fn(() => ({
+            docs: [
+                { data: () => ({ title: "Past Event" }) },
+                { data: () => ({ title: "Future Event" }) },
+            ],
+        })),
+        query: jest.fn(() => ({})),
+        where: jest.fn(() => ({})),
+        orderBy: jest.fn(() => ({})),
         serverTimestamp: jest.fn(() => ({})),
     }
 })
