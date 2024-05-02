@@ -6,16 +6,6 @@ import { Event } from "../types/Event"
 
 export async function createEvent(uid: string, title: string, description: string, date: Date, point: Point, location: string, imageUrl: string) {
   try {
-    // const docRef = doc(db, "events", uid)
-    // await setDoc(docRef, {
-    //   uid: uid,
-    //   title: title,
-    //   point: point,
-    //   location: location,
-    //   date: date,
-    //   description: description,
-    //   imageUrl: imageUrl,
-    // })
     const newCityRef = doc(collection(db, "events"))
     await setDoc(newCityRef, {
       uid: uid,
