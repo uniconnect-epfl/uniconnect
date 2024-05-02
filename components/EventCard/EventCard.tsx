@@ -1,35 +1,30 @@
-import { View, Text, Image, TouchableOpacity } from "react-native"
+import { View, Text, Image } from "react-native"
 import { styles } from "./styles"
 import React from "react"
+import { Event } from "../../types/Event"
 
 export interface EventCardProps {
-  uid: string
-  title: string
-  location: string
-  latitude: number
-  longitude: number
-  description: string
-  date: string
-  imageUrl: string // Assuming you pass the URL of the PNG image here
+  event: Event
 }
 
-const EventCard = (
-  {eventCard} :{ eventCard : EventCardProps}, onEventPress: (uid: string) => void
-) => {
+const EventCard = ({ event }: EventCardProps) => {
+
+  const displayDate = event.date instanceof Date ? event.date.toLocaleDateString("en-US", {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }) : 'Date not available'
+
   return (
     <View style={styles.cardContainer}>
-      <TouchableOpacity onPress={() => onEventPress(eventCard.uid)}>
-      <Image source={{ uri: eventCard.imageUrl }} style={styles.image}/>
-      </TouchableOpacity>
+      <Image source={{ uri: event.imageUrl }} style={styles.image} />
       <View style={styles.textContainer}>
-        <Text style={styles.title}>{eventCard.title}</Text>
-        <Text>{eventCard.date}</Text>
+        <Text style={styles.title}>{event.title}</Text>
+        <Text>{displayDate}</Text>
         <View style={styles.locationContainer}>
-          <Text style={styles.location}>{eventCard.location +  "  "}</Text>
-          <Text>{Number(eventCard.latitude).toFixed(2) + "  "}</Text>
-          <Text>{Number(eventCard.longitude).toFixed(2)}</Text>
+          <Text style={styles.location}>{event.location + "  "}</Text>
         </View>
-        <Text style={styles.description}>{eventCard.description}</Text>
+        <Text style={styles.description}>{event.description}</Text>
       </View>
     </View>
   )

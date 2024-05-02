@@ -11,6 +11,7 @@ import { MyQrCodeScreen } from "../../screens/Profile/MyQrCode/MyQrCodeScreen"
 import { UpdateMyProfileScreen } from "../../screens/Profile/UpdateMyProfile/UpdateMyProfileScreen"
 import ExternalProfileScreen from "../../screens/Profile/ExternalProfileScreen/ExternalProfileScreen"
 import DescriptionScreen from "../../screens/Registration/DescriptionScreen/DescriptionScreen"
+import EventCreationScreen from "../../screens/EventCreation/EventCreationScreen"
 import { auth } from "../../firebase/firebaseConfig"
 import { User, onAuthStateChanged } from "firebase/auth"
 import LoadingScreen from "../../screens/Loading/LoadingScreen"
@@ -132,6 +133,11 @@ const MainStackNavigator: React.FC = () => {
             <Stack.Screen
               name="AddContact"
               component={AddContactScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="EventCreation"
+              component={EventCreationScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen

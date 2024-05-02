@@ -44,7 +44,7 @@ describe("SettingsScreen", () => {
 
     // Assert that the menu items are rendered
     const menuItemTexts = [
-      "ACCOUNT CENTER",
+      "CREATE EVENT",
       "LANGUAGE",
       "NOTIFICATIONS",
       "HELP",
@@ -77,7 +77,7 @@ describe("SettingsScreen", () => {
       </NavigationContainer>
     )
 
-    const menuItem = getByText("ACCOUNT CENTER")
+    const menuItem = getByText("LANGUAGE")
     fireEvent.press(menuItem)
 
     expect(alertSpy).toHaveBeenCalledWith("Coming soon")

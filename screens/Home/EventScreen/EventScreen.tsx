@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, TextInput, SectionList, SectionListRenderItemInfo, SectionListData } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import EventCard, { EventCardProps } from '../../../components/EventCard/EventCard'
@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native'
 
 import { Ionicons } from "@expo/vector-icons"
 import { lightPeach } from '../../../assets/colors/colors'
+import { getAllFutureEvents, getAllPastEvents } from '../../../firebase/ManageEvents'
+import { showErrorToast } from '../../../components/ToastMessage/toast'
 
 interface EventScreenProps {
   onEventPress: (uid: string) => void
@@ -16,28 +18,39 @@ interface EventScreenProps {
 const EventScreen = ({ events, onEventPress  }: EventScreenProps) => {
   
   const navigation = useNavigation()
-  const [searchQuery, setSearchQuery] = useState("")
 
-  const getFilteredEvents = (isFutureEvent: boolean) => {
-    const currentDate = new Date()
-    return events.filter(event => {
-      const eventDate = new Date(event.date)
-      const isFuture = eventDate >= currentDate
-      return isFutureEvent ? isFuture : !isFuture
-    }).filter(event => event.title.toLowerCase().includes(searchQuery.toLowerCase()))
-  }
+  const [futureEvents, setFutureEvents] = React.useState<Event[] | null>([])
+  const [pastEvents, setPastEvents] = React.useState<Event[] | null>([])
+
+  const [ setSearchQuery] = React.useState("")
 
   const handleSearch = (search: string) => {
     setSearchQuery(search)
   }
+  useEffect(() => {
+    const loadEvents = async () => {
+      try {
+        const fetchedFutureEvents = await getAllFutureEvents() 
+        const fetchedPastEvents = await getAllPastEvents() 
+
+        setFutureEvents(fetchedFutureEvents)
+        setPastEvents(fetchedPastEvents)
+      }
+      catch (error) {
+        showErrorToast("Error fetching events. Please check your connection and try again.")
+      }
+    }
+
+    loadEvents()
+  }, [])
 
   const sections = [
-    { title: "Future Events", data: getFilteredEvents(true) },
-    { title: "Past Events", data: getFilteredEvents(false) }
+    { title: "Future Events", data: futureEvents },
+    { title: "Past Events", data: pastEvents }
   ]
 
   const renderItem = ({ item }: SectionListRenderItemInfo<EventCardProps>) => (
-    <TouchableOpacity onPress={() => onEventPress(item.uid)}>
+    <TouchableOpacity onPress={() => onEventPress(item.event.uid)}>
     <EventCard eventCard={item} />
     </TouchableOpacity>
   )
@@ -73,7 +86,7 @@ const EventScreen = ({ events, onEventPress  }: EventScreenProps) => {
       <View style={styles.containerEvent}>
         <SectionList
           sections={sections}
-          keyExtractor={(item, index) => item.uid + index.toString()}
+          keyExtractor={(item, index) => item.event.uid + index.toString()}
           renderItem={renderItem}
           renderSectionHeader={renderSectionHeader}
         />

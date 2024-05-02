@@ -3,34 +3,37 @@ import Map from '../../../screens/Maps/EventMap'
 import React from 'react'
 
 jest.mock('@react-navigation/native', () => {
-    const actualNav = jest.requireActual('@react-navigation/native')
-    return {
-      ...actualNav,
-      useRoute: () => ({
-        params: {
-          events: [
-            { title: "Balelek 2023", location: "EPFL, Agora", latitude: 46.51858962578904, longitude: 6.566048509782951, date: "2023-04-04" },
-            { title: "Event 2", location: "EPFL, CM", latitude: 46.51858962578904, longitude: 6.566048509782951, date: "2022-08-04" }
-          ]
-        }
-      }),
-      useNavigation: () => ({
-        navigate: jest.fn(),
-        goBack: jest.fn()
-      })
-    }
-  })
+  const actualNav = jest.requireActual('@react-navigation/native')
+  return {
+    ...actualNav,
+    useNavigation: () => ({
+      navigate: jest.fn(),
+      goBack: jest.fn(),
+    }),
+    useRoute: () => ({
+      params: {
+        events: [
+          {
+            title: "Balelek 2023",
+            location: "EPFL, Agora",
+            point: { x: 46.51858962578904, y: 6.566048509782951},
+            description: "Music festival 2023",
+            date: new Date('2024-05-03'),
+            imageUrl: "https://www.google.com"
+          }
+        ]
+      }
+    })
+  }
+})
 
 
   jest.mock('react-native-maps', () => {
-    const mockMapView = jest.fn(({ children }) => children)
-    const mockMarker = jest.fn(({ children }) => children)
-    const mockCallout = jest.fn(({ children }) => children)
     return {
       __esModule: true,
-      default: mockMapView,
-      Marker: mockMarker,
-      Callout: mockCallout,
+      default: jest.fn().mockImplementation(({ children, ...rest }) => <div {...rest}>{children}</div>), // Mocking MapView
+      Marker: jest.fn().mockImplementation(({ children, ...rest }) => <div {...rest}>{children}</div>), // Mocking Marker
+      Callout: jest.fn().mockImplementation(({ children, ...rest }) => <div {...rest}>{children}</div>), // Mocking Callout
       PROVIDER_GOOGLE: 'google',
     }
   })
@@ -42,8 +45,10 @@ describe('Map', () => {
             <Map/>
             )
 
-        const markers = getByText("2023-04-04")
+        const markers = getByText("5/3/2024")
         expect(markers).toBeTruthy()
+        expect(getByText('Balelek 2023')).toBeTruthy() // Check for the title
+        expect(getByText('EPFL, Agora')).toBeTruthy() // Check for the location
     })
 
     it('displays correct event details in callout', () => {
@@ -51,7 +56,7 @@ describe('Map', () => {
         const { getByText } = render(<Map />)
         const title = getByText('Balelek 2023')
         const location = getByText('EPFL, Agora')
-        const date = getByText('2023-04-04')
+        const date = getByText('5/3/2024')
 
         expect(title).toBeTruthy()
         expect(location).toBeTruthy()
