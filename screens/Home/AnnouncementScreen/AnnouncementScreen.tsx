@@ -21,8 +21,7 @@ const AnnouncementScreen = ({ announcements, onAnnouncementPress }: Announcement
   const getFutureAnnouncements = () => {
     const currentDate = new Date()
     return announcements.filter(announcement => {
-       if( announcement.announcement.date ) 
-      const announcementDate = new Date(announcement.announcement.date | 0)
+      const announcementDate = new Date(announcement.announcement.date)
       return announcementDate >= currentDate
     }).filter(announcement => announcement.announcement.title.toLowerCase().includes(searchQuery.toLowerCase()))
   }
@@ -32,7 +31,7 @@ const AnnouncementScreen = ({ announcements, onAnnouncementPress }: Announcement
   }
 
   const renderItem = ({ item }: SectionListRenderItemInfo<AnnouncementCardProps>) => (
-    <TouchableOpacity onPress={() => onAnnouncementPress(item.uid)}>
+    <TouchableOpacity onPress={() => onAnnouncementPress(item.announcement.uid)}>
       <AnnouncementCard announcement={item.announcement} />
     </TouchableOpacity>
   )
