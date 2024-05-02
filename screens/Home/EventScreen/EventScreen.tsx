@@ -13,7 +13,7 @@ interface EventScreenProps {
   events: EventCardProps[]
 }
 
-const EventScreen = ({ events }: EventScreenProps) => {
+const EventScreen = ({ events, onEventPress  }: EventScreenProps) => {
   
   const navigation = useNavigation()
   const [searchQuery, setSearchQuery] = useState("")
@@ -37,7 +37,9 @@ const EventScreen = ({ events }: EventScreenProps) => {
   ]
 
   const renderItem = ({ item }: SectionListRenderItemInfo<EventCardProps>) => (
+    <TouchableOpacity onPress={() => onEventPress(item.uid)}>
     <EventCard eventCard={item} />
+    </TouchableOpacity>
   )
 
   const renderSectionHeader = ({ section }: { section: SectionListData<EventCardProps> }) => (
