@@ -324,12 +324,18 @@ const ForceDirectedGraph: React.FC<{
     <G key={node.id + "group"}>
       {/* Apply the mask to the profile picture of the node */}
 
-      {createClipPath(
-        `clipPath-${node.id}`,
-        coordX(node),
-        coordY(node),
-        DEFAULT_NODE_SIZE / node.level
-      )}
+      <G
+        key={`${node.id}-group-${coordX(node)}-${coordY(node)}-${
+          DEFAULT_NODE_SIZE / node.level
+        }`}
+      >
+        {createClipPath(
+          `clipPath-${node.id}`,
+          coordX(node),
+          coordY(node),
+          DEFAULT_NODE_SIZE / node.level
+        )}
+      </G>
 
       {/* Circle to highlight the node when it is selected */}
       <Circle

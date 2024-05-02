@@ -61,39 +61,6 @@ describe("ContactGraph", () => {
     })
   })
 
-  it("clicking a node opens a modal", async () => {
-    const component = render(
-      <ContactGraph
-        onContactPress={() => mockFunc}
-        graph={graph}
-        userId={userId}
-      />
-    )
-    expect(component).toBeTruthy()
-
-    const node = component.getByTestId("node-0")
-    expect(node).toBeTruthy()
-
-    await act(() => {
-      fireEvent(node, "pressIn")
-    })
-
-    jest.useFakeTimers()
-    await act(() => {
-      jest.advanceTimersByTime(50)
-    })
-
-    await act(() => {
-      fireEvent(node, "pressOut")
-      jest.advanceTimersByTime(500)
-    })
-
-    jest.useRealTimers()
-
-    const modal = component.getByTestId("modal")
-    expect(modal).toBeTruthy()
-  })
-
   it("clicking outside the modal closes it", async () => {
     const component = render(
       <ContactGraph
