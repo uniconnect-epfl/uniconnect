@@ -13,7 +13,6 @@ import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { peach, white } from "../../assets/colors/colors"
 import { createEvent } from "../../firebase/ManageEvents"
-import { showErrorToast } from "../../components/ToastMessage/toast"
 
 const EventCreationScreen = () => {
   const navigation = useNavigation()
@@ -29,12 +28,7 @@ const EventCreationScreen = () => {
 
   const newEvent = async () => {
     console.log("Creating event")
-    try {
-      await createEvent("uid", title, description, new Date(2025, 0, 1), { x: 47.238458, y: 5.984155 }, location, "imageUrl")
-    }
-    catch (error) {
-      showErrorToast("There was an error creating the event. Please try again.")
-    }
+    await createEvent("uid2", title, description, new Date(2025, 0, 1), { x: 47.238458, y: 5.984155 }, location, "imageUrl")
   }
 
   return (
