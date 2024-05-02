@@ -2,49 +2,50 @@
 import { render } from '@testing-library/react-native'
 import EventCard from '../../../components/EventCard/EventCard'
 import React from 'react'
+import { Event } from '../../../types'
+import { Point } from 'react-native-maps'
 
 
 describe('EventCard', () => {
   
   it('renders the card', () => {
+
+    const point: Point = { x: 47.238458, y: 5.984155 }
+    const date = new Date()
+    const event: Event = {
+        uid: 'uid',
+        title: 'title',
+        location: 'location',
+        point: point,
+        description: 'description',
+        date: date,
+        imageUrl: 'imageUrl'
+    }
     const component = render(
-        <EventCard 
-            title='title'
-            location='location'
-            latitude={46.51858962578904}
-            longitude={6.566048509782951}
-            description='description'
-            date='date'
-            imageUrl='imageUrl'
-        />
+        <EventCard event={event}/>
     )
     expect(component).toBeTruthy()
   })
 
   it('renders right informations', () => {
-    const title = 'title'
-    const location = 'location'
-    const latitude = 46.51858962578904
-    const longitude = 6.566048509782951
-    const description = 'description'
-    const date = 'date'
-    const imageUrl = 'imageUrl'
+    const point: Point = { x: 47.238458, y: 5.984155 }
+    const date = new Date()
+    const event: Event = {
+        uid: 'uid',
+        title: 'title',
+        location: 'location',
+        point: point,
+        description: 'description',
+        date: date,
+        imageUrl: 'imageUrl'
+    }
 
     const {getByText } = render(
-        <EventCard 
-            title={title}
-            location={location}
-            latitude={latitude}
-            longitude={longitude}
-            description={description}
-            date={date}
-            imageUrl={imageUrl}
-        />
+        <EventCard event={event} />
     )
-    expect(getByText(title)).toBeTruthy()
-    expect(getByText(location)).toBeTruthy()
-    expect(getByText(description)).toBeTruthy()
-    expect(getByText(date)).toBeTruthy()
+    expect(getByText(event.title)).toBeTruthy()
+    expect(getByText(event.location)).toBeTruthy()
+    expect(getByText(event.description)).toBeTruthy()
 
   })
   

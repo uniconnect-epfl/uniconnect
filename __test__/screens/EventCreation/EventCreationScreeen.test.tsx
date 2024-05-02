@@ -1,8 +1,13 @@
 import React from "react"
 import { fireEvent, render } from "@testing-library/react-native"
 import EventCreationScreen from "../../../screens/EventCreation/EventCreationScreen"
+import { Firestore } from "firebase/firestore"
 
 const mockGoBack = jest.fn()
+
+jest.mock("../../../firebase/firebaseConfig", () => ({
+  db: jest.fn(() => ({} as Firestore))
+}))
 
 jest.mock("@react-navigation/native", () => {
   return {
@@ -13,6 +18,9 @@ jest.mock("@react-navigation/native", () => {
   }
 })
 
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+)
 // Component import
 
 describe("EventCreationScreen", () => {

@@ -2,11 +2,16 @@ import React from "react"
 import { render, fireEvent, act, waitFor } from "@testing-library/react-native"
 import { NavigationContainer } from "@react-navigation/native"
 import HomeTabNavigator from "../../../navigation/Home/HomeTabNavigator"
+import { Firestore } from "firebase/firestore"
 
 // Mock AsyncStorage methods
 jest.mock("@react-native-async-storage/async-storage", () => ({
   getItem: jest.fn(),
   setItem: jest.fn(),
+}))
+
+jest.mock("../../../firebase/firebaseConfig", () => ({
+  db: jest.fn(() => ({} as Firestore))
 }))
 
 const mockNavigate = jest.fn()
