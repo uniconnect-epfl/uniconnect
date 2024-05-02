@@ -29,15 +29,12 @@ const formatEvent = (doc): Event => {
   const data2 = doc.data() as Event
   const eventDate: Date = data.date.toDate()
 
-  const x = data.point.latitude
-  const y = data.point.longitude
-
   const event = {
     ...data2,
     date: eventDate,
     point: {
-      x: x,
-      y: y
+      x: data.point.latitude,
+      y: data.point.longitude
     }
   }
   return event
