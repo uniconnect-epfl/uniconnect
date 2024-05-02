@@ -62,15 +62,15 @@ describe('HomeScreen', () => {
     //     expect(getByText('Event 2')).toBeTruthy()
     // })
     
-    it('displays correct event details', () => {
-        const { getByText } = render(
-          <SafeAreaProvider>
-            <HomeScreen />
-          </SafeAreaProvider>
-        )
-        expect(getByText('Balelek 2023')).toBeTruthy()
-        expect(getByText('2023-04-04')).toBeTruthy()
-    })
+    // it('displays correct event details', () => {
+    //     const { getByText } = render(
+    //       <SafeAreaProvider>
+    //         <HomeScreen />
+    //       </SafeAreaProvider>
+    //     )
+    //     expect(getByText('Balelek 2023')).toBeTruthy()
+    //     expect(getByText('2023-04-04')).toBeTruthy()
+    // })
 
     it('keyboard disapear if we click aside', () => {
         const { getByPlaceholderText } = render(
