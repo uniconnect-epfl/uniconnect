@@ -23,6 +23,26 @@ export async function createEvent(uid: string, title: string, description: strin
   }
 }
 
+const formatEvent = (doc): Event => {
+  const data = doc.data()
+  const data2 = doc.data() as Event
+  const eventDate: Date = data.date.toDate()
+
+  const x = data.point.latitude
+  const y = data.point.longitude
+
+  const event = {
+    ...data2,
+    date: eventDate,
+    point: {
+      x: x,
+      y: y
+    }
+  }
+  return event
+
+}
+
 export const getAllPastEvents = async () => {
   try {
     // Reference to the events collection
@@ -38,7 +58,7 @@ export const getAllPastEvents = async () => {
 
     // Iterate through each doc in the querySnapshot and push its data into the events array
     querySnapshot.forEach((doc) => {
-      events.push(doc.data() as Event)
+      events.push(formatEvent(doc))
     })
 
     return events
@@ -65,24 +85,7 @@ export const getAllFutureEvents = async () => {
 
     // Iterate through each doc in the querySnapshot and push its data into the events array
     querySnapshot.forEach((doc) => {
-      const data = doc.data()
-      const data2 = doc.data() as Event
-      // Convert Timestamp to JavaScript Date object
-      const eventDate: Date = data.date.toDate()
-
-      const x = data.point.latitude
-      const y = data.point.longitude
-
-      // Ensure coordinates are correctly mapped if they are stored as latitude and longitude
-      const event = {
-        ...data2,
-        date: eventDate, // Use the converted Date object
-        point: {
-          x: x, // Assuming it has latitude
-          y: y // Assuming it has longitude
-        }
-      }
-      events.push(event)
+      events.push(formatEvent(doc))
     })
 
     return events
