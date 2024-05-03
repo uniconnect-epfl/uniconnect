@@ -1,23 +1,17 @@
 import { View, Text } from "react-native"
 import { styles } from "./styles"
-import React from "react"
+import React from "react-native"
 import { Announcement } from "../../types/Annoucements"
 
-export interface AnnouncementCardProps {
 
-    announcement: Announcement
-    }
-
-const AnnouncementCard = (
-  {announcement} :{ announcement : AnnouncementCardProps}
-) => {
+const AnnouncementCard = (announcement: Announcement) => {
   return (
     <View style={styles.cardContainer}>
       <Text style={styles.title}>
-        {announcement.announcement.title}
+        {announcement.title}
       </Text>
         <Text style={styles.category}>
-            {announcement.announcement.interests.join("- ")}
+            {announcement.interests.join("- ")}
         </Text>
     </View>
   )

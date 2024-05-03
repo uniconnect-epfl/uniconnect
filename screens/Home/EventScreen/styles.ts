@@ -88,6 +88,6 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   view: {
-    flex: 1,
+    flex: 1
   },
 })

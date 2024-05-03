@@ -63,7 +63,7 @@ describe("TabBar", () => {
     await act(async () => {
       fireEvent.press(home)
       await waitFor(() => {
-        expect(getByText("Show on the Map")).toBeTruthy()
+        expect(getByText("Map View")).toBeTruthy()
       })
     })
 

@@ -1,13 +1,10 @@
 import { View, Text, Image } from "react-native"
 import { styles } from "./styles"
-import React from "react"
+import React from "react-native"
 import { Event } from "../../types/Event"
 
-export interface EventCardProps {
-  event: Event
-}
 
-const EventCard = ({ event }: EventCardProps) => {
+const EventCard = (event : Event) => {
 
   const displayDate = event.date instanceof Date ? event.date.toLocaleDateString("en-US", {
     year: 'numeric',
