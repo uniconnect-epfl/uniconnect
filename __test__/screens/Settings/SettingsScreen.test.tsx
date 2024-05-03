@@ -44,7 +44,6 @@ describe("SettingsScreen", () => {
 
     // Assert that the menu items are rendered
     const menuItemTexts = [
-      "CREATE EVENT",
       "LANGUAGE",
       "NOTIFICATIONS",
       "HELP",

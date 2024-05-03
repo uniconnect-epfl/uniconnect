@@ -19,6 +19,7 @@ import MapsScreen from "../../screens/Maps/EventMap"
 import { AddContactScreen } from "../../screens/AddContact/AddContactScreen"
 import { isNewUser, storeInitialUserData } from "../../firebase/Registration"
 import { RegistrationContext } from "../../contexts/RegistrationContext"
+import EventScreen from "../../screens/Home/EventScreen/EventScreen"
 
 const Stack = createStackNavigator()
 
@@ -89,7 +90,7 @@ const MainStackNavigator: React.FC = () => {
     >
       <Stack.Navigator
         initialRouteName={
-          user ? (fillOutProfile ? "UpdateProfile" : "HomeTabs") : "Onboarding"
+          user ? ( "HomeTabs") : "Onboarding"
         }
       >
         {user ? (
@@ -140,6 +141,17 @@ const MainStackNavigator: React.FC = () => {
               component={EventCreationScreen}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="EventScreen"
+              component={EventScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="AnnouncementScreen"
+              component={MapsScreen}
+              options={{ headerShown: false }}
+            />
+            
           </>
         ) : (
           <>

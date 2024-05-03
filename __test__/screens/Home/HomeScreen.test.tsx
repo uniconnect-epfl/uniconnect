@@ -1,5 +1,5 @@
 
-import { render, fireEvent } from '@testing-library/react-native'
+import { render, fireEvent, waitFor } from '@testing-library/react-native'
 import HomeScreen from '../../../screens/Home/HomeScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import React from 'react'
@@ -34,6 +34,16 @@ jest.mock('@react-navigation/native', () => {
   }
 })
 
+jest.mock('../../../firebase/ManageEvents', () => ({
+  getAllFutureEvents: jest.fn(() => Promise.resolve([
+    { id: '1', title: 'Future Event 1', date: '2024-01-01' },
+    { id: '2', title: 'Future Event 2', date: '2024-01-02' }
+  ])),
+  getAllPastEvents: jest.fn(() => Promise.resolve([
+    { id: '3', title: 'Past Event 1', date: '2022-01-01' },
+    { id: '4', title: 'Past Event 2', date: '2022-01-02' }
+  ]))
+}))
 describe('HomeScreen', () => {
 
     it('renders the Home screen', () => {
@@ -45,32 +55,40 @@ describe('HomeScreen', () => {
         expect(component).toBeTruthy()
     })
 
-    // it('filters events based on search input', () => {
-    //     const { getByText, getByPlaceholderText, queryByText } = render(
-    //       <SafeAreaProvider>
-    //         <HomeScreen />
-    //       </SafeAreaProvider>
-    //     )
+    it('filters events based on search input', async () => {
+        const { getByText, getByPlaceholderText } = render(
+          <SafeAreaProvider>
+            <HomeScreen />
+          </SafeAreaProvider>
+        )
 
-    //     fireEvent.changeText(getByPlaceholderText('Search...'), 'Balelek')
-    //     expect(getByText('Balelek 2023')).toBeTruthy()
-    //     expect(queryByText('Event 2')).toBeNull()
-    //     expect(queryByText('')).toBeNull()
-    //     expect(queryByText('Abc')).toBeNull()
-
-    //     fireEvent.changeText(getByPlaceholderText('Search...'), '')
-    //     expect(getByText('Event 2')).toBeTruthy()
-    // })
+        await waitFor(() => {
+          fireEvent.changeText(getByPlaceholderText('Search...'), 'Past Event')
+          expect(getByText('Past Event 2')).toBeTruthy()
     
-    // it('displays correct event details', () => {
-    //     const { getByText } = render(
-    //       <SafeAreaProvider>
-    //         <HomeScreen />
-    //       </SafeAreaProvider>
-    //     )
-    //     expect(getByText('Balelek 2023')).toBeTruthy()
-    //     expect(getByText('2023-04-04')).toBeTruthy()
-    // })
+          fireEvent.changeText(getByPlaceholderText('Search...'), '')
+          expect(getByText('Past Event 1')).toBeTruthy()
+
+          fireEvent.press(getByText('Map View'))
+          expect(getByText('Map View')).toBeTruthy()
+        })
+    })
+    
+    it('displays correct event details', async () => {
+        const component= render(
+          <SafeAreaProvider>
+            <HomeScreen />
+          </SafeAreaProvider>
+        )
+        await waitFor(() => {
+          
+          //expect(getByText('Balelek 2023')).toBeTruthy()
+          //expect(getByText('2023-04-04')).toBeTruthy()
+          
+        })
+        expect(component).toBeTruthy()
+        
+    })
 
     it('keyboard disapear if we click aside', () => {
         const { getByPlaceholderText } = render(

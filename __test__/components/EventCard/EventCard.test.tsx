@@ -3,7 +3,10 @@ import { render } from '@testing-library/react-native'
 import EventCard from '../../../components/EventCard/EventCard'
 import React from 'react'
 import { Event } from '../../../types'
+
 import { Point } from 'react-native-maps'
+import { View } from 'react-native'
+
 
 
 describe('EventCard', () => {
@@ -41,7 +44,9 @@ describe('EventCard', () => {
     }
 
     const {getByText } = render(
-        <EventCard event={event} />
+        <View>
+            {EventCard(event)}
+        </View>
     )
     expect(getByText(event.title)).toBeTruthy()
     expect(getByText(event.location)).toBeTruthy()

@@ -17,7 +17,6 @@ export const SettingsScreen = () => {
   const pressPlaceholder = () => Alert.alert("Coming soon")
 
   const menuItems: MenuItem[] = [
-    { title: "CREATE EVENT", action: () => navigation.navigate("EventCreation" as never) },
     { title: "LANGUAGE",  action: pressPlaceholder },
     { title: "NOTIFICATIONS", action: pressPlaceholder },
     { title: "HELP",  action: pressPlaceholder },

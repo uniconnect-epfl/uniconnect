@@ -12,12 +12,17 @@ const INITIAL_REGION = {
   latitudeDelta: 0.01,
   longitudeDelta: 0.01,
 }
+type RootStackParamList = {
+  EventMap: {
+      events: Event[]
+  }
+}
 
-type MapScreenRouteProp = RouteProp<{ EventMap: { events: Event[] } }, 'EventMap'>
+type MapScreenRouteProp = RouteProp<RootStackParamList, 'EventMap'>;
 
 const EventMap = () => {
   const route = useRoute<MapScreenRouteProp>() 
-  const events = route.params.events 
+  const events = route.params.events
   const navigation = useNavigation()
 
 
