@@ -100,7 +100,6 @@ const EventScreen = () => {
           renderSectionHeader={renderSectionHeader}
         />
       </View> 
-
     </View>
   )
 }
