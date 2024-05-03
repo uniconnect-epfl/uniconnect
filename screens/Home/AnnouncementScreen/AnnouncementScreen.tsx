@@ -3,10 +3,9 @@ import { View, Text, TextInput, SectionList, SectionListRenderItemInfo } from 'r
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
 
-import { styles } from './styles'// Ensure the paths are correct
+import { styles } from './../stylesScreen'// Ensure the paths are correct
 
-import { Ionicons } from "@expo/vector-icons"
-import { defautlBackgroundColor, lightPeach } from '../../../assets/colors/colors'
+import { defautlBackgroundColor} from '../../../assets/colors/colors'
 import AnnouncementCard from '../../../components/AnnoucementCard/AnnouncementCard'
 import { Announcement } from '../../../types/Annoucements'
 
@@ -75,7 +74,9 @@ const AnnouncementScreen = () => {
   ]
 
   const renderSectionHeader = ( info : {section: typeof sections[number]}) => (
+    // Render the section header
     <View style={{ backgroundColor: defautlBackgroundColor}} >
+      {/* Add the section title and a separation bar */}
       <Text style={styles.header}>{info.section.title}</Text>
       <View style={styles.separationBar} />
     </View>
@@ -85,16 +86,13 @@ const AnnouncementScreen = () => {
     <View style={styles.view}>
       <View style={styles.searchAndMap}>
         <TextInput
+         style={styles.input}
           placeholder="Search..."
-          style={styles.input}
           onChangeText={handleSearch}
+         
+          
         />
       </View>
-      <>
-        <View style={styles.button}>
-          <Ionicons name="add" size={24} color={lightPeach}  />
-        </View>
-      </>
 
       <View style={styles.containerEvent}>
         <SectionList
