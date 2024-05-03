@@ -86,12 +86,12 @@ const EventScreen = () => {
           <Text>Map View</Text>
         </TouchableOpacity>
       </View>
-      <>
+      
       <TouchableOpacity onPress={() => navigation.navigate("EventCreation" as never) }>
       <View style={styles.button}>
             <Ionicons name="add" size={24} color={lightPeach}  />
         </View>
-      </TouchableOpacity></>
+      </TouchableOpacity>
 
       <View style={styles.containerEvent}>
         <SectionList

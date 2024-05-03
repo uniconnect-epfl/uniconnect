@@ -1,6 +1,6 @@
-import { View, Text, Image } from "react-native"
+
 import { styles } from "./styles"
-import React from "react-native"
+import React , { View, Text, Image }from "react-native"
 import { Event } from "../../types/Event"
 
 

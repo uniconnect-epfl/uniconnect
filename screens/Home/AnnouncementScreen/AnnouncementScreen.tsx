@@ -17,7 +17,7 @@ const announcements : Announcement[] =
       title: "Balelek 2023",
       location: "EPFL, Agora",
       description: "Music festival 2023",
-      date: "2023-04-04",
+      date: "2024-04-04",
       interests: []
     },
     {
@@ -25,7 +25,7 @@ const announcements : Announcement[] =
       title: "Event 2",
       location: "EPFL, CM",
       description: "Agepoly",
-      date: "2022-08-04",
+      date: "2024-08-04",
       interests: []
     },
     {
@@ -34,7 +34,7 @@ const announcements : Announcement[] =
       location: "EPFL, Agora",
       description: "Music festival 2024",
       date: "2024-05-20",
-      interests: []
+      interests: ["Friends", "Music", "Food", "Games"]
     },
     {
       uid: "4",
@@ -42,7 +42,15 @@ const announcements : Announcement[] =
       location: "EPFL, Swisstech",
       description: "Graduation",
       date: "2025-06-04",
-      interests: []
+      interests: ["Party", "Music", "Food", "Games"]
+    },
+    {
+      uid: "5",
+      title: "Graduation 2026",
+      location: "EPFL, Swisstech",
+      description: "Graduation",
+      date: "2026-06-04",
+      interests: ["Music", "Food", "Games"]
     },
 ]
 
@@ -96,7 +104,7 @@ const AnnouncementScreen = () => {
 
       <View style={styles.containerEvent}>
         <SectionList
-          sections={[{ title: "Future Announcements", data: announcements }]}
+          sections={[{ title: "Future Announcements", data: getFutureAnnouncements() }]}
           renderItem={renderItem}
           renderSectionHeader={renderSectionHeader}
         />
