@@ -40,7 +40,8 @@ a Github thread. Also, the Continuous Integration(CI) will need to pass before y
 
 Here is a rough overview of the architecture of the app:
 
-![Untitled-2024-04-12-1348(2)](https://github.com/uniconnect-epfl/uniconnect/assets/93329823/b640cb56-4c61-4046-a38a-f1eaff065923)
+<img width="1360" alt="Screenshot 2024-05-03 at 10 35 08" src="https://github.com/uniconnect-epfl/uniconnect/assets/91114548/cfa554e7-8723-4c23-a995-473414f78b65">
+
 
 - The entry file is `App.tsx`. You could think of it as a main function that is launched upon execution of the app.
 - There is an `assets` folder for images and other assets. Another folder `components` is for the components such as buttons, list items, bottom bars, search bars, cards etc.
