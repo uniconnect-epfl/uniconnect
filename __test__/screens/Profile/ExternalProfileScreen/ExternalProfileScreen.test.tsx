@@ -1,35 +1,27 @@
 import React from "react"
 import { render, fireEvent, waitFor } from "@testing-library/react-native"
 import ExternalProfileScreen from "../../../../screens/Profile/ExternalProfileScreen/ExternalProfileScreen"
-import { NavigationProp, ParamListBase } from "@react-navigation/native"
 
-const mockNavigation = {
-  navigate: jest.fn(),
-  goBack: jest.fn(),
-  addListener: jest.fn(),
-  removeListener: jest.fn(),
-  reset: jest.fn(),
-  setParams: jest.fn(),
-  dispatch: jest.fn(),
-  isFocused: jest.fn(),
-  canGoBack: jest.fn(),
-  dangerouslyGetParent: jest.fn(),
-  dangerouslyGetState: jest.fn()
-} as unknown as NavigationProp<ParamListBase>
+jest.mock('../../../../firebase/User', () => ({
+  getUserData: jest.fn().mockResolvedValue({
+    uid: '1',
+    firstName: 'John',
+    lastName: 'Doe',
+    location: 'Sample City',
+    description: 'Sample Description',
+    selectedInterests: ['Sample Interest'],
+    date: new Date().toISOString(),
+  }),
+}))
 
-jest.mock("@react-navigation/native", () => {
-  const mockRoute = {
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useRoute: () => ({
     params: {
-      userId: "123", 
+      uid: '1',
     },
-  }
-
-  return {
-    ...jest.requireActual("@react-navigation/native"),
-    useNavigation: () => mockNavigation,
-    useRoute: () => mockRoute,
-  }
-})
+  }),
+}))
 
 jest.mock("../../../../components/GeneralProfile/GeneralProfile", () => "GeneralProfile")
 jest.mock("../../../../components/ExpandableDescription/ExpandableDescription", () => "ExpandableDescription")
@@ -42,14 +34,6 @@ global.alert = jest.fn()
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 )
-
-jest.mock("../../../../firebase/User", () => ({
-  getUserData: jest.fn(() => ({
-    firstName: "John",
-    lastName: "Doe",
-    location: "London"
-  }))
-}))
 
 jest.mock("firebase/auth", () => ({
   getReactNativePersistence: jest.fn(() => ({})),
@@ -66,9 +50,8 @@ describe("ExternalProfileScreen", () => {
   it("renders correctly", async () => {
     const { getByText } = render(<ExternalProfileScreen />)
 
-    fireEvent.press(getByText("Network"))
-
     await waitFor(() => {
+      fireEvent.press(getByText("Network"))
       expect(getByText("Message")).toBeTruthy()
       expect(getByText("Remove")).toBeTruthy()
     })
