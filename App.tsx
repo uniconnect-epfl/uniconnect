@@ -32,7 +32,7 @@ export default function App() {
     prefixes: [Linking.createURL("/")],
     config: {
       screens: {
-        AddContact: "contact/:uid",
+        ExternalProfile: "contact/:uid",
       },
     },
   }

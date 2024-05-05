@@ -16,7 +16,6 @@ import { auth } from "../../firebase/firebaseConfig"
 import { User, onAuthStateChanged } from "firebase/auth"
 import LoadingScreen from "../../screens/Loading/LoadingScreen"
 import MapsScreen from "../../screens/Maps/EventMap"
-import { AddContactScreen } from "../../screens/AddContact/AddContactScreen"
 import { isNewUser, storeInitialUserData } from "../../firebase/Registration"
 import { RegistrationContext } from "../../contexts/RegistrationContext"
 import EventScreen from "../../screens/Home/EventScreen/EventScreen"
@@ -129,11 +128,6 @@ const MainStackNavigator: React.FC = () => {
             <Stack.Screen
               name="EventMap"
               component={MapsScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="AddContact"
-              component={AddContactScreen}
               options={{ headerShown: false }}
             />
             <Stack.Screen
