@@ -4,6 +4,7 @@ import HomeScreen from '../../../screens/Home/HomeScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import React from 'react'
 import { Firestore } from 'firebase/firestore'
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
 
 
 jest.mock("../../../firebase/firebaseConfig", () => ({
@@ -25,7 +26,18 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 
 const mockNavigation = {
   navigate: jest.fn(),
-} 
+  goBack: jest.fn(),
+  addListener: jest.fn(),
+  removeListener: jest.fn(),
+  reset: jest.fn(),
+  setParams: jest.fn(),
+  dispatch: jest.fn(),
+  isFocused: jest.fn(),
+  canGoBack: jest.fn(),
+  dangerouslyGetParent: jest.fn(),
+  dangerouslyGetState: jest.fn(),
+} as unknown as NavigationProp<ParamListBase>
+
 
 jest.mock('@react-navigation/native', () => {
   return {
@@ -49,7 +61,7 @@ describe('HomeScreen', () => {
     it('renders the Home screen', () => {
         const component = render(
         <SafeAreaProvider>
-          <HomeScreen/>
+          <HomeScreen navigation={mockNavigation}/>
         </SafeAreaProvider>
         )
         expect(component).toBeTruthy()
@@ -58,7 +70,7 @@ describe('HomeScreen', () => {
     it('filters events based on search input', async () => {
         const { getByText, getByPlaceholderText } = render(
           <SafeAreaProvider>
-            <HomeScreen />
+            <HomeScreen navigation={mockNavigation}/>
           </SafeAreaProvider>
         )
 
@@ -77,7 +89,7 @@ describe('HomeScreen', () => {
     it('displays correct event details', async () => {
         const component= render(
           <SafeAreaProvider>
-            <HomeScreen />
+            <HomeScreen navigation={mockNavigation}/>
           </SafeAreaProvider>
         )
         await waitFor(() => {
@@ -93,7 +105,7 @@ describe('HomeScreen', () => {
     it('keyboard disapear if we click aside', () => {
         const { getByPlaceholderText } = render(
           <SafeAreaProvider>
-            <HomeScreen />
+            <HomeScreen navigation={mockNavigation}/>
           </SafeAreaProvider>
         )
         fireEvent.press(getByPlaceholderText('Search...'))

@@ -19,7 +19,7 @@ describe('AnnouncementScreen', () => {
   it('renders correctly', async () => {
     const { getByText, debug } = render(
       
-        <AnnouncementScreen />
+        <AnnouncementScreen onAnnoucmentPress={() => {}} />
       
     )
     debug()

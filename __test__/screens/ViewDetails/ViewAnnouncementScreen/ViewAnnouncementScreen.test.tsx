@@ -26,7 +26,7 @@ jest.mock("@react-navigation/native", () => {
     return {
       ...actualNav,
       useRoute: () => ({
-        params: { annoucement: dummyAnnouncement },
+        params: { announcement: dummyAnnouncement },
       }),
     }
 })
