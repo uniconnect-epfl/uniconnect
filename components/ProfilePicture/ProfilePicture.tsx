@@ -18,7 +18,7 @@ const ProfilePicture = ({ size, pictureUrl }: ProfilePictureProps) => {
             />
         ) : (
             <View style={[styles.profilePicture, {width: size, height: size}]}>
-              <Ionicons name="person" size={size} color={black} />
+              <Ionicons name="person" size={0.7 * size} color={black} />
             </View>
         )}
     </View>
