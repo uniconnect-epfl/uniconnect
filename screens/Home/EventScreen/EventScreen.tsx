@@ -22,31 +22,51 @@ const EventScreen = () => {
   const [filteredFutureEvents, setFilteredFutureEvents] = React.useState<Event[] | null>([])
   const [filteredPastEvents, setFilteredPastEvents] = React.useState<Event[] | null>([])
 
+  const [sections, setSections] = React.useState<SectionListData<Event[], DefaultSectionT>[]>([])
+
   const [ searchQuery, setSearchQuery ] = React.useState("")
 
-  const handleSearch = (search: string) => {
-    setSearchQuery(search)
-    if (futureEvents === null || pastEvents === null) return
-    setFilteredFutureEvents(futureEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase())))
-    setFilteredPastEvents(pastEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase())))
-  }
+  useEffect(() => {
+
+    console.log("update")
+    console.log(searchQuery)
+    
+
+    if (searchQuery) {
+      setFilteredFutureEvents(futureEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase())))
+      setFilteredPastEvents(pastEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+    } else {
+      setFilteredFutureEvents(futureEvents)
+      setFilteredPastEvents(pastEvents)
+    }
+    console.log(filteredFutureEvents)
+    console.log(filteredPastEvents)
+  }, [searchQuery])
+
+  useEffect(() => {
+    setSections([
+      { title: "Future Events", data: groupEventsByTwo(filteredFutureEvents) },
+      { title: "Past Events", data: groupEventsByTwo(filteredPastEvents) }
+    ])
+  }, [filteredFutureEvents, filteredPastEvents])
+
   useEffect(() => {
     const loadEvents = async () => {
       try {
         const fetchedFutureEvents = await getAllFutureEvents() 
         const fetchedPastEvents = await getAllPastEvents()
         
-
         setFutureEvents(fetchedFutureEvents)
         setPastEvents(fetchedPastEvents)
 
         setFilteredFutureEvents(fetchedFutureEvents)
         setFilteredPastEvents(fetchedPastEvents)
 
-        sections = [
+        setSections([
           { title: "Future Events", data: groupEventsByTwo(filteredFutureEvents) },
           { title: "Past Events", data: groupEventsByTwo(filteredPastEvents) }
-        ]
+        ])
         
       }
       catch (error) {
@@ -57,7 +77,7 @@ const EventScreen = () => {
     loadEvents()
   }, [])
 
-  function groupEventsByTwo(events) {
+  function groupEventsByTwo(events: Event[]) {
     const grouped = []
     for (let i = 0; i < events.length; i += 2) {
       // Check if there is a pair to push, if not push the last single event with a dummy event
@@ -71,12 +91,6 @@ const EventScreen = () => {
     return grouped
   }
   
-    
-  let sections = [
-    { title: "Future Events", data: groupEventsByTwo(filteredFutureEvents) },
-    { title: "Past Events", data: groupEventsByTwo(filteredPastEvents) }
-  ]
-
   
 
 
@@ -110,7 +124,7 @@ const EventScreen = () => {
         <TextInput
           placeholder="Search..."
           style={styles.input}
-          onChangeText={handleSearch}
+          onChangeText={setSearchQuery}
         />
         <TouchableOpacity
           style={styles.map}
