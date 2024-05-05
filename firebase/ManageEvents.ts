@@ -33,8 +33,8 @@ const formatEvent = (doc): Event => {
     ...data2,
     date: eventDate,
     point: {
-      x: data.point.latitude,
-      y: data.point.longitude
+      x: data.point.x,
+      y: data.point.y
     }
   }
   return event
