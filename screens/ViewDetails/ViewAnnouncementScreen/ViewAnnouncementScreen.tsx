@@ -7,12 +7,12 @@ import { globalStyles } from '../../../assets/global/globalStyles'
 import ProfilePicture from '../../../components/ProfilePicture/ProfilePicture'
 
 type RootStackParamList = {
-  ViewAnnouncementScreen: {
+  ViewAnnouncement: {
       announcement: Announcement;
   }
 }
 
-type ViewAnnoucementScreenRouteProps = RouteProp<RootStackParamList, "ViewAnnouncementScreen">
+type ViewAnnoucementScreenRouteProps = RouteProp<RootStackParamList, "ViewAnnouncement">
 
 const ViewAnnoucementScreen = () => {
   const { announcement } = useRoute<ViewAnnoucementScreenRouteProps>().params

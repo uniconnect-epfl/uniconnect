@@ -25,13 +25,13 @@ const dummyEvent: Event = {
 }
 
 type RootStackParamList = {
-    ViewEventScreen: {
+    ViewEvent: {
         // Here we're getting a uid and not an event because it is possible that the app opens on this screen (by QR)
         uid: string;
     }
 }
   
-type ViewEventScreenRouteProps = RouteProp<RootStackParamList, "ViewEventScreen">
+type ViewEventScreenRouteProps = RouteProp<RootStackParamList, "ViewEvent">
 
 const ViewEventScreen = () => {
   const { uid } = useRoute<ViewEventScreenRouteProps>().params
