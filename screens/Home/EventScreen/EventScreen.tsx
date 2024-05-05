@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { View, Text, TextInput, SectionList, SectionListRenderItemInfo } from 'react-native'
+import { View, Text, TextInput, SectionList, SectionListRenderItemInfo, SectionListData, DefaultSectionT } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import EventCard from '../../../components/EventCard/EventCard'
 import  {styles} from './../stylesScreen' // Ensure the paths are correct
@@ -27,8 +27,8 @@ const EventScreen = () => {
   const handleSearch = (search: string) => {
     setSearchQuery(search)
     if (futureEvents === null || pastEvents === null) return
-    setFilteredFutureEvents(futureEvents.filter(event => event.title.toLowerCase().includes(searchQuery.toLowerCase())))
-    setFilteredPastEvents(pastEvents.filter(event => event.title.toLowerCase().includes(searchQuery.toLowerCase())))
+    setFilteredFutureEvents(futureEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase())))
+    setFilteredPastEvents(pastEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase())))
   }
   useEffect(() => {
     const loadEvents = async () => {
@@ -42,6 +42,11 @@ const EventScreen = () => {
 
         setFilteredFutureEvents(fetchedFutureEvents)
         setFilteredPastEvents(fetchedPastEvents)
+
+        sections = [
+          { title: "Future Events", data: groupEventsByTwo(filteredFutureEvents) },
+          { title: "Past Events", data: groupEventsByTwo(filteredPastEvents) }
+        ]
         
       }
       catch (error) {
@@ -52,24 +57,52 @@ const EventScreen = () => {
     loadEvents()
   }, [])
 
-  const sections = [
-    { title: "Future Events", data: filteredFutureEvents },
-    { title: "Past Events", data: filteredPastEvents }
+  function groupEventsByTwo(events) {
+    const grouped = []
+    for (let i = 0; i < events.length; i += 2) {
+      // Check if there is a pair to push, if not push the last single event with a dummy event
+      if (i + 1 < events.length) {
+        grouped.push([events[i], events[i + 1]])
+      } else {
+        // Push the last item with a dummy transparent item
+        grouped.push([events[i], { uid: 'dummy', name: '', description: ''}])
+      }
+    }
+    return grouped
+  }
+  
+    
+  let sections = [
+    { title: "Future Events", data: groupEventsByTwo(filteredFutureEvents) },
+    { title: "Past Events", data: groupEventsByTwo(filteredPastEvents) }
   ]
 
-   const renderItem = ({ item }: SectionListRenderItemInfo<Event>) => (
-    //Need to add the onPress function to navigate to the event page
-    <TouchableOpacity>
-    <EventCard {...item} />
-    </TouchableOpacity>
-  ) 
+  
 
-  const renderSectionHeader = (info : {section: typeof sections[number]} ) => (
-    <View style={{ backgroundColor: defautlBackgroundColor}} >
-    <Text style={styles.header}>{info.section.title}</Text>
-    <View style={styles.separationBar} />
+
+  const renderItem = ({ item }: SectionListRenderItemInfo<Event[]>) => (
+    <View style={styles.row}>
+      {item.map((event) => (
+        <TouchableOpacity 
+          key={event.uid}  // Ensure each child has a unique key
+          style={[styles.cardContainer, event.uid === "dummy" ? styles.transparent : {}]}
+          disabled={event.uid === "dummy"}
+        >
+          <EventCard {...event} />
+        </TouchableOpacity>
+      ))}
     </View>
   )
+  
+
+  const renderSectionHeader = (info : {section: SectionListData<Event[], DefaultSectionT>} ) => {
+    return (
+      <View style={{ backgroundColor: defautlBackgroundColor}} >
+      <Text style={styles.header}>{info.section.title}</Text>
+      <View style={styles.separationBar} />
+      </View>
+    )
+  }
 
   return (
     <View style={styles.view}>
@@ -97,7 +130,10 @@ const EventScreen = () => {
         <SectionList
           sections={sections}
           renderItem={renderItem}
+          stickySectionHeadersEnabled={true}
           renderSectionHeader={renderSectionHeader}
+          
+          
         />
       </View> 
     </View>

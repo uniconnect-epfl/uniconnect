@@ -1,14 +1,18 @@
 
 import { StyleSheet } from 'react-native'
-import { lightGray, peach, shadowColor} from '../../assets/colors/colors'
+import { lightGray, lightPeach, peach, shadowColor} from '../../assets/colors/colors'
 
 export const styles = StyleSheet.create({
   cardContainer: {
-    backgroundColor: peach,
+    backgroundColor: lightPeach,
+    borderColor: peach,
     borderRadius: 10,
-    elevation: 5,
-    margin: 10,
-    overflow: 'hidden',
+    borderWidth: 2,
+    flex: 1,
+    height: 202,
+    margin: 5,
+    overflow: 'scroll',
+    
     shadowColor: shadowColor,
     shadowOffset: {
       height: 2,
@@ -16,13 +20,19 @@ export const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    width: 172,
+    
   },
   description: {
+    
     color: lightGray,
     fontSize: 14,
+    fontStyle: 'italic',
+    textAlign: 'right',
   },
   image: {
-    height: 100, // Set this to the aspect ratio of your image
+    backgroundColor: peach,
+    height: 80,
     resizeMode: 'cover',
     width: '100%',
   },
@@ -35,7 +45,9 @@ export const styles = StyleSheet.create({
     marginBottom: 5,
   },
   textContainer: {
-    padding: 10,
+    borderBlockColor: peach,
+    borderTopWidth: 1,
+    padding: 5,
   },
   title: {
     fontSize: 18,
