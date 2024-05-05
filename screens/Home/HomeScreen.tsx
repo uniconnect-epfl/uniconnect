@@ -9,15 +9,15 @@ import React, { useState } from "react"
 import SectionTabs from "../../components/SectionTabs/SectionTabs"
 import EventScreen from "./EventScreen/EventScreen"
 import AnnouncementScreen from "./AnnouncementScreen/AnnouncementScreen"
+import { NavigationProp, ParamListBase } from "@react-navigation/native"
 
+interface HomeScreenProps {
+  navigation: NavigationProp<ParamListBase>
+}
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }: HomeScreenProps) => {
   const insets = useSafeAreaInsets()
   const [selectedTab, setSelectedTab] = useState("Events")
-  //const navigation = useNavigation()
-
-
-
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
@@ -33,11 +33,13 @@ const HomeScreen = () => {
 
       {selectedTab === "Events" && (
         <EventScreen
+          onEventPress={(event) => navigation.navigate("ViewEvent", {uid: event.uid})}
         />
       )}
 
       {selectedTab === "Announcements" && (
         <AnnouncementScreen
+          onAnnoucmentPress={(announcement) => navigation.navigate("ViewAnnouncement", {announcement: announcement})}
         />
       )}
     </View>

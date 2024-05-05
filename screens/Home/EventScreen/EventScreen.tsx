@@ -11,8 +11,11 @@ import { getAllFutureEvents, getAllPastEvents } from '../../../firebase/ManageEv
 import { showErrorToast } from '../../../components/ToastMessage/toast'
 import { Event } from '../../../types/Event'
 
+interface EventsScreenProps {
+  onEventPress: (announcement: Event) => void
+}
 
-const EventScreen = () => {
+const EventScreen = ({ onEventPress }: EventsScreenProps) => {
   
   const navigation = useNavigation()
 
@@ -60,7 +63,7 @@ const EventScreen = () => {
    const renderItem = ({ item }: SectionListRenderItemInfo<Event>) => (
     //Need to add the onPress function to navigate to the event page
     <TouchableOpacity
-      onPress={() => {navigation.navigate("ViewEvent", {uid: item.uid})} }
+      onPress={() => {onEventPress(item)} }
       >
         <EventCard {...item} />
     </TouchableOpacity>

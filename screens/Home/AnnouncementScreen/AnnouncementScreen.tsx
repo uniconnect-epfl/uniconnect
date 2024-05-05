@@ -54,7 +54,11 @@ const announcements : Announcement[] =
     },
 ]
 
-const AnnouncementScreen = () => {
+interface AnnouncementsScreenProps {
+  onAnnoucmentPress: (announcement: Announcement) => void
+}
+
+const AnnouncementScreen = ({ onAnnoucmentPress }: AnnouncementsScreenProps) => {
   
   const [searchQuery, setSearchQuery] = useState("")
 
@@ -71,7 +75,8 @@ const AnnouncementScreen = () => {
   }
 
   const renderItem = ({ item }: SectionListRenderItemInfo<Announcement>) => (
-    <TouchableOpacity >
+    <TouchableOpacity
+      onPress={() => {onAnnoucmentPress(item)}}>
       <AnnouncementCard {...item} />
     </TouchableOpacity>
   )
