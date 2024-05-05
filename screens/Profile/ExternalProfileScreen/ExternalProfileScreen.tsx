@@ -62,7 +62,7 @@ const ExternalProfileScreen = () => {
   useEffect(() => {
     if(user && externalUser){
       // this will just check if the two are friends when we'll have implemented friends
-      setIsFriend(!(externalUser.uid === "27tGkyeWaKYE46AyR8UMKwxLspH3"))
+      setIsFriend(true)
     } else {
       setIsFriend(false)
     }
