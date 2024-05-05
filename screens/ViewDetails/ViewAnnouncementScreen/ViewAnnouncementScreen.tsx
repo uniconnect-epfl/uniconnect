@@ -30,7 +30,7 @@ const ViewAnnoucementScreen = () => {
                 {announcement.title}
             </Text>
             <Text style={[globalStyles.text, viewDetailsStyles.detailsText]}>
-                Travel - Holidays - Work
+                {announcement.interests.join(" ")}
             </Text>
 
             <TouchableOpacity 
