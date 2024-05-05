@@ -59,8 +59,10 @@ const EventScreen = () => {
 
    const renderItem = ({ item }: SectionListRenderItemInfo<Event>) => (
     //Need to add the onPress function to navigate to the event page
-    <TouchableOpacity>
-    <EventCard {...item} />
+    <TouchableOpacity
+      onPress={() => {navigation.navigate("ViewEvent", {uid: item.uid})} }
+      >
+        <EventCard {...item} />
     </TouchableOpacity>
   ) 
 
