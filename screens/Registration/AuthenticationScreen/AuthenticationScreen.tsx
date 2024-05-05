@@ -49,8 +49,7 @@ const AuthenticationScreen: React.FC = () => {
   const submitForm = async () => {
     if (isPassword() && doPasswordsMatch() && isEmail() && doEmailsMatch()) {
       await createAccount(email, password)
-    }
-    else {
+    } else {
       showErrorToast("Please fill in the form correctly and try again")
     }
   }
@@ -68,6 +67,7 @@ const AuthenticationScreen: React.FC = () => {
         <InputField
           label="Password*"
           placeholder="****************"
+          secureTextEntry
           onChangeText={setPassword}
           value={password}
           onSubmitEditing={() => firstRef.current?.focus()}
@@ -76,6 +76,7 @@ const AuthenticationScreen: React.FC = () => {
         <InputField
           label="Confirm Password*"
           placeholder="****************"
+          secureTextEntry
           onChangeText={setConfirmPassword}
           value={confirmPassword}
           ref={firstRef}
@@ -133,7 +134,11 @@ const AuthenticationScreen: React.FC = () => {
           ref={thirdRef}
         ></InputField>
 
-        <LowBar nextScreen="HomeTabs" buttonText="Confirm" authenticate={submitForm} />
+        <LowBar
+          nextScreen="HomeTabs"
+          buttonText="Confirm"
+          authenticate={submitForm}
+        />
       </View>
     </TouchableWithoutFeedback>
   )
