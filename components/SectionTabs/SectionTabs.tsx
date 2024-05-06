@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { View, Text, TouchableOpacity } from "react-native"
+import { View, Text, Pressable } from "react-native"
 import { styles } from "./styles"
 import { globalStyles } from "../../assets/global/globalStyles"
 
@@ -13,13 +13,12 @@ interface SectionTabsProps {
 const SectionTabs: React.FC<SectionTabsProps> = ({
     tabs,
     startingTab,
-    barWidth = 80,
     onTabChange
 }) => {
     const [currentTab, setCurrentTab] = useState(startingTab)
 
     const RenderOneSection = ({ tab, index } : {tab : string, index: number}) => (
-        <TouchableOpacity
+        <Pressable
             key={index}  // Ensure unique key for each child
             style={styles.tabContainer}
             onPress={() => {
@@ -31,19 +30,14 @@ const SectionTabs: React.FC<SectionTabsProps> = ({
                 {tab}
             </Text>
             <View 
-                style={[
-                    tab === currentTab ? styles.selectedBar : styles.unselectedBar, 
-                    {width: barWidth}
-                ]}
+                style={tab === currentTab ? styles.selectedBar : styles.unselectedBar}
             />
-        </TouchableOpacity>
+        </Pressable>
     )
 
     return (
         <View style={styles.tabsContainer}>
-            <View/>
             {tabs.map((tab, index) => RenderOneSection({ tab, index }))}
-            <View/>
         </View>
     )
 }
