@@ -5,7 +5,8 @@ export const globalStyles = StyleSheet.create({
     fontFamily: "JetBrainsMono_700Bold",
   },
   smallText: {
-    fontSize: 10,
+    fontFamily: "JetBrainsMono_400Regular",
+    fontSize: 10
   },
   text: {
     fontFamily: "JetBrainsMono_400Regular",

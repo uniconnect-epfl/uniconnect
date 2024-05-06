@@ -1,4 +1,4 @@
-import { Timestamp, collection, doc, getDocs, orderBy, query, setDoc, where } from "firebase/firestore"
+import { DocumentData, Timestamp, collection, doc, getDocs, orderBy, query, setDoc, where } from "firebase/firestore"
 import { db } from "./firebaseConfig"
 import { showErrorToast, showSuccessToast } from "../components/ToastMessage/toast"
 import { Point } from "react-native-maps"
@@ -24,7 +24,7 @@ export async function createEvent(uid: string, title: string, description: strin
   }
 }
 
-const formatEvent = (doc): Event => {
+const formatEvent = (doc: DocumentData): Event => {
   const data = doc.data()
   const data2 = doc.data() as Event
   const eventDate: Date = data.date.toDate()
@@ -48,10 +48,8 @@ export const getAllPastEvents = async () => {
 
     // Create a query against the collection.
     // This query retrieves events where the eventDate is less than the current date and time.
-    console.log("Fetching past events")
     const q = query(eventsRef, where("date", "<", new Date()), orderBy("date", "desc"))
 
-    console.log("Querying past events")
     // Execute the query
     const querySnapshot = await getDocs(q)
     const events: Event[] = []
