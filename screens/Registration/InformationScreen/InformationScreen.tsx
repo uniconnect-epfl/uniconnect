@@ -31,7 +31,7 @@ const InformationScreen: React.FC = () => {
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
   const useNav = useNavigation()
 
-  const { firstName, setFirstName, lastName, setLastName, date, setDate, location, setLocation } = useContext(RegistrationContext)
+  const { firstName, setFirstName, lastName, setLastName, date, setDate, location, setLocation, description } = useContext(RegistrationContext)
 
   const onPress = () => {
     setDateModal(true)
@@ -114,7 +114,7 @@ const InformationScreen: React.FC = () => {
                   globalStyles.text,
                 ]}
               >
-                Use my location?
+                Use my location
               </Text>
               {!loc && <Entypo name="cross" color="red" />}
               {loc && <AntDesign name="check" color="green" />}
@@ -127,9 +127,7 @@ const InformationScreen: React.FC = () => {
             style={[styles.button, styles.buttonContainer]}
             onPress={() => useNav.navigate("Description" as never)}
           >
-            <Text style={[styles.buttonText, globalStyles.text]}>
-              Add a description now
-            </Text>
+            <Text style={[styles.buttonText, globalStyles.text]}>{description.length === 0 ? "Add a description now" : "Edit your description"}</Text>
           </TouchableOpacity>
         </View>
 

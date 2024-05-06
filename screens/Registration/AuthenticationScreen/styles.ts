@@ -3,6 +3,11 @@ import { peach, lightPeach, shadowColor } from '../../../assets/colors/colors'
 
 import { BUTTON_RADIUS } from '../../../assets/global/constants' 
 const styles = StyleSheet.create({
+  absolute: {
+    bottom: 0,
+    position: 'absolute',
+    width: '100%'
+  },
   button: {
     alignItems: 'center',
     alignSelf: 'center',
@@ -22,13 +27,12 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     width: '60%',
   },
-
   container: {
     alignContent: 'center',
     display: 'flex',
     flexDirection: 'column',
-    marginBottom: 10,
     marginLeft: 40,
+    marginVertical: 10
   },
   image: {
     alignSelf: 'center',
@@ -40,13 +44,15 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
   },
-
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     paddingBottom: 10,
     textAlign: 'center',
   },
+  view: {
+    flex: 1
+  }
 }) 
 
 export default styles 
