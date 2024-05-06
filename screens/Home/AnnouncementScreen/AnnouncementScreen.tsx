@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, SectionList, SectionListRenderItemInfo } from 'react-native'
+import { View, Text, TextInput, SectionList, SectionListRenderItemInfo, Pressable } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-
-
-import { styles } from './../stylesScreen'// Ensure the paths are correct
-
-import { defautlBackgroundColor} from '../../../assets/colors/colors'
+import { styles } from './styles'// Ensure the paths are correct
 import AnnouncementCard from '../../../components/AnnoucementCard/AnnouncementCard'
 import { Announcement } from '../../../types/Annoucements'
+import { Ionicons } from '@expo/vector-icons'
+import { globalStyles } from '../../../assets/global/globalStyles'
+import { white } from '../../../assets/colors/colors'
 
 
 const announcements : Announcement[] = 
@@ -76,37 +75,26 @@ const AnnouncementScreen = () => {
     </TouchableOpacity>
   )
 
-
-  const sections = [
-    { title: "Annoucement", data: getFutureAnnouncements() },
-  ]
-
-  const renderSectionHeader = ( info : {section: typeof sections[number]}) => (
-    // Render the section header
-    <View style={{ backgroundColor: defautlBackgroundColor}} >
-      {/* Add the section title and a separation bar */}
-      <Text style={styles.header}>{info.section.title}</Text>
-      <View style={styles.separationBar} />
-    </View>
-  )
-
   return (
     <View style={styles.view}>
       <View style={styles.searchAndMap}>
         <TextInput
-         style={styles.input}
+          style={styles.input}
           placeholder="Search..."
           onChangeText={handleSearch}
-         
-          
+          value={searchQuery}
         />
+        <Pressable style={styles.button}>
+          <Text style={[globalStyles.smallText, styles.text]}>Create</Text>
+          <Ionicons name="create-outline" size={18} color={white}/>
+        </Pressable>
       </View>
-
-      <View style={styles.containerEvent}>
+      <View style={styles.container}>
         <SectionList
-          sections={[{ title: "Future Announcements", data: getFutureAnnouncements() }]}
+          sections={[{ title: "Announcements", data: getFutureAnnouncements() }]}
           renderItem={renderItem}
-          renderSectionHeader={renderSectionHeader}
+          showsVerticalScrollIndicator={false}
+          stickySectionHeadersEnabled={false}
         />
       </View>
     </View>

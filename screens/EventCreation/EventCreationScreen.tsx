@@ -13,13 +13,15 @@ import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { peach, white } from "../../assets/colors/colors"
 import { createEvent } from "../../firebase/ManageEvents"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 const EventCreationScreen = () => {
   const navigation = useNavigation()
-  const [isEvent, setIsEvent] = useState(false)
+  const [isEvent, setIsEvent] = useState(true)
   const [title, setTitle] = useState("")
   const [description] = useState("lore ipsum")
   const [location] = useState("Besac City")
+  const insets = useSafeAreaInsets()
   // const [startDate, setStartDate] = useState<Date>()
   // const [endDate, setEndDate] = useState("")
   // const [imageUrl, setImageUrl] = useState("")
@@ -32,70 +34,72 @@ const EventCreationScreen = () => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
+    <View style={styles.form}>
+      <View style={[styles.header, {paddingTop: insets.top + 5}]}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           testID="back-button"
         >
           <Ionicons name="arrow-back-outline" size={24} color={peach} />
         </TouchableOpacity>
-        <View style={styles.headerIcon}>
-          <Ionicons name="add" size={24} color={peach} />
-        </View>
+        <TouchableOpacity>
+          <Ionicons name="add" size={24} color={peach} style={styles.headerIcon}/>
+        </TouchableOpacity>
       </View>
-      <View style={styles.body}>
-        <View
-          style={
-            isEvent
-              ? [styles.toggleBase, styles.toggleEvent ]
-              : [styles.toggleBase, styles.toggleAnnouncement]
-          }
-        >
-          <TouchableOpacity
-            onPress={() => setIsEvent(!isEvent)}
+      <ScrollView style={styles.container}>
+        <View style={styles.body}>
+          <View
+            style={
+              isEvent
+                ? [styles.toggleBase, styles.toggleEvent ]
+                : [styles.toggleBase, styles.toggleAnnouncement]
+            }
           >
-            <Text style={isEvent ? styles.toggleTextEvent : styles.toggleTextAnnouncement}>
-              {isEvent ? "Event" : "Announcement"}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.form}>
-          <View style={styles.tagsSepator}>
-            <TextInput style={[styles.input, globalStyles.text]} placeholder="Title" onChangeText={setTitle}/>
-            <Text style={[styles.tagsTitle, globalStyles.text]}>Choose up to three tags</Text>
-            <View style={styles.tags}>
-              <View style={styles.addTag}>
-                <Ionicons name="add" size={24} color={white} />
-              </View>
-              <View style={styles.addTag}>
-                <Ionicons name="add" size={24} color={white} />
-              </View>
-              <View style={styles.addTag}>
-                <Ionicons name="add" size={24} color={white} />
+            <TouchableOpacity
+              onPress={() => setIsEvent(!isEvent)}
+            >
+              <Text style={isEvent ? styles.toggleTextEvent : styles.toggleTextAnnouncement}>
+                {isEvent ? "Event" : "Announcement"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.form}>
+            <View style={styles.tagsSepator}>
+              <TextInput style={[styles.input, globalStyles.text]} placeholder="Title" onChangeText={setTitle}/>
+              <Text style={[styles.tagsTitle, globalStyles.text]}>Choose up to three tags</Text>
+              <View style={styles.tags}>
+                <View style={styles.addTag}>
+                  <Ionicons name="add" size={24} color={white} />
+                </View>
+                <View style={styles.addTag}>
+                  <Ionicons name="add" size={24} color={white} />
+                </View>
+                <View style={styles.addTag}>
+                  <Ionicons name="add" size={24} color={white} />
+                </View>
               </View>
             </View>
+            {isEvent && (
+              <>
+                <View style={styles.dateContainer}>
+                  <TextInput style={[styles.input, globalStyles.text]} placeholder="Start Date" />
+                  <TextInput style={[styles.input, globalStyles.text]} placeholder="End Date" />
+                </View>
+                <TextInput style={[styles.input, globalStyles.text]} placeholder="Location" />
+              </>
+            )}
+            <View style={styles.bottomButtons}>
+            <TouchableOpacity style={[styles.buttonBase, styles.buttonDescription]}>
+              <Text onPress={() => Alert.alert("SOON^TM")} style={globalStyles.boldText}>Add a description</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={[styles.buttonBase, styles.buttonValidate]}>
+              <Text onPress={newEvent} style={globalStyles.boldText}>Validate</Text>
+            </TouchableOpacity>
           </View>
-          {isEvent && (
-            <>
-              <View style={styles.dateContainer}>
-                <TextInput style={[styles.input, globalStyles.text]} placeholder="Start Date" />
-                <TextInput style={[styles.input, globalStyles.text]} placeholder="End Date" />
-              </View>
-              <TextInput style={[styles.input, globalStyles.text]} placeholder="Location" />
-            </>
-          )}
-          <View style={styles.bottomButtons}>
-          <TouchableOpacity style={[styles.buttonBase, styles.buttonDescription]}>
-            <Text onPress={() => Alert.alert("SOON^TM")} style={globalStyles.boldText}>Add a description</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.buttonBase, styles.buttonValidate]}>
-            <Text onPress={newEvent} style={globalStyles.boldText}>Validate</Text>
-          </TouchableOpacity>
+          </View>
         </View>
-        </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   )
 }
 

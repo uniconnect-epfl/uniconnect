@@ -5,10 +5,11 @@ import { useNavigation } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
 import { peach } from "../../assets/colors/colors"
 import { Logout } from "../../firebase/Logout"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 export const SettingsScreen = () => {
   const navigation = useNavigation()
-
+  const insets = useSafeAreaInsets()
   type MenuItem = {
     title: string;
     action: () => Promise<void>|void;
@@ -25,7 +26,7 @@ export const SettingsScreen = () => {
   ]
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {paddingTop: insets.top}]}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} testID="back-button">
           <Ionicons name="arrow-back-outline" size={24} color={peach} />

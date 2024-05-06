@@ -1,28 +1,31 @@
 import React, { useEffect } from 'react'
-import { View, Text, TextInput, SectionList, SectionListRenderItemInfo } from 'react-native'
+import { View, Text, TextInput, SectionList, SectionListRenderItemInfo, Pressable, DefaultSectionT, SectionListData } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import EventCard from '../../../components/EventCard/EventCard'
-import  {styles} from './../stylesScreen' // Ensure the paths are correct
+import  {styles} from './styles'
 import { useNavigation } from '@react-navigation/native'
-
 import { Ionicons } from "@expo/vector-icons"
-import { defautlBackgroundColor, lightPeach } from '../../../assets/colors/colors'
 import { getAllFutureEvents, getAllPastEvents } from '../../../firebase/ManageEvents'
 import { showErrorToast } from '../../../components/ToastMessage/toast'
 import { Event } from '../../../types/Event'
+import { globalStyles } from '../../../assets/global/globalStyles'
+import LoadingScreen from '../../Loading/LoadingScreen'
+import { StackNavigationProp } from '@react-navigation/stack'
 
+type RootStackParamList = {
+  EventMap: {
+      events: Event[] | null
+  }
+}
 
 const EventScreen = () => {
-  
-  const navigation = useNavigation()
-
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
   const [futureEvents, setFutureEvents] = React.useState<Event[] | null>([])
   const [pastEvents, setPastEvents] = React.useState<Event[] | null>([])
-  
   const [filteredFutureEvents, setFilteredFutureEvents] = React.useState<Event[] | null>([])
   const [filteredPastEvents, setFilteredPastEvents] = React.useState<Event[] | null>([])
-
   const [ searchQuery, setSearchQuery ] = React.useState("")
+  const [loading, setLoading] = React.useState(true)
 
   const handleSearch = (search: string) => {
     setSearchQuery(search)
@@ -33,6 +36,7 @@ const EventScreen = () => {
   useEffect(() => {
     const loadEvents = async () => {
       try {
+        setLoading(true)
         const fetchedFutureEvents = await getAllFutureEvents() 
         const fetchedPastEvents = await getAllPastEvents()
         
@@ -47,6 +51,9 @@ const EventScreen = () => {
       catch (error) {
         showErrorToast("Error fetching events. Please check your connection and try again.")
       }
+      finally {
+        setLoading(false)
+      }
     }
 
     loadEvents()
@@ -58,17 +65,21 @@ const EventScreen = () => {
   ]
 
    const renderItem = ({ item }: SectionListRenderItemInfo<Event>) => (
-    //Need to add the onPress function to navigate to the event page
-    <TouchableOpacity>
     <EventCard {...item} />
-    </TouchableOpacity>
   ) 
 
-  const renderSectionHeader = (info : {section: typeof sections[number]} ) => (
-    <View style={{ backgroundColor: defautlBackgroundColor}} >
-    <Text style={styles.header}>{info.section.title}</Text>
-    <View style={styles.separationBar} />
+  const renderSectionHeader = (info: { section: SectionListData<Event, DefaultSectionT> }) => (
+    <View style={styles.sectionHeader} >
+      <Text style={[globalStyles.boldText, styles.header]}>{info.section.title}</Text>
+      <Pressable onPress={() => navigation.navigate("EventCreation" as never)} style={styles.iconText}>
+        <Text style={[globalStyles.smallText, styles.text]}>Create an event</Text>
+        <Ionicons name="create-outline" size={16}/>
+      </Pressable>
     </View>
+  )
+
+  if (loading) return (
+    <LoadingScreen/>
   )
 
   return (
@@ -78,26 +89,22 @@ const EventScreen = () => {
           placeholder="Search..."
           style={styles.input}
           onChangeText={handleSearch}
+          value={searchQuery}
         />
         <TouchableOpacity
           style={styles.map}
           onPress={() => navigation.navigate("EventMap", {events: filteredFutureEvents})}
         >
-          <Text>Map View</Text>
+          <Text style={globalStyles.boldText}>Map View</Text>
         </TouchableOpacity>
       </View>
-      
-      <TouchableOpacity onPress={() => navigation.navigate("EventCreation" as never) }>
-      <View style={styles.button}>
-            <Ionicons name="add" size={24} color={lightPeach}  />
-        </View>
-      </TouchableOpacity>
-
       <View style={styles.containerEvent}>
         <SectionList
-          sections={sections}
+          sections={sections as SectionListData<Event, DefaultSectionT>[]}
           renderItem={renderItem}
           renderSectionHeader={renderSectionHeader}
+          showsVerticalScrollIndicator={false}
+          stickySectionHeadersEnabled={false}
         />
       </View> 
     </View>
