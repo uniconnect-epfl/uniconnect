@@ -37,7 +37,7 @@ export const GoogleSignInButton = () => {
         style={styles.icon}
       />
       <Text style={[styles.buttonText, globalStyles.boldText]}>
-        Continue with google
+        Continue with Google
       </Text>
     </View>
   </TouchableOpacity>
