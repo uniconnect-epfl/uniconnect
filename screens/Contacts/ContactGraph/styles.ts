@@ -20,8 +20,9 @@ export const styles = StyleSheet.create({
     borderColor: lightGray,
     borderRadius: 40,
     borderWidth: 1,
-    height: 60,
-    margin: 10,
-    padding: 20,
+    fontFamily: "JetBrainsMono_400Regular",
+    height: 40,
+    marginVertical: 10,
+    padding: 20
   },
 })
