@@ -28,7 +28,7 @@ jest.mock("@react-navigation/native", () => {
 
 jest.mock("react", () => ({
   ...jest.requireActual("react"),
-  useContext: jest.fn(() => ({selectedInterests: ["one"], setSelectedInterests: jest.fn()})),
+  useContext: jest.fn(() => ({selectedInterests: ["one"], setSelectedInterests: jest.fn(), description: ""})),
 }))
 
 describe("DescriptionScreen", () => {

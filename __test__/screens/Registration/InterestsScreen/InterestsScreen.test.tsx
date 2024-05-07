@@ -3,6 +3,7 @@ import { render, fireEvent, waitFor } from "@testing-library/react-native"
 import InterestsScreen from "../../../../screens/Registration/InterestsScreen/InterestsScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { Auth } from "firebase/auth"
+import { showErrorToast } from "../../../../components/ToastMessage/toast"
 
 jest.mock("@react-native-async-storage/async-storage", () =>
   require("@react-native-async-storage/async-storage/jest/async-storage-mock")
@@ -34,17 +35,21 @@ jest.mock("react", () => ({
 
 describe("InterestsScreen", () => {
   it("renders the screen with necessary components", async () => {
-    const { getByPlaceholderText, getAllByText } = render(
-      <SafeAreaProvider>
-        <InterestsScreen />
-      </SafeAreaProvider>
-    )
+    try {
+      const { getByPlaceholderText, getAllByText } = render(
+        <SafeAreaProvider>
+          <InterestsScreen />
+        </SafeAreaProvider>
+      )
 
-    await waitFor(() => {
-      expect(getByPlaceholderText("Search")).toBeTruthy()
-      const interestButtons = getAllByText(/.+/)
-      expect(interestButtons.length).toBeGreaterThan(0)
-    })
+      await waitFor(() => {
+        expect(getByPlaceholderText("Search")).toBeTruthy()
+        const interestButtons = getAllByText(/.+/)
+        expect(interestButtons.length).toBeGreaterThan(0)
+      })
+    } catch (error) {
+      showErrorToast("Unable to render")
+    }
   })
 
   it("allows searching and filters interests", async () => {

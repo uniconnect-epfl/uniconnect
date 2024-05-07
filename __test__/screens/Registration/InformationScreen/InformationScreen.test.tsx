@@ -2,7 +2,6 @@ import React from "react"
 import { render, fireEvent } from "@testing-library/react-native"
 import InformationScreen from "../../../../screens/Registration/InformationScreen/InformationScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { NavigationContainer } from "@react-navigation/native"
 
 const mockNavigate = jest.fn()
 jest.mock("@react-navigation/native", () => {
@@ -24,13 +23,16 @@ jest.mock("react-native-safe-area-context", () => {
   }
 })
 
+jest.mock("react", () => ({
+  ...jest.requireActual("react"),
+  useContext: jest.fn(() => ({selectedInterests: ["one"], setSelectedInterests: jest.fn(), description: ""})),
+}))
+
 describe("Information Screen", () => {
   it("renders all input fields and buttons", () => {
     const { getByPlaceholderText, getByText } = render(
       <SafeAreaProvider>
-        <NavigationContainer>
-          <InformationScreen />
-        </NavigationContainer>
+        <InformationScreen />
       </SafeAreaProvider>
     )
 
@@ -42,16 +44,14 @@ describe("Information Screen", () => {
     expect(getByText("JJ.MM.YYYY"))
     expect(getByText("Location"))
     expect(getByPlaceholderText("Location"))
-    expect(getByText("Use my location?"))
+    expect(getByText("Use my location"))
     expect(getByText("Add a description now"))
   })
 
   it("navigates to description up screen on footer press", () => {
     const { getByText } = render(
       <SafeAreaProvider>
-        <NavigationContainer>
-          <InformationScreen />
-        </NavigationContainer>
+        <InformationScreen />
       </SafeAreaProvider>
     )
     const DescButton = getByText("Add a description now")

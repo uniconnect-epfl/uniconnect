@@ -17,14 +17,14 @@ jest.mock('../../../components/AnnoucementCard/AnnouncementCard', () => 'Announc
 describe('AnnouncementScreen', () => {
 
   it('renders correctly', async () => {
-    const { getByText, debug } = render(
+    const { getByPlaceholderText, debug } = render(
       
         <AnnouncementScreen />
       
     )
     debug()
-    // Verify that the screen renders future announcements
-    expect(getByText('Future Announcements')).toBeTruthy()
+    // Verify that the screen renders announcements
+    expect(getByPlaceholderText('Search...')).toBeTruthy()
   }),
   it('rendre card correclty', async () => {
       const announcement = {

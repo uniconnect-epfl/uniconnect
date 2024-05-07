@@ -135,7 +135,7 @@ describe('AuthenticationScreen', () => {
       fireEvent.press(submitButton)
       }) 
     await waitFor(() => {
-      expect(showErrorToast).toHaveBeenCalledWith("Please fill in the form correctly and try again")
+      expect(showErrorToast).toHaveBeenCalledWith("Passwords do not match")
     })
   })
 
