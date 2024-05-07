@@ -61,8 +61,8 @@ describe("InterestsScreen", () => {
 
     await waitFor(() => {
       const searchInput = getByPlaceholderText("Search")
-      fireEvent.changeText(searchInput, "Machine Learning")
-      expect(getByText("Machine Learning")).toBeTruthy()
+      fireEvent.changeText(searchInput, "Artificial Intelligence")
+      expect(getByText("Artificial Intelligence")).toBeTruthy()
     })
   })
 
