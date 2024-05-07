@@ -6,7 +6,6 @@ import { globalStyles } from "../../assets/global/globalStyles"
 interface SectionTabsProps {
   tabs: string[]
   startingTab: string
-  barWidth?: number
   onTabChange: (newTab: string) => void
 }
 
