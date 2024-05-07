@@ -12,7 +12,6 @@ import { useNavigation } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { peach, white } from "../../assets/colors/colors"
-import { createEvent } from "../../firebase/ManageEvents"
 import { createAnnouncement } from "../../firebase/ManageAnnouncements"
 import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
 
