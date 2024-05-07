@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react"
+import React, { useState, useRef, useContext, useEffect } from "react"
 import {
   View,
   TouchableOpacity,
@@ -30,8 +30,32 @@ const InformationScreen: React.FC = () => {
   const [dateModal, setDateModal] = useState(false)
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
   const useNav = useNavigation()
+  const [keyboardVisible, setKeyboardVisible] = useState(false)
 
-  const { firstName, setFirstName, lastName, setLastName, date, setDate, location, setLocation } = useContext(RegistrationContext)
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setKeyboardVisible(true)
+    })
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardVisible(false)
+    })
+
+    return () => {
+      showSubscription.remove()
+      hideSubscription.remove()
+    }
+  }, [])
+
+  const {
+    firstName,
+    setFirstName,
+    lastName,
+    setLastName,
+    date,
+    setDate,
+    location,
+    setLocation,
+  } = useContext(RegistrationContext)
 
   const onPress = () => {
     setDateModal(true)
@@ -133,8 +157,8 @@ const InformationScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.footer, {bottom: insets.bottom}]}>
-          <LowBar nextScreen="Interests" />
+        <View style={[styles.footer, { bottom: insets.bottom }]}>
+          {!keyboardVisible && <LowBar nextScreen="Interests" />}
         </View>
 
         {dateModal && (

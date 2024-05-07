@@ -58,6 +58,21 @@ const InterestsScreen = () => {
     new Set([])
   )
   const [isLoading, setIsLoading] = useState(true)
+  const [keyboardVisible, setKeyboardVisible] = useState(false)
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setKeyboardVisible(true)
+    })
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardVisible(false)
+    })
+
+    return () => {
+      showSubscription.remove()
+      hideSubscription.remove()
+    }
+  }, [])
 
   //fetching the interests
   useEffect(() => {
@@ -171,7 +186,7 @@ const InterestsScreen = () => {
         />
 
         <View style={[styles.footer, { bottom: insets.bottom }]}>
-          <LowBar nextScreen="Authentication" />
+          {!keyboardVisible && <LowBar nextScreen="Authentication" />}
         </View>
       </View>
     </TouchableWithoutFeedback>
