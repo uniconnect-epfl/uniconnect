@@ -10,7 +10,6 @@ const styles = StyleSheet.create({
     borderColor: peach,
     borderRadius: BUTTON_RADIUS,
     borderWidth: 3,
-    display: "flex",
     elevation: 8,
     height: 40,
     justifyContent: "center",

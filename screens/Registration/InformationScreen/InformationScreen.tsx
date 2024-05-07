@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext, useEffect } from "react"
+import React, { useState, useRef, useContext } from "react"
 import {
   View,
   TouchableOpacity,
@@ -20,6 +20,7 @@ import { AntDesign } from "@expo/vector-icons"
 import MyDateInputComponent from "../../../components/DatePicker/DatePicker"
 import { useNavigation } from "@react-navigation/native"
 import { RegistrationContext } from "../../../contexts/RegistrationContext"
+import useKeyboardVisibility from "../../../hooks/useKeyboardVisibility"
 
 const InformationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
@@ -30,21 +31,7 @@ const InformationScreen: React.FC = () => {
   const [dateModal, setDateModal] = useState(false)
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
   const useNav = useNavigation()
-  const [keyboardVisible, setKeyboardVisible] = useState(false)
-
-  useEffect(() => {
-    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-      setKeyboardVisible(true)
-    })
-    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      setKeyboardVisible(false)
-    })
-
-    return () => {
-      showSubscription.remove()
-      hideSubscription.remove()
-    }
-  }, [])
+  const keyboardVisible = useKeyboardVisibility()
 
   const {
     firstName,

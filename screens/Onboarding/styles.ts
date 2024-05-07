@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
     backgroundColor: white,
     borderRadius: BUTTON_RADIUS,
     borderWidth: 1,
-    display: "flex",
     flexDirection: "row",
     height: BUTTON_HEIGHT,
     justifyContent: "flex-start",

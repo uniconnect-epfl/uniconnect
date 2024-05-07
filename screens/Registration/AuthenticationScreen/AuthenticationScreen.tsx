@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef } from "react"
 import {
   Text,
   Image,
@@ -18,6 +18,7 @@ import { AntDesign } from "@expo/vector-icons"
 import { red, green } from "../../../assets/colors/colors"
 import { createAccount } from "../../../firebase/Registration"
 import { showErrorToast } from "../../../components/ToastMessage/toast"
+import useKeyboardVisibility from "../../../hooks/useKeyboardVisibility"
 
 const AuthenticationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
@@ -29,21 +30,7 @@ const AuthenticationScreen: React.FC = () => {
   const firstRef = useRef<TextInput>(null)
   const secRef = useRef<TextInput>(null)
   const thirdRef = useRef<TextInput>(null)
-  const [keyboardVisible, setKeyboardVisible] = useState(false)
-
-  useEffect(() => {
-    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-      setKeyboardVisible(true)
-    })
-    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      setKeyboardVisible(false)
-    })
-
-    return () => {
-      showSubscription.remove()
-      hideSubscription.remove()
-    }
-  }, [])
+  const keyboardVisible = useKeyboardVisibility()
 
   const isPassword = () => {
     return password.length >= MIN_LENGHT
@@ -155,11 +142,13 @@ const AuthenticationScreen: React.FC = () => {
         </View>
 
         <View style={[styles.footer, { bottom: insets.bottom }]}>
-          {!keyboardVisible && <LowBar
-            nextScreen="HomeTabs"
-            buttonText="Confirm"
-            authenticate={submitForm}
-          />}
+          {!keyboardVisible && (
+            <LowBar
+              nextScreen="HomeTabs"
+              buttonText="Confirm"
+              authenticate={submitForm}
+            />
+          )}
         </View>
       </View>
     </TouchableWithoutFeedback>

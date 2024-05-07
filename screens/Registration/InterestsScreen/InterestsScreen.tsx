@@ -18,6 +18,7 @@ import LowBar from "../../../components/LowBar/LowBar"
 import Label from "../../../components/Label/Label"
 import { fetchInterests, Interest } from "../../../firebase/Interests"
 import LoadingScreen from "../../Loading/LoadingScreen"
+import useKeyboardVisibility from "../../../hooks/useKeyboardVisibility"
 
 interface InterestButtonProps {
   interest: Interest
@@ -58,21 +59,7 @@ const InterestsScreen = () => {
     new Set([])
   )
   const [isLoading, setIsLoading] = useState(true)
-  const [keyboardVisible, setKeyboardVisible] = useState(false)
-
-  useEffect(() => {
-    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
-      setKeyboardVisible(true)
-    })
-    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      setKeyboardVisible(false)
-    })
-
-    return () => {
-      showSubscription.remove()
-      hideSubscription.remove()
-    }
-  }, [])
+  const keyboardVisible = useKeyboardVisibility()
 
   //fetching the interests
   useEffect(() => {
