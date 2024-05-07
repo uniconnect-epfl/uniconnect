@@ -18,6 +18,7 @@ import LowBar from "../../../components/LowBar/LowBar"
 import Label from "../../../components/Label/Label"
 import { fetchInterests, Interest } from "../../../firebase/Interests"
 import LoadingScreen from "../../Loading/LoadingScreen"
+import useKeyboardVisibility from "../../../hooks/useKeyboardVisibility"
 
 interface InterestButtonProps {
   interest: Interest
@@ -58,6 +59,7 @@ const InterestsScreen = () => {
     new Set([])
   )
   const [isLoading, setIsLoading] = useState(true)
+  const keyboardVisible = useKeyboardVisibility()
 
   //fetching the interests
   useEffect(() => {
@@ -170,8 +172,8 @@ const InterestsScreen = () => {
           style={styles.interestsGrid}
         />
 
-        <View style={styles.footer}>
-          <LowBar nextScreen="Authentication" />
+        <View style={[styles.footer, { bottom: insets.bottom }]}>
+          {!keyboardVisible && <LowBar nextScreen="Authentication" />}
         </View>
       </View>
     </TouchableWithoutFeedback>
