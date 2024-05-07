@@ -66,8 +66,6 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    
-
   },
 
   date: {
@@ -88,8 +86,7 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-    bottom: 0,
-    position: 'absolute',
+    position: "absolute",
     width: "100%",
   },
 
@@ -98,7 +95,6 @@ const styles = StyleSheet.create({
     height: 75,
     marginRight: 10,
     width: 75,
-
   },
   input: {
     borderColor: lightGray,

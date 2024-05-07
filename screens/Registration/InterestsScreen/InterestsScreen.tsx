@@ -170,7 +170,7 @@ const InterestsScreen = () => {
           style={styles.interestsGrid}
         />
 
-        <View style={styles.footer}>
+        <View style={[styles.footer, { bottom: insets.bottom }]}>
           <LowBar nextScreen="Authentication" />
         </View>
       </View>
