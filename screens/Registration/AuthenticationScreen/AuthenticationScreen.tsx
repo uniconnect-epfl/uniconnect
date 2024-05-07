@@ -84,7 +84,6 @@ const AuthenticationScreen: React.FC = () => {
         <InputField
           label="Password*"
           placeholder="****************"
-          secureTextEntry
           onChangeText={setPassword}
           value={password}
           onSubmitEditing={() => firstRef.current?.focus()}
@@ -94,7 +93,6 @@ const AuthenticationScreen: React.FC = () => {
         <InputField
           label="Confirm Password*"
           placeholder="****************"
-          secureTextEntry
           onChangeText={setConfirmPassword}
           value={confirmPassword}
           ref={firstRef}
@@ -145,9 +143,11 @@ const AuthenticationScreen: React.FC = () => {
           value={confirmEmail}
           ref={thirdRef}
         ></InputField>
-        <View style={[styles.absolute, {paddingBottom: insets.bottom}]}>
-          <LowBar nextScreen="HomeTabs" buttonText="Confirm" authenticate={submitForm} />
-        </View>
+        {!keyboardVisible &&
+          <View style={[styles.absolute, {paddingBottom: insets.bottom}]}>
+            <LowBar nextScreen="HomeTabs" buttonText="Confirm" authenticate={submitForm} />
+          </View>
+        }
       </View>
     </TouchableWithoutFeedback>
   )
