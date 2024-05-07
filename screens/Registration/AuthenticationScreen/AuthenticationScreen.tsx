@@ -20,6 +20,28 @@ import { createAccount } from "../../../firebase/Registration"
 import { showErrorToast } from "../../../components/ToastMessage/toast"
 import useKeyboardVisibility from "../../../hooks/useKeyboardVisibility"
 
+//verifies that the pw has a number and a symbol
+function contains(password: string): boolean {
+  const symbols = '!@#$%^&*(),.?":{}|<>'
+  let hasNumber = false
+  let hasSymbol = false
+
+  for (const char of password) {
+    if (char >= "0" && char <= "9") {
+      hasNumber = true
+    } else if (symbols.includes(char)) {
+      hasSymbol = true
+    }
+
+    // Early exit if both conditions are met
+    if (hasNumber && hasSymbol) {
+      return true
+    }
+  }
+
+  return false
+}
+
 const AuthenticationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
   const MIN_LENGHT = 8
@@ -49,9 +71,17 @@ const AuthenticationScreen: React.FC = () => {
   }
 
   const submitForm = async () => {
-    if (isPassword() && doPasswordsMatch() && isEmail() && doEmailsMatch()) {
+    if (
+      isPassword() &&
+      doPasswordsMatch() &&
+      isEmail() &&
+      doEmailsMatch() &&
+      contains(password)
+    ) {
       await createAccount(email, password)
     } else {
+      //for each failure case give a different error message
+
       showErrorToast("Please fill in the form correctly and try again")
     }
   }
@@ -90,7 +120,14 @@ const AuthenticationScreen: React.FC = () => {
 
         <View style={styles.container}>
           <View style={styles.phrase}>
-            <Entypo name="cross" color="red" />
+            {contains(password) && isPassword() && doPasswordsMatch() && (
+              <AntDesign name="check" color={green} />
+            )}
+
+            {(!contains(password) || !isPassword() || !doPasswordsMatch()) && (
+              <Entypo name="cross" color="red" />
+            )}
+
             <Text style={[globalStyles.text, globalStyles.smallText]}>
               Password strength
             </Text>
@@ -113,7 +150,9 @@ const AuthenticationScreen: React.FC = () => {
           </View>
 
           <View style={styles.phrase}>
-            <Entypo name="cross" color={red} />
+            {!contains(password) && <Entypo name="cross" color={red} />}
+            {contains(password) && <AntDesign name="check" color={green} />}
+
             <Text style={[globalStyles.text, globalStyles.smallText]}>
               Contains a number and a symbol
             </Text>
