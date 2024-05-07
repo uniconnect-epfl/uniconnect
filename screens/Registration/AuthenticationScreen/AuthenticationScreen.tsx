@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import {
   Text,
   Image,
@@ -29,6 +29,21 @@ const AuthenticationScreen: React.FC = () => {
   const firstRef = useRef<TextInput>(null)
   const secRef = useRef<TextInput>(null)
   const thirdRef = useRef<TextInput>(null)
+  const [keyboardVisible, setKeyboardVisible] = useState(false)
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setKeyboardVisible(true)
+    })
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardVisible(false)
+    })
+
+    return () => {
+      showSubscription.remove()
+      hideSubscription.remove()
+    }
+  }, [])
 
   const isPassword = () => {
     return password.length >= MIN_LENGHT
@@ -55,8 +70,11 @@ const AuthenticationScreen: React.FC = () => {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={{ paddingBottom: insets.bottom, paddingTop: insets.top }}>
+    <TouchableWithoutFeedback
+      onPress={() => Keyboard.dismiss()}
+      style={{ bottom: insets.bottom, top: insets.top }}
+    >
+      <View style={styles.mainContainer}>
         <Image
           source={require("../../../assets/icon.png")}
           style={styles.image}
@@ -117,28 +135,32 @@ const AuthenticationScreen: React.FC = () => {
 
         <Divider />
 
-        <InputField
-          label="E-mail*"
-          placeholder="E-mail"
-          onChangeText={setEmail}
-          value={email}
-          ref={secRef}
-          onSubmitEditing={() => thirdRef.current?.focus()}
-        ></InputField>
+        <View>
+          <InputField
+            label="E-mail*"
+            placeholder="E-mail"
+            onChangeText={setEmail}
+            value={email}
+            ref={secRef}
+            onSubmitEditing={() => thirdRef.current?.focus()}
+          ></InputField>
 
-        <InputField
-          label="Confirm e-mail*"
-          placeholder="Confirm your e-mail"
-          onChangeText={setConfirmEmail}
-          value={confirmEmail}
-          ref={thirdRef}
-        ></InputField>
+          <InputField
+            label="Confirm e-mail*"
+            placeholder="Confirm your e-mail"
+            onChangeText={setConfirmEmail}
+            value={confirmEmail}
+            ref={thirdRef}
+          ></InputField>
+        </View>
 
-        <LowBar
-          nextScreen="HomeTabs"
-          buttonText="Confirm"
-          authenticate={submitForm}
-        />
+        <View style={[styles.footer, { bottom: insets.bottom }]}>
+          {!keyboardVisible && <LowBar
+            nextScreen="HomeTabs"
+            buttonText="Confirm"
+            authenticate={submitForm}
+          />}
+        </View>
       </View>
     </TouchableWithoutFeedback>
   )
