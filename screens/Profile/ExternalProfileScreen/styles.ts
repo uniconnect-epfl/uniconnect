@@ -5,7 +5,6 @@ export const styles = StyleSheet.create({
     container: {
         alignItems: "center",
         flex: 1,
-        justifyContent: "center",
     },
     invertedButtonColors: {
         backgroundColor: peach,
@@ -14,7 +13,7 @@ export const styles = StyleSheet.create({
     separatorLine: {
         backgroundColor: black,
         height: 1,
-        marginTop: 5,
+        marginVertical: 5,
         width: "auto",
     },
     

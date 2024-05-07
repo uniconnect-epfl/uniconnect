@@ -54,7 +54,7 @@ export const styles = StyleSheet.create({
         borderColor: lightGray,
         borderRadius: 40,
         borderWidth: 1,
-        height: 60,
+        height: 40,
         margin: 10,
         padding: 20,
         width: "100%"

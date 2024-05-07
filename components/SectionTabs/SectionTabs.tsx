@@ -15,11 +15,12 @@ const SectionTabs: React.FC<SectionTabsProps> = ({
     onTabChange
 }) => {
     const [currentTab, setCurrentTab] = useState(startingTab)
+    const sectionSize = 100 / tabs.length
 
     const RenderOneSection = ({ tab, index } : {tab : string, index: number}) => (
         <Pressable
             key={index}  // Ensure unique key for each child
-            style={styles.tabContainer}
+            style={[styles.tabContainer, { width: `${sectionSize}%` }]}
             onPress={() => {
                 setCurrentTab(tab)
                 onTabChange(tab)

@@ -15,6 +15,7 @@ import ForceDirectedGraph from "../../../components/Graph/ForceDirectedGraph/For
 import React, { useState } from "react"
 
 import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
+import { globalStyles } from "../../../assets/global/globalStyles"
 
 interface ContactGraphProps {
   onContactPress: (uid: string) => void
@@ -46,7 +47,7 @@ const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <TextInput
-          style={styles.searchBar}
+          style={[globalStyles.text, styles.searchBar]}
           placeholder="Search..."
           value={searchText}
           onChangeText={(text) => {
