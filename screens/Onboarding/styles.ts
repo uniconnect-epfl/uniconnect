@@ -15,11 +15,6 @@ import {
 } from "../../assets/global/constants"
 
 const styles = StyleSheet.create({
-  border: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "space-between",
-  },
   button: {
     alignItems: "center",
     backgroundColor: lightPeach,
@@ -37,7 +32,6 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   buttonGoogle: {
-    alignItems: "center",
     backgroundColor: white,
     borderRadius: BUTTON_RADIUS,
     borderWidth: 1,
@@ -53,36 +47,25 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
-  buttonPlaceholder: {
-    alignItems: "center",
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "flex-start",
-  },
   buttonText: {
     color: black,
     fontSize: BUTTON_TEXT_FONT_SIZE,
   },
-  buttonTextGoogle: {
-    color: black,
-    fontSize: BUTTON_TEXT_FONT_SIZE,
-    fontWeight: "bold",
-  },
+
   container: {
     alignItems: "center",
     flex: 1,
     gap: 1,
     padding: 20,
   },
+
   footer: {
-    display: "flex",
+    flex: 1,
     flexDirection: "row",
     position: "absolute",
     zIndex: -1,
   },
-  icon: {
-    paddingRight: 25,
-  },
+
   image: {
     height: 250,
     marginBottom: 10,
