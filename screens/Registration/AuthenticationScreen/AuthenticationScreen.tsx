@@ -17,6 +17,7 @@ import { AntDesign } from "@expo/vector-icons"
 import { red, green } from "../../../assets/colors/colors"
 import { createAccount } from "../../../firebase/Registration"
 import { showErrorToast } from "../../../components/ToastMessage/toast"
+import useKeyboardVisibility from "../../../hooks/useKeyboardVisibility"
 
 const AuthenticationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
@@ -28,6 +29,7 @@ const AuthenticationScreen: React.FC = () => {
   const firstRef = useRef<TextInput>(null)
   const secRef = useRef<TextInput>(null)
   const thirdRef = useRef<TextInput>(null)
+  const keyboardVisible = useKeyboardVisibility()
 
   const isPassword = () => {
     return password.length >= MIN_LENGHT
@@ -82,6 +84,7 @@ const AuthenticationScreen: React.FC = () => {
         <InputField
           label="Password*"
           placeholder="****************"
+          secureTextEntry
           onChangeText={setPassword}
           value={password}
           onSubmitEditing={() => firstRef.current?.focus()}
@@ -91,6 +94,7 @@ const AuthenticationScreen: React.FC = () => {
         <InputField
           label="Confirm Password*"
           placeholder="****************"
+          secureTextEntry
           onChangeText={setConfirmPassword}
           value={confirmPassword}
           ref={firstRef}

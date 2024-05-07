@@ -34,8 +34,7 @@ const MyDateInputComponent: React.FC<MyDateInputComponentProps> = ({
     >
       <View style={styles.dateContainer}>
         <DateTimePicker
-          // minimumDate={}
-          // maximumDate={}
+          maximumDate={new Date()}
           testID="dateTimePicker"
           value={date}
           mode="date"

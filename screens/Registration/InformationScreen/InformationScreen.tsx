@@ -20,6 +20,7 @@ import { AntDesign } from "@expo/vector-icons"
 import MyDateInputComponent from "../../../components/DatePicker/DatePicker"
 import { useNavigation } from "@react-navigation/native"
 import { RegistrationContext } from "../../../contexts/RegistrationContext"
+import useKeyboardVisibility from "../../../hooks/useKeyboardVisibility"
 
 const InformationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
@@ -30,6 +31,7 @@ const InformationScreen: React.FC = () => {
   const [dateModal, setDateModal] = useState(false)
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
   const useNav = useNavigation()
+  const keyboardVisible = useKeyboardVisibility()
 
   const { firstName, setFirstName, lastName, setLastName, date, setDate, location, setLocation, description } = useContext(RegistrationContext)
 
@@ -131,8 +133,8 @@ const InformationScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        <View style={[styles.footer, {bottom: insets.bottom}]}>
-          <LowBar nextScreen="Interests" />
+        <View style={[styles.footer, { bottom: insets.bottom }]}>
+          {!keyboardVisible && <LowBar nextScreen="Interests" />}
         </View>
 
         {dateModal && (
