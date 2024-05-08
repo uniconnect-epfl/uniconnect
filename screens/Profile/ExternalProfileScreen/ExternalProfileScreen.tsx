@@ -17,14 +17,14 @@ import { User } from "../../../types/User"
 
 type RootStackParamList = {
   ExternalProfile: {
-      uid: string;
+      externalUserUid: string;
   }
 }
 
 type ExternalProfileScreenRouteProp = RouteProp<RootStackParamList, "ExternalProfile">
 
 const ExternalProfileScreen = () => {
-  const { uid } = useRoute<ExternalProfileScreenRouteProp>().params
+  const { externalUserUid } = useRoute<ExternalProfileScreenRouteProp>().params
   const [externalUser, setExternalUser] = useState<User | null>(null)
   const [externalUserLoading, setExternalUserLoading] = useState(true)
 
@@ -51,13 +51,13 @@ const ExternalProfileScreen = () => {
     // load the user of which we want to see the profile
     const fetchData = async () => {
       setExternalUserLoading(true)
-      if(uid){
-        setExternalUser(await getUserData(uid))
+      if(externalUserUid){
+        setExternalUser(await getUserData(externalUserUid))
       }
       setExternalUserLoading(false)
     }
     fetchData()
-  }, [uid])
+  }, [externalUserUid])
 
   useEffect(() => {
     if(user && externalUser){
