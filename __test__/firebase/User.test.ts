@@ -1,6 +1,6 @@
 import { Firestore } from "firebase/firestore"
 import { Auth } from "firebase/auth"
-import { getUserData } from "../../firebase/User"
+import { getUserData, updateUserData } from "../../firebase/User"
 
 jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(() => ({} as Auth)),
@@ -52,6 +52,24 @@ describe("User", () => {
 
     await getUserData(uid)
 
+  })
+
+  it("should update user data when successfully updated", async () => {
+    const uid = "123"
+    const newData = { firstName: "John Doe" }
+
+    const result = await updateUserData(uid, newData)
+
+    expect(result).toBe(false)
+  })
+
+  it("should show error toast and return false when updating fails", async () => {
+    const uid = "123"
+    const newData = { firstName: "John Doe" }
+
+    const result = await updateUserData(uid, newData)
+
+    expect(result).toBe(false)
   })
   
 })
