@@ -149,14 +149,11 @@ describe("ExploreScreen", () => {
       fireEvent(node1, "pressOut")
     })
 
-    await waitFor(
-      () => {
-        const modal = component.getByTestId("modal")
-        expect(modal).toBeTruthy()
-        expect(modal.props.visible).toBe(true)
-      },
-      { timeout: 1000 }
-    )
+    await waitFor(() => {
+      const modal = component.getByTestId("modal")
+      expect(modal).toBeTruthy()
+      expect(modal.props.visible).toBe(true)
+    })
 
     jest.useRealTimers()
 
