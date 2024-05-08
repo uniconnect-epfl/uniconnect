@@ -7,7 +7,7 @@ jest.mock("@react-navigation/native", () => {
     return {
       ...actualNav,
       useRoute: () => ({
-        params: { uid: "123" },
+        params: { eventUid: "123" },
       }),
     }
 })

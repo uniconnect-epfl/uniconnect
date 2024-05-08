@@ -33,7 +33,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
 
       {selectedTab === "Events" && (
         <EventScreen
-          onEventPress={(event) => navigation.navigate("ViewEvent", {uid: event.uid})}
+          onEventPress={(event) => navigation.navigate("ViewEvent", {eventUid: event.uid})}
         />
       )}
 

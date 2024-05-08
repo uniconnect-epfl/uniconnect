@@ -27,14 +27,14 @@ const dummyEvent: Event = {
 type RootStackParamList = {
     ViewEvent: {
         // Here we're getting a uid and not an event because it is possible that the app opens on this screen (by QR)
-        uid: string;
+        eventUid: string;
     }
 }
   
 type ViewEventScreenRouteProps = RouteProp<RootStackParamList, "ViewEvent">
 
 const ViewEventScreen = () => {
-  const { uid } = useRoute<ViewEventScreenRouteProps>().params
+  const { eventUid } = useRoute<ViewEventScreenRouteProps>().params
   const [event, setEvent] = useState<Event | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -42,13 +42,13 @@ const ViewEventScreen = () => {
     // getting the event from the database
     const fetchData = async () => {
       setLoading(true)
-      if(uid){
+      if(eventUid){
         setEvent(dummyEvent) // here we will need to fetch the event
       }
       setLoading(false)
     }
     fetchData()
-  }, [uid])
+  }, [eventUid])
 
   if(loading || !event){
     return <LoadingScreen/>
