@@ -18,6 +18,7 @@ import { AntDesign } from "@expo/vector-icons"
 import { red, green } from "../../../assets/colors/colors"
 import { createAccount } from "../../../firebase/Registration"
 import { showErrorToast } from "../../../components/ToastMessage/toast"
+import useKeyboardVisibility from "../../../hooks/useKeyboardVisibility"
 
 const AuthenticationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
@@ -29,6 +30,7 @@ const AuthenticationScreen: React.FC = () => {
   const firstRef = useRef<TextInput>(null)
   const secRef = useRef<TextInput>(null)
   const thirdRef = useRef<TextInput>(null)
+  const keyboardVisible = useKeyboardVisibility()
 
   const isPassword = () => {
     return password.length >= MIN_LENGHT
@@ -49,15 +51,17 @@ const AuthenticationScreen: React.FC = () => {
   const submitForm = async () => {
     if (isPassword() && doPasswordsMatch() && isEmail() && doEmailsMatch()) {
       await createAccount(email, password)
-    }
-    else {
+    } else {
       showErrorToast("Please fill in the form correctly and try again")
     }
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={{ paddingBottom: insets.bottom, paddingTop: insets.top }}>
+    <TouchableWithoutFeedback
+      onPress={() => Keyboard.dismiss()}
+      style={{ bottom: insets.bottom, top: insets.top }}
+    >
+      <View style={styles.mainContainer}>
         <Image
           source={require("../../../assets/icon.png")}
           style={styles.image}
@@ -68,6 +72,7 @@ const AuthenticationScreen: React.FC = () => {
         <InputField
           label="Password*"
           placeholder="****************"
+          secureTextEntry
           onChangeText={setPassword}
           value={password}
           onSubmitEditing={() => firstRef.current?.focus()}
@@ -76,6 +81,7 @@ const AuthenticationScreen: React.FC = () => {
         <InputField
           label="Confirm Password*"
           placeholder="****************"
+          secureTextEntry
           onChangeText={setConfirmPassword}
           value={confirmPassword}
           ref={firstRef}
@@ -116,24 +122,34 @@ const AuthenticationScreen: React.FC = () => {
 
         <Divider />
 
-        <InputField
-          label="E-mail*"
-          placeholder="E-mail"
-          onChangeText={setEmail}
-          value={email}
-          ref={secRef}
-          onSubmitEditing={() => thirdRef.current?.focus()}
-        ></InputField>
+        <View>
+          <InputField
+            label="E-mail*"
+            placeholder="E-mail"
+            onChangeText={setEmail}
+            value={email}
+            ref={secRef}
+            onSubmitEditing={() => thirdRef.current?.focus()}
+          ></InputField>
 
-        <InputField
-          label="Confirm e-mail*"
-          placeholder="Confirm your e-mail"
-          onChangeText={setConfirmEmail}
-          value={confirmEmail}
-          ref={thirdRef}
-        ></InputField>
+          <InputField
+            label="Confirm e-mail*"
+            placeholder="Confirm your e-mail"
+            onChangeText={setConfirmEmail}
+            value={confirmEmail}
+            ref={thirdRef}
+          ></InputField>
+        </View>
 
-        <LowBar nextScreen="HomeTabs" buttonText="Confirm" authenticate={submitForm} />
+        <View style={[styles.footer, { bottom: insets.bottom }]}>
+          {!keyboardVisible && (
+            <LowBar
+              nextScreen="HomeTabs"
+              buttonText="Confirm"
+              authenticate={submitForm}
+            />
+          )}
+        </View>
       </View>
     </TouchableWithoutFeedback>
   )
