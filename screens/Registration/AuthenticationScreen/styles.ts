@@ -1,52 +1,60 @@
-import { StyleSheet } from 'react-native' 
-import { peach, lightPeach, shadowColor } from '../../../assets/colors/colors' 
+import { StyleSheet } from "react-native"
+import { peach, lightPeach, shadowColor } from "../../../assets/colors/colors"
 
-import { BUTTON_RADIUS } from '../../../assets/global/constants' 
+import { BUTTON_RADIUS } from "../../../assets/global/constants"
 const styles = StyleSheet.create({
   button: {
-    alignItems: 'center',
-    alignSelf: 'center',
+    alignItems: "center",
+    alignSelf: "center",
     backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: BUTTON_RADIUS,
     borderWidth: 3,
-    display: 'flex',
     elevation: 8,
     height: 40,
-    justifyContent: 'center',
+    justifyContent: "center",
     marginBottom: 60,
     marginTop: 35,
     shadowColor,
     shadowOffset: { width: 0, height: 2.5 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
-    width: '60%',
+    width: "60%",
   },
 
   container: {
-    alignContent: 'center',
-    display: 'flex',
-    flexDirection: 'column',
+    alignContent: "center",
+    display: "flex",
+    flexDirection: "column",
     marginBottom: 10,
     marginLeft: 40,
   },
+  footer: {
+    position: "absolute",
+    width: "100%",
+  },
   image: {
-    alignSelf: 'center',
+    alignSelf: "center",
     height: 75,
     marginRight: 10,
     width: 75,
   },
+
+  mainContainer: {
+    flex: 1,
+  },
+
   phrase: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
   },
 
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     paddingBottom: 10,
-    textAlign: 'center',
+    textAlign: "center",
   },
-}) 
+})
 
-export default styles 
+export default styles
