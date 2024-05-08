@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     height: 202,
     margin: 5,
-    overflow: 'scroll',
+    overflow: 'hidden',
     
     shadowColor: shadowColor,
     shadowOffset: {
