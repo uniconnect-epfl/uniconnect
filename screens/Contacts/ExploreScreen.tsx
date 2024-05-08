@@ -52,7 +52,7 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
     loadGraphData()
   }, [])
 
-  const [selectedTab, setSelectedTab] = useState("Plain View")
+  const [selectedTab, setSelectedTab] = useState("Graph")
   const insets = useSafeAreaInsets()
 
   // TODO: Implement retrieval and creation of list of contacts
@@ -62,8 +62,8 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <SectionTabs
-        tabs={["Plain View", "Graph View"]}
-        startingTab="Plain View"
+        tabs={["Graph", "List"]}
+        startingTab="Graph"
         onTabChange={(tab) => {
           setSelectedTab(tab)
         }}
@@ -71,7 +71,7 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
 
       <View style={styles.separationBar} />
 
-      {selectedTab === "Plain View" && (
+      {selectedTab === "List" && (
         <ContactList
           onContactPress={(uid) =>
             navigation.navigate("ExternalProfile", { uid: uid })
@@ -80,7 +80,7 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
         />
       )}
 
-      {selectedTab === "Graph View" && graph && (
+      {selectedTab === "Graph" && graph && (
         <ContactGraph
           onContactPress={(uid) =>
             navigation.navigate("ExternalProfile", { uid: uid })

@@ -4,27 +4,27 @@ import { NavigationContainer } from "@react-navigation/native"
 import HomeTabNavigator from "../../../navigation/Home/HomeTabNavigator"
 import { Firestore } from "firebase/firestore"
 
-jest.mock('@react-native-async-storage/async-storage', () =>
-  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+jest.mock("@react-native-async-storage/async-storage", () =>
+  require("@react-native-async-storage/async-storage/jest/async-storage-mock")
 )
 
 jest.mock("../../../firebase/User", () => ({
   getUserData: jest.fn(() => ({
     firstName: "John",
     lastName: "Doe",
-    location: "London"
-  }))
+    location: "London",
+  })),
 }))
 
 jest.mock("firebase/auth", () => ({
   getReactNativePersistence: jest.fn(() => ({})),
   initializeAuth: jest.fn(() => ({})),
-  onAuthStateChanged: jest.fn(() => ({uid: '123'})),
-  getAuth: jest.fn(() => ({currentUser: {uid: '123'}}))
+  onAuthStateChanged: jest.fn(() => ({ uid: "123" })),
+  getAuth: jest.fn(() => ({ currentUser: { uid: "123" } })),
 }))
 
 jest.mock("../../../firebase/firebaseConfig", () => ({
-  db: jest.fn(() => ({} as Firestore))
+  db: jest.fn(() => ({} as Firestore)),
 }))
 
 const mockNavigate = jest.fn()
@@ -75,9 +75,11 @@ describe("TabBar", () => {
     })
 
     await act(async () => {
-      fireEvent.press(explore)
+      act(() => {
+        fireEvent.press(explore)
+      })
       await waitFor(() => {
-        expect(getByText("Plain View")).toBeTruthy()
+        expect(getByText("Graph")).toBeTruthy()
       })
     })
   })

@@ -87,15 +87,15 @@ describe("ExploreScreen", () => {
     )
 
     await act(async () => {
-      fireEvent.press(getByText("Graph View"))
+      fireEvent.press(getByText("List"))
       await waitFor(() => {
-        expect(getByText("Graph View").props.style[1].color).toBe(black)
-        expect(getByText("Plain View").props.style[1].color).toBe(lightGray)
+        expect(getByText("Graph").props.style[1].color).toBe(lightGray)
+        expect(getByText("List").props.style[1].color).toBe(black)
       })
-      fireEvent.press(getByText("Plain View"))
+      fireEvent.press(getByText("Graph"))
       await waitFor(() => {
-        expect(getByText("Graph View").props.style[1].color).toBe(lightGray)
-        expect(getByText("Plain View").props.style[1].color).toBe(black)
+        expect(getByText("Graph").props.style[1].color).toBe(black)
+        expect(getByText("List").props.style[1].color).toBe(lightGray)
       })
     })
   })
@@ -107,6 +107,11 @@ describe("ExploreScreen", () => {
         </NavigationContainer>
       </SafeAreaProvider>
     )
+
+    await act(async () => {
+      fireEvent.press(component.getByText("List"))
+    })
+
     const button = component.getByText("Isabella Rodriguez")
 
     await act(async () => {
@@ -125,10 +130,9 @@ describe("ExploreScreen", () => {
         </NavigationContainer>
       </SafeAreaProvider>
     )
-    const button = component.getByText("Graph View")
 
     await act(async () => {
-      fireEvent.press(button)
+      fireEvent.press(component.getByText("Graph"))
     })
 
     const panHandler = component.getByTestId("pan-handler")
@@ -143,9 +147,8 @@ describe("ExploreScreen", () => {
     })
 
     jest.useFakeTimers()
-    await act(async () => {
-      jest.advanceTimersByTime(50)
-    })
+
+    jest.advanceTimersByTime(50)
 
     await act(async () => {
       fireEvent(node1, "pressOut")

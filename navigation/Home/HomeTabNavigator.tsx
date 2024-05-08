@@ -1,10 +1,10 @@
-import * as React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import HomeScreen from '../../screens/Home/HomeScreen'
-import { TabBar } from '../../components/TabBar/TabBar'
-import { Header } from '../../components/Header/Header'
-import ExploreScreen from '../../screens/Contacts/ExploreScreen'
-import QrScanScreen from '../../screens/QrScan/QrScanScreen'
+import * as React from "react"
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
+import HomeScreen from "../../screens/Home/HomeScreen"
+import { TabBar } from "../../components/TabBar/TabBar"
+import { Header } from "../../components/Header/Header"
+import ExploreScreen from "../../screens/Contacts/ExploreScreen"
+import QrScanScreen from "../../screens/QrScan/QrScanScreen"
 
 const Tab = createBottomTabNavigator()
 
@@ -12,17 +12,17 @@ const Tab = createBottomTabNavigator()
 const HomeTabNavigator = () => {
   return (
     <Tab.Navigator
-      tabBar={props => <TabBar {...props} />}
-      initialRouteName="Home"
+      tabBar={(props) => <TabBar {...props} />}
+      initialRouteName="Explore"
       screenOptions={{
-        header: () => <Header/>
+        header: () => <Header />,
       }}
     >
-      <Tab.Screen name="Home" component={HomeScreen}/>
-      <Tab.Screen name="Connections" component={QrScanScreen}/>
-      <Tab.Screen name="Explore" component={ExploreScreen}/>
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Connections" component={QrScanScreen} />
+      <Tab.Screen name="Explore" component={ExploreScreen} />
     </Tab.Navigator>
   )
 }
 
-export default HomeTabNavigator  
+export default HomeTabNavigator
