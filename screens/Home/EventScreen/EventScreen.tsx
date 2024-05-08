@@ -35,7 +35,6 @@ const EventScreen = () => {
       try {
         const fetchedFutureEvents = await getAllFutureEvents() 
         const fetchedPastEvents = await getAllPastEvents()
-        
 
         setFutureEvents(fetchedFutureEvents)
         setPastEvents(fetchedPastEvents)

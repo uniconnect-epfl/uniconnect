@@ -44,6 +44,8 @@ jest.mock('../../../firebase/ManageEvents', () => ({
     { id: '4', title: 'Past Event 2', date: '2022-01-02' }
   ]))
 }))
+
+
 describe('HomeScreen', () => {
 
     it('renders the Home screen', () => {
