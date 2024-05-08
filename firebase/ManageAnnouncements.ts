@@ -6,8 +6,7 @@ import { Announcement } from "../types/Annoucement"
 
 export async function createAnnouncement(uid: string, title: string, location: string, point: Point, description: string, interests: string[], date: string) {
     try {
-        const newCityRef = doc(collection(db, "announcements"))
-        await setDoc(newCityRef, {
+        await setDoc(doc(collection(db, "announcements")), {
             uid: uid,
             title: title,
             location: location,
@@ -19,15 +18,14 @@ export async function createAnnouncement(uid: string, title: string, location: s
 
         showSuccessToast("Announcement created successfully!")
     } catch (error) {
-        showErrorToast("There was an error storing your event data, please try again.")
+        showErrorToast("There was an error storing your announcement data, please try again.")
     }
 }
 
 
 export const getAllAnnouncements = async () => {
     try {
-        // Reference to the events collection
-        console.log("fetching announcements")
+
         // Execute the query
         const querySnapshot = await getDocs(collection(db, "announcements"))
         const announcements: Announcement[] = querySnapshot.docs.map((doc) => ({
