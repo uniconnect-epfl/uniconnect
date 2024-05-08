@@ -6,7 +6,7 @@ import  {styles} from './../stylesScreen' // Ensure the paths are correct
 import { useNavigation } from '@react-navigation/native'
 
 import { Ionicons } from "@expo/vector-icons"
-import { defautlBackgroundColor, lightPeach } from '../../../assets/colors/colors'
+import { defaultBackgroundColor, lightPeach } from '../../../assets/colors/colors'
 import { getAllFutureEvents, getAllPastEvents } from '../../../firebase/ManageEvents'
 import { showErrorToast } from '../../../components/ToastMessage/toast'
 import { Event } from '../../../types/Event'
@@ -16,11 +16,11 @@ const EventScreen = () => {
   
   const navigation = useNavigation()
 
-  const [futureEvents, setFutureEvents] = React.useState<Event[] | null>([])
-  const [pastEvents, setPastEvents] = React.useState<Event[] | null>([])
+  const [futureEvents, setFutureEvents] = React.useState<Event[] >([])
+  const [pastEvents, setPastEvents] = React.useState<Event[] >([])
   
-  const [filteredFutureEvents, setFilteredFutureEvents] = React.useState<Event[] | null>([])
-  const [filteredPastEvents, setFilteredPastEvents] = React.useState<Event[] | null>([])
+  const [filteredFutureEvents, setFilteredFutureEvents] = React.useState<Event[]>([])
+  const [filteredPastEvents, setFilteredPastEvents] = React.useState<Event[] >([])
 
   const [sections, setSections] = React.useState<SectionListData<Event[], DefaultSectionT>[]>([])
 
@@ -85,7 +85,7 @@ const EventScreen = () => {
         grouped.push([events[i], events[i + 1]])
       } else {
         // Push the last item with a dummy transparent item
-        grouped.push([events[i], { uid: 'dummy', name: '', description: ''}])
+        grouped.push([events[i], { uid: 'dummy' + i, title: "dummy"} as Event])
       }
     }
     return grouped
@@ -99,8 +99,8 @@ const EventScreen = () => {
       {item.map((event) => (
         <TouchableOpacity 
           key={event.uid}  // Ensure each child has a unique key
-          style={[styles.cardContainer, event.uid === "dummy" ? styles.transparent : {}]}
-          disabled={event.uid === "dummy"}
+          style={[styles.cardContainer, event.title === "dummy" ? styles.transparent : {}]}
+          disabled={event.title === "dummy"}
         >
           <EventCard {...event} />
         </TouchableOpacity>
@@ -111,7 +111,7 @@ const EventScreen = () => {
 
   const renderSectionHeader = (info : {section: SectionListData<Event[], DefaultSectionT>} ) => {
     return (
-      <View style={{ backgroundColor: defautlBackgroundColor}} >
+      <View style={{ backgroundColor: defaultBackgroundColor}} >
       <Text style={styles.header}>{info.section.title}</Text>
       <View style={styles.separationBar} />
       </View>

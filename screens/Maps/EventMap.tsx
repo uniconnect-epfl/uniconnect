@@ -1,11 +1,11 @@
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps"
-
+import React from "react"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import { View, Text, TouchableOpacity } from "react-native"
 import styles from "./styles" // Import styles
 import { Ionicons } from "@expo/vector-icons"
 import { Event } from "../../types/Event"
-import React = require("react")
+
 
 const INITIAL_REGION = {
   latitude: 46.51858962578904,
