@@ -5,5 +5,12 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         flex: 1,
         justifyContent: "center",
+    },
+    image: {
+        borderRadius: 50,
+        borderWidth: 1,
+        height: 100,
+        marginVertical: 10,
+        width: 100,
     }
 })

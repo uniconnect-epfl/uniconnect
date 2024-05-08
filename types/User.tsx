@@ -6,5 +6,6 @@ export type User = {
   date: Date
   description: string
   location: string
-  selectedInterests: string[]
+  selectedInterests: string[],
+  profilePicture: string
 }
