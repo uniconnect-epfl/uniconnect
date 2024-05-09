@@ -114,8 +114,9 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
 
       {selectedTab === "Plain View" && (
         <ContactList
-          onContactPress={(uid) =>
-            navigation.navigate("ExternalProfile", { uid: uid })
+          onContactPress={(/*uid*/) =>
+            // This is hardcoded for now but will be just the uid when we'll have implemented friends
+            navigation.navigate("ExternalProfile", { externalUserUid: "5AsCcApHTEdn2YW7IB8DOClVTZw1" })
           }
           contacts={contacts}
         />
@@ -123,8 +124,9 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
 
       {selectedTab === "Graph View" && graph && userId && (
         <ContactGraph
-          onContactPress={(uid) =>
-            navigation.navigate("ExternalProfile", { uid: uid })
+          onContactPress={(/*uid*/) =>
+            // This is hardcoded for now but will be just the uid when we'll have implemented friends
+            navigation.navigate("ExternalProfile", { externalUserUid: "5AsCcApHTEdn2YW7IB8DOClVTZw1" })
           }
           graph={graph}
           userId={userId}

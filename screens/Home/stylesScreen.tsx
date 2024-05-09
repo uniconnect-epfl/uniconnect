@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native'
-import { black, lightGray, lightPeach, peach, shadowColor} from '../../assets/colors/colors'
+import { black, lightGray, lightPeach, peach, shadowColor, white} from '../../assets/colors/colors'
 
 export const styles = StyleSheet.create({
   button :{
@@ -18,6 +18,10 @@ export const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 1.5,
   },
+  cardContainer: {
+    flex: 1,
+    padding: 10,
+  },
 
   containerEvent: {
     flex: 1,
@@ -26,13 +30,12 @@ export const styles = StyleSheet.create({
   header: { // A soft, inviting color
     borderRadius: 10,            // Rounded corners for a friendly look
     color: black,
-    elevation: 3,               // White text for contrast
-    fontSize: 20,               // A reasonable font size for headers
+                   
+    fontSize: 20,               
     fontWeight: 'bold', 
-    margin: "3%",               // A bold font weight for emphasis
-              
-    
-    textAlign: 'left',              
+    marginHorizontal: "3%",               
+    textAlign: 'left',  
+            
   },
 
   input: {
@@ -45,28 +48,45 @@ export const styles = StyleSheet.create({
     width: '70%',
       // Note: Exceeding 100% can lead to layout overflow
   },
+  itemContainer: {
+    backgroundColor: white,
+    flex: 1,
+    marginHorizontal: 10,
+    marginVertical: 8,
+    padding: 20,
+  },
+  itemRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+
+  },
   map: {
     
-    alignItems: 'center',
     backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: 40,
     borderWidth: 2,
     fontWeight: 'bold',
     height: 60,
-   
-    marginTop: 10, 
+    justifyContent: 'center',
+    marginTop: 10,
+    overflow: 'visible', 
     
     paddingHorizontal: 5,
-    paddingVertical: 20,
+    paddingVertical: "auto",
     shadowColor: shadowColor,
-
     shadowOffset: { height: 3, width: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 1.5,
+    
     width: '100%',
     
     
+  },
+  row: {
+    flexDirection: 'row',
+    
+    justifyContent: 'space-evenly',
   },
   searchAndMap: {
     flexDirection: 'row',
@@ -79,13 +99,18 @@ export const styles = StyleSheet.create({
     height: 1,
     marginLeft: "3%",
     marginRight: "50%",
-    
+   
    
   },
   title: {
     color: black,
     fontSize: 20,
     fontWeight: 'bold',
+  },
+
+  transparent: {
+   
+   opacity: 0,  
   },
   view: {
     flex: 1

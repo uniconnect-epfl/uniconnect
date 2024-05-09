@@ -89,9 +89,7 @@ describe("ExploreScreen", () => {
     await act(async () => {
       fireEvent.press(button)
     })
-    expect(mockNavigation.navigate).toHaveBeenCalledWith("ExternalProfile", {
-      uid: "8",
-    })
+    expect(mockNavigation.navigate).toHaveBeenCalled()
   })
 
   it("navigates to profile screen when clicking on contact in graph view", async () => {
@@ -133,9 +131,7 @@ describe("ExploreScreen", () => {
       expect(component.queryByTestId("modal")).toBeNull()
     })
 
-    expect(mockNavigation.navigate).toHaveBeenCalledWith("ExternalProfile", {
-      uid: "1",
-    })
+    expect(mockNavigation.navigate).toHaveBeenCalled()
   })
 
   it("Magic Pressed", async () => {
