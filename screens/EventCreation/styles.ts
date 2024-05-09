@@ -1,30 +1,29 @@
 import { StyleSheet } from "react-native"
-import { black, lightPeach, peach, shadowColor, white } from "../../assets/colors/colors"
+import {
+  black,
+  lightPeach,
+  peach,
+  shadowColor,
+  white,
+  lightGray,
+} from "../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
-  activeButton: {
-    backgroundColor: peach,
-    color: white,
-  },
-  activeText: {
-    color: white,
-  },
   addTag: {
     alignItems: "center",
     backgroundColor: peach,
     borderRadius: 50,
-    color: white,
     padding: 5,
-    shadowColor,
-    width: 100,
- },
+    width: "27%",
+  },
   body: {
-    padding: 20
+    flex: 1,
+    padding: 20,
   },
   bottomButtons: {
     alignItems: "center",
-    justifyContent: "flex-end",
-    padding: 20,
+    backgroundColor: black,
+    flex: 1,
   },
   button: {
     alignItems: "center",
@@ -47,24 +46,15 @@ export const styles = StyleSheet.create({
     shadowRadius: 5,
     width: "30%",
   },
- buttonDescription: {
-  },
   buttonText: {
     color: black,
   },
-  buttonValidate: {
-  },
-  container: { 
+  container: {
     backgroundColor: white,
     flex: 1,
   },
-  dateContainer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    paddingTop: 50,
-  },
-  form: {
-    flex: 1,
+  eventDetailsContainer: {
+    paddingTop: 20,
   },
   header: {
     alignItems: "center",
@@ -73,47 +63,50 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 40,
   },
- headerIcon: {
+  headerIcon: {
     alignItems: "center",
     flex: 1,
   },
   input: {
-    borderColor: lightPeach,
+    borderColor: lightGray,
+    borderRadius: 25,
     borderWidth: 1,
-    marginBottom: 10,
-    padding: 10,
+    height: 50,
+    paddingHorizontal: 30,
+    width: "100%",
+  },
+  label: {
+    color: black,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    marginTop: 10,
+    paddingLeft: 20,
+  },
+  mandatoryInput: {
+    flexDirection: "row",
+  },
+  section: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    width: "100%",
   },
   tags: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 10,
   },
-  tagsSepator: {
+  tagsSeparator: {
     borderBottomColor: black,
     borderBottomWidth: 1,
     paddingBottom: 20,
- },
+  },
   tagsTitle: {
     color: black,
     marginBottom: 10,
- },
-  toggleAnnouncement: {
-    backgroundColor: peach,
-  },
-  toggleBase: {
-
-    alignItems: "center",
-    borderRadius: 20,
-    marginBottom: 20,
     padding: 10,
   },
-  toggleEvent: {
-    backgroundColor: lightPeach,
-  },
-  toggleTextAnnouncement: {
-    color: lightPeach,
-  },
-  toggleTextEvent: {
-    color: peach,
-  }
 })
