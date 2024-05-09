@@ -86,7 +86,7 @@ const ForceDirectedGraph: React.FC<{
   onModalPress,
   onMagicPress,
 }) => {
-  const [transitionScale] = useState(new Animated.Value(20))
+  const [transitionScale] = useState(new Animated.Value(INITIAL_SCALE))
   const [transitionTranslateX] = useState(new Animated.Value(0))
   const [transitionTranslateY] = useState(new Animated.Value(0))
 
@@ -178,12 +178,17 @@ const ForceDirectedGraph: React.FC<{
       // If the graph is already initialized, we don't need to run the algorithm again as the nodes are already positioned
       setNodes(getNodes(graph))
     }
+    setLoad(true)
     transitionTranslateX.setValue(0)
     transitionTranslateY.setValue(0)
     zoomAndTranslate(DEFAULT_SCALE, 0, 0)
-
-    setLoad(true)
-  }, [graph, constrainedNodeId, magicNodeId])
+  }, [
+    graph,
+    constrainedNodeId,
+    magicNodeId,
+    transitionTranslateX,
+    transitionTranslateY,
+  ])
 
   // If the graph is not loaded, display an activity indicator
   if (!load) {
