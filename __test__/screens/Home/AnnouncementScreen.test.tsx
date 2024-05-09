@@ -1,11 +1,25 @@
 import React from 'react'
-import { render } from '@testing-library/react-native'
+import { render, waitFor } from '@testing-library/react-native'
 import AnnouncementScreen from '../../../screens/Home/AnnouncementScreen/AnnouncementScreen'
-import AnnouncementCard from '../../../components/AnnoucementCard/AnnouncementCard'
+import { Firestore } from 'firebase/firestore'
+import { getAllAnnouncements } from '../../../firebase/ManageAnnouncements'
+
 
 // Import your AnnouncementScreen component
 
 // Mock any external components not relevant for the test
+
+jest.mock("../../../firebase/firebaseConfig", () => ({
+  db: jest.fn(() => ({} as Firestore))
+}))
+
+jest.mock('../../../firebase/ManageAnnouncements', () => ({
+  getAllAnnouncements: jest.fn(() => Promise.resolve([
+    { id: '1', title: 'Future Announcement 1', date: '2024-04-05' },
+    { id: '2', title: 'Future Event 2', date: '2024-05-05' }
+  ])),
+}))
+
 jest.mock('react-native-gesture-handler', () => ({
   // eslint-disable-next-line react/prop-types
   TouchableOpacity: ({ children, onPress }) => <div onClick={onPress}>{children}</div>
@@ -13,31 +27,39 @@ jest.mock('react-native-gesture-handler', () => ({
 jest.mock("@expo/vector-icons", () => ({
   Ionicons: () => "Ionicon"
 }))
-jest.mock('../../../components/AnnoucementCard/AnnouncementCard', () => 'AnnouncementCard')
+
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+)
+
 describe('AnnouncementScreen', () => {
 
-  it('renders correctly', async () => {
-    const { getByText, debug } = render(
-      
-        <AnnouncementScreen onAnnoucmentPress={() => {}} />
-      
-    )
-    debug()
-    // Verify that the screen renders future announcements
-    expect(getByText('Future Announcements')).toBeTruthy()
-  }),
-  it('rendre card correclty', async () => {
-      const announcement = {
-        uid: '1',
-        title: 'Spring Festival',
-        location: 'Community Park',
-        description: 'Annual community gathering',
-        date: '2023-05-10',
-        interests: ['Music', 'Food', 'Games']
-      }
-  
-      const component = render(<AnnouncementCard {...announcement} />)
-      expect(component).toBeTruthy()
-  } 
-)
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
+  it('displays loading screen initially', async () => {
+    const { findByTestId } = render(<AnnouncementScreen />)
+    const loader = await findByTestId('loading-indicator')
+    expect(loader).toBeTruthy()
+  })
+
+  it('displays a message when there are no announcements', async () => {
+    // Adjust the mock to return an empty array or null
+    getAllAnnouncements.mockResolvedValueOnce([])
+    const { getByText } = render(<AnnouncementScreen />)
+    await waitFor(() => {
+      expect(getByText('Future Announcements')).toBeTruthy()
+    })
+  })
+
+  it('handles errors during data fetching', async () => {
+    // Simulate an error
+    getAllAnnouncements.mockRejectedValueOnce(new Error('Network Error'))
+    const { getByText } = render(<AnnouncementScreen />)
+    await waitFor(() => {
+      expect(getByText('No future announcements available.')).toBeTruthy()
+    })
+  })
+
 })

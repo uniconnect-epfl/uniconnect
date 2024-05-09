@@ -1,7 +1,7 @@
 
 import { styles } from "./styles"
-import React,{ View, Text }  from "react-native"
-import { Announcement } from "../../types/Annoucements"
+import React, { View, Text } from "react-native"
+import { Announcement } from "../../types/Annoucement"
 
 
 const AnnouncementCard = (announcement: Announcement) => {
@@ -10,9 +10,9 @@ const AnnouncementCard = (announcement: Announcement) => {
       <Text style={styles.title}>
         {announcement.title}
       </Text>
-        <Text style={styles.category}>
-            {announcement.interests.join("- ")}
-        </Text>
+      <Text style={styles.category}>
+        {announcement.interests.join("- ")}
+      </Text>
     </View>
   )
 }

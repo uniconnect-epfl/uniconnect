@@ -38,7 +38,6 @@ const EventScreen = ({ onEventPress }: EventsScreenProps) => {
       try {
         const fetchedFutureEvents = await getAllFutureEvents() 
         const fetchedPastEvents = await getAllPastEvents()
-        
 
         setFutureEvents(fetchedFutureEvents)
         setPastEvents(fetchedPastEvents)
