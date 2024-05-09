@@ -1,4 +1,6 @@
+
 import { Point } from "react-native-maps"
+
 
 export type Event = {
     uid: string
