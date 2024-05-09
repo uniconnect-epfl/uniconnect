@@ -86,7 +86,7 @@ const ForceDirectedGraph: React.FC<{
   onModalPress,
   onMagicPress,
 }) => {
-  const [transitionScale] = useState(new Animated.Value(INITIAL_SCALE))
+  const [transitionScale] = useState(new Animated.Value(20))
   const [transitionTranslateX] = useState(new Animated.Value(0))
   const [transitionTranslateY] = useState(new Animated.Value(0))
 
@@ -151,31 +151,9 @@ const ForceDirectedGraph: React.FC<{
 
   useEffect(() => {
     if (modalPressedOut) {
-      const rollbackAnimation = (
-        animationScale: number,
-        animationX: number,
-        animationY: number
-      ) => {
-        Animated.parallel([
-          Animated.timing(transitionScale, {
-            toValue: animationScale,
-            duration: ANIMATION_DURATION,
-            useNativeDriver: true,
-          }),
-          Animated.timing(transitionTranslateX, {
-            toValue: animationX,
-            duration: ANIMATION_DURATION,
-            useNativeDriver: true,
-          }),
-          Animated.timing(transitionTranslateY, {
-            toValue: animationY,
-            duration: ANIMATION_DURATION,
-            useNativeDriver: true,
-          }),
-        ]).start()
-      }
-      rollbackAnimation(DEFAULT_SCALE, 0, 0)
+      zoomAndTranslate(DEFAULT_SCALE, 0, 0)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalPressedOut])
 
   // Use effect to get the initial links, nodes and sizes
@@ -202,24 +180,10 @@ const ForceDirectedGraph: React.FC<{
       setNodes(getNodes(graph))
     }
     setLoad(true)
-
-    Animated.parallel([
-      Animated.timing(transitionScale, {
-        toValue: DEFAULT_SCALE,
-        duration: ANIMATION_DURATION,
-        useNativeDriver: true,
-      }),
-      Animated.timing(transitionTranslateX, {
-        toValue: 0,
-        duration: ANIMATION_DURATION,
-        useNativeDriver: true,
-      }),
-      Animated.timing(transitionTranslateY, {
-        toValue: 0,
-        duration: ANIMATION_DURATION,
-        useNativeDriver: true,
-      }),
-    ]).start()
+    transitionTranslateX.setValue(0)
+    transitionTranslateY.setValue(0)
+    zoomAndTranslate(DEFAULT_SCALE, 0, 0)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [graph, constrainedNodeId, magicNodeId])
 
   // If the graph is not loaded, display an activity indicator
@@ -395,8 +359,6 @@ const ForceDirectedGraph: React.FC<{
             )
           }
           setTimeout(() => {
-            transitionTranslateX.setValue(0)
-            transitionTranslateY.setValue(0)
             onMagicPress(node.id)
             setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
           }, 2 * ANIMATION_DURATION)
