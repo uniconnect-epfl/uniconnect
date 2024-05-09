@@ -97,18 +97,18 @@ const ForceDirectedGraph: React.FC<{
   ) => {
     Animated.parallel([
       Animated.timing(transitionScale, {
-        toValue: animationScale, // Change this value to adjust the zoom level
-        duration: ANIMATION_DURATION, // Adjust duration as needed
-        useNativeDriver: true, // Enable native driver for better performance
+        toValue: animationScale,
+        duration: ANIMATION_DURATION,
+        useNativeDriver: true,
       }),
       Animated.timing(transitionTranslateX, {
-        toValue: animationX, // Change this value to adjust the target X coordinate
-        duration: ANIMATION_DURATION, // Adjust duration as needed
+        toValue: animationX,
+        duration: ANIMATION_DURATION,
         useNativeDriver: true,
       }),
       Animated.timing(transitionTranslateY, {
-        toValue: animationY, // Change this value to adjust the target Y coordinate
-        duration: ANIMATION_DURATION, // Adjust duration as needed
+        toValue: animationY,
+        duration: ANIMATION_DURATION,
         useNativeDriver: true,
       }),
     ]).start()
@@ -151,7 +151,30 @@ const ForceDirectedGraph: React.FC<{
 
   useEffect(() => {
     if (modalPressedOut) {
-      zoomAndTranslate(DEFAULT_SCALE, 0, 0)
+      const rollbackAnimation = (
+        animationScale: number,
+        animationX: number,
+        animationY: number
+      ) => {
+        Animated.parallel([
+          Animated.timing(transitionScale, {
+            toValue: animationScale,
+            duration: ANIMATION_DURATION,
+            useNativeDriver: true,
+          }),
+          Animated.timing(transitionTranslateX, {
+            toValue: animationX,
+            duration: ANIMATION_DURATION,
+            useNativeDriver: true,
+          }),
+          Animated.timing(transitionTranslateY, {
+            toValue: animationY,
+            duration: ANIMATION_DURATION,
+            useNativeDriver: true,
+          }),
+        ]).start()
+      }
+      rollbackAnimation(DEFAULT_SCALE, 0, 0)
     }
   }, [modalPressedOut])
 
@@ -179,16 +202,25 @@ const ForceDirectedGraph: React.FC<{
       setNodes(getNodes(graph))
     }
     setLoad(true)
-    transitionTranslateX.setValue(0)
-    transitionTranslateY.setValue(0)
-    zoomAndTranslate(DEFAULT_SCALE, 0, 0)
-  }, [
-    graph,
-    constrainedNodeId,
-    magicNodeId,
-    transitionTranslateX,
-    transitionTranslateY,
-  ])
+
+    Animated.parallel([
+      Animated.timing(transitionScale, {
+        toValue: DEFAULT_SCALE,
+        duration: ANIMATION_DURATION,
+        useNativeDriver: true,
+      }),
+      Animated.timing(transitionTranslateX, {
+        toValue: 0,
+        duration: ANIMATION_DURATION,
+        useNativeDriver: true,
+      }),
+      Animated.timing(transitionTranslateY, {
+        toValue: 0,
+        duration: ANIMATION_DURATION,
+        useNativeDriver: true,
+      }),
+    ]).start()
+  }, [graph, constrainedNodeId, magicNodeId])
 
   // If the graph is not loaded, display an activity indicator
   if (!load) {
@@ -363,6 +395,8 @@ const ForceDirectedGraph: React.FC<{
             )
           }
           setTimeout(() => {
+            transitionTranslateX.setValue(0)
+            transitionTranslateY.setValue(0)
             onMagicPress(node.id)
             setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
           }, 2 * ANIMATION_DURATION)
