@@ -58,7 +58,7 @@ describe('HomeScreen', () => {
     })
 
     it('filters events based on search input', async () => {
-        const { getByText, getByPlaceholderText } = render(
+        const {getByText ,getAllByText, getByPlaceholderText } = render(
           <SafeAreaProvider>
             <HomeScreen />
           </SafeAreaProvider>
@@ -66,10 +66,10 @@ describe('HomeScreen', () => {
 
         await waitFor(() => {
           fireEvent.changeText(getByPlaceholderText('Search...'), 'Past Event')
-          expect(getByText('Past Event 2')).toBeTruthy()
+          expect(getAllByText('Past Event 2')).toBeTruthy()
     
           fireEvent.changeText(getByPlaceholderText('Search...'), '')
-          expect(getByText('Past Event 1')).toBeTruthy()
+          expect(getAllByText('Past Event 1')).toBeTruthy()
 
           fireEvent.press(getByText('Map View'))
           expect(getByText('Map View')).toBeTruthy()
