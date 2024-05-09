@@ -2,7 +2,7 @@ import React from "react"
 import { render } from "@testing-library/react-native"
 import ViewAnnoucementScreen from "../../../../screens/ViewDetails/ViewAnnouncementScreen/ViewAnnouncementScreen"
 import { Point } from "react-native-maps"
-import { Announcement } from "../../../../types/Annoucements"
+import { Announcement } from "../../../../types/Annoucement"
 
 // Create a dummy Point
 const dummyPoint: Point = {
