@@ -3,7 +3,7 @@ import { View, Text, TextInput, SectionList, SectionListRenderItemInfo, SectionL
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import EventCard from '../../../components/EventCard/EventCard'
 import  {styles} from './../stylesScreen' // Ensure the paths are correct
-import { useNavigation } from '@react-navigation/native'
+import {  useNavigation } from '@react-navigation/native'
 
 import { Ionicons } from "@expo/vector-icons"
 import { defaultBackgroundColor, lightPeach } from '../../../assets/colors/colors'
@@ -26,33 +26,10 @@ const EventScreen = () => {
 
   const [ searchQuery, setSearchQuery ] = React.useState("")
 
-  useEffect(() => {
-
-    console.log("update")
-    console.log(searchQuery)
-    
-
-    if (searchQuery) {
-      setFilteredFutureEvents(futureEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase())))
-      setFilteredPastEvents(pastEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase()))
-      )
-    } else {
-      setFilteredFutureEvents(futureEvents)
-      setFilteredPastEvents(pastEvents)
-    }
-    console.log(filteredFutureEvents)
-    console.log(filteredPastEvents)
-  }, [searchQuery])
-
-  useEffect(() => {
-    setSections([
-      { title: "Future Events", data: groupEventsByTwo(filteredFutureEvents) },
-      { title: "Past Events", data: groupEventsByTwo(filteredPastEvents) }
-    ])
-  }, [filteredFutureEvents, filteredPastEvents])
-
-  useEffect(() => {
+  useEffect(
+    () => {
     const loadEvents = async () => {
+
       try {
         const fetchedFutureEvents = await getAllFutureEvents() 
         const fetchedPastEvents = await getAllPastEvents()
@@ -62,20 +39,39 @@ const EventScreen = () => {
 
         setFilteredFutureEvents(fetchedFutureEvents)
         setFilteredPastEvents(fetchedPastEvents)
-
-        setSections([
-          { title: "Future Events", data: groupEventsByTwo(filteredFutureEvents) },
-          { title: "Past Events", data: groupEventsByTwo(filteredPastEvents) }
-        ])
-        
       }
       catch (error) {
         showErrorToast("Error fetching events. Please check your connection and try again.")
-      }
-    }
+      
+    }}
 
     loadEvents()
   }, [])
+
+  useEffect(() => {
+    
+
+    if (searchQuery) {
+      setFilteredFutureEvents(futureEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase())))
+      setFilteredPastEvents(pastEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+    } else {
+
+        
+      setFilteredFutureEvents(futureEvents)
+      setFilteredPastEvents(pastEvents)
+    }
+
+  }, [searchQuery])
+
+  useEffect(() => {
+    setSections([
+      { title: "Future Events", data: groupEventsByTwo(filteredFutureEvents) },
+      { title: "Past Events", data: groupEventsByTwo(filteredPastEvents) }
+    ])
+  }, [filteredFutureEvents, filteredPastEvents])
+
+  
 
   function groupEventsByTwo(events: Event[]) {
     const grouped = []
