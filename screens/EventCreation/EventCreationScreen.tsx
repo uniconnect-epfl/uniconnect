@@ -1,75 +1,54 @@
-import React, { useContext, useState } from "react"
-import { View, Text, ScrollView, Pressable } from "react-native"
+import React, { useState } from "react"
+import { View, Text, Pressable, ScrollView } from "react-native"
 import { styles } from "./styles"
 import { useNavigation } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { peach, white } from "../../assets/colors/colors"
 import { createAnnouncement } from "../../firebase/ManageAnnouncements"
-import { createEvent } from "../../firebase/ManageEvents"
 import InputField from "../../components/InputField/InputField"
 import MyDateInputComponent from "../../components/DatePicker/DatePicker"
-import { RegistrationContext } from "../../contexts/RegistrationContext"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 interface EventCreationScreenProps {
-  isAnnouncement?: boolean
+  isAnnouncement: undefined | boolean
 }
 
 const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
+  // const firstRef = React.useRef<TextInput>(null)
   const navigation = useNavigation()
   const [dateModal, setDateModal] = useState(false)
   const [date, setDate] = useState<Date>(new Date())
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
 
   const [title, setTitle] = useState("")
+  const [description] = useState("lorem ipsum")
   const [location, setLocation] = useState("")
-  const insets = useSafeAreaInsets()
   const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
 
-  const { description, setDescription } = useContext(RegistrationContext)
+  // const [imageUrl, setImageUrl] = useState("")
+  //  const [point, setPoint] = useState({ x: 47.238458, y: 5.984155 })
 
+  // const newEvent = async () => {
+  //   console.log("Creating event")
+  //   await createEvent("uid2", title, description, new Date(2025, 0, 1), { x: 47.238458, y: 5.984155 }, location, "imageUrl")
+  // }
   const opacity = !hasBeenTouched ? 0.2 : 1
 
-  const publish = async () => {
-    // send the data to the backend
-    console.log("Publishing event...")
-    console.log("Title:", title)
-    console.log("Location:", location)
-    console.log("Description:", description)
-    console.log("Date:", date.toDateString())
-    console.log("Interests:", interests)
-
-    if (isAnnouncement) {
-      await createAnnouncement(
-        "0",
-        title,
-        location,
-        { x: 47.238458, y: 5.984155 },
-        description,
-        interests,
-        date.toDateString()
-      )
-    } else {
-      await createEvent(
-        "0",
-        title,
-        description,
-        date,
-        { x: 47.238458, y: 5.984155 },
-        location,
-        "imageUrl"
-      )
-    }
-
-    // after the user has filled out the form
-    // we should make sure the global state is cleaned
-    setDescription("")
+  const newAnnouncement = async () => {
+    await createAnnouncement(
+      "0",
+      title,
+      location,
+      { x: 47.238458, y: 5.984155 },
+      description,
+      interests,
+      date.toDateString()
+    )
   }
 
   return (
     <ScrollView style={styles.container}>
-      <View style={[styles.header, { paddingTop: insets.top + 5 }]}>
+      <View style={styles.header}>
         <Pressable onPress={() => navigation.goBack()} testID="back-button">
           <Ionicons name="arrow-back-outline" size={24} color={peach} />
         </Pressable>
@@ -88,24 +67,22 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
           <Text style={[styles.tagsTitle, globalStyles.text]}>
             Choose up to three tags
           </Text>
-
-          <Pressable onPress={() => alert("Coming in the next sprint")}>
-            <View style={styles.tags}>
-              {[...Array(3)].map((_, index) => (
-                <View style={styles.addTag} key={index}>
-                  <Ionicons name="add" size={24} color={white} />
-                </View>
-              ))}
+          <View style={styles.tags}>
+            <View style={styles.addTag}>
+              <Ionicons name="add" size={24} color={white} />
             </View>
-          </Pressable>
+            <View style={styles.addTag}>
+              <Ionicons name="add" size={24} color={white} />
+            </View>
+            <View style={styles.addTag}>
+              <Ionicons name="add" size={24} color={white} />
+            </View>
+          </View>
         </View>
         {!isAnnouncement && (
           <View style={styles.eventDetailsContainer}>
             {dateModal && (
               <MyDateInputComponent
-                maximumDate={
-                  new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-                }
                 date={date}
                 setDate={setDate}
                 setDateModal={setDateModal}
@@ -117,41 +94,47 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
               value={location}
               onChangeText={setLocation}
             />
-            <Pressable
-              style={styles.section}
-              onPress={() => {
-                setDateModal(true)
-                setHasBeenTouched(true)
-              }}
-            >
-              <Text style={[styles.label, globalStyles.text]}>{"Date*"}</Text>
-              <View style={styles.input}>
-                <Text style={[globalStyles.text, { opacity: opacity }]}>
-                  {!hasBeenTouched
-                    ? "DD.MM.YYYY"
-                    : "" +
-                      date.getUTCDate().toString() +
-                      "." +
-                      (date.getUTCMonth() + 1).toString() +
-                      "." +
-                      date.getFullYear().toString() +
-                      ""}
-                </Text>
-              </View>
-            </Pressable>
           </View>
         )}
+        <Pressable
+          style={styles.section}
+          onPress={() => {
+            setDateModal(true)
+            setHasBeenTouched(true)
+          }}
+        >
+          <Text style={[styles.label, globalStyles.text]}>
+            {"Date of Birth*"}
+          </Text>
+          <View style={styles.input}>
+            <Text style={[globalStyles.text, { opacity: opacity }]}>
+              {!hasBeenTouched
+                ? "JJ.MM.YYYY"
+                : "" +
+                  date.getUTCDate().toString() +
+                  "." +
+                  (date.getUTCMonth() + 1).toString() +
+                  "." +
+                  date.getFullYear().toString() +
+                  ""}
+            </Text>
+          </View>
+        </Pressable>
         <View style={styles.bottomButtons}>
           <Pressable style={styles.buttonBase}>
             <Text
-              onPress={() => navigation.navigate("Description" as never)}
+              onPress={() =>
+                navigation.navigate("Description" as never, {} as never)
+              }
               style={globalStyles.boldText}
             >
               Add a description
             </Text>
           </Pressable>
-          <Pressable style={styles.buttonBase} onPress={publish}>
-            <Text style={globalStyles.boldText}>Validate</Text>
+          <Pressable style={styles.buttonBase}>
+            <Text onPress={newAnnouncement} style={globalStyles.boldText}>
+              Validate
+            </Text>
           </Pressable>
         </View>
       </View>
