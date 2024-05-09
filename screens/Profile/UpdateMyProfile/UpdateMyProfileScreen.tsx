@@ -49,6 +49,26 @@ export const UpdateMyProfileScreen = () => {
           <Text>Update my profile picture</Text>
         </Pressable>
       }
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
+      <Text>soon</Text>
     </View>
   )
 }
