@@ -17,5 +17,10 @@ export const styles = StyleSheet.create({
         marginTop: 5,
         width: "auto",
     },
+    uniqueButton: {
+        marginLeft: "40%",
+        marginRight: "10%",
+        width: "50%",
+    },
     
 })

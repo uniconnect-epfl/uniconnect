@@ -40,7 +40,7 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
       if(scannedUser === null || scannedUser === undefined){
         showErrorToast("User not found")
       } else {
-        navigation.navigate("AddContact", {uid: id})
+        navigation.navigate("ExternalProfile", {uid: id})
       }
     }
   }
@@ -54,9 +54,6 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
     if(linkScanned){
       const path = linkScanned.replace(Linking.createURL("/"), "")
       const [route, id] = path.split("/")
-      console.log(path)
-      console.log(route)
-      console.log(id)
       if(route === "contact") handleUser(id)
       else if (route === "event") handleEvent(id)
       else showErrorToast("Qr code not recognized")
