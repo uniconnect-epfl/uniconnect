@@ -37,6 +37,7 @@ import {
 
 import { black, peach, transparent } from "../../../assets/colors/colors"
 import { globalStyles } from "../../../assets/global/globalStyles"
+import { showErrorToast } from "../../ToastMessage/toast"
 
 // Constants used for the gestures
 const DOUBLE_PRESS_DURATION = 200 // When the press is more longer than 100ms, we consider that it is intended for dragging a node
@@ -343,25 +344,36 @@ const ForceDirectedGraph: React.FC<{
         }}
         onLongPress={() => {
           Vibration.vibrate()
-          if (getNodeById(graph, node.id).magicSelected) {
-            zoomAndTranslate(
-              INITIAL_SCALE,
-              (CENTER_WIDTH - coordX(getNodeById(graph, constrainedNodeId))) *
-                scale,
-              (CENTER_HEIGHT - coordY(getNodeById(graph, constrainedNodeId))) *
-                scale
-            )
-          } else {
-            zoomAndTranslate(
-              INITIAL_SCALE,
-              (CENTER_WIDTH - coordX(node)) * scale,
-              (CENTER_HEIGHT - coordY(node)) * scale
-            )
-          }
-          setTimeout(() => {
-            onMagicPress(node.id)
+          if (node.level > 2) {
+            showErrorToast("You can only view friends of friends")
             setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-          }, 2 * ANIMATION_DURATION)
+          } else {
+            if (magicNodeId === "" && node.id === constrainedNodeId) {
+              showErrorToast(
+                "You cannot unselect without selecting a node first"
+              )
+              setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
+            } else if (getNodeById(graph, node.id).magicSelected) {
+              zoomAndTranslate(
+                INITIAL_SCALE,
+                (CENTER_WIDTH - coordX(getNodeById(graph, constrainedNodeId))) *
+                  scale,
+                (CENTER_HEIGHT -
+                  coordY(getNodeById(graph, constrainedNodeId))) *
+                  scale
+              )
+            } else {
+              zoomAndTranslate(
+                INITIAL_SCALE,
+                (CENTER_WIDTH - coordX(node)) * scale,
+                (CENTER_HEIGHT - coordY(node)) * scale
+              )
+            }
+            setTimeout(() => {
+              onMagicPress(node.id)
+              setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
+            }, 2 * ANIMATION_DURATION)
+          }
         }}
       >
         {/* Profile picture of the node */}
