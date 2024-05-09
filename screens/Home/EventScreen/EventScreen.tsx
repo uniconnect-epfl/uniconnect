@@ -12,7 +12,7 @@ import { showErrorToast } from '../../../components/ToastMessage/toast'
 import { Event } from '../../../types/Event'
 
 interface EventsScreenProps {
-  onEventPress: (announcement: Event) => void
+  onEventPress: (event: Event) => void
 }
 
 const EventScreen = ({ onEventPress }: EventsScreenProps) => {
@@ -65,7 +65,7 @@ const EventScreen = ({ onEventPress }: EventsScreenProps) => {
       setFilteredPastEvents(pastEvents)
     }
 
-  }, [searchQuery])
+  }, [futureEvents, pastEvents, searchQuery])
 
   useEffect(() => {
     setSections([
@@ -99,6 +99,7 @@ const EventScreen = ({ onEventPress }: EventsScreenProps) => {
         <TouchableOpacity 
           key={event.uid}  // Ensure each child has a unique key
           style={[styles.cardContainer, event.title === "dummy" ? styles.transparent : {}]}
+          onPress={() => {if(event.title != "dummy") onEventPress(event)}}
           disabled={event.title === "dummy"}
         >
           <EventCard {...event} />
