@@ -18,11 +18,17 @@ import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
 
 interface ContactGraphProps {
   onContactPress: (uid: string) => void
+  onMagicPress: (uid: string) => void
   graph: Graph
   userId: string
 }
 
-const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
+const ContactGraph = ({
+  onContactPress,
+  graph,
+  userId,
+  onMagicPress,
+}: ContactGraphProps) => {
   const [searchText, setSearchText] = useState("")
   const [modalVisible, setModalVisible] = useState(false)
   const [clickedNode, setClickedNode] = useState<Node>(
@@ -66,6 +72,7 @@ const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
             graph={graph}
             constrainedNodeId={userId}
             onModalPress={onModalPress}
+            onMagicPress={onMagicPress}
           />
         </View>
       </View>

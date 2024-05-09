@@ -71,18 +71,9 @@ export default class Graph {
       level: 1,
     })
 
-    // Create a set to keep track of visited nodes to avoid duplicates
-    const visited = new Set<string>()
-    visited.add(userId)
-
     // Add the friends of the user
     if (user.friends) {
       for (const friendId of user.friends) {
-        // If the friend has already been visited, skip to the next friend
-        if (visited.has(friendId)) {
-          continue
-        }
-
         // Find the friend in the provided contacts
         const friend = contacts.find(
           (contact) => contact.uid === friendId
@@ -90,9 +81,6 @@ export default class Graph {
 
         // If the friend is not found, skip to the next friend
         if (!friend) continue
-
-        // Mark the friend as visited
-        visited.add(friendId)
 
         // Add the friend to the graph
         this.nodes.push({
@@ -129,11 +117,6 @@ export default class Graph {
         }
         // For each friend of the friend, add the friend to the graph and a link between the friend and the friend of the friend
         for (const friendOfFriendId of friend.friends) {
-          // If the friend of the friend has already been visited, skip to the next friend of the friend
-          if (visited.has(friendOfFriendId)) {
-            continue
-          }
-
           // Find the friend of the friend in the provided contacts
           const friendOfFriend = contacts.find(
             (contact) => contact.uid === friendOfFriendId
@@ -143,9 +126,6 @@ export default class Graph {
           if (!friendOfFriend) {
             continue
           }
-
-          // Mark the friend of the friend as visited
-          visited.add(friendOfFriendId)
 
           // Add the friend of the friend to the graph
           this.nodes.push({
@@ -177,6 +157,18 @@ export default class Graph {
  */
 function addNode(graph: Graph, node: Node): void {
   graph.nodes.push(node)
+}
+
+function addContactNode(graph: Graph, contact: Contact, level: number): void {
+  graph.nodes.push({
+    id: contact.uid,
+    x: 0,
+    y: 0,
+    dx: 0,
+    dy: 0,
+    contact,
+    level,
+  })
 }
 
 /**
@@ -280,6 +272,7 @@ export {
   Node,
   Link,
   addNode,
+  addContactNode,
   addLink,
   getNodeById,
   getNodes,

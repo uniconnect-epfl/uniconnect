@@ -17,7 +17,7 @@ import { User } from "../../../types/User"
 import { getUserData } from "../../../firebase/User"
 import LoadingScreen from "../../Loading/LoadingScreen"
 
-interface MyProfileScreenProps{
+interface MyProfileScreenProps {
   navigation: NavigationProp<ParamListBase>
 }
 
@@ -30,7 +30,7 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
-      if(userId){
+      if (userId) {
         setUser(await getUserData(userId))
       }
       setLoading(false)
@@ -38,8 +38,8 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
     fetchData()
   }, [userId])
 
-  if(loading || !user){
-    return <LoadingScreen/>
+  if (loading || !user) {
+    return <LoadingScreen />
   }
   return (
     <View style={styles.container}>
@@ -75,10 +75,7 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
           </View>
         </View>
 
-
-        <ExpandableDescription
-          description={user.description}
-        />
+        <ExpandableDescription description={user.description} />
 
         <SectionTabs
           tabs={["Events", "Interests"]}

@@ -7,9 +7,20 @@ import { NavigationProp, ParamListBase } from "@react-navigation/native"
 import ContactList from "./ContactList/ContactList"
 import ContactGraph from "./ContactGraph/ContactGraph"
 import { mockContacts } from "./mockContacts"
-import Graph from "../../components/Graph/Graph"
+import { mockContactsL2 } from "./mockContactsL2"
+import Graph, {
+  addContactNode,
+  addLink,
+  deleteNode,
+  setInitialized,
+} from "../../components/Graph/Graph"
 import { Contact } from "../../types/Contact"
 import AsyncStorage from "@react-native-async-storage/async-storage"
+
+// import { User } from "../../types/User"
+import { getUserData } from "../../firebase/User"
+// import { getAuth } from "firebase/auth"
+// import { get } from "http"
 
 const GRAPH_STORAGE_KEY = "graph"
 const GRAPH_EXISTENCE_FLAG_KEY = "graph_exists"
@@ -20,36 +31,66 @@ interface ContactListScreenProps {
 
 const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
   const [graph, setGraph] = useState<Graph>()
+  const [magicNeighbors, setMagicNeighbors] = useState<string[]>([])
 
-  useEffect(() => {
-    const loadGraphData = async () => {
-      try {
-        // Check if the graph data exists in AsyncStorage
-        const graphData = await AsyncStorage.getItem(GRAPH_STORAGE_KEY)
-        if (graphData) {
-          // If the data exists, parse it and set the graph state
-          const parsedGraph = JSON.parse(graphData)
-          setGraph(parsedGraph)
-        } else {
-          // If the data doesn't exist, create the graph from contacts
-          const newGraph = createGraphfromContacts(mockContacts, "0")
-          // Store the graph data in AsyncStorage
-          await AsyncStorage.setItem(
-            GRAPH_STORAGE_KEY,
-            JSON.stringify(newGraph)
-          )
+  const [magicPressedID, setMagicPressedID] = useState<string>("")
 
-          await AsyncStorage.setItem(GRAPH_EXISTENCE_FLAG_KEY, "true")
-          // Set the graph state
-          setGraph(newGraph)
-        }
-      } catch (error) {
-        console.error("Error loading graph data:", error)
+  // const [user, setUser] = useState<User | null>(null)
+  const [userId, setUserId] = useState<string | null>("0")
+  // const [friends, setFriends] = useState<string[] | null>(null)
+
+  const onMagicPress = (uid: string) => {
+    if (graph) {
+      if (magicPressedID === uid) {
+        console.log("Resetting graph")
+        setMagicPressedID("")
+        magicNeighbors.forEach((neighbor) => {
+          deleteNode(graph, neighbor)
+        })
+        setMagicNeighbors([])
+        setInitialized(graph, false)
+        setUserId("0")
+      } else {
+        console.log("USER ID: ", userId)
+        // friendsFromUID(uid).then((friends) => {
+        //   const newContacts = createContactListFromUsers(friends)
+        //   newContacts.forEach((contact) => {
+        //     addContactNode(graph, contact, 3)
+        //     addLink(graph, uid, contact.uid)
+        //   })
+        // })
+
+        const newContacts = mockContactsL2
+        newContacts.forEach((contact) => {
+          addContactNode(graph, contact, 3)
+          addLink(graph, uid, contact.uid)
+        })
+        setMagicNeighbors(newContacts.map((contact) => contact.uid))
+        setMagicPressedID(uid)
+        setUserId(uid)
+        setInitialized(graph, false)
       }
     }
+  }
 
-    // Load graph data when the component mounts
-    loadGraphData()
+  useEffect(() => {
+    console.log("User ID: ", userId)
+    const fetchData = async () => {
+      if (userId) {
+        setUser(await getUserData(userId))
+      }
+    }
+    fetchData()
+    // if (user?.friends) {
+    //   setFriends(user?.friends)
+    // }
+  }, [userId])
+
+  useEffect(() => {
+    console.log("Magic Pressed ID: ", magicPressedID)
+    loadGraphData().then((graph) => {
+      setGraph(graph)
+    })
   }, [])
 
   const [selectedTab, setSelectedTab] = useState("Plain View")
@@ -86,13 +127,48 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
             navigation.navigate("ExternalProfile", { uid: uid })
           }
           graph={graph}
-          userId="0"
+          userId={userId ?? "0"}
+          onMagicPress={onMagicPress}
         />
       )}
     </View>
   )
 }
 
+// async function friendsFromUID(uid: string): Promise<string[]> {
+//   const user = await getUserData(uid)
+//   if (!user) {
+//     return []
+//   } else {
+//     return user.friends ?? []
+//   }
+// }
+
+// function createContactListFromUsers(friends: string[]): Contact[] {
+//   const contacts: Contact[] = []
+//   friends.forEach((friendID) => {
+//     const fetchData = async () => {
+//       if (friendID) {
+//         const friend = await getUserData(friendID)
+//         const contact: Contact = {
+//           uid: friend?.uid ?? "-1",
+//           firstName: friend?.firstName ?? "",
+//           lastName: friend?.lastName ?? "",
+//           profilePictureUrl: "",
+//           description: friend?.description ?? "",
+//           location: friend?.location ?? "",
+//           interests: friend?.selectedInterests ?? [""],
+//           events: [""],
+//           friends: friend?.friends ?? [],
+//         }
+//         contacts.push(contact)
+//       }
+//     }
+//     fetchData()
+//   })
+
+//   return contacts
+// }
 function createGraphfromContacts(contacts: Contact[], uid: string): Graph {
   return new Graph(contacts, uid)
 }
@@ -110,6 +186,30 @@ const destroyGraphFileIfExists = async () => {
     }
   } catch (error) {
     console.error("Error destroying graph file:", error)
+  }
+}
+
+async function loadGraphData(): Promise<Graph> {
+  console.log("Loading graph data")
+  try {
+    const graphData = await AsyncStorage.getItem(GRAPH_STORAGE_KEY)
+    if (graphData) {
+      const parsedGraph = JSON.parse(graphData)
+      return parsedGraph
+    } else {
+      const newGraph = createGraphfromContacts(mockContacts, "0")
+      // const newGraph = createGraphfromContacts(
+      //   createContactListFromUsers(friends ?? []),
+      //   userId ?? "-1"
+      // )
+      await AsyncStorage.setItem(GRAPH_STORAGE_KEY, JSON.stringify(newGraph))
+
+      await AsyncStorage.setItem(GRAPH_EXISTENCE_FLAG_KEY, "true")
+      return newGraph
+    }
+  } catch (error) {
+    console.error("Error loading graph data:", error)
+    return new Graph([], "")
   }
 }
 
