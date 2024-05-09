@@ -1,6 +1,6 @@
 import React, { View, Text, Alert, TouchableOpacity } from 'react-native'
 import { RouteProp, useRoute } from '@react-navigation/native'
-import { Announcement } from '../../../types/Annoucements'
+import { Announcement } from '../../../types/Annoucement'
 import { styles } from './styles'
 import { viewDetailsStyles } from '../ViewDetailsStyles'
 import { globalStyles } from '../../../assets/global/globalStyles'
