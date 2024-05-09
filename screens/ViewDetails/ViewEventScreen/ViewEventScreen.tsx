@@ -5,24 +5,10 @@ import { Event } from '../../../types/Event'
 import { useEffect, useState } from 'react'
 import LoadingScreen from '../../Loading/LoadingScreen'
 import { viewDetailsStyles } from '../ViewDetailsStyles'
-import MapView, { Marker, PROVIDER_GOOGLE, Point } from 'react-native-maps'
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { globalStyles } from '../../../assets/global/globalStyles'
 import ProfilePicture from '../../../components/ProfilePicture/ProfilePicture'
-
-const dummyPoint: Point = {
-    x : 40.712776,
-    y : -74.005974
-}
-
-const dummyEvent: Event = {
-    uid: "1",
-    title: "Title of the event right at the start",
-    location: "Central Park",
-    point: dummyPoint,
-    date: new Date(), // current date and time
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Dolor morbi non arcu risus quis. Mattis molestie a iaculis at. Tristique risus nec feugiat in fermentum posuere urna. Quisque sagittis purus sit amet volutpat consequat mauris nunc. Sapien eget mi proin sed libero. Condimentum mattis pellentesque id nibh tortor id aliquet lectus proin. Suspendisse faucibus interdum posuere lorem. In mollis nunc sed id semper risus. Amet consectetur adipiscing elit ut aliquam purus. Integer enim neque volutpat ac.    ",
-    imageUrl: ""
-}
+import { getEventData } from '../../../firebase/ManageEvents'
 
 type RootStackParamList = {
     ViewEvent: {
@@ -43,7 +29,7 @@ const ViewEventScreen = () => {
     const fetchData = async () => {
       setLoading(true)
       if(eventUid){
-        setEvent(dummyEvent) // here we will need to fetch the event
+        setEvent(await getEventData(eventUid)) // here we will need to fetch the event
       }
       setLoading(false)
     }
