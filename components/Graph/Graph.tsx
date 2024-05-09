@@ -18,6 +18,7 @@ interface Node {
   dx: number
   dy: number
   selected?: boolean
+  magicSelected?: boolean
   contact: Contact
   level: number
 }

@@ -5,6 +5,7 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Vibration,
+  Animated,
 } from "react-native"
 import Svg, {
   Circle,
@@ -62,8 +63,6 @@ const MODAL_SCALE = 4 // Scale of the graph when a node is clicked
 
 // Constants used for the animation
 const ANIMATION_DURATION = 500 // Duration of the animation in milliseconds
-const FPS = 60 // Number of frames per second for smooth animation
-const TOTAL_FRAMES = FPS * (ANIMATION_DURATION / 1000) // Total number of frames
 
 /**
  *
@@ -75,9 +74,46 @@ const TOTAL_FRAMES = FPS * (ANIMATION_DURATION / 1000) // Total number of frames
 const ForceDirectedGraph: React.FC<{
   graph: Graph
   constrainedNodeId: string
+  magicNodeId: string
+  modalPressedOut: boolean
   onModalPress: (uid: string) => void
   onMagicPress: (uid: string) => void
-}> = ({ graph, constrainedNodeId, onModalPress, onMagicPress }) => {
+}> = ({
+  graph,
+  constrainedNodeId,
+  magicNodeId,
+  modalPressedOut,
+  onModalPress,
+  onMagicPress,
+}) => {
+  const [transitionScale] = useState(new Animated.Value(20))
+  const [transitionTranslateX] = useState(new Animated.Value(0))
+  const [transitionTranslateY] = useState(new Animated.Value(0))
+
+  const zoomAndTranslate = (
+    animationScale: number,
+    animationX: number,
+    animationY: number
+  ) => {
+    Animated.parallel([
+      Animated.timing(transitionScale, {
+        toValue: animationScale, // Change this value to adjust the zoom level
+        duration: ANIMATION_DURATION, // Adjust duration as needed
+        useNativeDriver: true, // Enable native driver for better performance
+      }),
+      Animated.timing(transitionTranslateX, {
+        toValue: animationX, // Change this value to adjust the target X coordinate
+        duration: ANIMATION_DURATION, // Adjust duration as needed
+        useNativeDriver: true,
+      }),
+      Animated.timing(transitionTranslateY, {
+        toValue: animationY, // Change this value to adjust the target Y coordinate
+        duration: ANIMATION_DURATION, // Adjust duration as needed
+        useNativeDriver: true,
+      }),
+    ]).start()
+  }
+
   // States to store the nodes, links and loading status
   const [nodes, setNodes] = useState<Node[]>([])
   const [links, setLinks] = useState<Link[]>([])
@@ -90,55 +126,19 @@ const ForceDirectedGraph: React.FC<{
     DEFAULT_CLICKED_NODE_ID
   )
 
-  const [scale, setScale] = useState(INITIAL_SCALE)
-  const [lastScale, setLastScale] = useState(INITIAL_SCALE) // Add state to keep track of last scale
-
-  // State to store the gesture enabled status (i.e., whether the user can interact with the graph or not)
-  const [gestureEnabled, setGestureEnabled] = useState(true)
+  const [scale, setScale] = useState(DEFAULT_SCALE)
+  const [lastScale, setLastScale] = useState(DEFAULT_SCALE) // Add state to keep track of last scale
 
   // Refs to store the press start time
   const pressStartRef = useRef(0)
-
   const lastPressRef = useRef(0)
 
   // Refs to store the pan and pinch gesture handlers
   const panRef = useRef(null)
   const pinchRef = useRef(null)
 
-  // Function to zoom in on a node when it is clicked
-  const nodeZoomOut = (SCALE: number) => {
-    setGestureEnabled(false) // Disable gestures while animating
-
-    const initialScale = lastScale
-    const scaleIncrement = (SCALE - initialScale) / TOTAL_FRAMES
-
-    let currentFrame = 0
-
-    const animateZoom = () => {
-      if (currentFrame <= TOTAL_FRAMES) {
-        const newScale = initialScale + scaleIncrement * currentFrame
-
-        setScale(newScale)
-
-        currentFrame++
-
-        requestAnimationFrame(animateZoom)
-      } else {
-        // When the animation is over do the following:
-        setGestureEnabled(true) // Re-enable gestures
-
-        // Fix the last and current scales value
-        setLastScale(SCALE)
-        setScale(SCALE)
-      }
-    }
-
-    // Start the animation
-    requestAnimationFrame(animateZoom)
-  }
-
   // Function to create a clip path for the nodes (i.e., to create a circular mask for the profile pictures of the nodes)
-  const createClipPath = (
+  const profilePictureMask = (
     id: string,
     cx: number,
     cy: number,
@@ -148,6 +148,12 @@ const ForceDirectedGraph: React.FC<{
       <Circle cx={cx} cy={cy} r={radius} />
     </ClipPath>
   )
+
+  useEffect(() => {
+    if (modalPressedOut) {
+      zoomAndTranslate(DEFAULT_SCALE, 0, 0)
+    }
+  }, [modalPressedOut])
 
   // Use effect to get the initial links, nodes and sizes
   useEffect(() => {
@@ -160,7 +166,7 @@ const ForceDirectedGraph: React.FC<{
         fruchtermanReingold(
           getNodes(graph),
           initialLinks,
-          constrainedNodeId,
+          magicNodeId == "" ? constrainedNodeId : magicNodeId,
           WIDTH,
           HEIGHT,
           MAX_ITERATIONS
@@ -172,10 +178,12 @@ const ForceDirectedGraph: React.FC<{
       // If the graph is already initialized, we don't need to run the algorithm again as the nodes are already positioned
       setNodes(getNodes(graph))
     }
+    transitionTranslateX.setValue(0)
+    transitionTranslateY.setValue(0)
+    zoomAndTranslate(DEFAULT_SCALE, 0, 0)
 
     setLoad(true)
-    nodeZoomOut(DEFAULT_SCALE)
-  }, [graph, constrainedNodeId])
+  }, [graph, constrainedNodeId, magicNodeId])
 
   // If the graph is not loaded, display an activity indicator
   if (!load) {
@@ -241,80 +249,10 @@ const ForceDirectedGraph: React.FC<{
     lastPressRef.current = Date.now()
   }
 
-  // Function to zoom in on a node when it is clicked
-  const nodeZoomIn = async (
-    clickedNode: Node,
-    SCALE: number,
-    callback = () => {}
-  ) => {
-    setGestureEnabled(false) // Disable gestures while animating
-
-    const initialScale = lastScale
-    const scaleIncrement = (SCALE - initialScale) / TOTAL_FRAMES
-
-    const initialOffsetX = totalOffset.x
-    const initialOffsetY = totalOffset.y
-
-    const targetOffsetX = initialOffsetX - (coordX(clickedNode) - CENTER_WIDTH)
-    const targetOffsetY = initialOffsetY - (coordY(clickedNode) - CENTER_HEIGHT)
-
-    let currentFrame = 0
-
-    const animateZoom = () => {
-      if (currentFrame <= TOTAL_FRAMES) {
-        const newScale = initialScale + scaleIncrement * currentFrame
-
-        const newOffsetX =
-          initialOffsetX +
-          ((targetOffsetX - initialOffsetX) * currentFrame) / TOTAL_FRAMES
-
-        const newOffsetY =
-          initialOffsetY +
-          ((targetOffsetY - initialOffsetY) * currentFrame) / TOTAL_FRAMES
-
-        setScale(newScale)
-        setTotalOffset({ x: newOffsetX, y: newOffsetY })
-
-        currentFrame++
-
-        requestAnimationFrame(animateZoom)
-      } else {
-        // When the animation is over do the following:
-        setGestureEnabled(true) // Re-enable gestures
-
-        // Fix the last and current scales value
-        setLastScale(SCALE)
-        setScale(SCALE)
-
-        setTotalOffset({ x: 0, y: 0 }) // Reset the total offset
-
-        // Fix the positions of the nodes
-        setNodes(
-          nodes.map((node) => ({
-            ...node,
-            x: coordX(node) - (coordX(clickedNode) - CENTER_WIDTH),
-            y: coordY(node) - (coordY(clickedNode) - CENTER_HEIGHT),
-          }))
-        )
-
-        callback()
-      }
-    }
-
-    // Start the animation
-    requestAnimationFrame(animateZoom)
-  }
-
   const coordX = (node: Node): number => {
     if (node === undefined) {
       return 0
     }
-    // If gesture is not enabled the animation is running and therefore the whole graph is moving
-    if (!gestureEnabled) {
-      return node.x + totalOffset.x
-    }
-
-    // When the animation is not running, we are either dragging a node or dragging the whole graph.
 
     // If clickedNodeID is equal to the default value, it means that no node is clicked, therefore the whole graph is dragged
     if (clickedNodeID == DEFAULT_CLICKED_NODE_ID) {
@@ -334,13 +272,6 @@ const ForceDirectedGraph: React.FC<{
     if (node === undefined) {
       return 0
     }
-
-    // If gesture is not enabled the animation is running and therefore the whole graph is moving
-    if (!gestureEnabled) {
-      return node.y + totalOffset.y
-    }
-
-    // When the animation is not running, we are either dragging a node or dragging the whole graph.
 
     // If clickedNodeID is equal to the default value, it means that no node is clicked, therefore the whole graph is dragged
     if (clickedNodeID == DEFAULT_CLICKED_NODE_ID) {
@@ -373,7 +304,7 @@ const ForceDirectedGraph: React.FC<{
     <G key={node.id + "group"}>
       {/* Apply the mask to the profile picture of the node */}
       <G key={`${node.id}-group-${coordX(node)}-${coordY(node)}`}>
-        {createClipPath(
+        {profilePictureMask(
           `clipPath-${node.id}`,
           coordX(node),
           coordY(node),
@@ -398,22 +329,38 @@ const ForceDirectedGraph: React.FC<{
           handlePressIn(
             () => {
               setClickedNodeID(node.id)
-              // startTimer(node.id)
             },
             () => {
-              nodeZoomIn(node, MODAL_SCALE, () => {
-                onModalPress(node.id)
-                setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-              })
+              onModalPress(node.id)
+              zoomAndTranslate(
+                MODAL_SCALE,
+                (CENTER_WIDTH - coordX(node)) * scale,
+                (CENTER_HEIGHT - coordY(node)) * scale
+              )
             }
           )
         }}
         onLongPress={() => {
-          nodeZoomIn(node, INITIAL_SCALE, () => {
-            Vibration.vibrate()
+          Vibration.vibrate()
+          if (getNodeById(graph, node.id).magicSelected) {
+            zoomAndTranslate(
+              INITIAL_SCALE,
+              (CENTER_WIDTH - coordX(getNodeById(graph, constrainedNodeId))) *
+                scale,
+              (CENTER_HEIGHT - coordY(getNodeById(graph, constrainedNodeId))) *
+                scale
+            )
+          } else {
+            zoomAndTranslate(
+              INITIAL_SCALE,
+              (CENTER_WIDTH - coordX(node)) * scale,
+              (CENTER_HEIGHT - coordY(node)) * scale
+            )
+          }
+          setTimeout(() => {
             onMagicPress(node.id)
             setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-          })
+          }, 2 * ANIMATION_DURATION)
         }}
       >
         {/* Profile picture of the node */}
@@ -458,7 +405,6 @@ const ForceDirectedGraph: React.FC<{
         onGestureEvent={handlePinchGestureEvent}
         onHandlerStateChange={handlePinchHandlerStateChange}
         simultaneousHandlers={panRef}
-        enabled={gestureEnabled}
         testID="pinch-handler"
       >
         <PanGestureHandler
@@ -468,21 +414,30 @@ const ForceDirectedGraph: React.FC<{
           minPointers={PAN_GESTURE_MIN_MAX_POINTERS}
           maxPointers={PAN_GESTURE_MIN_MAX_POINTERS}
           simultaneousHandlers={pinchRef}
-          enabled={gestureEnabled}
           testID="pan-handler"
         >
           <View style={styles.container}>
-            <Svg width={WIDTH} height={HEIGHT}>
-              <G
-                scale={scale}
-                originX={CENTER_WIDTH}
-                originY={CENTER_HEIGHT}
-                testID="group"
-              >
-                {LINKS}
-                {NODES}
-              </G>
-            </Svg>
+            <Animated.View
+              style={{
+                transform: [
+                  { scale: transitionScale },
+                  { translateX: transitionTranslateX },
+                  { translateY: transitionTranslateY },
+                ],
+              }}
+            >
+              <Svg width={WIDTH} height={HEIGHT}>
+                <G
+                  scale={scale}
+                  originX={CENTER_WIDTH}
+                  originY={CENTER_HEIGHT}
+                  testID="group"
+                >
+                  {LINKS}
+                  {NODES}
+                </G>
+              </Svg>
+            </Animated.View>
           </View>
         </PanGestureHandler>
       </PinchGestureHandler>

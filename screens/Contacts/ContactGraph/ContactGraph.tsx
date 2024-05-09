@@ -12,7 +12,7 @@ import Graph, {
 } from "../../../components/Graph/Graph"
 
 import ForceDirectedGraph from "../../../components/Graph/ForceDirectedGraph/ForceDirectedGraph"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
 import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
 
@@ -21,12 +21,14 @@ interface ContactGraphProps {
   onMagicPress: (uid: string) => void
   graph: Graph
   userId: string
+  magicUserId: string
 }
 
 const ContactGraph = ({
   onContactPress,
   graph,
   userId,
+  magicUserId,
   onMagicPress,
 }: ContactGraphProps) => {
   const [searchText, setSearchText] = useState("")
@@ -46,6 +48,10 @@ const ContactGraph = ({
   const onModalPressOut = () => {
     setModalVisible(false)
   }
+
+  useEffect(() => {
+    handleSearch(searchText, graph)
+  }, [magicUserId])
 
   return (
     // Dismiss the keyboard when the user taps outside of the search bar
@@ -71,6 +77,8 @@ const ContactGraph = ({
           <ForceDirectedGraph
             graph={graph}
             constrainedNodeId={userId}
+            magicNodeId={magicUserId}
+            modalPressedOut={!modalVisible}
             onModalPress={onModalPress}
             onMagicPress={onMagicPress}
           />

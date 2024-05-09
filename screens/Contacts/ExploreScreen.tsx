@@ -12,13 +12,14 @@ import Graph, {
   addContactNode,
   addLink,
   deleteNode,
+  getNodeById,
   setInitialized,
 } from "../../components/Graph/Graph"
 import { Contact } from "../../types/Contact"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
 // import { User } from "../../types/User"
-import { getUserData } from "../../firebase/User"
+// import { getUserData } from "../../firebase/User"
 // import { getAuth } from "firebase/auth"
 // import { get } from "http"
 
@@ -36,22 +37,22 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
   const [magicPressedID, setMagicPressedID] = useState<string>("")
 
   // const [user, setUser] = useState<User | null>(null)
-  const [userId, setUserId] = useState<string | null>("0")
+  // const [userId, setUserId] = useState<string | null>("0")
+
+  const userId = "0"
   // const [friends, setFriends] = useState<string[] | null>(null)
 
   const onMagicPress = (uid: string) => {
     if (graph) {
       if (magicPressedID === uid) {
-        console.log("Resetting graph")
+        setInitialized(graph, false)
+        getNodeById(graph, uid).magicSelected = false
         setMagicPressedID("")
         magicNeighbors.forEach((neighbor) => {
           deleteNode(graph, neighbor)
         })
         setMagicNeighbors([])
-        setInitialized(graph, false)
-        setUserId("0")
       } else {
-        console.log("USER ID: ", userId)
         // friendsFromUID(uid).then((friends) => {
         //   const newContacts = createContactListFromUsers(friends)
         //   newContacts.forEach((contact) => {
@@ -66,28 +67,27 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
           addLink(graph, uid, contact.uid)
         })
         setMagicNeighbors(newContacts.map((contact) => contact.uid))
+        getNodeById(graph, uid).magicSelected = true
         setMagicPressedID(uid)
-        setUserId(uid)
         setInitialized(graph, false)
       }
     }
   }
 
-  useEffect(() => {
-    console.log("User ID: ", userId)
-    const fetchData = async () => {
-      if (userId) {
-        setUser(await getUserData(userId))
-      }
-    }
-    fetchData()
-    // if (user?.friends) {
-    //   setFriends(user?.friends)
-    // }
-  }, [userId])
+  // useEffect(() => {
+  //   console.log("User ID: ", userId)
+  //   const fetchData = async () => {
+  //     if (userId) {
+  //       setUser(await getUserData(userId))
+  //     }
+  //   }
+  //   fetchData()
+  //   // if (user?.friends) {
+  //   //   setFriends(user?.friends)
+  //   // }
+  // }, [userId])
 
   useEffect(() => {
-    console.log("Magic Pressed ID: ", magicPressedID)
     loadGraphData().then((graph) => {
       setGraph(graph)
     })
@@ -121,13 +121,14 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
         />
       )}
 
-      {selectedTab === "Graph View" && graph && (
+      {selectedTab === "Graph View" && graph && userId && (
         <ContactGraph
           onContactPress={(uid) =>
             navigation.navigate("ExternalProfile", { uid: uid })
           }
           graph={graph}
-          userId={userId ?? "0"}
+          userId={userId}
+          magicUserId={magicPressedID}
           onMagicPress={onMagicPress}
         />
       )}
