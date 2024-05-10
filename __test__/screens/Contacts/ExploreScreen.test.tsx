@@ -164,4 +164,92 @@ describe("ExploreScreen", () => {
       await new Promise((resolve) => setTimeout(resolve, 2000))
     })
   })
+
+  it("magic press another node", async () => {
+    const component = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ExploreScreen navigation={mockNavigation} />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+    const button = component.getByText("Graph View")
+
+    await act(async () => {
+      fireEvent.press(button)
+    })
+
+    const node1 = component.getByTestId("node-1")
+
+    expect(node1).toBeTruthy()
+
+    await act(async () => {
+      fireEvent(node1, "longPress")
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+    })
+
+    const node2 = component.getByTestId("node-2")
+
+    await act(async () => {
+      fireEvent(node2, "longPress")
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+    })
+  })
+
+  it("magic press the constrained node first", async () => {
+    const component = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ExploreScreen navigation={mockNavigation} />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+    const button = component.getByText("Graph View")
+
+    await act(async () => {
+      fireEvent.press(button)
+    })
+
+    const node0 = component.getByTestId("node-0")
+
+    expect(node0).toBeTruthy()
+
+    await act(async () => {
+      fireEvent(node0, "longPress")
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+    })
+  })
+
+  it("magic press the constrained node second", async () => {
+    const component = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ExploreScreen navigation={mockNavigation} />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+    const button = component.getByText("Graph View")
+
+    await act(async () => {
+      fireEvent.press(button)
+    })
+
+    const node1 = component.getByTestId("node-1")
+
+    expect(node1).toBeTruthy()
+
+    await act(async () => {
+      fireEvent(node1, "longPress")
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+    })
+
+    const node0 = component.getByTestId("node-0")
+
+    expect(node0).toBeTruthy()
+
+    await act(async () => {
+      fireEvent(node0, "longPress")
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+    })
+  })
 })

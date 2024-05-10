@@ -180,7 +180,7 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
         />
       )}
 
-      {selectedTab === "Graph View" && graph && userId && (
+      {selectedTab === "Graph View" && graph && userId !== undefined && (
         <ContactGraph
           onContactPress={
             (/*uid*/) =>
