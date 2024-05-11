@@ -15,6 +15,10 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     margin: "3%"
   },
+  cardContainer: {
+    flex: 1,
+    padding: 10,
+  },
   containerEvent: {
     flex: 1,
   },
@@ -47,6 +51,11 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 10,
   },
+  row: {
+    flexDirection: 'row',
+    
+    justifyContent: 'space-evenly',
+  },
   searchAndMap: {
     alignItems: "center",
     flexDirection: "row",
@@ -66,7 +75,10 @@ export const styles = StyleSheet.create({
     letterSpacing: -0.5,
     paddingRight: 3
   },
+  transparent: {
+    opacity: 0,  
+   },
   view: {
     flex: 1,
-  }
+  },
 })

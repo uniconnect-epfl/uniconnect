@@ -20,33 +20,28 @@ type RootStackParamList = {
 
 const EventScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
-  const [futureEvents, setFutureEvents] = React.useState<Event[] | null>([])
-  const [pastEvents, setPastEvents] = React.useState<Event[] | null>([])
-  const [filteredFutureEvents, setFilteredFutureEvents] = React.useState<Event[] | null>([])
-  const [filteredPastEvents, setFilteredPastEvents] = React.useState<Event[] | null>([])
+  const [futureEvents, setFutureEvents] = React.useState<Event[]>([])
+  const [pastEvents, setPastEvents] = React.useState<Event[]>([])
+  const [filteredFutureEvents, setFilteredFutureEvents] = React.useState<Event[]>([])
+  const [filteredPastEvents, setFilteredPastEvents] = React.useState<Event[]>([])
+  const [sections, setSections] = React.useState<SectionListData<Event[], DefaultSectionT>[]>([])
   const [ searchQuery, setSearchQuery ] = React.useState("")
   const [loading, setLoading] = React.useState(true)
 
-  const handleSearch = (search: string) => {
-    setSearchQuery(search)
-    if (futureEvents === null || pastEvents === null) return
-    setFilteredFutureEvents(futureEvents.filter(event => event.title.toLowerCase().includes(searchQuery.toLowerCase())))
-    setFilteredPastEvents(pastEvents.filter(event => event.title.toLowerCase().includes(searchQuery.toLowerCase())))
-  }
-  useEffect(() => {
+  useEffect(
+    () => {
     const loadEvents = async () => {
+
       try {
         setLoading(true)
         const fetchedFutureEvents = await getAllFutureEvents() 
         const fetchedPastEvents = await getAllPastEvents()
         
-
         setFutureEvents(fetchedFutureEvents)
         setPastEvents(fetchedPastEvents)
 
         setFilteredFutureEvents(fetchedFutureEvents)
         setFilteredPastEvents(fetchedPastEvents)
-        
       }
       catch (error) {
         showErrorToast("Error fetching events. Please check your connection and try again.")
@@ -59,22 +54,64 @@ const EventScreen = () => {
     loadEvents()
   }, [])
 
-  const sections = [
-    { title: "Future Events", data: filteredFutureEvents },
-    { title: "Past Events", data: filteredPastEvents }
-  ]
-
-   const renderItem = ({ item }: SectionListRenderItemInfo<Event>) => (
-    <EventCard {...item} />
-  ) 
-
-  const renderSectionHeader = (info: { section: SectionListData<Event, DefaultSectionT> }) => (
+  const renderSectionHeader = (info : {section: SectionListData<Event[], DefaultSectionT>}) => (
     <View style={styles.sectionHeader} >
       <Text style={[globalStyles.boldText, styles.header]}>{info.section.title}</Text>
       <Pressable onPress={() => navigation.navigate("EventCreation" as never)} style={styles.iconText}>
         <Text style={[globalStyles.smallText, styles.text]}>Create an event</Text>
         <Ionicons name="create-outline" size={16}/>
       </Pressable>
+    </View>
+  )
+  useEffect(() => {
+    if (searchQuery) {
+      setFilteredFutureEvents(futureEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase())))
+      setFilteredPastEvents(pastEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase()))
+      )
+    } else {
+      setFilteredFutureEvents(futureEvents)
+      setFilteredPastEvents(pastEvents)
+    }
+
+  }, [searchQuery, futureEvents, pastEvents])
+
+  useEffect(() => {
+    setSections([
+      { title: "Future Events", data: groupEventsByTwo(filteredFutureEvents) },
+      { title: "Past Events", data: groupEventsByTwo(filteredPastEvents) }
+    ])
+  }, [filteredFutureEvents, filteredPastEvents])
+
+  
+
+  function groupEventsByTwo(events: Event[]) {
+    const grouped = []
+    for (let i = 0; i < events.length; i += 2) {
+      // Check if there is a pair to push, if not push the last single event with a dummy event
+      if (i + 1 < events.length) {
+        grouped.push([events[i], events[i + 1]])
+      } else {
+        // Push the last item with a dummy transparent item
+        grouped.push([events[i], { uid: 'dummy' + i, title: "dummy"} as Event])
+      }
+    }
+    return grouped
+  }
+  
+  
+
+
+  const renderItem = ({ item }: SectionListRenderItemInfo<Event[]>) => (
+    <View style={styles.row}>
+      {item.map((event) => (
+        <TouchableOpacity 
+          key={event.uid}  // Ensure each child has a unique key
+          style={[styles.cardContainer, event.title === "dummy" ? styles.transparent : {}]}
+          disabled={event.title === "dummy"}
+        >
+          <EventCard {...event} />
+        </TouchableOpacity>
+      ))}
     </View>
   )
 
@@ -88,8 +125,8 @@ const EventScreen = () => {
         <TextInput
           placeholder="Search..."
           style={styles.input}
-          onChangeText={handleSearch}
           value={searchQuery}
+          onChangeText={setSearchQuery}
         />
         <TouchableOpacity
           style={styles.map}
@@ -100,7 +137,7 @@ const EventScreen = () => {
       </View>
       <View style={styles.containerEvent}>
         <SectionList
-          sections={sections as SectionListData<Event, DefaultSectionT>[]}
+          sections={sections}
           renderItem={renderItem}
           renderSectionHeader={renderSectionHeader}
           showsVerticalScrollIndicator={false}
