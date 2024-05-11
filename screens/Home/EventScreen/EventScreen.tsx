@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
-import { View, Text, TextInput, SectionList, SectionListRenderItemInfo, SectionListData, DefaultSectionT } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { View, Text, TextInput, SectionList, SectionListRenderItemInfo, SectionListData, DefaultSectionT, TouchableOpacity } from 'react-native'
 import EventCard from '../../../components/EventCard/EventCard'
 import  {styles} from './../stylesScreen' // Ensure the paths are correct
 import {  useNavigation } from '@react-navigation/native'
@@ -32,7 +31,7 @@ const EventScreen = ({ onEventPress }: EventsScreenProps) => {
   useEffect(
     () => {
     const loadEvents = async () => {
-
+      console.log("loading events")
       try {
         const fetchedFutureEvents = await getAllFutureEvents() 
         const fetchedPastEvents = await getAllPastEvents()
