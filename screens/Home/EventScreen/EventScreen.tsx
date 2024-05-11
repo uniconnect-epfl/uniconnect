@@ -31,7 +31,6 @@ const EventScreen = ({ onEventPress }: EventsScreenProps) => {
   useEffect(
     () => {
     const loadEvents = async () => {
-      console.log("loading events")
       try {
         const fetchedFutureEvents = await getAllFutureEvents() 
         const fetchedPastEvents = await getAllPastEvents()
