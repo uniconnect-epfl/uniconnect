@@ -18,11 +18,19 @@ import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
 
 interface ContactGraphProps {
   onContactPress: (uid: string) => void
+  onMagicPress: (uid: string) => void
   graph: Graph
   userId: string
+  magicUserId: string
 }
 
-const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
+const ContactGraph = ({
+  onContactPress,
+  graph,
+  userId,
+  magicUserId,
+  onMagicPress,
+}: ContactGraphProps) => {
   const [searchText, setSearchText] = useState("")
   const [modalVisible, setModalVisible] = useState(false)
   const [clickedNode, setClickedNode] = useState<Node>(
@@ -39,6 +47,11 @@ const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
 
   const onModalPressOut = () => {
     setModalVisible(false)
+  }
+
+  const onMagicPressUpdate = (uid: string) => {
+    onMagicPress(uid)
+    handleSearch(searchText, graph)
   }
 
   return (
@@ -65,7 +78,10 @@ const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
           <ForceDirectedGraph
             graph={graph}
             constrainedNodeId={userId}
+            magicNodeId={magicUserId}
+            modalPressedOut={!modalVisible}
             onModalPress={onModalPress}
+            onMagicPress={onMagicPressUpdate}
           />
         </View>
       </View>

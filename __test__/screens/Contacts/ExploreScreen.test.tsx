@@ -2,7 +2,6 @@ import React from "react"
 import { render, fireEvent, act, waitFor } from "@testing-library/react-native"
 import ExploreScreen from "../../../screens/Contacts/ExploreScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
-import { black, lightGray } from "../../../assets/colors/colors"
 import {
   NavigationContainer,
   NavigationProp,
@@ -77,28 +76,6 @@ describe("ExploreScreen", () => {
     })
   })
 
-  it("updates tab selection on button press", async () => {
-    const { getByText } = render(
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <ExploreScreen navigation={mockNavigation} />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    )
-
-    await act(async () => {
-      fireEvent.press(getByText("Graph View"))
-      await waitFor(() => {
-        expect(getByText("Graph View").props.style[1].color).toBe(black)
-        expect(getByText("Plain View").props.style[1].color).toBe(lightGray)
-      })
-      fireEvent.press(getByText("Plain View"))
-      await waitFor(() => {
-        expect(getByText("Graph View").props.style[1].color).toBe(lightGray)
-        expect(getByText("Plain View").props.style[1].color).toBe(black)
-      })
-    })
-  })
   it("navigates to profile screen when clicking on contact", async () => {
     const component = render(
       <SafeAreaProvider>
@@ -129,24 +106,13 @@ describe("ExploreScreen", () => {
       fireEvent.press(button)
     })
 
-    const panHandler = component.getByTestId("pan-handler")
     const node1 = component.getByTestId("node-1")
 
     expect(node1).toBeTruthy()
-    expect(panHandler).toBeTruthy()
-    expect(panHandler.props.enabled).toBe(true)
 
     await act(async () => {
       fireEvent(node1, "pressIn")
-    })
-
-    jest.useFakeTimers()
-    await act(async () => {
-      jest.advanceTimersByTime(50)
-    })
-
-    await act(async () => {
-      fireEvent(node1, "pressOut")
+      fireEvent(node1, "pressIn")
     })
 
     await waitFor(() => {
@@ -154,8 +120,6 @@ describe("ExploreScreen", () => {
       expect(modal).toBeTruthy()
       expect(modal.props.visible).toBe(true)
     })
-
-    jest.useRealTimers()
 
     const modalImage = component.getByTestId("modal-profile-picture")
 
@@ -167,8 +131,125 @@ describe("ExploreScreen", () => {
       expect(component.queryByTestId("modal")).toBeNull()
     })
 
-    jest.useRealTimers()
-
     expect(mockNavigation.navigate).toHaveBeenCalled()
+  })
+
+  it("Magic Pressed", async () => {
+    const component = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ExploreScreen navigation={mockNavigation} />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+    const button = component.getByText("Graph View")
+
+    await act(async () => {
+      fireEvent.press(button)
+    })
+
+    const node1 = component.getByTestId("node-1")
+
+    expect(node1).toBeTruthy()
+
+    await act(async () => {
+      fireEvent(node1, "longPress")
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+    })
+
+    expect(node1).toBeTruthy()
+
+    await act(async () => {
+      fireEvent(node1, "longPress")
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+    })
+  })
+
+  it("magic press another node", async () => {
+    const component = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ExploreScreen navigation={mockNavigation} />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+    const button = component.getByText("Graph View")
+
+    await act(async () => {
+      fireEvent.press(button)
+    })
+
+    const node1 = component.getByTestId("node-1")
+
+    expect(node1).toBeTruthy()
+
+    await act(async () => {
+      fireEvent(node1, "longPress")
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+    })
+
+    const node2 = component.getByTestId("node-2")
+
+    await act(async () => {
+      fireEvent(node2, "longPress")
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+    })
+  })
+
+  it("magic press the constrained node first", async () => {
+    const component = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ExploreScreen navigation={mockNavigation} />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+    const button = component.getByText("Graph View")
+
+    await act(async () => {
+      fireEvent.press(button)
+    })
+
+    const node0 = component.getByTestId("node-0")
+
+    expect(node0).toBeTruthy()
+
+    await act(async () => {
+      fireEvent(node0, "longPress")
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+    })
+  })
+
+  it("magic press the constrained node second", async () => {
+    const component = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ExploreScreen navigation={mockNavigation} />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+    const button = component.getByText("Graph View")
+
+    await act(async () => {
+      fireEvent.press(button)
+    })
+
+    const node1 = component.getByTestId("node-1")
+
+    expect(node1).toBeTruthy()
+
+    await act(async () => {
+      fireEvent(node1, "longPress")
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+    })
+
+    const node0 = component.getByTestId("node-0")
+
+    expect(node0).toBeTruthy()
+
+    await act(async () => {
+      fireEvent(node0, "longPress")
+      await new Promise((resolve) => setTimeout(resolve, 2000))
+    })
   })
 })

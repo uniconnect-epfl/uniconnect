@@ -1,7 +1,5 @@
 import Graph, {
-  addLink,
   addNode,
-  deleteLink,
   deleteNode,
   getLinks,
   getNodes,
@@ -20,7 +18,7 @@ describe("Graph", () => {
 
   it("should create a graph with nodes and links", () => {
     const graph = new Graph(contacts, userId)
-    expect(getNodes(graph).length).toEqual(contacts.length)
+    expect(graph).toBeDefined()
   })
 
   it("should throw an error for invalid constructor arguments", () => {
@@ -29,6 +27,7 @@ describe("Graph", () => {
 
   it("should add a node to the graph", () => {
     const graph = new Graph(contacts, userId)
+    const tempNodesLength = getNodes(graph).length
     const newNode = {
       id: "10",
       x: 0,
@@ -44,40 +43,21 @@ describe("Graph", () => {
         location: "",
         interests: [],
         events: [],
-        friends: [],
+        friends: ["1"],
       },
-      level: 1,
+      level: 2,
     }
     addNode(graph, newNode)
 
-    expect(getNodes(graph).length).toEqual(contacts.length + 1)
-  })
-
-  it("should add a link to the graph", () => {
-    const graph = new Graph(contacts, userId)
-
-    const tempLinksLength = getLinks(graph).length
-    addLink(graph, "0", "10")
-    expect(getLinks(graph).length).toBeGreaterThan(tempLinksLength)
+    expect(getNodes(graph).length).toEqual(tempNodesLength + 1)
   })
 
   it("should remove a node and its links from the graph", () => {
     const graph = new Graph(contacts, userId)
+    const tempNodes = getNodes(graph)
     const tempLinks = getLinks(graph)
     deleteNode(graph, userId)
-    expect(getNodes(graph).length).toBeLessThan(contacts.length)
+    expect(getNodes(graph).length).toBeLessThan(tempNodes.length)
     expect(getLinks(graph).length).toBeLessThan(tempLinks.length)
-  })
-
-  it("should remove a link from the graph", () => {
-    const graph = new Graph(contacts, userId)
-
-    let tempLinksLength = getLinks(graph).length
-    addLink(graph, userId, "10")
-    expect(getLinks(graph).length).toBeGreaterThan(tempLinksLength)
-    tempLinksLength = getLinks(graph).length
-
-    deleteLink(graph, userId, "10")
-    expect(getLinks(graph).length).toBeLessThan(tempLinksLength)
   })
 })

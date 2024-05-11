@@ -18,6 +18,7 @@ interface Node {
   dx: number
   dy: number
   selected?: boolean
+  magicSelected?: boolean
   contact: Contact
   level: number
 }
@@ -42,6 +43,7 @@ export default class Graph {
   nodes: Node[]
   links: Link[]
   initialized: boolean
+  userId: string
 
   /**
    * Constructor for the Graph class
@@ -61,6 +63,8 @@ export default class Graph {
       throw new Error("User not found in contacts")
     }
 
+    this.userId = userId
+
     this.nodes.push({
       id: userId,
       x: 0,
@@ -71,18 +75,9 @@ export default class Graph {
       level: 1,
     })
 
-    // Create a set to keep track of visited nodes to avoid duplicates
-    const visited = new Set<string>()
-    visited.add(userId)
-
     // Add the friends of the user
     if (user.friends) {
       for (const friendId of user.friends) {
-        // If the friend has already been visited, skip to the next friend
-        if (visited.has(friendId)) {
-          continue
-        }
-
         // Find the friend in the provided contacts
         const friend = contacts.find(
           (contact) => contact.uid === friendId
@@ -90,9 +85,6 @@ export default class Graph {
 
         // If the friend is not found, skip to the next friend
         if (!friend) continue
-
-        // Mark the friend as visited
-        visited.add(friendId)
 
         // Add the friend to the graph
         this.nodes.push({
@@ -111,60 +103,6 @@ export default class Graph {
           target: friendId,
         })
       }
-
-      // Add the friends of the friends of the user
-      for (const friendId of user.friends) {
-        // Find the friend in the provided contacts
-        const friend = contacts.find(
-          (contact) => contact.uid === friendId
-        ) as Contact
-
-        // If the friend is not found, skip to the next friend
-        if (!friend) {
-          continue
-        }
-
-        if (!friend.friends) {
-          continue
-        }
-        // For each friend of the friend, add the friend to the graph and a link between the friend and the friend of the friend
-        for (const friendOfFriendId of friend.friends) {
-          // If the friend of the friend has already been visited, skip to the next friend of the friend
-          if (visited.has(friendOfFriendId)) {
-            continue
-          }
-
-          // Find the friend of the friend in the provided contacts
-          const friendOfFriend = contacts.find(
-            (contact) => contact.uid === friendOfFriendId
-          ) as Contact
-
-          // If the friend of the friend is not found, skip to the next friend of the friend
-          if (!friendOfFriend) {
-            continue
-          }
-
-          // Mark the friend of the friend as visited
-          visited.add(friendOfFriendId)
-
-          // Add the friend of the friend to the graph
-          this.nodes.push({
-            id: friendOfFriendId,
-            x: 0,
-            y: 0,
-            dx: 0,
-            dy: 0,
-            contact: friendOfFriend,
-            level: 3,
-          })
-
-          // Add a link between the friend and the friend of the friend
-          this.links.push({
-            source: friendId,
-            target: friendOfFriendId,
-          })
-        }
-      }
     }
   }
 }
@@ -177,6 +115,28 @@ export default class Graph {
  */
 function addNode(graph: Graph, node: Node): void {
   graph.nodes.push(node)
+}
+
+function addContactNode(graph: Graph, contact: Contact, level: number): void {
+  // Add all relevant links
+
+  graph.nodes.push({
+    id: contact.uid,
+    x: 0,
+    y: 0,
+    dx: 0,
+    dy: 0,
+    contact,
+    level,
+  })
+  // Add a link between the contact and its friends
+  if (contact.friends) {
+    for (const friendId of contact.friends) {
+      if (getNodeById(graph, friendId)) {
+        addLink(graph, contact.uid, friendId)
+      }
+    }
+  }
 }
 
 /**
@@ -280,6 +240,7 @@ export {
   Node,
   Link,
   addNode,
+  addContactNode,
   addLink,
   getNodeById,
   getNodes,

@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     flexWrap: "wrap",
     marginBottom: 10,
-    overflow: "hidden", // Hide overflow content
+    overflow: "hidden",
     width: "100%",
   },
   searchBar: {
