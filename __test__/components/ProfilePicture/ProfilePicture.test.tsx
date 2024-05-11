@@ -12,5 +12,14 @@ describe("ProfilePicture", () => {
         />)
     expect(component).toBeTruthy()
   })
+
+  it("renders image", () => {
+    const component = render(
+        <ProfilePicture
+            size={50}
+            pictureUrl="../../../assets/icon.png"
+        />)
+    expect(component).toBeTruthy()
+  })
   
 })
