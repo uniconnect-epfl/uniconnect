@@ -49,7 +49,8 @@ jest.mock('@react-navigation/native', () => {
 jest.mock('../../../firebase/ManageEvents', () => ({
   getAllFutureEvents: jest.fn(() => Promise.resolve([
     { id: '1', title: 'Future Event 1', date: '2024-01-01' },
-    { id: '2', title: 'Future Event 2', date: '2024-01-02' }
+    { id: '2', title: 'Future Event 2', date: '2024-01-02' },
+    { id: '3', title: 'Future Event 3', date: '2024-01-03' }
   ])),
   getAllPastEvents: jest.fn(() => Promise.resolve([
     { id: '3', title: 'Past Event 1', date: '2022-01-01' },
@@ -113,6 +114,28 @@ describe('HomeScreen', () => {
         fireEvent.press(getByPlaceholderText('Search...'))
         expect(getByPlaceholderText('Search...')).toBeTruthy()
     })
+
+    it('can change screen', () => {
+      const { getByText } = render(
+        <SafeAreaProvider>
+          <HomeScreen navigation={mockNavigation}/>
+        </SafeAreaProvider>
+      )
+      fireEvent.press(getByText('Announcements'))
+      fireEvent.press(getByText('Events'))
+    })
+
+    it('has dummy', async () => {
+      const { getByText } = render(
+        <SafeAreaProvider>
+          <HomeScreen navigation={mockNavigation}/>
+        </SafeAreaProvider>
+      )
+      await waitFor(() => {
+        fireEvent.press(getByText('dummy'))
+      })
+    })
+
 
 
 })
