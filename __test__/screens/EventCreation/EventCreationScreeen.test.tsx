@@ -4,49 +4,48 @@ import EventCreationScreen from "../../../screens/EventCreation/EventCreationScr
 import { Firestore } from "firebase/firestore"
 
 const mockGoBack = jest.fn()
+const mockNavigate = jest.fn()
 
 jest.mock("../../../firebase/firebaseConfig", () => ({
-  db: jest.fn(() => ({} as Firestore))
+  db: jest.fn(() => ({} as Firestore)),
 }))
 
 jest.mock("@react-navigation/native", () => {
   return {
     ...jest.requireActual("@react-navigation/native"),
     useNavigation: () => ({
+      navigate: mockNavigate,
       goBack: mockGoBack,
     }),
   }
 })
 
-jest.mock('@react-native-async-storage/async-storage', () =>
-  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+jest.mock("@react-native-async-storage/async-storage", () =>
+  require("@react-native-async-storage/async-storage/jest/async-storage-mock")
 )
 // Component import
 
 describe("EventCreationScreen", () => {
   it("renders correctly", () => {
     const { getByText, getByPlaceholderText } = render(<EventCreationScreen />)
-    expect(getByText("Announcement")).toBeTruthy()
-    expect(getByPlaceholderText("Title")).toBeTruthy()
+    expect(getByText("Validate")).toBeTruthy()
+    expect(getByText("Add a description")).toBeTruthy()
+    expect(getByText("Choose up to three tags")).toBeTruthy()
+    expect(getByPlaceholderText("Turing Avenue 69")).toBeTruthy()
   })
 
-  it("allows toggling between event and announcement", () => {
-    const { getByText } = render(<EventCreationScreen />)
-    const toggleButton = getByText("Announcement")
-    fireEvent.press(toggleButton)
-    expect(getByText("Event")).toBeTruthy()
-    fireEvent.press(toggleButton)
-    expect(getByText("Announcement")).toBeTruthy()
-  })
+  it("shows date input fiel when creating event", () => {
+    { // restricting scope to avoid naming conflicts
+      const { queryByText } = render(
+        <EventCreationScreen isAnnouncement={true} />
+      )
+        expect(queryByText("DD.MM.YYYY")).toBeNull()
+    }
 
-  it("shows date input fields when event is selected", () => {
-    const { getByText, queryByPlaceholderText } = render(
-      <EventCreationScreen />
+    const { queryByText } = render(
+      <EventCreationScreen isAnnouncement={false} />
     )
-    expect(queryByPlaceholderText("Start Date")).toBeNull()
-    fireEvent.press(getByText("Announcement"))
-    expect(queryByPlaceholderText("Start Date")).toBeTruthy()
-    expect(queryByPlaceholderText("End Date")).toBeTruthy()
+      expect(queryByText("DD.MM.YYYY")).toBeTruthy()
   })
 
   it('should handle "Add a description" button press', () => {
