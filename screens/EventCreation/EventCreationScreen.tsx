@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  ScrollView,
   Alert,
 } from "react-native"
 import { styles } from "./styles"
@@ -14,13 +13,15 @@ import { globalStyles } from "../../assets/global/globalStyles"
 import { peach, white } from "../../assets/colors/colors"
 import { createAnnouncement } from "../../firebase/ManageAnnouncements"
 import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 const EventCreationScreen = () => {
   const navigation = useNavigation()
-  const [isEvent, setIsEvent] = useState(false)
+  const [isEvent, setIsEvent] = useState(true)
   const [title, setTitle] = useState("")
   const [description] = useState("lore ipsum")
   const [location] = useState("Besac City")
+  const insets = useSafeAreaInsets()
   const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
   const [date] = useState("12/07/2024")
 
@@ -30,10 +31,10 @@ const EventCreationScreen = () => {
   //  const [point, setPoint] = useState({ x: 47.238458, y: 5.984155 })
 
 
-  // const newEvent = async () => {
-  //   console.log("Creating event")
-  //   await createEvent("uid2", title, description, new Date(2025, 0, 1), { x: 47.238458, y: 5.984155 }, location, "imageUrl")
-  // }
+  /* const newEvent = async () => {
+     console.log("Creating event")
+     await createEvent("uid2", title, description, new Date(2025, 0, 1), { x: 47.238458, y: 5.984155 }, location, "imageUrl")
+  }*/
 
   const newAnnouncement = async () => {
     console.log("creating announcement")
@@ -46,17 +47,17 @@ const EventCreationScreen = () => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
+    <View style={styles.form}>
+      <View style={[styles.header, {paddingTop: insets.top + 5}]}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           testID="back-button"
         >
           <Ionicons name="arrow-back-outline" size={24} color={peach} />
         </TouchableOpacity>
-        <View style={styles.headerIcon}>
-          <Ionicons name="add" size={24} color={peach} />
-        </View>
+        <TouchableOpacity>
+          <Ionicons name="add" size={24} color={peach} style={styles.headerIcon}/>
+        </TouchableOpacity>
       </View>
       <View style={styles.body}>
         <View
@@ -109,8 +110,9 @@ const EventCreationScreen = () => {
           </View>
         </View>
       </View>
-    </ScrollView>
+    </View>
   )
 }
 
 export default EventCreationScreen
+

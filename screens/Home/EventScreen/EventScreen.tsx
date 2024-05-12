@@ -1,36 +1,39 @@
 import React, { useEffect } from 'react'
-import { View, Text, TextInput, SectionList, SectionListRenderItemInfo, SectionListData, DefaultSectionT } from 'react-native'
+import { View, Text, TextInput, SectionList, SectionListRenderItemInfo, Pressable, DefaultSectionT, SectionListData } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import EventCard from '../../../components/EventCard/EventCard'
-import  {styles} from './../stylesScreen' // Ensure the paths are correct
-import {  useNavigation } from '@react-navigation/native'
-
+import  {styles} from './styles'
+import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from "@expo/vector-icons"
-import { defaultBackgroundColor, lightPeach } from '../../../assets/colors/colors'
 import { getAllFutureEvents, getAllPastEvents } from '../../../firebase/ManageEvents'
 import { showErrorToast } from '../../../components/ToastMessage/toast'
 import { Event } from '../../../types/Event'
+import { globalStyles } from '../../../assets/global/globalStyles'
+import LoadingScreen from '../../Loading/LoadingScreen'
+import { StackNavigationProp } from '@react-navigation/stack'
 
+type RootStackParamList = {
+  EventMap: {
+      events: Event[] | null
+  }
+}
 
 const EventScreen = () => {
-  
-  const navigation = useNavigation()
-
-  const [futureEvents, setFutureEvents] = React.useState<Event[] >([])
-  const [pastEvents, setPastEvents] = React.useState<Event[] >([])
-  
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
+  const [futureEvents, setFutureEvents] = React.useState<Event[]>([])
+  const [pastEvents, setPastEvents] = React.useState<Event[]>([])
   const [filteredFutureEvents, setFilteredFutureEvents] = React.useState<Event[]>([])
-  const [filteredPastEvents, setFilteredPastEvents] = React.useState<Event[] >([])
-
+  const [filteredPastEvents, setFilteredPastEvents] = React.useState<Event[]>([])
   const [sections, setSections] = React.useState<SectionListData<Event[], DefaultSectionT>[]>([])
-
   const [ searchQuery, setSearchQuery ] = React.useState("")
+  const [loading, setLoading] = React.useState(true)
 
   useEffect(
     () => {
     const loadEvents = async () => {
 
       try {
+        setLoading(true)
         const fetchedFutureEvents = await getAllFutureEvents() 
         const fetchedPastEvents = await getAllPastEvents()
         
@@ -42,27 +45,35 @@ const EventScreen = () => {
       }
       catch (error) {
         showErrorToast("Error fetching events. Please check your connection and try again.")
-      
-    }}
+      }
+      finally {
+        setLoading(false)
+      }
+    }
 
     loadEvents()
   }, [])
 
+  const renderSectionHeader = (info : {section: SectionListData<Event[], DefaultSectionT>}) => (
+    <View style={styles.sectionHeader} >
+      <Text style={[globalStyles.boldText, styles.header]}>{info.section.title}</Text>
+      <Pressable onPress={() => navigation.navigate("EventCreation" as never)} style={styles.iconText}>
+        <Text style={[globalStyles.smallText, styles.text]}>Create an event</Text>
+        <Ionicons name="create-outline" size={16}/>
+      </Pressable>
+    </View>
+  )
   useEffect(() => {
-    
-
     if (searchQuery) {
       setFilteredFutureEvents(futureEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase())))
       setFilteredPastEvents(pastEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase()))
       )
     } else {
-
-        
       setFilteredFutureEvents(futureEvents)
       setFilteredPastEvents(pastEvents)
     }
 
-  }, [searchQuery])
+  }, [searchQuery, futureEvents, pastEvents])
 
   useEffect(() => {
     setSections([
@@ -103,16 +114,10 @@ const EventScreen = () => {
       ))}
     </View>
   )
-  
 
-  const renderSectionHeader = (info : {section: SectionListData<Event[], DefaultSectionT>} ) => {
-    return (
-      <View style={{ backgroundColor: defaultBackgroundColor}} >
-      <Text style={styles.header}>{info.section.title}</Text>
-      <View style={styles.separationBar} />
-      </View>
-    )
-  }
+  if (loading) return (
+    <LoadingScreen/>
+  )
 
   return (
     <View style={styles.view}>
@@ -120,30 +125,23 @@ const EventScreen = () => {
         <TextInput
           placeholder="Search..."
           style={styles.input}
+          value={searchQuery}
           onChangeText={setSearchQuery}
         />
         <TouchableOpacity
           style={styles.map}
           onPress={() => navigation.navigate("EventMap", {events: filteredFutureEvents})}
         >
-          <Text>Map View</Text>
+          <Text style={globalStyles.boldText}>Map View</Text>
         </TouchableOpacity>
       </View>
-      
-      <TouchableOpacity onPress={() => navigation.navigate("EventCreation" as never) }>
-      <View style={styles.button}>
-            <Ionicons name="add" size={24} color={lightPeach}  />
-        </View>
-      </TouchableOpacity>
-
       <View style={styles.containerEvent}>
         <SectionList
           sections={sections}
           renderItem={renderItem}
-          stickySectionHeadersEnabled={true}
           renderSectionHeader={renderSectionHeader}
-          
-          
+          showsVerticalScrollIndicator={false}
+          stickySectionHeadersEnabled={false}
         />
       </View> 
     </View>

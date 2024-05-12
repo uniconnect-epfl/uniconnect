@@ -4,6 +4,7 @@ import { SettingsScreen } from "../../../screens/Settings/SettingsScreen"
 import { NavigationContainer } from "@react-navigation/native"
 import { Alert } from 'react-native'
 import { Auth } from 'firebase/auth'
+import { SafeAreaProvider } from "react-native-safe-area-context"
 
 
 const mockGoBack = jest.fn()
@@ -14,6 +15,16 @@ jest.mock("@react-navigation/native", () => {
     useNavigation: () => ({
       goBack: mockGoBack,
     }),
+  }
+})
+
+jest.mock("react-native-safe-area-context", () => {
+  const inset = { top: 0, right: 0, bottom: 0, left: 0 }
+  return {
+    SafeAreaProvider: jest.fn(({ children }) => children),
+    SafeAreaConsumer: jest.fn(({ children }) => children(inset)),
+    useSafeAreaInsets: jest.fn(() => inset),
+    useSafeAreaFrame: jest.fn(() => ({ x: 0, y: 0, width: 390, height: 844 })),
   }
 })
 
@@ -34,7 +45,9 @@ describe("SettingsScreen", () => {
   test("renders correctly", () => {
     const { getByTestId, getByText } = render(
       <NavigationContainer>
-        <SettingsScreen />
+        <SafeAreaProvider>
+          <SettingsScreen />
+        </SafeAreaProvider>
       </NavigationContainer>
     )
 
@@ -59,7 +72,9 @@ describe("SettingsScreen", () => {
   test("navigates back when back button is pressed", () => {
     const { getByTestId } = render(
       <NavigationContainer>
-        <SettingsScreen />
+        <SafeAreaProvider>
+          <SettingsScreen />
+        </SafeAreaProvider>
       </NavigationContainer>
     )
 
@@ -72,7 +87,9 @@ describe("SettingsScreen", () => {
     const alertSpy = jest.spyOn(Alert, "alert")
     const { getByText } = render(
       <NavigationContainer>
-        <SettingsScreen />
+        <SafeAreaProvider>
+          <SettingsScreen />
+        </SafeAreaProvider>
       </NavigationContainer>
     )
 
@@ -85,7 +102,9 @@ describe("SettingsScreen", () => {
   test("calls the correct action when the logout menu item is pressed", () => {
     const { getByText } = render(
       <NavigationContainer>
-        <SettingsScreen />
+        <SafeAreaProvider>
+          <SettingsScreen />
+        </SafeAreaProvider>
       </NavigationContainer>
     )
 
