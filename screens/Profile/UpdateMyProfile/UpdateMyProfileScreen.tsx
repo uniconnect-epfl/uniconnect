@@ -6,6 +6,7 @@ import { User } from "../../../types/User"
 import { launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker'
 import { updateUserImage, uploadUserImageToStorage } from "../../../firebase/User"
 import { peach } from "../../../assets/colors/colors"
+import InputField from "../../../components/InputField/InputField"
 
 type RootStackParamList = {
   UpdateProfile: {
@@ -21,6 +22,9 @@ export const UpdateMyProfileScreen = () => {
   const [image, setImage] = useState(user.profilePicture)
   const [imageLoading, setImageLoading] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [name, setName] = useState(user.firstName)
+  const [lastName, setLastName] = useState(user.lastName)
+  const [location, setLocation] = useState(user.location)
 
   const pickImage = async () => {
     const result = await launchImageLibraryAsync({
@@ -59,6 +63,21 @@ export const UpdateMyProfileScreen = () => {
       {loading &&
         <Text>soon</Text>
       }
+      <InputField
+        label="First Name"
+        value={name}
+        onChangeText={setName}
+      />
+      <InputField
+        label="Last Name"
+        value={lastName}
+        onChangeText={setLastName}
+      />
+      <InputField
+        label="Location"
+        value={location}
+        onChangeText={setLocation}
+      />
       <Text>soon</Text>
       <Text>soon</Text>
       <Text>soon</Text>
