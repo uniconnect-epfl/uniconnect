@@ -145,6 +145,11 @@ const MainStackNavigator: React.FC = () => {
               component={MapsScreen}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="Description"
+              component={DescriptionScreen}
+              options={{ headerShown: false }}
+            />
             
           </>
         ) : (

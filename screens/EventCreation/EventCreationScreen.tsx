@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useContext, useState } from "react"
 import { View, Text, Pressable, ScrollView } from "react-native"
 import { styles } from "./styles"
 import { useNavigation } from "@react-navigation/native"
@@ -9,6 +9,7 @@ import { createAnnouncement } from "../../firebase/ManageAnnouncements"
 import { createEvent } from "../../firebase/ManageEvents"
 import InputField from "../../components/InputField/InputField"
 import MyDateInputComponent from "../../components/DatePicker/DatePicker"
+import { RegistrationContext } from "../../contexts/RegistrationContext"
 
 interface EventCreationScreenProps {
   isAnnouncement?: boolean
@@ -21,30 +22,33 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
 
   const [title, setTitle] = useState("")
-  const [description] = useState("lorem ipsum")
   const [location, setLocation] = useState("")
   const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
 
-  // const [imageUrl, setImageUrl] = useState("")
-  //  const [point, setPoint] = useState({ x: 47.238458, y: 5.984155 })
+  const {description} = useContext(RegistrationContext)
 
-  // const newEvent = async () => {
-  //   console.log("Creating event")
-  //   await createEvent("uid2", title, description, new Date(2025, 0, 1), { x: 47.238458, y: 5.984155 }, location, "imageUrl")
-  // }
   const opacity = !hasBeenTouched ? 0.2 : 1
 
   const publish = async () => {
-    isAnnouncement ?
-    await createAnnouncement(
-      "0",
-      title,
-      location,
-      { x: 47.238458, y: 5.984155 },
-      description,
-      interests,
-      date.toDateString()
-    ) : await createEvent("0", title, description, date, { x: 47.238458, y: 5.984155 }, location, "imageUrl")
+    isAnnouncement
+      ? await createAnnouncement(
+          "0",
+          title,
+          location,
+          { x: 47.238458, y: 5.984155 },
+          description,
+          interests,
+          date.toDateString()
+        )
+      : await createEvent(
+          "0",
+          title,
+          description,
+          date,
+          { x: 47.238458, y: 5.984155 },
+          location,
+          "imageUrl"
+        )
   }
 
   return (
@@ -131,9 +135,7 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
             </Text>
           </Pressable>
           <Pressable style={styles.buttonBase} onPress={publish}>
-            <Text style={globalStyles.boldText}>
-              Validate
-            </Text>
+            <Text style={globalStyles.boldText}>Validate</Text>
           </Pressable>
         </View>
       </View>
