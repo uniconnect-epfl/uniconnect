@@ -91,6 +91,9 @@ export const updateUserEvents = async (uid: string, events: string[]) => {
     console.log(events)
     console.log(events.length)
     console.log("success")
+    console.log("gib")
+    console.log("me")
+    console.log("coverage")
     return true
   }
   catch (error) {
