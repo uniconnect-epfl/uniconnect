@@ -104,6 +104,8 @@ export default class Graph {
         })
       }
     }
+
+    console.log("Nodes: ", this.nodes)
   }
 }
 
@@ -133,7 +135,8 @@ function addContactNode(graph: Graph, contact: Contact, level: number): void {
   if (contact.friends) {
     for (const friendId of contact.friends) {
       if (getNodeById(graph, friendId)) {
-        addLink(graph, contact.uid, friendId)
+        console.log("Friend exists in graph")
+        addLink(graph, friendId, contact.uid)
       }
     }
   }

@@ -8,5 +8,5 @@ export type Contact = {
   location: string
   interests: string[]
   events: string[]
-  friends?: string[]
+  friends: string[]
 }
