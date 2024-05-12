@@ -1,4 +1,4 @@
-import { Firestore } from "firebase/firestore"
+import { Firestore, updateDoc } from "firebase/firestore"
 import { Auth } from "firebase/auth"
 import { getUserData, updateUserData, updateUserImage, updateUserInterests, uploadUserImageToStorage } from "../../firebase/User"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
@@ -32,7 +32,8 @@ jest.mock("firebase/firestore", () => ({
   addDoc: jest.fn(),
   collection: jest.fn(() => ({})),
   serverTimestamp: jest.fn(() => ({})),
-  setDoc: mockSetDoc
+  setDoc: mockSetDoc,
+  updateDoc: jest.fn()
 }))
 
 jest.mock("../../components/ToastMessage/toast", () => ({
@@ -66,14 +67,20 @@ describe("User", () => {
     const uid = "123"
     const newData = { firstName: "John Doe" }
 
+    const mockUpdateDoc = updateDoc as jest.Mock
+    mockUpdateDoc.mockResolvedValue(true)
+
     const result = await updateUserData(uid, newData)
 
-    expect(result).toBe(false)
+    expect(result).toBe(true)
   })
 
   it("should show error toast and return false when updating fails", async () => {
     const uid = "123"
     const newData = { firstName: "John Doe" }
+
+    const mockUpdateDoc = updateDoc as jest.Mock
+    mockUpdateDoc.mockRejectedValue(new Error("Failed to fetch user data"))
 
     const result = await updateUserData(uid, newData)
 
@@ -125,15 +132,21 @@ describe("User", () => {
     const uid = "123"
     const url = "https://example.com/image.jpg"
 
+    const mockUpdateDoc = updateDoc as jest.Mock
+    mockUpdateDoc.mockResolvedValue(true)
+    
+
     const result = await updateUserImage(uid, url)
 
-    expect(result).toBe(false)
+    expect(result).toBe(true)
   })
 
   it("should show error toast and return false when updating user image fails", async () => {
     const uid = "123"
     const url = "https://example.com/image.jpg"
 
+    const mockUpdateDoc = updateDoc as jest.Mock
+    mockUpdateDoc.mockRejectedValue(new Error("Failed to fetch user data"))
 
     const result = await updateUserImage(uid, url)
 
@@ -144,15 +157,21 @@ describe("User", () => {
     const uid = "123"
     const interests = ["Machine Learning, Sports, Tractoupelle"]
 
+    const mockUpdateDoc = updateDoc as jest.Mock
+    mockUpdateDoc.mockResolvedValue(true)
+
     const result = await updateUserInterests(uid, interests)
 
-    expect(result).toBe(false)
+    expect(result).toBe(true)
   })
 
   it("should update user interests in database and return true when successful", async () => {
     const uid = "123"
 
     const interests = ["Machine Learning, Sports, Tractoupelle"]
+
+    const mockUpdateDoc = updateDoc as jest.Mock
+    mockUpdateDoc.mockRejectedValue(new Error("Failed to fetch user data"))
 
     const result = await updateUserInterests(uid, interests)
 
