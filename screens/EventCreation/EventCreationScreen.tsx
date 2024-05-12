@@ -14,7 +14,6 @@ import { peach, white } from "../../assets/colors/colors"
 import { createAnnouncement } from "../../firebase/ManageAnnouncements"
 import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { createEvent } from "../../firebase/ManageEvents"
 
 const EventCreationScreen = () => {
   const navigation = useNavigation()
@@ -32,10 +31,10 @@ const EventCreationScreen = () => {
   //  const [point, setPoint] = useState({ x: 47.238458, y: 5.984155 })
 
 
-  const newEvent = async () => {
+  /* const newEvent = async () => {
      console.log("Creating event")
      await createEvent("uid2", title, description, new Date(2025, 0, 1), { x: 47.238458, y: 5.984155 }, location, "imageUrl")
-  }
+  }*/
 
   const newAnnouncement = async () => {
     console.log("creating announcement")
@@ -91,23 +90,6 @@ const EventCreationScreen = () => {
                 <Ionicons name="add" size={24} color={white} />
               </View>
             </View>
-            {isEvent && (
-              <>
-                <View style={styles.dateContainer}>
-                  <TextInput style={[styles.input, globalStyles.text]} placeholder="Start Date" />
-                  <TextInput style={[styles.input, globalStyles.text]} placeholder="End Date" />
-                </View>
-                <TextInput style={[styles.input, globalStyles.text]} placeholder="Location" />
-              </>
-            )}
-            <View style={styles.bottomButtons}>
-            <TouchableOpacity style={[styles.buttonBase, styles.buttonDescription]}>
-              <Text onPress={() => Alert.alert("SOON^TM")} style={globalStyles.boldText}>Add a description</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.buttonBase, styles.buttonValidate]}>
-              <Text onPress={newEvent} style={globalStyles.boldText}>Validate</Text>
-            </TouchableOpacity>
-          </View>
           </View>
           {isEvent && (
             <>
