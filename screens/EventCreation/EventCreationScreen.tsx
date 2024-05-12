@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react"
-import { View, Text, Pressable, ScrollView } from "react-native"
+import { View, Text, ScrollView, Pressable } from "react-native"
 import { styles } from "./styles"
 import { useNavigation } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
@@ -10,6 +10,7 @@ import { createEvent } from "../../firebase/ManageEvents"
 import InputField from "../../components/InputField/InputField"
 import MyDateInputComponent from "../../components/DatePicker/DatePicker"
 import { RegistrationContext } from "../../contexts/RegistrationContext"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 interface EventCreationScreenProps {
   isAnnouncement?: boolean
@@ -23,6 +24,7 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
 
   const [title, setTitle] = useState("")
   const [location, setLocation] = useState("")
+  const insets = useSafeAreaInsets()
   const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
 
   const { description, setDescription } = useContext(RegistrationContext)
@@ -58,7 +60,7 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.header}>
+      <View style={[styles.header, { paddingTop: insets.top + 5 }]}>
         <Pressable onPress={() => navigation.goBack()} testID="back-button">
           <Ionicons name="arrow-back-outline" size={24} color={peach} />
         </Pressable>
@@ -145,7 +147,7 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
           </Pressable>
         </View>
       </View>
-    </ScrollView>
+    </ScrollView> // Correctly closed here
   )
 }
 

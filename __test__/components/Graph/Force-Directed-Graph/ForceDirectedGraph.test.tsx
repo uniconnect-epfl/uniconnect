@@ -1,11 +1,5 @@
 import React from "react"
-import {
-  cleanup,
-  render,
-  act,
-  fireEvent,
-  waitFor,
-} from "@testing-library/react-native"
+import { cleanup, render, act, fireEvent } from "@testing-library/react-native"
 import ForceDirectedGraph from "../../../../components/Graph/ForceDirectedGraph/ForceDirectedGraph"
 import Graph from "../../../../components/Graph/Graph"
 import { State } from "react-native-gesture-handler"
@@ -26,13 +20,18 @@ jest.mock("react-native-gesture-handler", () => {
 describe("ForceDirectedGraph", () => {
   let contacts = mockContacts
   let constrainedNodeId = "0"
-
-  const mockFunc = jest.fn()
+  let magicNodeId = ""
+  let modalPressedOut = false
+  const onModalPress = jest.fn()
+  const onMagicPress = jest.fn()
 
   beforeEach(() => {
     contacts = mockContacts
     constrainedNodeId = "0"
-    mockFunc.mockClear()
+    magicNodeId = ""
+    modalPressedOut = false
+    onModalPress.mockClear()
+    onMagicPress.mockClear()
   })
 
   afterEach(() => {
@@ -45,7 +44,10 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
-        onModalPress={mockFunc}
+        magicNodeId={magicNodeId}
+        modalPressedOut={modalPressedOut}
+        onModalPress={onModalPress}
+        onMagicPress={onMagicPress}
       />
     )
     expect(component).toBeTruthy()
@@ -57,7 +59,10 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
-        onModalPress={mockFunc}
+        magicNodeId={magicNodeId}
+        modalPressedOut={modalPressedOut}
+        onModalPress={onModalPress}
+        onMagicPress={onMagicPress}
       />
     )
 
@@ -90,78 +95,47 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
-        onModalPress={mockFunc}
+        magicNodeId={magicNodeId}
+        modalPressedOut={modalPressedOut}
+        onModalPress={onModalPress}
+        onMagicPress={onMagicPress}
       />
     )
 
-    const panHandler = component.getByTestId("pan-handler")
     const node1 = component.getByTestId("node-1")
 
     expect(node1).toBeTruthy()
-    expect(panHandler).toBeTruthy()
-    expect(panHandler.props.enabled).toBe(true)
 
     act(() => {
       fireEvent(node1, "pressIn")
+      fireEvent(node1, "pressIn")
     })
 
-    jest.useFakeTimers()
-    act(() => {
-      jest.advanceTimersByTime(50)
-    })
-
-    act(() => {
-      fireEvent(node1, "pressOut")
-      jest.advanceTimersByTime(500)
-    })
-
-    jest.useRealTimers()
-    expect(mockFunc).toHaveBeenCalled()
+    expect(onModalPress).toHaveBeenCalled()
   })
 
-  it("very short pressing a node does not display a modal", async () => {
+  it("single pressing a node does not display a modal", async () => {
     const graph = new Graph(contacts, constrainedNodeId)
 
     const component = render(
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
-        onModalPress={mockFunc}
+        magicNodeId={magicNodeId}
+        modalPressedOut={modalPressedOut}
+        onModalPress={onModalPress}
+        onMagicPress={onMagicPress}
       />
     )
 
     const node1 = component.getByTestId("node-1")
 
     expect(node1).toBeTruthy()
-    expect(component.queryByTestId("modal")).toBeNull()
 
-    fireEvent(node1, "pressIn")
-    fireEvent(node1, "pressOut")
-    jest.useFakeTimers()
-    await waitFor(
-      () => {
-        expect(component.queryByTestId("modal")).toBeNull()
-      },
-      { timeout: 10 }
-    )
-    jest.useRealTimers()
-  })
-
-  it("long pressing a node does not display a modal", async () => {
-    const graph = new Graph(contacts, constrainedNodeId)
-
-    const component = render(
-      <ForceDirectedGraph
-        graph={graph}
-        constrainedNodeId={constrainedNodeId}
-        onModalPress={mockFunc}
-      />
-    )
-
-    const node1 = component.getByTestId("node-1")
-
-    expect(node1).toBeTruthy()
-    expect(mockFunc).not.toHaveBeenCalled()
+    act(() => {
+      fireEvent(node1, "press")
+    })
+    expect(onModalPress).not.toHaveBeenCalled()
   })
 
   it("pinching zooms the graph", async () => {
@@ -171,7 +145,10 @@ describe("ForceDirectedGraph", () => {
       <ForceDirectedGraph
         graph={graph}
         constrainedNodeId={constrainedNodeId}
-        onModalPress={mockFunc}
+        magicNodeId={magicNodeId}
+        modalPressedOut={modalPressedOut}
+        onModalPress={onModalPress}
+        onMagicPress={onMagicPress}
       />
     )
 

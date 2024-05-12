@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, SectionList, SectionListRenderItemInfo } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-
-
-import { styles } from './../stylesScreen'// Ensure the paths are correct
-
-import { defautlBackgroundColor } from '../../../assets/colors/colors'
+import { styles } from './styles'// Ensure the paths are correct
 import AnnouncementCard from '../../../components/AnnoucementCard/AnnouncementCard'
 import { Announcement } from '../../../types/Annoucement'
 import { getAllAnnouncements } from '../../../firebase/ManageAnnouncements'
 import { showErrorToast } from '../../../components/ToastMessage/toast'
 import LoadingScreen from '../../Loading/LoadingScreen'
 
-const AnnouncementScreen = () => {
+interface AnnouncementsScreenProps {
+  onAnnoucmentPress: (announcement: Announcement) => void
+}
+
+const AnnouncementScreen = ({ onAnnoucmentPress }: AnnouncementsScreenProps) => {
 
   //const [searchQuery, setSearchQuery] = useState("")
   const [isLoading, setIsLoading] = useState(true)
@@ -41,17 +41,10 @@ const AnnouncementScreen = () => {
   // }
 
   const renderItem = ({ item }: SectionListRenderItemInfo<Announcement>) => (
-    <TouchableOpacity >
+    <TouchableOpacity
+      onPress={() => {onAnnoucmentPress(item)}}>
       <AnnouncementCard {...item} />
     </TouchableOpacity>
-  )
-
-  const renderSectionHeader = (info: { section: typeof sections[number] }) => (
-    // Render the section header
-    <View style={{ backgroundColor: defautlBackgroundColor }} >
-      <Text style={styles.header}>{info.section.title}</Text>
-      <View style={styles.separationBar} />
-    </View>
   )
 
   if (isLoading) {
@@ -76,12 +69,12 @@ const AnnouncementScreen = () => {
           onChangeText={handleSearch}
         /> */}
       </View>
-
-      <View style={styles.containerEvent}>
+      <View style={styles.container}>
         <SectionList
           sections={sections}
           renderItem={renderItem}
-          renderSectionHeader={renderSectionHeader}
+          showsVerticalScrollIndicator={false}
+          stickySectionHeadersEnabled={false}
         />
       </View>
     </View>

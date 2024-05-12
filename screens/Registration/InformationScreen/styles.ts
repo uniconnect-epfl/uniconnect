@@ -9,7 +9,7 @@ import {
   gray,
 } from "../../../assets/colors/colors"
 
-import { BUTTON_HEIGHT, BUTTON_RADIUS } from "../../../assets/global/constants"
+import { BUTTON_RADIUS } from "../../../assets/global/constants"
 
 const styles = StyleSheet.create({
   button: {
@@ -19,19 +19,17 @@ const styles = StyleSheet.create({
     borderRadius: BUTTON_RADIUS,
     borderWidth: 2,
     elevation: 8, //
-    height: BUTTON_HEIGHT,
-    justifyContent: "center",
     marginHorizontal: 30,
     shadowColor,
     shadowOffset: { width: 0, height: 2.5 },
     shadowOpacity: 0.3,
-    shadowRadius: 5,
-    width: "auto",
+    shadowRadius: 5
   },
 
   buttonContainer: {
     marginHorizontal: 20,
     marginVertical: 10,
+    padding: 15
   },
 
   buttonSmall: {
@@ -115,12 +113,11 @@ const styles = StyleSheet.create({
   },
 
   locationButton: {
-    display: "flex",
+    alignItems: "center",
     flexDirection: "row",
-    height: 25,
+    justifyContent: "center",
     marginBottom: 20,
-    marginLeft: 20,
-    width: 180,
+    padding: 5
   },
 
   locationText: {

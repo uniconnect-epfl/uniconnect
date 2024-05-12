@@ -39,7 +39,7 @@ const contact_3: Contact = {
   location: "Houston",
   interests: ["1", "2"],
   events: ["1", "2"],
-  friends: ["5", "6", "9"],
+  friends: ["4", "5", "6", "9"],
 }
 
 const contact_4: Contact = {
@@ -53,6 +53,7 @@ const contact_4: Contact = {
   location: "Miami",
   interests: ["1", "2"],
   events: ["1", "2"],
+  friends: ["1"],
 }
 
 const contact_5: Contact = {
@@ -66,6 +67,7 @@ const contact_5: Contact = {
   location: "San Francisco",
   interests: ["1", "2", "7", "8", "9", "10", "11"],
   events: ["1", "2", "11", "12"],
+  friends: ["1", "2"],
 }
 
 const contact_6: Contact = {
@@ -79,6 +81,7 @@ const contact_6: Contact = {
   location: "Seattle",
   interests: ["1", "2", "7", "8", "9"],
   events: ["1", "2", "7", "8"],
+  friends: ["2"],
 }
 
 const contact_7: Contact = {
@@ -91,6 +94,7 @@ const contact_7: Contact = {
   location: "Dallas",
   interests: ["1", "2", "7", "8"],
   events: ["1", "2", "7", "8"],
+  friends: ["2"],
 }
 
 const contact_8: Contact = {
@@ -104,6 +108,7 @@ const contact_8: Contact = {
   location: "Atlanta",
   interests: ["17", "18"],
   events: [],
+  friends: ["0"],
 }
 
 const contact_9: Contact = {
@@ -117,6 +122,7 @@ const contact_9: Contact = {
   location: "Phoenix",
   interests: ["1"],
   events: ["1"],
+  friends: ["0"],
 }
 
 const contact_10: Contact = {
@@ -130,6 +136,7 @@ const contact_10: Contact = {
   location: "Denver",
   interests: ["1", "2"],
   events: ["1", "78", "9", "10"],
+  friends: ["2"],
 }
 
 export const mockContacts: Contact[] = [

@@ -135,7 +135,107 @@ describe('AuthenticationScreen', () => {
       fireEvent.press(submitButton)
       }) 
     await waitFor(() => {
-      expect(showErrorToast).toHaveBeenCalledWith("Please fill in the form correctly and try again")
+      expect(showErrorToast).toHaveBeenCalledWith("Passwords do not match")
+    })
+  })
+
+  it('shows alert when password is too short', async () => {
+    const { getByText, getByPlaceholderText, getAllByPlaceholderText } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <AuthenticationScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+
+    fireEvent.changeText(getAllByPlaceholderText("****************")[0], 'pass')
+    fireEvent.changeText(getAllByPlaceholderText("****************")[1], 'pass')
+    fireEvent.changeText(getByPlaceholderText("E-mail"), 'test@example.com')
+    fireEvent.changeText(getByPlaceholderText("Confirm your e-mail"), 'test@example.com')
+
+    const submitButton = getByText('Confirm')
+
+    await act(async () => {
+      fireEvent.press(submitButton)
+    })
+
+    await waitFor(() => {
+      expect(showErrorToast).toHaveBeenCalledWith("Password must be at least 8 characters long")
+    })
+  })
+
+  it('shows alert when passwords do not match', async () => {
+    const { getByText, getByPlaceholderText, getAllByPlaceholderText } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <AuthenticationScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+
+    fireEvent.changeText(getAllByPlaceholderText("****************")[0], 'password123')
+    fireEvent.changeText(getAllByPlaceholderText("****************")[1], 'password456')
+    fireEvent.changeText(getByPlaceholderText("E-mail"), 'test@example.com')
+    fireEvent.changeText(getByPlaceholderText("Confirm your e-mail"), 'test@example.com')
+
+    const submitButton = getByText('Confirm')
+
+    await act(async () => {
+      fireEvent.press(submitButton)
+    })
+
+    await waitFor(() => {
+      expect(showErrorToast).toHaveBeenCalledWith("Passwords do not match")
+    })
+  })
+
+  it('shows alert when email is invalid', async () => {
+    const { getByText, getByPlaceholderText, getAllByPlaceholderText } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <AuthenticationScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+
+    fireEvent.changeText(getAllByPlaceholderText("****************")[0], 'password123')
+    fireEvent.changeText(getAllByPlaceholderText("****************")[1], 'password123')
+    fireEvent.changeText(getByPlaceholderText("E-mail"), 'invalidemail')
+    fireEvent.changeText(getByPlaceholderText("Confirm your e-mail"), 'invalidemail')
+
+    const submitButton = getByText('Confirm')
+
+    await act(async () => {
+      fireEvent.press(submitButton)
+    })
+
+    await waitFor(() => {
+      expect(showErrorToast).toHaveBeenCalledWith("Please enter a valid email address")
+    })
+  })
+
+  it('shows alert when emails do not match', async () => {
+    const { getByText, getByPlaceholderText, getAllByPlaceholderText } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <AuthenticationScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+
+    fireEvent.changeText(getAllByPlaceholderText("****************")[0], 'password123')
+    fireEvent.changeText(getAllByPlaceholderText("****************")[1], 'password123')
+    fireEvent.changeText(getByPlaceholderText("E-mail"), 'test@example.com')
+    fireEvent.changeText(getByPlaceholderText("Confirm your e-mail"), 'test@example.net')
+
+    const submitButton = getByText('Confirm')
+
+    await act(async () => {
+      fireEvent.press(submitButton)
+    })
+
+    await waitFor(() => {
+      expect(showErrorToast).toHaveBeenCalledWith("Emails do not match")
     })
   })
 

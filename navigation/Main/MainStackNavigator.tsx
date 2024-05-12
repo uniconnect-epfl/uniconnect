@@ -19,6 +19,8 @@ import MapsScreen from "../../screens/Maps/EventMap"
 import { isNewUser, storeInitialUserData } from "../../firebase/Registration"
 import { RegistrationContext } from "../../contexts/RegistrationContext"
 import EventScreen from "../../screens/Home/EventScreen/EventScreen"
+import ViewEventScreen from "../../screens/ViewDetails/ViewEventScreen/ViewEventScreen"
+import ViewAnnoucementScreen from "../../screens/ViewDetails/ViewAnnouncementScreen/ViewAnnouncementScreen"
 
 const Stack = createStackNavigator()
 
@@ -150,7 +152,16 @@ const MainStackNavigator: React.FC = () => {
               component={DescriptionScreen}
               options={{ headerShown: false }}
             />
-            
+            <Stack.Screen
+              name="ViewEvent"
+              component={ViewEventScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ViewAnnouncement"
+              component={ViewAnnoucementScreen}
+              options={{ headerShown: false }}
+            />
           </>
         ) : (
           <>

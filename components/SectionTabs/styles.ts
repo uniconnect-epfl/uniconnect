@@ -11,16 +11,21 @@ export const styles = StyleSheet.create({
     selectedBar: {
         backgroundColor: peach,
         borderRadius: 2,
-        height: 4,
+        height: 3,
+        width: '100%'
     },
     tabContainer: {
         alignItems: "center",
-        justifyContent: "center",
+        height: 40,
+        justifyContent: "space-between",
+        paddingVertical: 5,
+        width: '50%'
     },
     tabsContainer: {
         alignItems: "center",
         flexDirection: "row",
         justifyContent: "space-between",
+        paddingHorizontal: '2.5%'
     },
     unselectedBar: {
         backgroundColor: transparent

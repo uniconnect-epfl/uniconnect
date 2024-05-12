@@ -28,6 +28,7 @@ jest.mock("@expo/vector-icons", () => ({
   Ionicons: () => "Ionicon"
 }))
 
+
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 )
@@ -39,7 +40,7 @@ describe('AnnouncementScreen', () => {
   })
 
   it('displays loading screen initially', async () => {
-    const { findByTestId } = render(<AnnouncementScreen />)
+    const { findByTestId } = render(<AnnouncementScreen onAnnoucmentPress={() => {}}/>)
     const loader = await findByTestId('loading-indicator')
     expect(loader).toBeTruthy()
   })
@@ -47,16 +48,16 @@ describe('AnnouncementScreen', () => {
   it('displays a message when there are no announcements', async () => {
     // Adjust the mock to return an empty array or null
     getAllAnnouncements.mockResolvedValueOnce([])
-    const { getByText } = render(<AnnouncementScreen />)
+    const { queryByText } = render(<AnnouncementScreen onAnnoucmentPress={() => {}}/>)
     await waitFor(() => {
-      expect(getByText('Future Announcements')).toBeTruthy()
+      expect(queryByText('Announcement 1')).toBeFalsy()
     })
   })
 
   it('handles errors during data fetching', async () => {
     // Simulate an error
     getAllAnnouncements.mockRejectedValueOnce(new Error('Network Error'))
-    const { getByText } = render(<AnnouncementScreen />)
+    const { getByText } = render(<AnnouncementScreen onAnnoucmentPress={() => {}}/>)
     await waitFor(() => {
       expect(getByText('No future announcements available.')).toBeTruthy()
     })

@@ -58,11 +58,12 @@ export const styles = StyleSheet.create({
     paddingTop: 20,
   },
   header: {
-    alignItems: "center",
     backgroundColor: lightPeach,
     flexDirection: "row",
-    paddingHorizontal: 20,
-    paddingVertical: 40,
+    justifyContent: "space-between",
+    paddingHorizontal: "3%",
+    paddingVertical: 20,
+    width: "100%"
   },
   headerIcon: {
     alignItems: "center",

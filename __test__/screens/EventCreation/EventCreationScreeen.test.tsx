@@ -3,6 +3,7 @@ import { fireEvent, render } from "@testing-library/react-native"
 import EventCreationScreen from "../../../screens/EventCreation/EventCreationScreen"
 import { Firestore } from "firebase/firestore"
 import { RegistrationContext } from "../../../contexts/RegistrationContext"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 
 const mockGoBack = jest.fn()
 const mockNavigate = jest.fn()
@@ -24,7 +25,16 @@ jest.mock("@react-navigation/native", () => {
 jest.mock("@react-native-async-storage/async-storage", () =>
   require("@react-native-async-storage/async-storage/jest/async-storage-mock")
 )
-// Component import
+
+jest.mock("react-native-safe-area-context", () => {
+  const inset = { top: 0, right: 0, bottom: 0, left: 0 }
+  return {
+    SafeAreaProvider: jest.fn(({ children }) => children),
+    SafeAreaConsumer: jest.fn(({ children }) => children(inset)),
+    useSafeAreaInsets: jest.fn(() => inset),
+    useSafeAreaFrame: jest.fn(() => ({ x: 0, y: 0, width: 390, height: 844 })),
+  }
+})
 
 describe("EventCreationScreen", () => {
   it("renders correctly", () => {
@@ -39,19 +49,27 @@ describe("EventCreationScreen", () => {
     {
       // restricting scope to avoid naming conflicts
       const { queryByText } = render(
-        <EventCreationScreen isAnnouncement={true} />
+        <SafeAreaProvider>
+          <EventCreationScreen isAnnouncement={true} />
+        </SafeAreaProvider>
       )
       expect(queryByText("DD.MM.YYYY")).toBeNull()
     }
 
     const { queryByText } = render(
-      <EventCreationScreen isAnnouncement={false} />
+      <SafeAreaProvider>
+        <EventCreationScreen isAnnouncement={false} />
+      </SafeAreaProvider>
     )
     expect(queryByText("DD.MM.YYYY")).toBeTruthy()
   })
 
   it('should handle "Add a description" button press', () => {
-    const { getByText } = render(<EventCreationScreen />)
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <EventCreationScreen />
+      </SafeAreaProvider>
+    )
     const descriptionButton = getByText("Add a description")
     fireEvent.press(descriptionButton)
     // You can expand this to check if a specific function is called or a modal/dialog opens
@@ -68,15 +86,16 @@ describe("EventCreationScreen", () => {
 
     // Render the component wrapped in the mock provider directly
     const { getByText } = render(
-      // @ts-expect-error this is a test mock
-      <RegistrationContext.Provider value={providerProps}>
-        <EventCreationScreen />
-      </RegistrationContext.Provider>
+      <SafeAreaProvider>
+        {/* @ts-expect-error this is a test mock */}
+        <RegistrationContext.Provider value={providerProps}>
+          <EventCreationScreen />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
     )
 
     // Locate the Validate button and simulate a press
     const validateButton = getByText("Validate")
     fireEvent.press(validateButton)
-
   })
 })

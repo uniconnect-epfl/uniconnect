@@ -13,15 +13,15 @@ export const styles = StyleSheet.create({
     flex: 1,
     flexWrap: "wrap",
     marginBottom: 10,
-    overflow: "hidden", // Hide overflow content
+    overflow: "hidden",
     width: "100%",
   },
   searchBar: {
     borderColor: lightGray,
     borderRadius: 40,
     borderWidth: 1,
-    height: 60,
-    margin: 10,
-    padding: 20,
+    height: 40,
+    marginVertical: 10,
+    padding: 20
   },
 })
