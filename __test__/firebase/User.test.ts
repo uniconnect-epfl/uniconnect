@@ -1,6 +1,6 @@
 import { Firestore, updateDoc } from "firebase/firestore"
 import { Auth } from "firebase/auth"
-import { getUserData, updateUserData, updateUserImage, updateUserInterests, uploadUserImageToStorage } from "../../firebase/User"
+import { getUserData, updateUserData, updateUserEvents, updateUserImage, updateUserInterests, uploadUserImageToStorage } from "../../firebase/User"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 
 jest.mock('firebase/storage', () => ({
@@ -185,7 +185,7 @@ describe("User", () => {
     const mockUpdateDoc = updateDoc as jest.Mock
     mockUpdateDoc.mockResolvedValue(true)
 
-    const result = await updateUserInterests(uid, events)
+    const result = await updateUserEvents(uid, events)
 
     expect(result).toBe(true)
   })
@@ -197,7 +197,7 @@ describe("User", () => {
     const mockUpdateDoc = updateDoc as jest.Mock
     mockUpdateDoc.mockRejectedValue(new Error("Failed to fetch user data"))
 
-    const result = await updateUserInterests(uid, events)
+    const result = await updateUserEvents(uid, events)
 
     expect(result).toBe(false)
   })
