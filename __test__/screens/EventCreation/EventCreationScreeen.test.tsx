@@ -104,4 +104,23 @@ describe("EventCreationScreen", () => {
     const validateButton = getByText("Validate")
     fireEvent.press(validateButton)
   })
+
+  it("checks if the description button navigates correctly", () => {
+    const { getByText } = render(<EventCreationScreen />)
+    fireEvent.press(getByText("Add a description"))
+    expect(mockNavigate).toHaveBeenCalledWith("Description")
+  })
+
+  it("navigates back when the back button is pressed", () => {
+    const { getByTestId } = render(<EventCreationScreen />)
+    fireEvent.press(getByTestId("back-button"))
+    expect(mockGoBack).toHaveBeenCalled()
+  })
+
+  it("updates title input correctly", () => {
+    const { getByPlaceholderText } = render(<EventCreationScreen />)
+    const titleInput = getByPlaceholderText("Chemistry x Python")
+    fireEvent.changeText(titleInput, "New Event Title")
+    expect(titleInput.props.value).toBe("New Event Title")
+  })
 })
