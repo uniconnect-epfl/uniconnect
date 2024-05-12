@@ -51,6 +51,31 @@ export const UpdateMyProfileScreen = () => {
     setLoading(false)
   }, [])
 
+  useEffect(() => {
+    // TODO: Later
+    setLoading(false)
+  }, [])
+
+  useEffect(() => {
+    // TODO: Later
+    setLoading(false)
+  }, [])
+
+  useEffect(() => {
+    // TODO: Later
+    setLoading(false)
+  }, [])
+
+  useEffect(() => {
+    // TODO: Later
+    setLoading(false)
+  }, [])
+
+  useEffect(() => {
+    // TODO: Later
+    setLoading(false)
+  }, [])
+
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={{uri: image}}/>
