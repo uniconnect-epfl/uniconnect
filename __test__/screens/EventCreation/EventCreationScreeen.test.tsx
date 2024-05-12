@@ -123,4 +123,21 @@ describe("EventCreationScreen", () => {
     fireEvent.changeText(titleInput, "New Event Title")
     expect(titleInput.props.value).toBe("New Event Title")
   })
+
+  it("handles interest tag selection", () => {
+    const { getByText } = render(<EventCreationScreen />)
+    fireEvent.press(getByText("Choose up to three tags"))
+    // Assume modal or dropdown opens, simulate selecting a tag
+    // Add mock function or state update check here
+  })
+
+  it("renders different UI elements based on the isAnnouncement prop", () => {
+    const { queryByText, rerender } = render(
+      <EventCreationScreen isAnnouncement={true} />
+    )
+    expect(queryByText("Location*")).toBeNull() // Assuming location is not needed for announcements
+
+    rerender(<EventCreationScreen isAnnouncement={false} />)
+    expect(queryByText("Location*")).toBeTruthy()
+  })
 })

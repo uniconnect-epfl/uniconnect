@@ -33,25 +33,34 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
 
   const publish = async () => {
     // send the data to the backend
-    isAnnouncement
-      ? await createAnnouncement(
-          "0",
-          title,
-          location,
-          { x: 47.238458, y: 5.984155 },
-          description,
-          interests,
-          date.toDateString()
-        )
-      : await createEvent(
-          "0",
-          title,
-          description,
-          date,
-          { x: 47.238458, y: 5.984155 },
-          location,
-          "imageUrl"
-        )
+    console.log("Publishing event...")
+    console.log("Title:", title)
+    console.log("Location:", location)
+    console.log("Description:", description)
+    console.log("Date:", date.toDateString())
+    console.log("Interests:", interests)
+
+    if (isAnnouncement) {
+      await createAnnouncement(
+        "0",
+        title,
+        location,
+        { x: 47.238458, y: 5.984155 },
+        description,
+        interests,
+        date.toDateString()
+      )
+    } else {
+      await createEvent(
+        "0",
+        title,
+        description,
+        date,
+        { x: 47.238458, y: 5.984155 },
+        location,
+        "imageUrl"
+      )
+    }
 
     // after the user has filled out the form
     // we should make sure the global state is cleaned
@@ -82,15 +91,11 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
 
           <Pressable onPress={() => alert("Coming in the next sprint")}>
             <View style={styles.tags}>
-              <View style={styles.addTag}>
-                <Ionicons name="add" size={24} color={white} />
-              </View>
-              <View style={styles.addTag}>
-                <Ionicons name="add" size={24} color={white} />
-              </View>
-              <View style={styles.addTag}>
-                <Ionicons name="add" size={24} color={white} />
-              </View>
+              {[...Array(3)].map((_, index) => (
+                <View style={styles.addTag} key={index}>
+                  <Ionicons name="add" size={24} color={white} />
+                </View>
+              ))}
             </View>
           </Pressable>
         </View>
@@ -150,7 +155,7 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
           </Pressable>
         </View>
       </View>
-    </ScrollView> // Correctly closed here
+    </ScrollView>
   )
 }
 
