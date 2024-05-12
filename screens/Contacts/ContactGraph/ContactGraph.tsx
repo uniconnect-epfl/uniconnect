@@ -202,7 +202,6 @@ function handleQuery(callback: (uid: string) => void, graph: Graph): void {
   }
 }
 
-// TODO: Implement the 'similarity' fetching
 async function friendsFromUID(uid: string): Promise<string[]> {
   // TODO: Implement Asynchronous storage of friends data
   const user = await getUserData(uid)
@@ -223,8 +222,8 @@ export async function createContactListFromUsers(
         uid: friend?.uid ?? "-1",
         firstName: friend?.firstName ?? "",
         lastName: friend?.lastName ?? "",
-        profilePictureUrl:
-          "https://t3.ftcdn.net/jpg/04/65/28/08/360_F_465280897_8nL6xlvBwUcLYIQBmyX0GO9fQjDwNYtV.jpg",
+        profilePictureUrl: "",
+        // "https://t3.ftcdn.net/jpg/04/65/28/08/360_F_465280897_8nL6xlvBwUcLYIQBmyX0GO9fQjDwNYtV.jpg",
         description: friend?.description ?? "",
         location: friend?.location ?? "",
         interests: friend?.selectedInterests ?? [""],

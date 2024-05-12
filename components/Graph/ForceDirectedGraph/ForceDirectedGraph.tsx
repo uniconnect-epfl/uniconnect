@@ -195,8 +195,6 @@ const ForceDirectedGraph: React.FC<{
 
     // If the graph is not initialized, run the Fruchterman-Reingold algorithm
     if (getInitialized(graph) === false) {
-      console.log("Running Fruchterman-Reingold algorithm")
-      console.log(magicNodeId)
       setNodes(
         fruchtermanReingold(
           getNodes(graph),
@@ -428,17 +426,32 @@ const ForceDirectedGraph: React.FC<{
       >
         <G>
           {/* Profile picture of the node */}
-          <Image
-            key={node.id + "image"}
-            x={coordX(node) - DEFAULT_NODE_SIZE / node.level}
-            y={coordY(node) - DEFAULT_NODE_SIZE / node.level}
-            width={(2 * DEFAULT_NODE_SIZE) / node.level}
-            height={(2 * DEFAULT_NODE_SIZE) / node.level}
-            xlinkHref={node.contact.profilePictureUrl}
-            clipPath={`url(#clipPath-${node.id})`}
-            preserveAspectRatio="xMidYMid slice"
-            testID={"node-" + node.id}
-          />
+          {node.contact.profilePictureUrl === "" ? (
+            <Image
+              key={node.id + "image"}
+              x={coordX(node) - DEFAULT_NODE_SIZE / node.level}
+              y={coordY(node) - DEFAULT_NODE_SIZE / node.level}
+              width={(2 * DEFAULT_NODE_SIZE) / node.level}
+              height={(2 * DEFAULT_NODE_SIZE) / node.level}
+              href={require("../../../assets/default_profile_picture.png")}
+              clipPath={`url(#clipPath-${node.id})`}
+              preserveAspectRatio="xMidYMid slice"
+              testID={"node-" + node.id}
+            />
+          ) : (
+            <Image
+              key={node.id + "image"}
+              x={coordX(node) - DEFAULT_NODE_SIZE / node.level}
+              y={coordY(node) - DEFAULT_NODE_SIZE / node.level}
+              width={(2 * DEFAULT_NODE_SIZE) / node.level}
+              height={(2 * DEFAULT_NODE_SIZE) / node.level}
+              xlinkHref={node.contact.profilePictureUrl}
+              clipPath={`url(#clipPath-${node.id})`}
+              preserveAspectRatio="xMidYMid slice"
+              testID={"node-" + node.id}
+            />
+          )}
+
           <Circle
             key={node.id + "mask"}
             cx={coordX(node)}

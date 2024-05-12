@@ -9,7 +9,6 @@ import ContactGraph, {
   createContactListFromUsers,
   createGraphfromContacts,
 } from "./ContactGraph/ContactGraph"
-import { mockContacts } from "./mockContacts"
 import Graph from "../../components/Graph/Graph"
 import { Contact } from "../../types/Contact"
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -44,16 +43,26 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
   })
 
   const [friends, setFriends] = useState<string[] | null>(null)
+  const [contacts, setContacts] = useState<Contact[]>([])
 
+  const initializeContacts = async () => {
+    const contacts = await createContactListFromUsers(friends ?? [])
+    setContacts(contacts)
+  }
   useEffect(() => {
     if (friends) {
-      loadGraphData(userId ?? "-1", userContact, friends ?? [""]).then(
-        (graph) => {
-          setGraph(graph)
-        }
-      )
+      initializeContacts()
     }
   }, [friends])
+
+  useEffect(() => {
+    console.log(contacts)
+    if (contacts.length > 0) {
+      loadGraphData(userId ?? "-1", userContact, contacts).then((graph) => {
+        setGraph(graph)
+      })
+    }
+  }, [contacts])
 
   useEffect(() => {
     setUserId(getAuth().currentUser?.uid)
@@ -92,8 +101,6 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
   const [selectedTab, setSelectedTab] = useState("Plain View")
   const insets = useSafeAreaInsets()
 
-  const contacts = mockContacts
-
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <SectionTabs
@@ -108,12 +115,10 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
 
       {selectedTab === "Plain View" && (
         <ContactList
-          onContactPress={
-            (/*uid*/) =>
-              // This is hardcoded for now but will be just the uid when we'll have implemented friends
-              navigation.navigate("ExternalProfile", {
-                externalUserUid: "5AsCcApHTEdn2YW7IB8DOClVTZw1",
-              })
+          onContactPress={(uid) =>
+            navigation.navigate("ExternalProfile", {
+              externalUserUid: uid,
+            })
           }
           contacts={contacts}
         />
@@ -122,7 +127,6 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
       {selectedTab === "Graph View" && graph && userId && (
         <ContactGraph
           onContactPress={(uid) =>
-            // This is hardcoded for now but will be just the uid when we'll have implemented friends
             navigation.navigate("ExternalProfile", {
               externalUserUid: uid,
             })
@@ -155,7 +159,7 @@ const destroyGraphFileIfExists = async () => {
 async function loadGraphData(
   userId: string,
   userContact: Contact,
-  friends: string[]
+  contacts: Contact[]
 ): Promise<Graph> {
   try {
     const graphData = await AsyncStorage.getItem(GRAPH_STORAGE_KEY)
@@ -163,12 +167,8 @@ async function loadGraphData(
       const parsedGraph = JSON.parse(graphData)
       return parsedGraph
     } else {
-      // const newGraph = createGraphfromContacts(mockContacts, "0")
-
-      // Create the graph by fetching the user's friends
-      // –––––––––––––––––––––––––––––––––––––––––––––––
       const newGraph = createGraphfromContacts(
-        [userContact, ...(await createContactListFromUsers(friends ?? []))],
+        [userContact, ...contacts],
         userId ?? "-1"
       )
       await AsyncStorage.setItem(GRAPH_STORAGE_KEY, JSON.stringify(newGraph))

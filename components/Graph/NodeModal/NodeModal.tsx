@@ -16,6 +16,7 @@ const NodeModal: React.FC<{
   onPressOut: () => void
   onContactPress: (uid: string) => void
 }> = ({ node, visible, onPressOut, onContactPress }) => {
+  console.log(node.contact.profilePictureUrl)
   return (
     <Modal
       animationType="fade"
@@ -41,7 +42,13 @@ const NodeModal: React.FC<{
             >
               <Image
                 key={node.id + "modalimage"}
-                source={{ uri: node.contact.profilePictureUrl }}
+                source={
+                  // node.contact.profilePicture !== ""
+                  //   ? { uri: node.contact.profilePictureUrl }
+                  //   : {
+
+                  require("../../../assets/default_profile_picture.png")
+                }
                 style={styles.modalProfilePicture}
                 testID="modal-profile-picture"
               />

@@ -135,7 +135,6 @@ function addContactNode(graph: Graph, contact: Contact, level: number): void {
   if (contact.friends) {
     for (const friendId of contact.friends) {
       if (getNodeById(graph, friendId)) {
-        console.log("Friend exists in graph")
         addLink(graph, friendId, contact.uid)
       }
     }
