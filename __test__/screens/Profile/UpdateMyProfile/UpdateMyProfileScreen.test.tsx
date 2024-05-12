@@ -165,4 +165,22 @@ describe('UpdateMyProfileScreen', () => {
       expect(showSuccessToast).toHaveBeenCalledTimes(1)
     })
   })
+
+  it("should show error toast when user data is not updated", async () => {
+    const { getByText } = render(
+      <NavigationContainer>
+        <UpdateMyProfileScreen />
+      </NavigationContainer>
+    )
+
+    const mockUpdateUserData = updateUserData as jest.Mock
+    mockUpdateUserData.mockResolvedValue(false)
+
+    const updateButton = getByText("Submit changes")
+    fireEvent.press(updateButton)
+
+    await waitFor(() => {
+      expect(showSuccessToast).not.toHaveBeenCalled()
+    })
+  })
 })
