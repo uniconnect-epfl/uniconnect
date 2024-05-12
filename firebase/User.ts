@@ -90,6 +90,7 @@ export const updateUserEvents = async (uid: string, events: string[]) => {
     console.log("Events updated")
     console.log(events)
     console.log(events.length)
+    console.log("success")
     return true
   }
   catch (error) {
