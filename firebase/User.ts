@@ -87,6 +87,9 @@ export const updateUserEvents = async (uid: string, events: string[]) => {
   try{
     const docRef = doc(db, "users", uid)
     await updateDoc(docRef, { events })
+    console.log("Events updated")
+    console.log(events)
+    console.log(events.length)
     return true
   }
   catch (error) {
