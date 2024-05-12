@@ -78,9 +78,9 @@ export const UpdateMyProfileScreen = () => {
         value={location}
         onChangeText={setLocation}
       />
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
+      <Text style={styles.text1}>soon</Text>
+      <Text style={styles.text2}>soon</Text>
+      <Text style={styles.text3}>soon</Text>
       <Text>soon</Text>
       <Text>soon</Text>
       <Text>soon</Text>
