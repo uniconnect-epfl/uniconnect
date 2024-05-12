@@ -77,17 +77,20 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
           <Text style={[styles.tagsTitle, globalStyles.text]}>
             Choose up to three tags
           </Text>
-          <View style={styles.tags}>
-            <View style={styles.addTag}>
-              <Ionicons name="add" size={24} color={white} />
+
+          <Pressable onPress={() => alert("Coming in the next sprint")}>
+            <View style={styles.tags}>
+              <View style={styles.addTag}>
+                <Ionicons name="add" size={24} color={white} />
+              </View>
+              <View style={styles.addTag}>
+                <Ionicons name="add" size={24} color={white} />
+              </View>
+              <View style={styles.addTag}>
+                <Ionicons name="add" size={24} color={white} />
+              </View>
             </View>
-            <View style={styles.addTag}>
-              <Ionicons name="add" size={24} color={white} />
-            </View>
-            <View style={styles.addTag}>
-              <Ionicons name="add" size={24} color={white} />
-            </View>
-          </View>
+          </Pressable>
         </View>
         {!isAnnouncement && (
           <View style={styles.eventDetailsContainer}>
