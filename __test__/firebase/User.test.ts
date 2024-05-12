@@ -153,7 +153,7 @@ describe("User", () => {
     expect(result).toBe(false)
   })
 
-  it("should show error toast and return false when updating user interests fails", async () => {
+  it("should update user interests in database and return true when successful", async () => {
     const uid = "123"
     const interests = ["Machine Learning, Sports, Tractoupelle"]
 
@@ -165,7 +165,7 @@ describe("User", () => {
     expect(result).toBe(true)
   })
 
-  it("should update user interests in database and return true when successful", async () => {
+  it("should show error toast and return false when updating user interests fails", async () => {
     const uid = "123"
 
     const interests = ["Machine Learning, Sports, Tractoupelle"]
@@ -177,5 +177,28 @@ describe("User", () => {
 
     expect(result).toBe(false)
   })
-  
+
+  it("should update user events in database and return true when successful", async () => {
+    const uid = "123"
+    const events = ["Machine Learning, Sports, Tractoupelle"]
+
+    const mockUpdateDoc = updateDoc as jest.Mock
+    mockUpdateDoc.mockResolvedValue(true)
+
+    const result = await updateUserInterests(uid, events)
+
+    expect(result).toBe(true)
+  })
+
+  it("should show error toast and return false when updating user events fails", async () => {
+    const uid = "123"
+    const events = ["Machine Learning, Sports, Tractoupelle"]
+
+    const mockUpdateDoc = updateDoc as jest.Mock
+    mockUpdateDoc.mockRejectedValue(new Error("Failed to fetch user data"))
+
+    const result = await updateUserInterests(uid, events)
+
+    expect(result).toBe(false)
+  })
 })

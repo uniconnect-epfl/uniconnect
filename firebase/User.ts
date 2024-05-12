@@ -81,3 +81,15 @@ export const updateUserInterests = async (uid: string, interests: string[]) => {
     return false
   }
 }
+
+export const updateUserEvents = async (uid: string, events: string[]) => {
+  try{
+    const docRef = doc(db, "users", uid)
+    await updateDoc(docRef, { events })
+    return true
+  }
+  catch (error) {
+    showErrorToast("Error updating user data. Please check your connection and try again.")
+    return false
+  }
+}
