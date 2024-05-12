@@ -69,3 +69,15 @@ export const updateUserImage = async (uid: string, url: string) => {
     return false
   }
 }
+
+// Ignore for now
+export const updateUserInterests = async (uid: string, interests: string[]) => {
+  try {
+    const docRef = doc(db, "users", uid)
+    await updateDoc(docRef, { interests })
+    return true
+  } catch (error) {
+    showErrorToast("Error updating user data. Please check your connection and try again.")
+    return false
+  }
+}

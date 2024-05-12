@@ -1,6 +1,6 @@
 import { Firestore } from "firebase/firestore"
 import { Auth } from "firebase/auth"
-import { getUserData, updateUserData, updateUserImage, uploadUserImageToStorage } from "../../firebase/User"
+import { getUserData, updateUserData, updateUserImage, updateUserInterests, uploadUserImageToStorage } from "../../firebase/User"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
 
 jest.mock('firebase/storage', () => ({
@@ -136,6 +136,25 @@ describe("User", () => {
 
 
     const result = await updateUserImage(uid, url)
+
+    expect(result).toBe(false)
+  })
+
+  it("should show error toast and return false when updating user interests fails", async () => {
+    const uid = "123"
+    const interests = ["Machine Learning, Sports, Tractoupelle"]
+
+    const result = await updateUserInterests(uid, interests)
+
+    expect(result).toBe(false)
+  })
+
+  it("should update user interests in database and return true when successful", async () => {
+    const uid = "123"
+
+    const interests = ["Machine Learning, Sports, Tractoupelle"]
+
+    const result = await updateUserInterests(uid, interests)
 
     expect(result).toBe(false)
   })
