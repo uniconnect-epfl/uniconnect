@@ -66,61 +66,61 @@ const ContactGraph = ({
   }
 
   const onMagicPress = async (uid: string) => {
-    console.log("Magic Pressed")
-    if (graph) {
-      if (uid === userId) {
-        setInitialized(graph, false)
-        if (magicPressedID !== "") {
-          getNodeById(graph, magicPressedID).magicSelected = false
-        }
-        setMagicPressedID("")
+    if (!graph) {
+      return
+    }
+    if (uid === userId) {
+      setInitialized(graph, false)
+      if (magicPressedID !== "") {
+        getNodeById(graph, magicPressedID).magicSelected = false
+      }
+      setMagicPressedID("")
+      magicNeighbors.forEach((neighbor) => {
+        deleteNode(graph, neighbor)
+      })
+      setMagicNeighbors([])
+    } else if (magicPressedID !== "" && magicPressedID === uid) {
+      setInitialized(graph, false)
+      getNodeById(graph, uid).magicSelected = false
+      setMagicPressedID("")
+      magicNeighbors.forEach((neighbor) => {
+        deleteNode(graph, neighbor)
+      })
+      setMagicNeighbors([])
+    } else {
+      if (magicPressedID !== "" && magicPressedID !== uid) {
+        getNodeById(graph, magicPressedID).magicSelected = false
         magicNeighbors.forEach((neighbor) => {
           deleteNode(graph, neighbor)
         })
-        setMagicNeighbors([])
-      } else if (magicPressedID !== "" && magicPressedID === uid) {
-        setInitialized(graph, false)
-        getNodeById(graph, uid).magicSelected = false
-        setMagicPressedID("")
-        magicNeighbors.forEach((neighbor) => {
-          deleteNode(graph, neighbor)
-        })
-        setMagicNeighbors([])
-      } else {
-        if (magicPressedID !== "" && magicPressedID !== uid) {
-          getNodeById(graph, magicPressedID).magicSelected = false
-          magicNeighbors.forEach((neighbor) => {
-            deleteNode(graph, neighbor)
-          })
-        }
-        const newFriends = await friendsFromUID(uid)
+      }
+      const newFriends = await friendsFromUID(uid)
 
-        const newContacts = await createContactListFromUsers(newFriends)
+      const newContacts = await createContactListFromUsers(newFriends)
 
-        const filteredNewContacts = newContacts.filter(
-          (contact) =>
-            !getNodes(graph).find((node) => node.contact.uid === contact.uid) &&
-            contact.uid !== userId &&
-            getNodeById(graph, uid).contact.friends?.includes(contact.uid)
-        )
+      const filteredNewContacts = newContacts.filter(
+        (contact) =>
+          !getNodes(graph).find((node) => node.contact.uid === contact.uid) &&
+          contact.uid !== userId &&
+          getNodeById(graph, uid).contact.friends?.includes(contact.uid)
+      )
 
-        const relevantNewContact = filteredNewContacts.filter((contact) =>
-          relevantContact(userContact, contact)
-        )
+      const relevantNewContact = filteredNewContacts.filter((contact) =>
+        relevantContact(userContact, contact)
+      )
 
-        if (relevantNewContact.length === 0) {
-          setInitialized(graph, false)
-        }
-
-        relevantNewContact.forEach((contact) => {
-          addContactNode(graph, contact, 3)
-        })
-
-        setMagicNeighbors(relevantNewContact.map((contact) => contact.uid))
-        getNodeById(graph, uid).magicSelected = true
-        setMagicPressedID(uid)
+      if (relevantNewContact.length === 0) {
         setInitialized(graph, false)
       }
+
+      relevantNewContact.forEach((contact) => {
+        addContactNode(graph, contact, 3)
+      })
+
+      setMagicNeighbors(relevantNewContact.map((contact) => contact.uid))
+      getNodeById(graph, uid).magicSelected = true
+      setMagicPressedID(uid)
+      setInitialized(graph, false)
     }
     handleSearch(searchText, graph)
   }
