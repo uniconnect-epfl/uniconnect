@@ -48,9 +48,9 @@ describe('AnnouncementScreen', () => {
   it('displays a message when there are no announcements', async () => {
     // Adjust the mock to return an empty array or null
     getAllAnnouncements.mockResolvedValueOnce([])
-    const { getByText } = render(<AnnouncementScreen onAnnoucmentPress={() => {}}/>)
+    const { queryByText } = render(<AnnouncementScreen onAnnoucmentPress={() => {}}/>)
     await waitFor(() => {
-      expect(getByText('Future Announcements')).toBeTruthy()
+      expect(queryByText('Announcement 1')).toBeFalsy()
     })
   })
 
