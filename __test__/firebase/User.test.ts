@@ -32,8 +32,7 @@ jest.mock("firebase/firestore", () => ({
   addDoc: jest.fn(),
   collection: jest.fn(() => ({})),
   serverTimestamp: jest.fn(() => ({})),
-  setDoc: mockSetDoc,
-  updateDoc: jest.fn(() => false)
+  setDoc: mockSetDoc
 }))
 
 jest.mock("../../components/ToastMessage/toast", () => ({
