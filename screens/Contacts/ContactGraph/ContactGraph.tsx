@@ -15,14 +15,23 @@ import ForceDirectedGraph from "../../../components/Graph/ForceDirectedGraph/For
 import React, { useState } from "react"
 
 import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
+import { globalStyles } from "../../../assets/global/globalStyles"
 
 interface ContactGraphProps {
   onContactPress: (uid: string) => void
+  onMagicPress: (uid: string) => void
   graph: Graph
   userId: string
+  magicUserId: string
 }
 
-const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
+const ContactGraph = ({
+  onContactPress,
+  graph,
+  userId,
+  magicUserId,
+  onMagicPress,
+}: ContactGraphProps) => {
   const [searchText, setSearchText] = useState("")
   const [modalVisible, setModalVisible] = useState(false)
   const [clickedNode, setClickedNode] = useState<Node>(
@@ -41,12 +50,17 @@ const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
     setModalVisible(false)
   }
 
+  const onMagicPressUpdate = (uid: string) => {
+    onMagicPress(uid)
+    handleSearch(searchText, graph)
+  }
+
   return (
     // Dismiss the keyboard when the user taps outside of the search bar
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <TextInput
-          style={styles.searchBar}
+          style={[globalStyles.text, styles.searchBar]}
           placeholder="Search..."
           value={searchText}
           onChangeText={(text) => {
@@ -65,7 +79,10 @@ const ContactGraph = ({ onContactPress, graph, userId }: ContactGraphProps) => {
           <ForceDirectedGraph
             graph={graph}
             constrainedNodeId={userId}
+            magicNodeId={magicUserId}
+            modalPressedOut={!modalVisible}
             onModalPress={onModalPress}
+            onMagicPress={onMagicPressUpdate}
           />
         </View>
       </View>

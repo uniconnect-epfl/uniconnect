@@ -17,7 +17,7 @@ jest.mock('firebase/auth', () => ({
 
 jest.mock("../../../components/GoogleSignInButton/GoogleSignInButton", () => {
   return {
-    GoogleSignInButton: () => {"Continue with google"}
+    GoogleSignInButton: () => {"Continue with Google"}
   }
 })
 

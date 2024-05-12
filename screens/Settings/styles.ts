@@ -17,8 +17,8 @@ export const styles = StyleSheet.create({
   header: {
     alignItems: "center",
     flexDirection: "row",
+    marginBottom: 40,
     marginHorizontal: 20,
-    marginVertical: 40,
   },
   headerTitle: {
     color: black,

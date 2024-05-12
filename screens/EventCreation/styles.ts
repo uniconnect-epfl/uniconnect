@@ -47,7 +47,7 @@ export const styles = StyleSheet.create({
     shadowRadius: 5,
     width: "30%",
   },
- buttonDescription: {
+  buttonDescription: {
   },
   buttonText: {
     color: black,
@@ -67,15 +67,15 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    alignItems: "center",
     backgroundColor: lightPeach,
     flexDirection: "row",
-    paddingHorizontal: 20,
-    paddingVertical: 40,
+    justifyContent: "space-between",
+    paddingHorizontal: "3%",
+    paddingVertical: 20,
+    width: "100%"
   },
- headerIcon: {
-    alignItems: "center",
-    flex: 1,
+  headerIcon: {
+    alignSelf: "flex-end"
   },
   input: {
     borderColor: lightPeach,

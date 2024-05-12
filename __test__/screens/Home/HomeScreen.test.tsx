@@ -1,5 +1,5 @@
 
-import { render, fireEvent, waitFor } from '@testing-library/react-native'
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native'
 import HomeScreen from '../../../screens/Home/HomeScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import React from 'react'
@@ -105,14 +105,19 @@ describe('HomeScreen', () => {
         
     })
 
-    it('keyboard disapear if we click aside', () => {
+    it('keyboard disapear if we click aside', async () => {
         const { getByPlaceholderText } = render(
           <SafeAreaProvider>
             <HomeScreen navigation={mockNavigation}/>
           </SafeAreaProvider>
         )
-        fireEvent.press(getByPlaceholderText('Search...'))
-        expect(getByPlaceholderText('Search...')).toBeTruthy()
+        await act(async () => {
+          await waitFor(() => {
+            const search = getByPlaceholderText('Search...')
+            fireEvent.press(search)
+            expect(getByPlaceholderText('Search...')).toBeTruthy()
+          })
+        })
     })
 
     it('can change screen', () => {

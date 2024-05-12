@@ -1,11 +1,7 @@
 
 import { View } from "react-native"
 import { styles } from "./styles"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
-
 import React, { useState } from "react"
-// will need to import it from the database later
-
 import SectionTabs from "../../components/SectionTabs/SectionTabs"
 import EventScreen from "./EventScreen/EventScreen"
 import AnnouncementScreen from "./AnnouncementScreen/AnnouncementScreen"
@@ -16,11 +12,10 @@ interface HomeScreenProps {
 }
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {
-  const insets = useSafeAreaInsets()
   const [selectedTab, setSelectedTab] = useState("Events")
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={styles.container}>
       <SectionTabs
         tabs={["Events","Announcements"]}
         startingTab="Events"
@@ -28,8 +23,6 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
           setSelectedTab(tab)
         }}
       />
-
-      <View style={styles.separationBar} />
 
       {selectedTab === "Events" && (
         <EventScreen
