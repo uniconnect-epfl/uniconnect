@@ -6,15 +6,15 @@ import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { peach, white } from "../../assets/colors/colors"
 import { createAnnouncement } from "../../firebase/ManageAnnouncements"
+import { createEvent } from "../../firebase/ManageEvents"
 import InputField from "../../components/InputField/InputField"
 import MyDateInputComponent from "../../components/DatePicker/DatePicker"
 
 interface EventCreationScreenProps {
-  isAnnouncement: undefined | boolean
+  isAnnouncement?: boolean
 }
 
 const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
-  // const firstRef = React.useRef<TextInput>(null)
   const navigation = useNavigation()
   const [dateModal, setDateModal] = useState(false)
   const [date, setDate] = useState<Date>(new Date())
@@ -34,7 +34,8 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
   // }
   const opacity = !hasBeenTouched ? 0.2 : 1
 
-  const newAnnouncement = async () => {
+  const publish = async () => {
+    isAnnouncement ?
     await createAnnouncement(
       "0",
       title,
@@ -43,7 +44,7 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
       description,
       interests,
       date.toDateString()
-    )
+    ) : await createEvent("0", title, description, date, { x: 47.238458, y: 5.984155 }, location, "imageUrl")
   }
 
   return (
@@ -94,45 +95,43 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
               value={location}
               onChangeText={setLocation}
             />
+            <Pressable
+              style={styles.section}
+              onPress={() => {
+                setDateModal(true)
+                setHasBeenTouched(true)
+              }}
+            >
+              <Text style={[styles.label, globalStyles.text]}>{"Date*"}</Text>
+              <View style={styles.input}>
+                <Text style={[globalStyles.text, { opacity: opacity }]}>
+                  {!hasBeenTouched
+                    ? "DD.MM.YYYY"
+                    : "" +
+                      date.getUTCDate().toString() +
+                      "." +
+                      (date.getUTCMonth() + 1).toString() +
+                      "." +
+                      date.getFullYear().toString() +
+                      ""}
+                </Text>
+              </View>
+            </Pressable>
           </View>
         )}
-        <Pressable
-          style={styles.section}
-          onPress={() => {
-            setDateModal(true)
-            setHasBeenTouched(true)
-          }}
-        >
-          <Text style={[styles.label, globalStyles.text]}>
-            {"Date of Birth*"}
-          </Text>
-          <View style={styles.input}>
-            <Text style={[globalStyles.text, { opacity: opacity }]}>
-              {!hasBeenTouched
-                ? "JJ.MM.YYYY"
-                : "" +
-                  date.getUTCDate().toString() +
-                  "." +
-                  (date.getUTCMonth() + 1).toString() +
-                  "." +
-                  date.getFullYear().toString() +
-                  ""}
-            </Text>
-          </View>
-        </Pressable>
         <View style={styles.bottomButtons}>
           <Pressable style={styles.buttonBase}>
             <Text
               onPress={() =>
-                navigation.navigate("Description" as never, {} as never)
+                navigation.navigate("Description" as never)
               }
               style={globalStyles.boldText}
             >
               Add a description
             </Text>
           </Pressable>
-          <Pressable style={styles.buttonBase}>
-            <Text onPress={newAnnouncement} style={globalStyles.boldText}>
+          <Pressable style={styles.buttonBase} onPress={publish}>
+            <Text style={globalStyles.boldText}>
               Validate
             </Text>
           </Pressable>

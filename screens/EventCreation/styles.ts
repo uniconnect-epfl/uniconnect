@@ -18,11 +18,12 @@ export const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
+    flexDirection: "column",
+    justifyContent: "flex-end",
     padding: 20,
   },
   bottomButtons: {
     alignItems: "center",
-    backgroundColor: black,
     flex: 1,
   },
   button: {
@@ -31,20 +32,20 @@ export const styles = StyleSheet.create({
     padding: 10,
   },
   buttonBase: {
-    alignItems: "center",
     backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: 20,
     borderWidth: 2,
     display: "flex",
-    elevation: 8,
-    height: 30,
-    justifyContent: "center",
+    elevation: 4,
+    height: "auto",
+    margin: 20,
+    padding: 7,
+    paddingHorizontal: 25,
     shadowColor,
-    shadowOffset: { width: 0, height: 2.5 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.3,
-    shadowRadius: 5,
-    width: "30%",
+    shadowRadius: 2,
   },
   buttonText: {
     color: black,
@@ -72,6 +73,7 @@ export const styles = StyleSheet.create({
     borderRadius: 25,
     borderWidth: 1,
     height: 50,
+    justifyContent: "center",
     paddingHorizontal: 30,
     width: "100%",
   },
@@ -86,10 +88,12 @@ export const styles = StyleSheet.create({
   mandatoryInput: {
     flexDirection: "row",
   },
+
   section: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
+    marginBottom: 50,
     paddingHorizontal: 20,
     paddingTop: 10,
     width: "100%",
