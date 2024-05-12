@@ -1,30 +1,30 @@
 import { StyleSheet } from "react-native"
-import { black, lightPeach, peach, shadowColor, white } from "../../assets/colors/colors"
+import {
+  black,
+  lightPeach,
+  peach,
+  shadowColor,
+  white,
+  lightGray,
+} from "../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
-  activeButton: {
-    backgroundColor: peach,
-    color: white,
-  },
-  activeText: {
-    color: white,
-  },
   addTag: {
     alignItems: "center",
     backgroundColor: peach,
     borderRadius: 50,
-    color: white,
     padding: 5,
-    shadowColor,
-    width: 100,
- },
+    width: "27%",
+  },
   body: {
-    padding: 20
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    padding: 20,
   },
   bottomButtons: {
     alignItems: "center",
-    justifyContent: "flex-end",
-    padding: 20,
+    flex: 1,
   },
   button: {
     alignItems: "center",
@@ -32,39 +32,30 @@ export const styles = StyleSheet.create({
     padding: 10,
   },
   buttonBase: {
-    alignItems: "center",
     backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: 20,
     borderWidth: 2,
     display: "flex",
-    elevation: 8,
-    height: 30,
-    justifyContent: "center",
+    elevation: 4,
+    height: "auto",
+    margin: 20,
+    padding: 7,
+    paddingHorizontal: 25,
     shadowColor,
-    shadowOffset: { width: 0, height: 2.5 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.3,
-    shadowRadius: 5,
-    width: "30%",
-  },
-  buttonDescription: {
+    shadowRadius: 2,
   },
   buttonText: {
     color: black,
   },
-  buttonValidate: {
-  },
-  container: { 
+  container: {
     backgroundColor: white,
     flex: 1,
   },
-  dateContainer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    paddingTop: 50,
-  },
-  form: {
-    flex: 1,
+  eventDetailsContainer: {
+    paddingTop: 20,
   },
   header: {
     backgroundColor: lightPeach,
@@ -75,45 +66,52 @@ export const styles = StyleSheet.create({
     width: "100%"
   },
   headerIcon: {
-    alignSelf: "flex-end"
+    alignItems: "center",
+    flex: 1,
   },
   input: {
-    borderColor: lightPeach,
+    borderColor: lightGray,
+    borderRadius: 25,
     borderWidth: 1,
-    marginBottom: 10,
-    padding: 10,
+    height: 50,
+    justifyContent: "center",
+    paddingHorizontal: 30,
+    width: "100%",
+  },
+  label: {
+    color: black,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    marginTop: 10,
+    paddingLeft: 20,
+  },
+  mandatoryInput: {
+    flexDirection: "row",
+  },
+
+  section: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    marginBottom: 50,
+    paddingHorizontal: 20,
+    paddingTop: 10,
+    width: "100%",
   },
   tags: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 10,
   },
-  tagsSepator: {
+  tagsSeparator: {
     borderBottomColor: black,
     borderBottomWidth: 1,
     paddingBottom: 20,
- },
+  },
   tagsTitle: {
     color: black,
     marginBottom: 10,
- },
-  toggleAnnouncement: {
-    backgroundColor: peach,
-  },
-  toggleBase: {
-
-    alignItems: "center",
-    borderRadius: 20,
-    marginBottom: 20,
     padding: 10,
   },
-  toggleEvent: {
-    backgroundColor: lightPeach,
-  },
-  toggleTextAnnouncement: {
-    color: lightPeach,
-  },
-  toggleTextEvent: {
-    color: peach,
-  }
 })
