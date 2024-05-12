@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, SectionList, SectionListRenderItemInfo } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { View, Text, SectionList, SectionListRenderItemInfo, TouchableOpacity } from 'react-native'
 import { styles } from './styles'// Ensure the paths are correct
 import AnnouncementCard from '../../../components/AnnoucementCard/AnnouncementCard'
 import { Announcement } from '../../../types/Annoucement'
