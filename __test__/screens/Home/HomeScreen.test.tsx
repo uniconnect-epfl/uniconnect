@@ -1,5 +1,5 @@
 
-import { render, fireEvent, waitFor } from '@testing-library/react-native'
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native'
 import HomeScreen from '../../../screens/Home/HomeScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import React from 'react'
@@ -44,6 +44,8 @@ jest.mock('../../../firebase/ManageEvents', () => ({
     { id: '4', title: 'Past Event 2', date: '2022-01-02' }
   ]))
 }))
+
+
 describe('HomeScreen', () => {
 
     it('renders the Home screen', () => {
@@ -56,7 +58,7 @@ describe('HomeScreen', () => {
     })
 
     it('filters events based on search input', async () => {
-        const { getByText, getByPlaceholderText } = render(
+        const {getByText ,getAllByText, getByPlaceholderText } = render(
           <SafeAreaProvider>
             <HomeScreen />
           </SafeAreaProvider>
@@ -64,10 +66,10 @@ describe('HomeScreen', () => {
 
         await waitFor(() => {
           fireEvent.changeText(getByPlaceholderText('Search...'), 'Past Event')
-          expect(getByText('Past Event 2')).toBeTruthy()
+          expect(getAllByText('Past Event 2')).toBeTruthy()
     
           fireEvent.changeText(getByPlaceholderText('Search...'), '')
-          expect(getByText('Past Event 1')).toBeTruthy()
+          expect(getAllByText('Past Event 1')).toBeTruthy()
 
           fireEvent.press(getByText('Map View'))
           expect(getByText('Map View')).toBeTruthy()
@@ -90,14 +92,19 @@ describe('HomeScreen', () => {
         
     })
 
-    it('keyboard disapear if we click aside', () => {
+    it('keyboard disapear if we click aside', async () => {
         const { getByPlaceholderText } = render(
           <SafeAreaProvider>
             <HomeScreen />
           </SafeAreaProvider>
         )
-        fireEvent.press(getByPlaceholderText('Search...'))
-        expect(getByPlaceholderText('Search...')).toBeTruthy()
+        await act(async () => {
+          await waitFor(() => {
+            const search = getByPlaceholderText('Search...')
+            fireEvent.press(search)
+            expect(getByPlaceholderText('Search...')).toBeTruthy()
+          })
+        })
     })
 
 

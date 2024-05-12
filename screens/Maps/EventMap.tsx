@@ -6,6 +6,7 @@ import styles from "./styles" // Import styles
 import { Ionicons } from "@expo/vector-icons"
 import { Event } from "../../types/Event"
 
+
 const INITIAL_REGION = {
   latitude: 46.51858962578904,
   longitude: 6.566048509782951,
@@ -30,7 +31,7 @@ const EventMap = () => {
     <View style={styles.container}>
       {/* Navigation Bar */}
       <View style={styles.navigationBar}>
-        <TouchableOpacity testID='back-button' onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity testID='back-button' onPress={() => navigation.goBack} style={styles.backButton}>
           {/* Using Ionicons for the back button icon */}
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
@@ -48,11 +49,7 @@ const EventMap = () => {
           <Marker
             key={index}
             title={event.title}
-            coordinate={{
-              latitude: event.point.x,
-              longitude: event.point.y,
-            }}
-            testID={`marker-${index}`}
+            coordinate={{ latitude: event.point.x, longitude: event.point.y}}
           >
             <Callout
               onPress={() => console.log("Callout pressed:", event.title)}

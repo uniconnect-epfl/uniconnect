@@ -70,7 +70,7 @@ const ContactList = ({ onContactPress, contacts }: ContactListProps) => {
   return (
     <View style={styles.container}>
       <TextInput
-        style={styles.searchBar}
+        style={[globalStyles.text, styles.searchBar]}
         placeholder="Search..."
         value={searchText}
         onChangeText={handleSearch}

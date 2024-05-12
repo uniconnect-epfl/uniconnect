@@ -1,10 +1,10 @@
 import { StyleSheet } from "react-native"
-import { lightPeach} from "../../assets/colors/colors"
+import { white} from "../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
     container: {
       alignItems: 'center',
-      backgroundColor: lightPeach,
+      backgroundColor: white,
       flexDirection: 'row',
       justifyContent: 'space-between',
       paddingHorizontal: 16,
