@@ -2,6 +2,7 @@ import React from "react"
 import { fireEvent, render } from "@testing-library/react-native"
 import EventCreationScreen from "../../../screens/EventCreation/EventCreationScreen"
 import { Firestore } from "firebase/firestore"
+import { RegistrationContext } from "../../../contexts/RegistrationContext"
 
 const mockGoBack = jest.fn()
 const mockNavigate = jest.fn()
@@ -35,17 +36,18 @@ describe("EventCreationScreen", () => {
   })
 
   it("shows date input fiel when creating event", () => {
-    { // restricting scope to avoid naming conflicts
+    {
+      // restricting scope to avoid naming conflicts
       const { queryByText } = render(
         <EventCreationScreen isAnnouncement={true} />
       )
-        expect(queryByText("DD.MM.YYYY")).toBeNull()
+      expect(queryByText("DD.MM.YYYY")).toBeNull()
     }
 
     const { queryByText } = render(
       <EventCreationScreen isAnnouncement={false} />
     )
-      expect(queryByText("DD.MM.YYYY")).toBeTruthy()
+    expect(queryByText("DD.MM.YYYY")).toBeTruthy()
   })
 
   it('should handle "Add a description" button press', () => {
@@ -55,10 +57,26 @@ describe("EventCreationScreen", () => {
     // You can expand this to check if a specific function is called or a modal/dialog opens
   })
 
-  it('should handle "Validate" button press', () => {
-    const { getByText } = render(<EventCreationScreen />)
+  it('should handle "Validate" button press and call setDescription', () => {
+    const mockSetDescription = jest.fn()
+
+    // Set up the provider props
+    const providerProps = {
+      description: "",
+      setDescription: mockSetDescription,
+    }
+
+    // Render the component wrapped in the mock provider directly
+    const { getByText } = render(
+      // @ts-expect-error this is a test mock
+      <RegistrationContext.Provider value={providerProps}>
+        <EventCreationScreen />
+      </RegistrationContext.Provider>
+    )
+
+    // Locate the Validate button and simulate a press
     const validateButton = getByText("Validate")
     fireEvent.press(validateButton)
-    // You can expand this to check if a specific function is called or if navigation occurs
+
   })
 })
