@@ -82,6 +82,7 @@ export const updateUserInterests = async (uid: string, interests: string[]) => {
   }
 }
 
+// Ignore for now
 export const updateUserEvents = async (uid: string, events: string[]) => {
   try{
     const docRef = doc(db, "users", uid)
