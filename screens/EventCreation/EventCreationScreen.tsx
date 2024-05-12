@@ -25,11 +25,12 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
   const [location, setLocation] = useState("")
   const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
 
-  const {description} = useContext(RegistrationContext)
+  const { description, setDescription } = useContext(RegistrationContext)
 
   const opacity = !hasBeenTouched ? 0.2 : 1
 
   const publish = async () => {
+    // send the data to the backend
     isAnnouncement
       ? await createAnnouncement(
           "0",
@@ -49,6 +50,10 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
           location,
           "imageUrl"
         )
+
+    // after the user has filled out the form
+    // we should make sure the global state is cleaned
+    setDescription("")
   }
 
   return (
@@ -126,9 +131,7 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
         <View style={styles.bottomButtons}>
           <Pressable style={styles.buttonBase}>
             <Text
-              onPress={() =>
-                navigation.navigate("Description" as never)
-              }
+              onPress={() => navigation.navigate("Description" as never)}
               style={globalStyles.boldText}
             >
               Add a description
