@@ -41,7 +41,11 @@ const NodeModal: React.FC<{
             >
               <Image
                 key={node.id + "modalimage"}
-                source={{ uri: node.contact.profilePictureUrl }}
+                source={
+                  node.contact.profilePictureUrl === ""
+                    ? require("../../../assets/default_profile_picture.png")
+                    : { uri: node.contact.profilePictureUrl }
+                }
                 style={styles.modalProfilePicture}
                 testID="modal-profile-picture"
               />

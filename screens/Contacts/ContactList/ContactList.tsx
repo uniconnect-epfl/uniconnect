@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
   View,
   Text,
@@ -19,8 +19,13 @@ interface ContactListProps {
 }
 
 const ContactList = ({ onContactPress, contacts }: ContactListProps) => {
-  const [filteredContacts, setFilteredContacts] = useState(contacts)
-  const [searchText, setSearchText] = useState("")
+  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([])
+  const [searchText, setSearchText] = useState<string>("")
+
+  useEffect(() => {
+    if (contacts.length === 0) return
+    setFilteredContacts(contacts)
+  }, [contacts])
 
   const handleSearch = (text: string) => {
     setSearchText(text)
@@ -70,16 +75,15 @@ const ContactList = ({ onContactPress, contacts }: ContactListProps) => {
   return (
     <View style={styles.container}>
       <TextInput
-        style={[globalStyles.text, styles.searchBar]}
+        style={styles.searchBar}
         placeholder="Search..."
         value={searchText}
         onChangeText={handleSearch}
       />
-
       <FlatList
         data={filteredContacts}
-        renderItem={RenderOneContact}
         keyExtractor={(contact) => contact.uid}
+        renderItem={RenderOneContact}
       />
     </View>
   )
