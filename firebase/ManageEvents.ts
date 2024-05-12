@@ -4,10 +4,10 @@ import { showErrorToast, showSuccessToast } from "../components/ToastMessage/toa
 import { Point } from "react-native-maps"
 import { Event } from "../types/Event"
 
-export async function createEvent(uid: string, title: string, description: string, date: Date, point: Point, location: string, imageUrl: string) {
+export async function createEvent(uid: string, title: string, description: string, date: Date, point: Point, location: string, imageUrl: string): Promise<string | undefined> {
   try {
-    const newCityRef = doc(collection(db, "events"))
-    await setDoc(newCityRef, {
+    const eventRef = doc(collection(db, "events"))
+    await setDoc(eventRef, {
       uid: uid,
       title: title,
       point: point,
@@ -16,11 +16,13 @@ export async function createEvent(uid: string, title: string, description: strin
       description: description,
       imageUrl: imageUrl,
     })
-
     showSuccessToast("Event created successfully!")
+    return eventRef.id
   } catch (error) {
+
     showErrorToast("There was an error storing your event data, please try again.")
   }
+  return undefined
 }
 
 const formatEvent = (doc): Event => {

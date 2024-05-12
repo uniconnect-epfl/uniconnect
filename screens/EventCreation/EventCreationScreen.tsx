@@ -12,8 +12,8 @@ import { useNavigation } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { peach, white } from "../../assets/colors/colors"
-import { createAnnouncement } from "../../firebase/ManageAnnouncements"
-import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
+import { createEvent } from "../../firebase/ManageEvents"
+import { updateUserEvents } from "../../firebase/User"
 
 const EventCreationScreen = () => {
   const navigation = useNavigation()
@@ -21,8 +21,9 @@ const EventCreationScreen = () => {
   const [title, setTitle] = useState("")
   const [description] = useState("lore ipsum")
   const [location] = useState("Besac City")
-  const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
-  const [date] = useState("12/07/2024")
+  // const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
+  // const [date] = useState("12/07/2024")
+  const [eventId, setEventId] = useState("")
 
   // const [startDate, setStartDate] = useState<Date>()
   // const [endDate, setEndDate] = useState("")
@@ -30,20 +31,25 @@ const EventCreationScreen = () => {
   //  const [point, setPoint] = useState({ x: 47.238458, y: 5.984155 })
 
 
-  // const newEvent = async () => {
-  //   console.log("Creating event")
-  //   await createEvent("uid2", title, description, new Date(2025, 0, 1), { x: 47.238458, y: 5.984155 }, location, "imageUrl")
-  // }
+  const newEvent = async () => {
+    console.log("Creating event")
+    const eventId_ = await createEvent("uid2", title, description, new Date(2025, 0, 1), { x: 47.238458, y: 5.984155 }, location, "imageUrl")
+    setEventId(eventId_)
+    await updateUserEvents("uid2", eventId)
+    console.log(eventId)
 
-  const newAnnouncement = async () => {
-    console.log("creating announcement")
-    try {
-      await createAnnouncement("0", title,location,{ x: 47.238458, y: 5.984155 }, description, interests, date)
-      showSuccessToast("Announcement created succesfully")
-    } catch (error) {
-      showErrorToast("Could not create announcement")
-    }
   }
+
+    // const newAnnouncement = async () => {
+    //   console.log("creating announcement")
+    //   try {
+    //     const announcementId = await createAnnouncement("0", title,location,{ x: 47.238458, y: 5.984155 }, description, interests, date)
+
+    //     showSuccessToast("Announcement created succesfully")
+    //   } catch (error) {
+    //     showErrorToast("Could not create announcement")
+    //   }
+    // }
 
   return (
     <ScrollView style={styles.container}>
@@ -104,7 +110,7 @@ const EventCreationScreen = () => {
               <Text onPress={() => Alert.alert("SOON^TM")} style={globalStyles.boldText}>Add a description</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.buttonBase, styles.buttonValidate]}>
-              <Text onPress={newAnnouncement} style={globalStyles.boldText}>Validate</Text>
+              <Text onPress={newEvent} style={globalStyles.boldText}>Validate</Text>
             </TouchableOpacity>
           </View>
         </View>
