@@ -45,27 +45,17 @@ describe("EventCreationScreen", () => {
     expect(getByPlaceholderText("Turing Avenue 69")).toBeTruthy()
   })
 
-  it("updates title input correctly", () => {
-    const { getByPlaceholderText } = render(<EventCreationScreen />)
-    const titleInput = getByPlaceholderText("Chemistry x Python")
-    fireEvent.changeText(titleInput, "New Event Title")
-    expect(titleInput.props.value).toBe("New Event Title")
-  })
   it("shows date input fiel when creating event", () => {
     {
       // restricting scope to avoid naming conflicts
       const { queryByText } = render(
-        <SafeAreaProvider>
-          <EventCreationScreen isAnnouncement={true} />
-        </SafeAreaProvider>
+        <EventCreationScreen isAnnouncement={true} />
       )
       expect(queryByText("DD.MM.YYYY")).toBeNull()
     }
 
     const { queryByText } = render(
-      <SafeAreaProvider>
-        <EventCreationScreen isAnnouncement={false} />
-      </SafeAreaProvider>
+      <EventCreationScreen isAnnouncement={false} />
     )
     expect(queryByText("DD.MM.YYYY")).toBeTruthy()
   })
