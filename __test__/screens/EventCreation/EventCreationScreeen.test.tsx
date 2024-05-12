@@ -45,6 +45,12 @@ describe("EventCreationScreen", () => {
     expect(getByPlaceholderText("Turing Avenue 69")).toBeTruthy()
   })
 
+  it("updates title input correctly", () => {
+    const { getByPlaceholderText } = render(<EventCreationScreen />)
+    const titleInput = getByPlaceholderText("Chemistry x Python")
+    fireEvent.changeText(titleInput, "New Event Title")
+    expect(titleInput.props.value).toBe("New Event Title")
+  })
   it("shows date input fiel when creating event", () => {
     {
       // restricting scope to avoid naming conflicts
