@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
-import { View, Text, TextInput, SectionList, SectionListRenderItemInfo, Pressable, DefaultSectionT, SectionListData } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { View, Text, TextInput, SectionList, SectionListRenderItemInfo, Pressable, DefaultSectionT, SectionListData, TouchableOpacity } from 'react-native'
 import EventCard from '../../../components/EventCard/EventCard'
 import  {styles} from './styles'
 import { useNavigation } from '@react-navigation/native'
@@ -12,13 +11,17 @@ import { globalStyles } from '../../../assets/global/globalStyles'
 import LoadingScreen from '../../Loading/LoadingScreen'
 import { StackNavigationProp } from '@react-navigation/stack'
 
+interface EventsScreenProps {
+  onEventPress: (event: Event) => void
+}
+
 type RootStackParamList = {
   EventMap: {
       events: Event[] | null
   }
 }
 
-const EventScreen = () => {
+const EventScreen = ({ onEventPress }: EventsScreenProps) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
   const [futureEvents, setFutureEvents] = React.useState<Event[]>([])
   const [pastEvents, setPastEvents] = React.useState<Event[]>([])
@@ -31,7 +34,6 @@ const EventScreen = () => {
   useEffect(
     () => {
     const loadEvents = async () => {
-
       try {
         setLoading(true)
         const fetchedFutureEvents = await getAllFutureEvents() 
@@ -107,6 +109,7 @@ const EventScreen = () => {
         <TouchableOpacity 
           key={event.uid}  // Ensure each child has a unique key
           style={[styles.cardContainer, event.title === "dummy" ? styles.transparent : {}]}
+          onPress={() => {if(event.title != "dummy") onEventPress(event)}}
           disabled={event.title === "dummy"}
         >
           <EventCard {...event} />

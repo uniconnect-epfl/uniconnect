@@ -1,7 +1,8 @@
 import React from 'react'
-import { render } from '@testing-library/react-native'
+import { render, waitFor } from '@testing-library/react-native'
 import AnnouncementScreen from '../../../screens/Home/AnnouncementScreen/AnnouncementScreen'
 import { Firestore } from 'firebase/firestore'
+import { getAllAnnouncements } from '../../../firebase/ManageAnnouncements'
 
 
 // Import your AnnouncementScreen component
@@ -39,17 +40,27 @@ describe('AnnouncementScreen', () => {
   })
 
   it('displays loading screen initially', async () => {
-    const { findByTestId } = render(<AnnouncementScreen />)
+    const { findByTestId } = render(<AnnouncementScreen onAnnoucmentPress={() => {}}/>)
     const loader = await findByTestId('loading-indicator')
     expect(loader).toBeTruthy()
   })
 
   it('displays a message when there are no announcements', async () => {
     // Adjust the mock to return an empty array or null
+    getAllAnnouncements.mockResolvedValueOnce([])
+    const { queryByText } = render(<AnnouncementScreen onAnnoucmentPress={() => {}}/>)
+    await waitFor(() => {
+      expect(queryByText('Announcement 1')).toBeFalsy()
+    })
   })
 
   it('handles errors during data fetching', async () => {
     // Simulate an error
+    getAllAnnouncements.mockRejectedValueOnce(new Error('Network Error'))
+    const { getByText } = render(<AnnouncementScreen onAnnoucmentPress={() => {}}/>)
+    await waitFor(() => {
+      expect(getByText('No future announcements available.')).toBeTruthy()
+    })
   })
 
 })

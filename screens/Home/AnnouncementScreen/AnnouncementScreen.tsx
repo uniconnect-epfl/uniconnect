@@ -8,7 +8,11 @@ import { getAllAnnouncements } from '../../../firebase/ManageAnnouncements'
 import { showErrorToast } from '../../../components/ToastMessage/toast'
 import LoadingScreen from '../../Loading/LoadingScreen'
 
-const AnnouncementScreen = () => {
+interface AnnouncementsScreenProps {
+  onAnnoucmentPress: (announcement: Announcement) => void
+}
+
+const AnnouncementScreen = ({ onAnnoucmentPress }: AnnouncementsScreenProps) => {
 
   //const [searchQuery, setSearchQuery] = useState("")
   const [isLoading, setIsLoading] = useState(true)
@@ -37,7 +41,8 @@ const AnnouncementScreen = () => {
   // }
 
   const renderItem = ({ item }: SectionListRenderItemInfo<Announcement>) => (
-    <TouchableOpacity >
+    <TouchableOpacity
+      onPress={() => {onAnnoucmentPress(item)}}>
       <AnnouncementCard {...item} />
     </TouchableOpacity>
   )
