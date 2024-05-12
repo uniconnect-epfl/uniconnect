@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { View, Text, Image, Pressable, ActivityIndicator } from "react-native"
 import { styles } from "./styles"
 import { RouteProp, useRoute } from "@react-navigation/native"
@@ -19,6 +19,7 @@ export const UpdateMyProfileScreen = () => {
   const route = useRoute<MapScreenRouteProp>()
   const user = route.params.user
   const [image, setImage] = useState(user.profilePicture)
+  const [imageLoading, setImageLoading] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const pickImage = async () => {
@@ -30,26 +31,34 @@ export const UpdateMyProfileScreen = () => {
     })
 
     if (!result.canceled) {
-      setLoading(true)
+      setImageLoading(true)
       const url = await uploadUserImageToStorage(user.uid, result.assets[0].uri)
       if (url) {
         await updateUserImage(user.uid, url)
         setImage(url)
       }
-      setTimeout(() => setLoading(false), 500)
+      setTimeout(() => setImageLoading(false), 500)
     }
   }
+
+  useEffect(() => {
+    setLoading(true)
+    // TODO: Later
+    setLoading(false)
+  }, [])
 
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={{uri: image}}/>
-      {loading && <ActivityIndicator size="large" color={peach} />}
-      {!loading &&
+      {imageLoading && <ActivityIndicator size="large" color={peach} />}
+      {!imageLoading &&
         <Pressable onPress={pickImage}>
           <Text>Update my profile picture</Text>
         </Pressable>
       }
-      <Text>soon</Text>
+      {loading &&
+        <Text>soon</Text>
+      }
       <Text>soon</Text>
       <Text>soon</Text>
       <Text>soon</Text>
