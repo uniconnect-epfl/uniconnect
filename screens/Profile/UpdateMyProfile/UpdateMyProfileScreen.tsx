@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { View, Text, Image, Pressable, ActivityIndicator } from "react-native"
 import { styles } from "./styles"
-import { RouteProp, useRoute } from "@react-navigation/native"
+import { RouteProp, useRoute, useNavigation } from "@react-navigation/native"
 import { User } from "../../../types/User"
 import { launchImageLibraryAsync, MediaTypeOptions } from 'expo-image-picker'
-import { updateUserImage, uploadUserImageToStorage } from "../../../firebase/User"
+import { updateUserData, updateUserImage, uploadUserImageToStorage } from "../../../firebase/User"
 import { peach } from "../../../assets/colors/colors"
 import InputField from "../../../components/InputField/InputField"
+import { showSuccessToast } from "../../../components/ToastMessage/toast"
 
 type RootStackParamList = {
   UpdateProfile: {
@@ -18,6 +19,7 @@ type MapScreenRouteProp = RouteProp<RootStackParamList, 'UpdateProfile'>;
 
 export const UpdateMyProfileScreen = () => {
   const route = useRoute<MapScreenRouteProp>()
+  const navigation = useNavigation()
   const user = route.params.user
   const [image, setImage] = useState(user.profilePicture)
   const [imageLoading, setImageLoading] = useState(false)
@@ -51,30 +53,21 @@ export const UpdateMyProfileScreen = () => {
     setLoading(false)
   }, [])
 
-  useEffect(() => {
-    // TODO: Later
+  const submitChanges = async () => {
+    setLoading(true)
+    const newData = {
+      firstName: name,
+      lastName: lastName,
+      location: location
+    }
+    const success = await updateUserData(user.uid, newData)
+    if(success) {
+      showSuccessToast("Profile updated successfully!")
+      navigation.goBack()
+    }
     setLoading(false)
-  }, [])
+  }
 
-  useEffect(() => {
-    // TODO: Later
-    setLoading(false)
-  }, [])
-
-  useEffect(() => {
-    // TODO: Later
-    setLoading(false)
-  }, [])
-
-  useEffect(() => {
-    // TODO: Later
-    setLoading(false)
-  }, [])
-
-  useEffect(() => {
-    // TODO: Later
-    setLoading(false)
-  }, [])
 
   return (
     <View style={styles.container}>
@@ -103,25 +96,12 @@ export const UpdateMyProfileScreen = () => {
         value={location}
         onChangeText={setLocation}
       />
+      <Pressable onPress={submitChanges}>
+          <Text>Submit changes</Text>
+      </Pressable>
       <Text style={styles.text1}>soon</Text>
       <Text style={styles.text2}>soon</Text>
       <Text style={styles.text3}>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
-      <Text>soon</Text>
     </View>
   )
 }

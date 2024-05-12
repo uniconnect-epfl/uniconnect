@@ -5,7 +5,8 @@ import { Auth } from 'firebase/auth'
 import { Firestore } from 'firebase/firestore'
 import { NavigationContainer, NavigationProp, ParamListBase } from '@react-navigation/native'
 import { launchImageLibraryAsync } from 'expo-image-picker'
-  import { updateUserImage, uploadUserImageToStorage } from "../../../../firebase/User"
+  import { updateUserData, updateUserImage, uploadUserImageToStorage } from "../../../../firebase/User"
+import { showSuccessToast } from '../../../../components/ToastMessage/toast'
 
 jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(() => ({} as Auth)),
@@ -49,6 +50,7 @@ jest.mock('expo-image-picker', () => ({
 jest.mock("../../../../firebase/User", () => ({
   updateUserImage: jest.fn(),
   uploadUserImageToStorage: jest.fn(),
+  updateUserData: jest.fn()
 }))
 
 const mockNavigation = {
@@ -70,6 +72,7 @@ jest.mock('@react-navigation/native', () => {
     ...jest.requireActual('@react-navigation/native'),
     useNavigation: () => ({
       navigate: mockNavigation,
+      goBack: jest.fn(),
     }),
     useRoute: () => ({
       params: {
@@ -142,6 +145,24 @@ describe('UpdateMyProfileScreen', () => {
       fireEvent.press(updateButton)
       expect(uploadUserImageToStorage).not.toHaveBeenCalled()
       expect(updateUserImage).not.toHaveBeenCalled()
+    })
+  })
+
+  it("should show success toast and navigate back when user data is updated", async () => {
+    const { getByText } = render(
+      <NavigationContainer>
+        <UpdateMyProfileScreen />
+      </NavigationContainer>
+    )
+
+    const mockUpdateUserData = updateUserData as jest.Mock
+    mockUpdateUserData.mockResolvedValue(true)
+
+    const updateButton = getByText("Submit changes")
+    fireEvent.press(updateButton)
+
+    await waitFor(() => {
+      expect(showSuccessToast).toHaveBeenCalledTimes(1)
     })
   })
 })
