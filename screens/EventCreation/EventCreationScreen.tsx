@@ -98,6 +98,9 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
           <View style={styles.eventDetailsContainer}>
             {dateModal && (
               <MyDateInputComponent
+                maximumDate={
+                  new Date(new Date().setFullYear(new Date().getFullYear() + 1))
+                }
                 date={date}
                 setDate={setDate}
                 setDateModal={setDateModal}
