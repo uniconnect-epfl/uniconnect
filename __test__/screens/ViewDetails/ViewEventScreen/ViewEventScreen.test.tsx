@@ -1,6 +1,7 @@
 import React from "react"
 import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import ViewEventScreen from "../../../../screens/ViewDetails/ViewEventScreen/ViewEventScreen"
+import { NavigationContainer } from "@react-navigation/native"
 
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
@@ -44,12 +45,20 @@ global.alert = jest.fn()
 describe("ViewEventScreen", () => {
   
   it("renders correctly", () => {
-    const component = render(<ViewEventScreen />)
+    const component = render(
+    <NavigationContainer>
+      <ViewEventScreen />
+    </NavigationContainer>
+    )
     expect(component).toBeTruthy()
   })
 
   it("can click on participate", async () => {
-    const { getByText } = render(<ViewEventScreen />)
+    const { getByText } = render(
+      <NavigationContainer>
+        <ViewEventScreen />
+      </NavigationContainer>
+      )
     await waitFor(() => {
       fireEvent.press(getByText("Participate"))
     })
