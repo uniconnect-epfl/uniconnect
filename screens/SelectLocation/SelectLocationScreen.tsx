@@ -27,6 +27,7 @@ export const SelectLocationScreen = () => {
     }
 
     useEffect(() => {
+        console.log("changed location")
         onLocationChange(location)
     }, [onLocationChange, location])
 

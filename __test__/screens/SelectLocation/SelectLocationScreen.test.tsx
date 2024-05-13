@@ -62,13 +62,15 @@ describe('SelectLocationScreen', () => {
           goBack: mockGoBack,
         }),
       }
-  })
-    const component = render(
+    })
+    const { getByText } = render(
         <NavigationContainer>
             <SelectLocationScreen />
         </NavigationContainer>
     )
-    expect(component).toBeTruthy()
+    const confirmButton = getByText("Confirm")
+    fireEvent.press(confirmButton)
+    expect(mockGoBack).toHaveBeenCalled
     jest.resetAllMocks()
   })
 
