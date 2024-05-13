@@ -27,7 +27,6 @@ export const SelectLocationScreen = () => {
     }
 
     useEffect(() => {
-        console.log("changed location")
         onLocationChange(location)
     }, [onLocationChange, location])
 
@@ -43,7 +42,6 @@ export const SelectLocationScreen = () => {
 
         <MapView 
             style={styles.map} 
-            testID="map"
             initialRegion={initialRegion} 
             showsUserLocation
             showsMyLocationButton
@@ -66,7 +64,16 @@ export const SelectLocationScreen = () => {
         </MapView>
         <TouchableOpacity
             style={styles.confirmButton}
-            onPress={() => navigation.goBack()}>
+            onPress={() => {
+                navigation.goBack()
+                console.log("confirmating location")
+                if(location !== undefined){
+                    console.log("location x: " + location.x)
+                    console.log("location y: " + location.y)
+                }
+                console.log("going back to precedent screen")
+
+            }}>
             <Text style={globalStyles.boldText}> 
                 Confirm 
             </Text>
