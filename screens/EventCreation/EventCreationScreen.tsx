@@ -25,7 +25,7 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
 
   const [title, setTitle] = useState("")
-  const [point, setPoint] = useState<Point | null>(null)
+  const [point, setPoint] = useState<Point | undefined>(undefined)
   const insets = useSafeAreaInsets()
   const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
 
@@ -34,16 +34,9 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
   const opacity = !hasBeenTouched ? 0.2 : 1
 
   const publish = async () => {
-    if(point === null){
+    if(point === undefined){
       showErrorToast("An event needs a location!")
     } else {
-      // send the data to the backend
-      console.log("Publishing event...")
-      console.log("Title:", title)
-      console.log("Description:", description)
-      console.log("Date:", date.toDateString())
-      console.log("Interests:", interests)
-
       if (isAnnouncement) {
         await createAnnouncement(
           "0",

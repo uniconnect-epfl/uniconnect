@@ -47,28 +47,29 @@ describe('SelectLocationScreen', () => {
   })
 
   it('renders correctly with no initial point', () => {
+    jest.resetAllMocks()
     jest.mock("@react-navigation/native", () => {
-        const actualNav = jest.requireActual("@react-navigation/native")
-        return {
-          ...actualNav,
-          useRoute: () => ({
-            params: {
-              initialLocation: undefined,
-              onLocationChange: jest.fn()
-            },
-          }),
-          useNavigation: () => ({
-            navigate: jest.fn(),
-            goBack: jest.fn(),
-          }),
-        }
-      })
+      return {
+        ...jest.requireActual("@react-navigation/native"),
+        useRoute: () => ({
+          params: {
+            initialLocation: undefined,
+            onLocationChange: jest.fn()
+          },
+        }),
+        useNavigation: () => ({
+          navigate: mockNavigate,
+          goBack: mockGoBack,
+        }),
+      }
+  })
     const component = render(
         <NavigationContainer>
             <SelectLocationScreen />
         </NavigationContainer>
     )
     expect(component).toBeTruthy()
+    jest.resetAllMocks()
   })
 
   it('we can confirmate', () => {
