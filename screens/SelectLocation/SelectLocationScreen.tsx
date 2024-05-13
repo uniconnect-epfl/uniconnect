@@ -7,8 +7,8 @@ import { globalStyles } from "../../assets/global/globalStyles"
 
 type RootStackParamList = {
     SelectLocationScreen: {
-        initialPoint: Point | null,
-        onLocationChange: (point: Point | null) => void,
+        initialPoint: Point | undefined,
+        onLocationChange: (point: Point | undefined) => void,
     }
 }
   
@@ -17,7 +17,7 @@ type SelectLocationScreenRouteProps = RouteProp<RootStackParamList, "SelectLocat
 export const SelectLocationScreen = () => {
     const { onLocationChange, initialPoint } = useRoute<SelectLocationScreenRouteProps>().params
     const navigation = useNavigation()
-    const [location, setLocation] = useState<Point | null>(initialPoint)
+    const [location, setLocation] = useState<Point | undefined>(initialPoint)
 
     const initialRegion: Region = {
         latitude: initialPoint ? initialPoint.x : 46.51858962578904,
@@ -51,7 +51,7 @@ export const SelectLocationScreen = () => {
                 setLocation(newLocation)
             }}
             >
-            { location !== null && 
+            { location !== undefined && 
                 <Marker
                     key={"location"} 
                     coordinate={{
