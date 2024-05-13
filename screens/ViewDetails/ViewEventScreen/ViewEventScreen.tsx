@@ -9,6 +9,7 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { globalStyles } from '../../../assets/global/globalStyles'
 import ProfilePicture from '../../../components/ProfilePicture/ProfilePicture'
 import { getEventData } from '../../../firebase/ManageEvents'
+import { BackArrow } from '../../../components/BackArrow/BackArrow'
 
 type RootStackParamList = {
     ViewEvent: {
@@ -42,7 +43,10 @@ const ViewEventScreen = () => {
 
   return (
     <View style={styles.container}>
+        
         <View style={viewDetailsStyles.topBackground} />
+        <BackArrow/>
+
         <View style={viewDetailsStyles.detailsContainer}>
 
             <Text style={[
@@ -98,6 +102,14 @@ const ViewEventScreen = () => {
             <Text style={[globalStyles.smallText, viewDetailsStyles.descriptionContainer]}>
                 {event.description}
             </Text>
+
+            <TouchableOpacity
+                style={styles.participateButton}
+                onPress={() => {alert("Not implemented yet")}}>
+                <Text style={globalStyles.boldText}>
+                    Participate
+                </Text>
+            </TouchableOpacity>
             
         </View>
     </View>
