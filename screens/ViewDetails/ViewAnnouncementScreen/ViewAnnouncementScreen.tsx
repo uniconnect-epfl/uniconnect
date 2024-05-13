@@ -5,6 +5,7 @@ import { styles } from './styles'
 import { viewDetailsStyles } from '../ViewDetailsStyles'
 import { globalStyles } from '../../../assets/global/globalStyles'
 import ProfilePicture from '../../../components/ProfilePicture/ProfilePicture'
+import { BackArrow } from '../../../components/BackArrow/BackArrow'
 
 type RootStackParamList = {
   ViewAnnouncement: {
@@ -19,7 +20,10 @@ const ViewAnnoucementScreen = () => {
 
   return (
     <View style={styles.container}>
+
         <View style={viewDetailsStyles.topBackground} />
+        <BackArrow />
+
         <View style={viewDetailsStyles.detailsContainer}>
 
             <Text style={[

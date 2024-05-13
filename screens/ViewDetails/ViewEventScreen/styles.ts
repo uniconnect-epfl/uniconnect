@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native" 
-import { peach } from "../../../assets/colors/colors"
+import { lightPeach, peach } from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
     container: {
@@ -14,11 +14,23 @@ export const styles = StyleSheet.create({
         borderColor: peach,
         borderRadius: 20,
         borderWidth: 2,
-        height: "40%",
-        marginHorizontal: "5%",
-        marginTop: "5%",
+        height: "38%",
+        marginHorizontal: "10%",
+        marginTop: "4%",
         overflow: "hidden",
-        width: "90%",
+        width: "80%",
     },
+    participateButton: {
+        alignItems: "center",
+        backgroundColor: lightPeach,
+        borderColor: peach,
+        borderRadius: 15,
+        borderWidth: 2,
+        elevation: 4,
+        height: "7%",
+        justifyContent: "center",
+        marginHorizontal: "30%",
+        width: "40%",
+    }
     
 })
