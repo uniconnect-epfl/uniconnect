@@ -17,16 +17,18 @@ export const ProfileEvents = () => {
       setLoading(true)
       if (userId) {
         setUser(await getUserData(userId))
-        if (user) {
-          const eventsId = user.events
-          setEvents(eventsId)
-        }
       }
       setLoading(false)
     }
     fetchData()
   }, [userId])
 
+  useEffect(() => {
+    if (user) {
+      const eventsId = user.events
+      setEvents(eventsId)
+    }
+      }, [user, userId])
 
   
   if (loading || !user) {

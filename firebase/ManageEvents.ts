@@ -50,10 +50,8 @@ export const getAllPastEvents = async () => {
 
     // Create a query against the collection.
     // This query retrieves events where the eventDate is less than the current date and time.
-    console.log("Fetching past events")
     const q = query(eventsRef, where("date", "<", new Date()), orderBy("date", "desc"))
 
-    console.log("Querying past events")
     // Execute the query
     const querySnapshot = await getDocs(q)
     const events: Event[] = []
