@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     borderWidth: 1,
     height: 50,
+    margin: 10,
     paddingHorizontal: 30,
     width: "100%",
   },
@@ -21,20 +22,12 @@ const styles = StyleSheet.create({
   },
 
   section: {
-    display: "flex",
-    flexDirection: "column",
+    alignItems: "center",
+    flexDirection: "row",
+    flex: 1,
     justifyContent: "center",
+    maxHeight: 70,
     paddingHorizontal: 20,
-    paddingTop: 10,
-    width: "100%",
-  },
-
-  sectionFirst: {
-    paddingTop: 60,
-  },
-
-  sectionLast: {
-    paddingBottom: 65,
   },
 })
 

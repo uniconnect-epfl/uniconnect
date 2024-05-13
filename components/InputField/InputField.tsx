@@ -20,7 +20,7 @@ const InputField = forwardRef<TextInput, InputFieldProps>(function InputField(
     props
   return (
     <View style={styles.section}>
-      <Text style={[styles.label, globalStyles.text]}>{label}</Text>
+      { label !== "" && <Text style={[styles.label, globalStyles.text]}>{label}</Text> }
       <TextInput
         placeholder={placeholder}
         style={[styles.input, globalStyles.text]}
