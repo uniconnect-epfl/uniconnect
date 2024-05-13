@@ -98,6 +98,14 @@ const ViewEventScreen = () => {
             <Text style={[globalStyles.smallText, viewDetailsStyles.descriptionContainer]}>
                 {event.description}
             </Text>
+
+            <TouchableOpacity
+                style={styles.participateButton}
+                onPress={() => {alert("Not implemented yet")}}>
+                <Text style={globalStyles.boldText}>
+                    Participate
+                </Text>
+            </TouchableOpacity>
             
         </View>
     </View>

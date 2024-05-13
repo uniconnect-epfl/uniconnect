@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native" 
-import { peach } from "../../../assets/colors/colors"
+import { lightPeach, peach } from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
     container: {
@@ -20,5 +20,17 @@ export const styles = StyleSheet.create({
         overflow: "hidden",
         width: "90%",
     },
+    participateButton: {
+        alignItems: "center",
+        backgroundColor: lightPeach,
+        borderColor: peach,
+        borderRadius: 15,
+        borderWidth: 2,
+        elevation: 4,
+        height: "8%",
+        justifyContent: "center",
+        marginHorizontal: "30%",
+        width: "40%",
+    }
     
 })
