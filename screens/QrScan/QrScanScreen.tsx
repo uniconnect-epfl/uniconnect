@@ -20,6 +20,7 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
   const isFocused = useIsFocused()
   const [permission, requestPermission] = Camera.useCameraPermissions()
   const [showCamera, setShowCamera] = useState(false)
+  const [isScanning, setIsScanning] = useState(false)
   // current user
   const userId = getAuth().currentUser?.uid
 
@@ -58,6 +59,7 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
       else if (route === "event") handleEvent(id)
       else showErrorToast("Qr code not recognized")
     }
+    setIsScanning(false)
   }, 300)
 
   if (!permission) {
@@ -95,7 +97,12 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
         <Camera 
           testID="camera"
           style={styles.camera}
-          onBarCodeScanned={(result) => debouncedQr(result.data)}
+          onBarCodeScanned={(result) => {
+            if(!isScanning) {
+              setIsScanning(true)
+              debouncedQr(result.data)
+            }
+          }}
         />
       ) : (
         <View style={styles.container}>
