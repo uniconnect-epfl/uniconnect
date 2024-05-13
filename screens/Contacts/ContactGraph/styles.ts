@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import { lightGray, lightPeach, peach } from "../../../assets/colors/colors"
+import { lightPeach, peach } from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
   container: {
@@ -12,16 +12,8 @@ export const styles = StyleSheet.create({
     borderWidth: 3, // Add border width
     flex: 1,
     flexWrap: "wrap",
-    marginBottom: 10,
+    marginVertical: 10,
     overflow: "hidden",
     width: "100%",
-  },
-  searchBar: {
-    borderColor: lightGray,
-    borderRadius: 40,
-    borderWidth: 1,
-    height: 40,
-    marginVertical: 10,
-    padding: 20
   },
 })

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { View, Text, TextInput, SectionList, SectionListRenderItemInfo, Pressable, DefaultSectionT, SectionListData, TouchableOpacity } from 'react-native'
+import { View, Text, SectionList, SectionListRenderItemInfo, Pressable, DefaultSectionT, SectionListData, TouchableOpacity } from 'react-native'
 import EventCard from '../../../components/EventCard/EventCard'
 import  {styles} from './styles'
 import { useNavigation } from '@react-navigation/native'
@@ -10,6 +10,7 @@ import { Event } from '../../../types/Event'
 import { globalStyles } from '../../../assets/global/globalStyles'
 import LoadingScreen from '../../Loading/LoadingScreen'
 import { StackNavigationProp } from '@react-navigation/stack'
+import InputField from '../../../components/InputField/InputField'
 
 interface EventsScreenProps {
   onEventPress: (event: Event) => void
@@ -125,12 +126,13 @@ const EventScreen = ({ onEventPress }: EventsScreenProps) => {
   return (
     <View style={styles.view}>
       <View style={styles.searchAndMap}>
-        <TextInput
+        <InputField
+          label=""
           placeholder="Search..."
-          style={styles.input}
           value={searchQuery}
           onChangeText={setSearchQuery}
-        />
+          onSubmitEditing={() => {}}
+      />
         <TouchableOpacity
           style={styles.map}
           onPress={() => navigation.navigate("EventMap", {events: filteredFutureEvents})}

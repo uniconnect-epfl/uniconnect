@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native"
 import {
-  lightGray,
   lightPeach,
   peach,
   white,
@@ -31,15 +30,6 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "center"
-  },
-  input: {
-    borderColor: lightGray,
-    borderRadius: 40,
-    borderWidth: 1,
-    fontFamily: "JetBrainsMono_400Regular",
-    height: 40,
-    paddingHorizontal: 20,
-    width: "70%"
   },
   map: {
     alignItems: "center",

@@ -1,11 +1,12 @@
 import { View, Text, Image } from "react-native"
 import { styles } from "./styles"
 import React, { useState } from "react"
-import { FlatList, TextInput } from "react-native-gesture-handler"
+import { FlatList } from "react-native-gesture-handler"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import { mockContacts } from "../../Contacts/mockContacts"
 import { Contact } from "../../../types/Contact"
+import InputField from "../../../components/InputField/InputField"
 
 const RenderOneContact = ({ item }: { item: Contact }) => (
   <View style={styles.contactCard}>
@@ -56,11 +57,12 @@ export const ProfileNetwork = () => {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.searchBar}
+      <InputField
+        label=""
         placeholder="Search..."
         value={searchText}
         onChangeText={handleSearch}
+        onSubmitEditing={() => {}}
       />
 
       <FlatList

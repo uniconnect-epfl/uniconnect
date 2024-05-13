@@ -1,6 +1,5 @@
 import {
   View,
-  TextInput,
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native"
@@ -15,7 +14,7 @@ import ForceDirectedGraph from "../../../components/Graph/ForceDirectedGraph/For
 import React, { useState } from "react"
 
 import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
-import { globalStyles } from "../../../assets/global/globalStyles"
+import InputField from "../../../components/InputField/InputField"
 
 interface ContactGraphProps {
   onContactPress: (uid: string) => void
@@ -59,8 +58,8 @@ const ContactGraph = ({
     // Dismiss the keyboard when the user taps outside of the search bar
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        <TextInput
-          style={[globalStyles.text, styles.searchBar]}
+        <InputField
+          label=""
           placeholder="Search..."
           value={searchText}
           onChangeText={(text) => {
