@@ -67,12 +67,11 @@ export const SelectLocationScreen = () => {
             onPress={() => {
                 navigation.goBack()
                 console.log("confirmating location")
-                if(location !== undefined){
-                    console.log("location x: " + location.x)
-                    console.log("location y: " + location.y)
-                }
+                console.log("we ve confirmated the location")
+                console.log("the location was entered we are now returning")
+                console.log("location " + location ? "defined" : "undefined")
+                console.log("we can now return")
                 console.log("going back to precedent screen")
-
             }}>
             <Text style={globalStyles.boldText}> 
                 Confirm 
