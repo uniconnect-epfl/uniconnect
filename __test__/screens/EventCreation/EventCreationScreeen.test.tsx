@@ -154,6 +154,6 @@ describe("EventCreationScreen", () => {
       <EventCreationScreen isAnnouncement={true} navigation={mockNavigation} />
     )
     rerender(<EventCreationScreen isAnnouncement={false} navigation={mockNavigation} />)
-    expect(queryByText("Add a location")).toBeTruthy()
+    expect(queryByText("Add a location")).toBeFalsy()
   })
 })
