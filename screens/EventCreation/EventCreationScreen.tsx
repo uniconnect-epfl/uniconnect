@@ -138,10 +138,14 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
         <View style={styles.bottomButtons}>
           <Pressable style={styles.buttonBase}>
             <Text
-              onPress={() => navigation.navigate("SelectLocation", {onLocationChange: setPoint, initialPoint: point})}
+              onPress={() => {
+                console.log("going to select a location")
+                console.log("location is " + point === undefined ? "undefined" : "defined")
+                navigation.navigate("SelectLocation", {onLocationChange: setPoint, initialPoint: point})
+              }}
               style={globalStyles.boldText}
               >
-              {point === null ? "Add a location" : "Modify location"}
+              {point === undefined ? "Add a location" : "Modify location"}
             </Text>
           </Pressable>
           <Pressable style={styles.buttonBase}>

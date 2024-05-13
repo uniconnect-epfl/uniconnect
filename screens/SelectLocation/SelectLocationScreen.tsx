@@ -66,6 +66,7 @@ export const SelectLocationScreen = () => {
             style={styles.confirmButton}
             onPress={() => {
                 navigation.goBack()
+                console.log("user clicked on confirmate")
                 console.log("confirmating location")
                 console.log("we ve confirmated the location")
                 console.log("the location was entered we are now returning")
