@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
   View,
   Text,
@@ -13,7 +13,10 @@ import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { peach, white } from "../../assets/colors/colors"
 import { createEvent } from "../../firebase/ManageEvents"
-import { updateUserEvents } from "../../firebase/User"
+import { getUserData, updateUserEvents } from "../../firebase/User"
+import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
+import { getAuth } from "firebase/auth"
+import { User } from "../../types/User"
 
 const EventCreationScreen = () => {
   const navigation = useNavigation()
@@ -21,35 +24,50 @@ const EventCreationScreen = () => {
   const [title, setTitle] = useState("")
   const [description] = useState("lore ipsum")
   const [location] = useState("Besac City")
+  const userId = getAuth().currentUser?.uid
+  const [user, setUser] = useState<User | null>(null)
+  const [, setLoading] = useState(false)
   // const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
   // const [date] = useState("12/07/2024")
-  const [eventId, setEventId] = useState("")
 
   // const [startDate, setStartDate] = useState<Date>()
   // const [endDate, setEndDate] = useState("")
   // const [imageUrl, setImageUrl] = useState("")
   //  const [point, setPoint] = useState({ x: 47.238458, y: 5.984155 })
 
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true)
+      if (userId) {
+        setUser(await getUserData(userId))
+      }
+      setLoading(false)
+    }
+    fetchData()
+  }, [userId])
 
   const newEvent = async () => {
-    console.log("Creating event")
-    const eventId_ = await createEvent("uid2", title, description, new Date(2025, 0, 1), { x: 47.238458, y: 5.984155 }, location, "imageUrl")
-    setEventId(eventId_)
-    await updateUserEvents("uid2", eventId)
-    console.log(eventId)
-
+    if (!userId) {
+      showErrorToast("You must be logged in to create an event")
+      return
+    }
+    const eventId = await createEvent(title, description, new Date(2025, 0, 1), { x: 47.238458, y: 5.984155 }, location, "imageUrl")
+    if (eventId && user) {
+      await updateUserEvents(user.uid, eventId)
+      showSuccessToast("Event created successfully")
+    }
   }
 
-    // const newAnnouncement = async () => {
-    //   console.log("creating announcement")
-    //   try {
-    //     const announcementId = await createAnnouncement("0", title,location,{ x: 47.238458, y: 5.984155 }, description, interests, date)
+  // const newAnnouncement = async () => {
+  //   console.log("creating announcement")
+  //   try {
+  //     const announcementId = await createAnnouncement("0", title,location,{ x: 47.238458, y: 5.984155 }, description, interests, date)
 
-    //     showSuccessToast("Announcement created succesfully")
-    //   } catch (error) {
-    //     showErrorToast("Could not create announcement")
-    //   }
-    // }
+  //     showSuccessToast("Announcement created succesfully")
+  //   } catch (error) {
+  //     showErrorToast("Could not create announcement")
+  //   }
+  // }
 
   return (
     <ScrollView style={styles.container}>
@@ -120,3 +138,4 @@ const EventCreationScreen = () => {
 }
 
 export default EventCreationScreen
+
