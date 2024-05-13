@@ -38,6 +38,9 @@ jest.mock("../../../../firebase/User", () => ({
   }),
 }))
 
+//mock an alert with jest
+global.alert = jest.fn()
+
 describe("ViewEventScreen", () => {
   
   it("renders correctly", () => {
