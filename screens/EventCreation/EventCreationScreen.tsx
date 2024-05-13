@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react"
 import { View, Text, ScrollView, Pressable } from "react-native"
 import { styles } from "./styles"
-import { useNavigation } from "@react-navigation/native"
+import { NavigationProp, ParamListBase } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { peach, white } from "../../assets/colors/colors"
@@ -11,19 +11,21 @@ import InputField from "../../components/InputField/InputField"
 import MyDateInputComponent from "../../components/DatePicker/DatePicker"
 import { RegistrationContext } from "../../contexts/RegistrationContext"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { Point } from "react-native-maps"
+import { showErrorToast } from "../../components/ToastMessage/toast"
 
 interface EventCreationScreenProps {
+  navigation: NavigationProp<ParamListBase>,
   isAnnouncement?: boolean
 }
 
-const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
-  const navigation = useNavigation()
+const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreenProps) => {
   const [dateModal, setDateModal] = useState(false)
   const [date, setDate] = useState<Date>(new Date())
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
 
   const [title, setTitle] = useState("")
-  const [location, setLocation] = useState("")
+  const [point, setPoint] = useState<Point | null>(null)
   const insets = useSafeAreaInsets()
   const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
 
@@ -32,35 +34,39 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
   const opacity = !hasBeenTouched ? 0.2 : 1
 
   const publish = async () => {
-    // send the data to the backend
-    console.log("Publishing event...")
-    console.log("Title:", title)
-    console.log("Location:", location)
-    console.log("Description:", description)
-    console.log("Date:", date.toDateString())
-    console.log("Interests:", interests)
-
-    if (isAnnouncement) {
-      await createAnnouncement(
-        "0",
-        title,
-        location,
-        { x: 47.238458, y: 5.984155 },
-        description,
-        interests,
-        date.toDateString()
-      )
+    if(point === null){
+      showErrorToast("An event needs a location!")
     } else {
-      await createEvent(
-        "0",
-        title,
-        description,
-        date,
-        { x: 47.238458, y: 5.984155 },
-        location,
-        "imageUrl"
-      )
-    }
+      // send the data to the backend
+      console.log("Publishing event...")
+      console.log("Title:", title)
+      console.log("Description:", description)
+      console.log("Date:", date.toDateString())
+      console.log("Interests:", interests)
+
+      if (isAnnouncement) {
+        await createAnnouncement(
+          "0",
+          title,
+          "",
+          point,
+          description,
+          interests,
+          date.toDateString()
+        )
+      } else {
+        await createEvent(
+          "0",
+          title,
+          description,
+          date,
+          point,
+          "",
+          "imageUrl"
+        )
+      }
+    } 
+    
 
     // after the user has filled out the form
     // we should make sure the global state is cleaned
@@ -111,12 +117,7 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
                 setDateModal={setDateModal}
               />
             )}
-            <InputField
-              label="Location*"
-              placeholder="Turing Avenue 69"
-              value={location}
-              onChangeText={setLocation}
-            />
+            
             <Pressable
               style={styles.section}
               onPress={() => {
@@ -142,6 +143,14 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
           </View>
         )}
         <View style={styles.bottomButtons}>
+          <Pressable style={styles.buttonBase}>
+            <Text
+              onPress={() => navigation.navigate("SelectLocation", {onLocationChange: setPoint, initialPoint: point})}
+              style={globalStyles.boldText}
+              >
+              {point === null ? "Add a location" : "Modify location"}
+            </Text>
+          </Pressable>
           <Pressable style={styles.buttonBase}>
             <Text
               onPress={() => navigation.navigate("Description" as never)}
