@@ -23,7 +23,6 @@ const AnnouncementScreen = () => {
     const fetchData = async () => {
       try {
         const announcements = await getAllAnnouncements() || [] // Fallback to an empty array if null
-        console.log(announcements)
         setAnnouncements(announcements)
         setIsLoading(false)
       } catch (error) {

@@ -56,7 +56,6 @@ const EventScreen = () => {
       setFilteredPastEvents(pastEvents.filter((event: { title: string }) => event.title.toLowerCase().includes(searchQuery.toLowerCase()))
       )
     } else {
-
         
       setFilteredFutureEvents(futureEvents)
       setFilteredPastEvents(pastEvents)
