@@ -140,7 +140,6 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
             <Text
               onPress={() => {
                 console.log("going to select a location")
-                console.log("location is " + point === undefined ? "undefined" : "defined")
                 navigation.navigate("SelectLocation", {onLocationChange: setPoint, initialPoint: point})
               }}
               style={globalStyles.boldText}
