@@ -1,6 +1,7 @@
 
 import { styles } from "./styles"
-import React , { View, Text, Image }from "react-native"
+import React , { View, Text }from "react-native"
+import { Image } from "expo-image"
 import { Event } from "../../types/Event"
 import { Ionicons } from "@expo/vector-icons"
 
@@ -15,7 +16,7 @@ const EventCard = (event : Event) => {
 
   return (
     <View style={styles.cardContainer}>
-      <Image source={{ uri: event.imageUrl }} style={styles.image} />
+      <Image source={event.imageUrl} style={styles.image}/>
       <View style={styles.textContainer}>
         <Text style={styles.title}>{event.title}</Text>
         <Text>{displayDate}</Text>

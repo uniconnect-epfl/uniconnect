@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { View } from "react-native"
 import { styles } from "./styles"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 import SectionTabs from "../../components/SectionTabs/SectionTabs"
 import { NavigationProp, ParamListBase } from "@react-navigation/native"
 import ContactList from "./ContactList/ContactList"
@@ -149,14 +148,13 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
   // }, [user])
 
   const [selectedTab, setSelectedTab] = useState("Plain View")
-  const insets = useSafeAreaInsets()
 
   // TODO: Implement retrieval and creation of list of contacts
 
   const contacts = mockContacts
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={styles.container}>
       <SectionTabs
         tabs={["Plain View", "Graph View"]}
         startingTab="Plain View"
@@ -164,8 +162,6 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
           setSelectedTab(tab)
         }}
       />
-
-      <View style={styles.separationBar} />
 
       {selectedTab === "Plain View" && (
         <ContactList

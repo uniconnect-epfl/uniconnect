@@ -1,9 +1,10 @@
 
-import { render, fireEvent, waitFor } from '@testing-library/react-native'
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native'
 import HomeScreen from '../../../screens/Home/HomeScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import React from 'react'
 import { Firestore } from 'firebase/firestore'
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
 
 
 jest.mock("../../../firebase/firebaseConfig", () => ({
@@ -25,7 +26,18 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 
 const mockNavigation = {
   navigate: jest.fn(),
-} 
+  goBack: jest.fn(),
+  addListener: jest.fn(),
+  removeListener: jest.fn(),
+  reset: jest.fn(),
+  setParams: jest.fn(),
+  dispatch: jest.fn(),
+  isFocused: jest.fn(),
+  canGoBack: jest.fn(),
+  dangerouslyGetParent: jest.fn(),
+  dangerouslyGetState: jest.fn(),
+} as unknown as NavigationProp<ParamListBase>
+
 
 jest.mock('@react-navigation/native', () => {
   return {
@@ -37,7 +49,8 @@ jest.mock('@react-navigation/native', () => {
 jest.mock('../../../firebase/ManageEvents', () => ({
   getAllFutureEvents: jest.fn(() => Promise.resolve([
     { id: '1', title: 'Future Event 1', date: '2024-01-01' },
-    { id: '2', title: 'Future Event 2', date: '2024-01-02' }
+    { id: '2', title: 'Future Event 2', date: '2024-01-02' },
+    { id: '3', title: 'Future Event 3', date: '2024-01-03' }
   ])),
   getAllPastEvents: jest.fn(() => Promise.resolve([
     { id: '3', title: 'Past Event 1', date: '2022-01-01' },
@@ -51,7 +64,7 @@ describe('HomeScreen', () => {
     it('renders the Home screen', () => {
         const component = render(
         <SafeAreaProvider>
-          <HomeScreen/>
+          <HomeScreen navigation={mockNavigation}/>
         </SafeAreaProvider>
         )
         expect(component).toBeTruthy()
@@ -60,7 +73,7 @@ describe('HomeScreen', () => {
     it('filters events based on search input', async () => {
         const {getByText ,getAllByText, getByPlaceholderText } = render(
           <SafeAreaProvider>
-            <HomeScreen />
+            <HomeScreen navigation={mockNavigation}/>
           </SafeAreaProvider>
         )
 
@@ -79,7 +92,7 @@ describe('HomeScreen', () => {
     it('displays correct event details', async () => {
         const component= render(
           <SafeAreaProvider>
-            <HomeScreen />
+            <HomeScreen navigation={mockNavigation}/>
           </SafeAreaProvider>
         )
         await waitFor(() => {
@@ -92,15 +105,42 @@ describe('HomeScreen', () => {
         
     })
 
-    it('keyboard disapear if we click aside', () => {
+    it('keyboard disapear if we click aside', async () => {
         const { getByPlaceholderText } = render(
           <SafeAreaProvider>
-            <HomeScreen />
+            <HomeScreen navigation={mockNavigation}/>
           </SafeAreaProvider>
         )
-        fireEvent.press(getByPlaceholderText('Search...'))
-        expect(getByPlaceholderText('Search...')).toBeTruthy()
+        await act(async () => {
+          await waitFor(() => {
+            const search = getByPlaceholderText('Search...')
+            fireEvent.press(search)
+            expect(getByPlaceholderText('Search...')).toBeTruthy()
+          })
+        })
     })
+
+    it('can change screen', () => {
+      const { getByText } = render(
+        <SafeAreaProvider>
+          <HomeScreen navigation={mockNavigation}/>
+        </SafeAreaProvider>
+      )
+      fireEvent.press(getByText('Announcements'))
+      fireEvent.press(getByText('Events'))
+    })
+
+    it('has dummy', async () => {
+      const { getByText } = render(
+        <SafeAreaProvider>
+          <HomeScreen navigation={mockNavigation}/>
+        </SafeAreaProvider>
+      )
+      await waitFor(() => {
+        fireEvent.press(getByText('dummy'))
+      })
+    })
+
 
 
 })

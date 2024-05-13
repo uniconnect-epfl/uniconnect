@@ -12,7 +12,8 @@ export const globalStyles = StyleSheet.create({
     textAlign: "right",
   },
   smallText: {
-    fontSize: 10,
+    fontFamily: "JetBrainsMono_400Regular",
+    fontSize: 10
   },
   text: {
     fontFamily: "JetBrainsMono_400Regular",

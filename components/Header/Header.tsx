@@ -1,3 +1,4 @@
+import React from "react"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Image, Pressable, View } from "react-native"
 import { styles } from "./styles"

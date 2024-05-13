@@ -10,13 +10,15 @@ interface MyDateInputComponentProps {
   date: Date
   setDate: (date: Date) => void
   setDateModal: (val: boolean) => void
+  maximumDate?: Date
 }
 
-const MyDateInputComponent: React.FC<MyDateInputComponentProps> = ({
+const MyDateInputComponent = ({
   date,
   setDate,
   setDateModal,
-}) => {
+  maximumDate,
+}: MyDateInputComponentProps ) => {
   const onChange = (
     event: DateTimePickerEvent,
     selectedDate: Date | undefined
@@ -34,7 +36,7 @@ const MyDateInputComponent: React.FC<MyDateInputComponentProps> = ({
     >
       <View style={styles.dateContainer}>
         <DateTimePicker
-          maximumDate={new Date()}
+          maximumDate={maximumDate ?? new Date()}
           testID="dateTimePicker"
           value={date}
           mode="date"
