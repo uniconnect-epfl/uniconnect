@@ -57,7 +57,7 @@ export const styles = StyleSheet.create({
     backgroundColor: white,
     flexDirection: "row",
     justifyContent: "space-between",
-    margin: "2.5%"
+    marginHorizontal: "2.5%"
   },
   text: {
     fontFamily: "JetBrainsMono_400Regular",
