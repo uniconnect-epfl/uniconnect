@@ -42,6 +42,7 @@ export const SelectLocationScreen = () => {
 
         <MapView 
             style={styles.map} 
+            testID="map"
             initialRegion={initialRegion} 
             showsUserLocation
             showsMyLocationButton

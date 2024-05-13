@@ -20,14 +20,23 @@ jest.mock("@react-navigation/native", () => {
         goBack: mockGoBack,
       }),
     }
-  })
+})
 
 //mock an alert with jest
 global.alert = jest.fn()
 
+jest.mock('react-native-maps', () => {
+    return {
+      __esModule: true,
+      default: jest.fn().mockImplementation(({ children, ...rest }) => <div {...rest}>{children}</div>), // Mocking MapView
+      Marker: jest.fn().mockImplementation(({ children, ...rest }) => <div {...rest}>{children}</div>), // Mocking Marker
+      Callout: jest.fn().mockImplementation(({ children, ...rest }) => <div {...rest}>{children}</div>), // Mocking Callout
+      PROVIDER_GOOGLE: 'google',
+    }
+  })
+
 
 describe('SelectLocationScreen', () => {
-  
   it('renders correctly', () => {
     const component = render(
         <NavigationContainer>
@@ -37,7 +46,32 @@ describe('SelectLocationScreen', () => {
     expect(component).toBeTruthy()
   })
 
-  it('renders correctly', () => {
+  it('renders correctly with no initial point', () => {
+    jest.mock("@react-navigation/native", () => {
+        const actualNav = jest.requireActual("@react-navigation/native")
+        return {
+          ...actualNav,
+          useRoute: () => ({
+            params: {
+              initialLocation: undefined,
+              onLocationChange: jest.fn()
+            },
+          }),
+          useNavigation: () => ({
+            navigate: jest.fn(),
+            goBack: jest.fn(),
+          }),
+        }
+      })
+    const component = render(
+        <NavigationContainer>
+            <SelectLocationScreen />
+        </NavigationContainer>
+    )
+    expect(component).toBeTruthy()
+  })
+
+  it('we can confirmate', () => {
     const { getByText } = render(
         <NavigationContainer>
             <SelectLocationScreen />
@@ -47,5 +81,5 @@ describe('SelectLocationScreen', () => {
     fireEvent.press(confirmButton)
     expect(mockGoBack).toHaveBeenCalled
   })
-  
+
 })
