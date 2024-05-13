@@ -1,5 +1,5 @@
 import React from "react"
-import { render } from "@testing-library/react-native"
+import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import ViewEventScreen from "../../../../screens/ViewDetails/ViewEventScreen/ViewEventScreen"
 
 jest.mock('@react-native-async-storage/async-storage', () =>
@@ -43,6 +43,13 @@ describe("ViewEventScreen", () => {
   it("renders correctly", () => {
     const component = render(<ViewEventScreen />)
     expect(component).toBeTruthy()
+  })
+
+  it("can click on participate", async () => {
+    const { getByText } = render(<ViewEventScreen />)
+    await waitFor(() => {
+      fireEvent.press(getByText("Participate"))
+    })
   })
   
 })
