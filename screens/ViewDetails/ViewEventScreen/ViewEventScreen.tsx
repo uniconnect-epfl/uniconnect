@@ -13,7 +13,7 @@ import { getEventData } from '../../../firebase/ManageEvents'
 type RootStackParamList = {
     ViewEvent: {
         // Here we're getting a uid and not an event because it is possible that the app opens on this screen (by QR)
-        eventUid: string;
+        eventUid: string
     }
 }
   
@@ -21,7 +21,7 @@ type ViewEventScreenRouteProps = RouteProp<RootStackParamList, "ViewEvent">
 
 const ViewEventScreen = () => {
   const { eventUid } = useRoute<ViewEventScreenRouteProps>().params
-  const [event, setEvent] = useState<Event | null>(null)
+  const [event, setEvent] = useState<Event | undefined>(undefined)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

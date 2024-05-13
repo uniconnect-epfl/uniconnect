@@ -1,4 +1,4 @@
-import { Timestamp, collection, doc, getDocs, orderBy, query, setDoc, where } from "firebase/firestore"
+import { Timestamp, collection, doc, getDocs, orderBy, query, setDoc, where, getDoc, DocumentData } from "firebase/firestore"
 import { db } from "./firebaseConfig"
 import { showErrorToast, showSuccessToast } from "../components/ToastMessage/toast"
 import { Point } from "react-native-maps"
@@ -93,4 +93,29 @@ export const getAllFutureEvents = async () => {
     showErrorToast("Error fetching events. Please check your connection and try again.")
     return []
   }
+}
+
+export const getEventData = async (eventUid: string) => {
+  try {
+    const docRef = doc(db, "events", eventUid)
+    const docSnapshot = await getDoc(docRef)
+
+    if (docSnapshot.exists()) {
+      const data = docSnapshot.data() as DocumentData
+      const event: Event = {
+        uid: data.uid,
+        title: data.title,
+        location: data.location,
+        point: data.point,
+        description: data.description,
+        date: data.date.toDate(),  // Assuming 'date' is stored as a Firestore Timestamp
+        imageUrl: data.imageUrl,
+      }
+      return event
+    } else {
+      console.log("No such document!")
+      return undefined  
+    }
+  } catch (error) {
+    showErrorToast("Error fetching event data. Please check your connection and try again.")}
 }
