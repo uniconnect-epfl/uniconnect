@@ -70,7 +70,8 @@ export const SelectLocationScreen = () => {
                 console.log("confirmating location")
                 console.log("we ve confirmated the location")
                 console.log("the location was entered we are now returning")
-                console.log("location " + location ? "defined" : "undefined")
+                console.log("is location defined ?")
+                console.log("we don't know yet")
                 console.log("we can now return")
                 console.log("going back to precedent screen")
             }}>
