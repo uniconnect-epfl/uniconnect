@@ -11,30 +11,28 @@ import InputField from "../../components/InputField/InputField"
 import MyDateInputComponent from "../../components/DatePicker/DatePicker"
 import { RegistrationContext } from "../../contexts/RegistrationContext"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { getUserData, updateUserEvents } from "../../firebase/User"
+import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
+import { getAuth } from "firebase/auth"
+import { User } from "../../types/User"
 
 interface EventCreationScreenProps {
   isAnnouncement?: boolean
 }
 
 const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
-import { createEvent } from "../../firebase/ManageEvents"
-import { getUserData, updateUserEvents } from "../../firebase/User"
-import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
-import { getAuth } from "firebase/auth"
-import { User } from "../../types/User"
-
-const EventCreationScreen = () => {
   const navigation = useNavigation()
   const [dateModal, setDateModal] = useState(false)
   const [date, setDate] = useState<Date>(new Date())
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
-
   const [title, setTitle] = useState("")
   const [location, setLocation] = useState("")
   const insets = useSafeAreaInsets()
   const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
-
   const { description, setDescription } = useContext(RegistrationContext)
+  const userId = getAuth().currentUser?.uid
+  const [user, setUser] = useState<User | null>(null)
+  const [, setLoading] = useState(false)
 
   const opacity = !hasBeenTouched ? 0.2 : 1
 
@@ -48,41 +46,16 @@ const EventCreationScreen = () => {
     console.log("Interests:", interests)
 
     if (isAnnouncement) {
-      await createAnnouncement(
-        "0",
-        title,
-        location,
-        { x: 47.238458, y: 5.984155 },
-        description,
-        interests,
-        date.toDateString()
-      )
+      newAnnouncement()
     } else {
-      await createEvent(
-        "0",
-        title,
-        description,
-        date,
-        { x: 47.238458, y: 5.984155 },
-        location,
-        "imageUrl"
-      )
+      newEvent()
     }
 
     // after the user has filled out the form
     // we should make sure the global state is cleaned
     setDescription("")
   }
-  const userId = getAuth().currentUser?.uid
-  const [user, setUser] = useState<User | null>(null)
-  const [, setLoading] = useState(false)
-  // const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
-  // const [date] = useState("12/07/2024")
 
-  // const [startDate, setStartDate] = useState<Date>()
-  // const [endDate, setEndDate] = useState("")
-  // const [imageUrl, setImageUrl] = useState("")
-  //  const [point, setPoint] = useState({ x: 47.238458, y: 5.984155 })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,23 +73,21 @@ const EventCreationScreen = () => {
       showErrorToast("You must be logged in to create an event")
       return
     }
-    const eventId = await createEvent(title, description, new Date(2025, 0, 1), { x: 47.238458, y: 5.984155 }, location, "imageUrl")
+    const eventId = await createEvent(title, description, date,{ x: 47.238458, y: 5.984155 }, location, "imageUrl")
     if (eventId && user) {
       await updateUserEvents(user.uid, eventId)
       showSuccessToast("Event created successfully")
     }
   }
 
-  // const newAnnouncement = async () => {
-  //   console.log("creating announcement")
-  //   try {
-  //     const announcementId = await createAnnouncement("0", title,location,{ x: 47.238458, y: 5.984155 }, description, interests, date)
-
-  //     showSuccessToast("Announcement created succesfully")
-  //   } catch (error) {
-  //     showErrorToast("Could not create announcement")
-  //   }
-  // }
+  const newAnnouncement = async () => {
+    try {
+      await createAnnouncement( title,location,{ x: 47.238458, y: 5.984155 }, description, interests, date.toISOString())
+      showSuccessToast("Announcement created succesfully")
+    } catch (error) {
+      showErrorToast("Could not create announcement")
+    }
+  }
 
   return (
     <ScrollView style={styles.container}>

@@ -1,4 +1,4 @@
-import { DocumentData, Timestamp, collection, doc, getDocs, orderBy, query, setDoc, where } from "firebase/firestore"
+import { Timestamp, collection, doc, getDocs, orderBy, query, setDoc, where } from "firebase/firestore"
 import { db } from "./firebaseConfig"
 import { showErrorToast, showSuccessToast } from "../components/ToastMessage/toast"
 import { Point } from "react-native-maps"
@@ -25,7 +25,7 @@ export async function createEvent(title: string, description: string, date: Date
   return undefined
 }
 
-const formatEvent = (doc: DocumentData): Event => {
+const formatEvent = (doc): Event => {
   const data = doc.data()
   const data2 = doc.data() as Event
   const eventDate: Date = data.date.toDate()
