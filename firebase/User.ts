@@ -16,20 +16,24 @@ export const getUserData = async (uid: string) => {
   }
 }
 
-export const updateUserEvents = async (uid: string, eventId: string) => {
+export const updateUserEvents = async (uid: string, eventId: string) : Promise<boolean> => {
   try {
     //read events array and add new event
     const docRef = doc(db, "users", uid)
     const user = await getDoc(docRef)
     const user2 = user.data() as User
     const userEvents = user2.events
+    userEvents.forEach((event) => {
+      if (event === eventId) {
+        throw new Error("You are already registered to this event.")
+      }
+    })
     userEvents.push(eventId)
     await updateDoc(docRef,{
       events: userEvents,
     })
+    return true
   } catch (error) {
-    showErrorToast(
-      "Error updating user events. Please check your connection and try again."
-    )
+    return false
   }
 }
