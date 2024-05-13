@@ -25,7 +25,7 @@ export const ProfileEvents = () => {
       setLoading(false)
     }
     fetchData()
-  }, userId)
+  }, [userId])
 
 
   
