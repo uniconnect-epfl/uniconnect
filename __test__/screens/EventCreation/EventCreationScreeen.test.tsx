@@ -55,13 +55,17 @@ describe("EventCreationScreen", () => {
     {
       // restricting scope to avoid naming conflicts
       const { queryByText } = render(
-        <EventCreationScreen isAnnouncement={true} />
+        <SafeAreaProvider>
+          <EventCreationScreen isAnnouncement={true} />
+        </SafeAreaProvider>
       )
       expect(queryByText("DD.MM.YYYY")).toBeNull()
     }
 
     const { queryByText } = render(
-      <EventCreationScreen isAnnouncement={false} />
+      <SafeAreaProvider>
+        <EventCreationScreen isAnnouncement={false} />
+      </SafeAreaProvider>
     )
     expect(queryByText("DD.MM.YYYY")).toBeTruthy()
   })
