@@ -171,7 +171,6 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
           <Pressable style={styles.buttonBase}>
             <Text
               onPress={() => {
-                console.log("going to select a location")
                 navigation.navigate("SelectLocation", {onLocationChange: setPoint, initialPoint: point})
               }}
               style={globalStyles.boldText}
