@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc } from "firebase/firestore"
+import { doc, getDoc, setDoc } from "firebase/firestore"
 import { db } from "./firebaseConfig"
 import { showErrorToast } from "../components/ToastMessage/toast"
 import { User } from "../types/User"
@@ -22,16 +22,20 @@ export const updateUserEvents = async (uid: string, eventId: string) : Promise<b
     const docRef = doc(db, "users", uid)
     const user = await getDoc(docRef)
     const user2 = user.data() as User
-    const userEvents = user2.events
-    userEvents.forEach((event) => {
-      if (event === eventId) {
-        throw new Error("You are already registered to this event.")
-      }
-    })
-    userEvents.push(eventId)
-    await updateDoc(docRef,{
+    let userEvents = user2.events
+    if (userEvents !== undefined){
+      userEvents.forEach((event) => {
+        if (event === eventId) {
+          throw new Error("You are already registered to this event.")
+        }
+      })
+      userEvents.push(eventId)
+    }else{
+      userEvents = [eventId]
+    }
+    await setDoc(docRef,{
       events: userEvents,
-    })
+    }, { merge: true })
     return true
   } catch (error) {
     return false
