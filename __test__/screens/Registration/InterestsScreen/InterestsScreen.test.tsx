@@ -25,12 +25,14 @@ jest.mock("react-native-safe-area-context", () => {
   }
 })
 
+const mockSetSelectedInterests = jest.fn()
+
 jest.mock("react", () => ({
   ...jest.requireActual("react"),
-  useContext: jest.fn(() => ({
+  useContext: () => ({
     selectedInterests: ["one"],
-    setSelectedInterests: jest.fn(),
-  })),
+    setSelectedInterests: mockSetSelectedInterests,
+  }),
 }))
 
 describe("InterestsScreen", () => {
@@ -132,5 +134,32 @@ describe("InterestsScreen", () => {
     )
 
     expect(getByTestId("loading-indicator")).toBeTruthy()
+  })
+
+  it("toggles the interest selection correctly", async () => {
+    const { getByTestId } = render(
+      <SafeAreaProvider>
+        <InterestsScreen />
+      </SafeAreaProvider>
+    )
+
+    await waitFor(() => {
+      const interestButton = getByTestId("CryptocurrencyID")
+
+      // Mock function to capture the selected interests
+      const mockSelectedInterests: string[] = []
+      mockSetSelectedInterests.mockImplementation((callback) => {
+        const result = callback(mockSelectedInterests)
+        mockSelectedInterests.splice(0, mockSelectedInterests.length, ...result)
+      })
+
+      // Select the interest
+      fireEvent.press(interestButton)
+      expect(mockSelectedInterests).toContain("Cryptocurrency")
+
+      // Deselect the interest
+      fireEvent.press(interestButton)
+      expect(mockSelectedInterests).not.toContain("Cryptocurrency")
+    })
   })
 })
