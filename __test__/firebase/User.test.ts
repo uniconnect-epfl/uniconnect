@@ -16,7 +16,7 @@ jest.mock("firebase/auth", () => ({
   initializeAuth: jest.fn(() => ({} as Auth)),
 }))
 
-const mockUpdateDoc = jest.fn()
+const mockSetDoc = jest.fn()
 const mockGetDoc = jest.fn()
 
 const mockUser: User = {
@@ -36,7 +36,7 @@ jest.mock("firebase/firestore", () => ({
   getFirestore: jest.fn(() => ({} as Firestore)),
   getDoc: jest.fn((...args) => mockGetDoc(...args)),
   doc: jest.fn(() => ({})),
-  updateDoc: jest.fn((...args) => mockUpdateDoc(...args))
+  setDoc: jest.fn((...args) => mockSetDoc(...args))
 }))
 
 jest.mock("../../components/ToastMessage/toast", () => ({
@@ -63,9 +63,9 @@ describe("updateUserEvents", () => {
     const result = await updateUserEvents(uid, eventId)
 
     expect(result).toBe(true)
-    expect(mockUpdateDoc).toHaveBeenCalledWith(expect.any(Object), {
+    expect(mockSetDoc).toHaveBeenCalledWith(expect.any(Object), {
       events: ["123", "456", "789", eventId]
-    })
+    }, { merge: true })
   })
 
   it("should not update user events if already registered", async () => {
@@ -78,7 +78,7 @@ describe("updateUserEvents", () => {
     const result = await updateUserEvents(uid, eventId)
 
     expect(result).toBe(false)
-    expect(mockUpdateDoc).not.toHaveBeenCalled()
+    expect(mockSetDoc).not.toHaveBeenCalled()
   })
 
   it("should handle errors gracefully", async () => {
@@ -89,6 +89,6 @@ describe("updateUserEvents", () => {
     const result = await updateUserEvents(uid, eventId)
 
     expect(result).toBe(false)
-    expect(mockUpdateDoc).not.toHaveBeenCalled()
+    expect(mockSetDoc).not.toHaveBeenCalled()
   })
 })
