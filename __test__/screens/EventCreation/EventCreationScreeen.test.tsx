@@ -12,6 +12,22 @@ jest.mock("../../../firebase/firebaseConfig", () => ({
   db: jest.fn(() => ({} as Firestore)),
 }))
 
+jest.mock("firebase/auth", () => ({
+  getReactNativePersistence: jest.fn(() => ({})),
+  initializeAuth: jest.fn(() => ({})),
+  onAuthStateChanged: jest.fn(() => ({ uid: "123" })),
+  getAuth: jest.fn(() => ({ currentUser: { uid: "123" } })),
+}))
+
+jest.mock("firebase/firestore", () => {
+  const originalModule = jest.requireActual("firebase/firestore")
+
+  return {
+      ...originalModule,
+      getFirestore: jest.fn(() => ({} as Firestore)),
+  }
+})
+
 jest.mock("@react-navigation/native", () => {
   return {
     ...jest.requireActual("@react-navigation/native"),

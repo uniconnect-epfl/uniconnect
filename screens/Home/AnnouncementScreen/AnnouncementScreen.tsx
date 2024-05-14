@@ -22,7 +22,6 @@ const AnnouncementScreen = ({ onAnnoucmentPress }: AnnouncementsScreenProps) => 
     const fetchData = async () => {
       try {
         const announcements = await getAllAnnouncements() || [] // Fallback to an empty array if null
-        console.log(announcements)
         setAnnouncements(announcements)
         setIsLoading(false)
       } catch (error) {
@@ -48,18 +47,15 @@ const AnnouncementScreen = ({ onAnnoucmentPress }: AnnouncementsScreenProps) => 
 
   if (isLoading) {
     // Display a loading indicator while data is fetching
-    console.log("Loading...")
     return <LoadingScreen/>
   }
 
   if (announcements === null) {
     // Display a message if there are no announcements
-    console.log("No future announcements available.")
     return <Text>No future announcements available.</Text>
   }
 
   return (
-    console.log("Rendering..."),
     <View style={styles.view}>
       <View style={styles.searchAndMap}>
         {/* <TextInput

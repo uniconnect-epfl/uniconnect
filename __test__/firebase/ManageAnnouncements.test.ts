@@ -56,10 +56,9 @@ describe("manageAnnouncements", () => {
         const point = { x: 47.238458, y: 5.984155 }
         const location = "location"
         const imageUrl = "imageUrl"
-        const uid = "1"
         const interests = ["interest1", "interest2", "interest3"]
 
-        await createAnnouncement(uid, title, location,point, description, interests ,imageUrl)
+        await createAnnouncement(title, location,point, description, interests ,imageUrl)
         expect(showSuccessToast).toHaveBeenCalledWith("Announcement created successfully!")
     })
 
@@ -69,10 +68,9 @@ describe("manageAnnouncements", () => {
         const point = { x: 47.238458, y: 5.984155 }
         const location = "location"
         const imageUrl = "imageUrl"
-        const uid = "0"
         const interests = ["interest1", "interest2", "interest3"]
 
-        await createAnnouncement(uid, title, location,point, description, interests ,imageUrl)
+        await createAnnouncement(title, location,point, description, interests ,imageUrl)
         expect(showErrorToast).toHaveBeenCalledWith("There was an error storing your announcement data, please try again.")
     })
 

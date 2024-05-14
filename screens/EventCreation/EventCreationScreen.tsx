@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import { View, Text, ScrollView, Pressable } from "react-native"
 import { styles } from "./styles"
 import { useNavigation } from "@react-navigation/native"
@@ -11,6 +11,10 @@ import InputField from "../../components/InputField/InputField"
 import MyDateInputComponent from "../../components/DatePicker/DatePicker"
 import { RegistrationContext } from "../../contexts/RegistrationContext"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { getUserData, updateUserEvents } from "../../firebase/User"
+import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
+import { getAuth } from "firebase/auth"
+import { User } from "../../types/User"
 
 interface EventCreationScreenProps {
   isAnnouncement?: boolean
@@ -21,13 +25,14 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
   const [dateModal, setDateModal] = useState(false)
   const [date, setDate] = useState<Date>(new Date())
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
-
   const [title, setTitle] = useState("")
   const [location, setLocation] = useState("")
   const insets = useSafeAreaInsets()
   const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
-
   const { description, setDescription } = useContext(RegistrationContext)
+  const userId = getAuth().currentUser?.uid
+  const [user, setUser] = useState<User | null>(null)
+  const [, setLoading] = useState(false)
 
   const opacity = !hasBeenTouched ? 0.2 : 1
 
@@ -41,30 +46,47 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
     console.log("Interests:", interests)
 
     if (isAnnouncement) {
-      await createAnnouncement(
-        "0",
-        title,
-        location,
-        { x: 47.238458, y: 5.984155 },
-        description,
-        interests,
-        date.toDateString()
-      )
+      newAnnouncement()
     } else {
-      await createEvent(
-        "0",
-        title,
-        description,
-        date,
-        { x: 47.238458, y: 5.984155 },
-        location,
-        "imageUrl"
-      )
+      newEvent()
     }
 
     // after the user has filled out the form
     // we should make sure the global state is cleaned
     setDescription("")
+  }
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true)
+      if (userId) {
+        setUser(await getUserData(userId))
+      }
+      setLoading(false)
+    }
+    fetchData()
+  }, [userId])
+
+  const newEvent = async () => {
+    if (!userId) {
+      showErrorToast("You must be logged in to create an event")
+      return
+    }
+    const eventId = await createEvent(title, description, date,{ x: 47.238458, y: 5.984155 }, location, "imageUrl")
+    if (eventId && user) {
+      await updateUserEvents(user.uid, eventId)
+      showSuccessToast("Event created successfully")
+    }
+  }
+
+  const newAnnouncement = async () => {
+    try {
+      await createAnnouncement( title,location,{ x: 47.238458, y: 5.984155 }, description, interests, date.toISOString())
+      showSuccessToast("Announcement created succesfully")
+    } catch (error) {
+      showErrorToast("Could not create announcement")
+    }
   }
 
   return (
@@ -160,3 +182,4 @@ const EventCreationScreen = ({ isAnnouncement }: EventCreationScreenProps) => {
 }
 
 export default EventCreationScreen
+
