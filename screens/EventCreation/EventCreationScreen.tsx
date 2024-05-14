@@ -47,14 +47,10 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
     console.log("Date:", date.toDateString())
     console.log("Interests:", interests)
 
-    if(point === undefined){
-      showErrorToast("An event needs a location!")
+    if (isAnnouncement) {
+      newAnnouncement()
     } else {
-      if (isAnnouncement) {
-        newAnnouncement()
-      } else {
-        newEvent()
-      }
+      newEvent()
     }
 
     // after the user has filled out the form
@@ -146,7 +142,7 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
               value={location}
               onChangeText={setLocation}
             />
-            
+
             <Pressable
               style={styles.section}
               onPress={() => {

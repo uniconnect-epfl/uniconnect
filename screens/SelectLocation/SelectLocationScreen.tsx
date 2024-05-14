@@ -20,8 +20,8 @@ export const SelectLocationScreen = () => {
     const [location, setLocation] = useState<Point | undefined>(initialPoint)
 
     const initialRegion: Region = {
-        latitude: initialPoint ? initialPoint.x : 46.51858962578904,
-        longitude: initialPoint ? initialPoint.y : 6.566048509782951,
+        latitude: 46.51858962578904,
+        longitude: 6.566048509782951,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
     }
