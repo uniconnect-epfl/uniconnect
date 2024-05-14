@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect, useContext, useCallback } from "react"
 import {
   View,
   Text,
@@ -20,6 +20,7 @@ import { fetchInterests, Interest } from "../../../firebase/Interests"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import useKeyboardVisibility from "../../../hooks/useKeyboardVisibility"
 import { RegistrationContext } from "../../../contexts/RegistrationContext"
+import { useFocusEffect } from "@react-navigation/native"
 
 interface InterestButtonProps {
   interest: Interest
@@ -74,6 +75,14 @@ const InterestsScreen = () => {
         setIsLoading(false)
       })
   }, [])
+
+  useFocusEffect(
+    useCallback(() => {
+      setSelectedInterests([])
+      setLabelArray([])
+      return () => {}
+    }, [setSelectedInterests, setLabelArray])
+  )
 
   const handleRemoveInterest = (interest: string) => {
     setSelectedInterests(
