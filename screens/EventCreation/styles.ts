@@ -63,7 +63,7 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: "3%",
     paddingVertical: 20,
-    width: "100%"
+    width: "100%",
   },
   headerIcon: {
     alignItems: "center",
