@@ -8,4 +8,5 @@ export type User = {
   description: string
   location: string
   selectedInterests: string[]
+  events: string[]
 }

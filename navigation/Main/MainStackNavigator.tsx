@@ -90,11 +90,7 @@ const MainStackNavigator: React.FC = () => {
         setSelectedInterests,
       }}
     >
-      <Stack.Navigator
-        initialRouteName={
-          user ? ( "HomeTabs") : "Onboarding"
-        }
-      >
+      <Stack.Navigator initialRouteName={user ? "HomeTabs" : "Onboarding"}>
         {user ? (
           <>
             <Stack.Screen
