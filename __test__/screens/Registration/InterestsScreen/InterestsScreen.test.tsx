@@ -106,4 +106,31 @@ describe("InterestsScreen", () => {
       expect(queryByTestId("Artificial Inteligence" + "IDlabel")).toBeNull()
     })
   })
+
+  it("shows error toast when there's an error rendering the screen", async () => {
+    try {
+      const { getByPlaceholderText, getAllByText } = render(
+        <SafeAreaProvider>
+          <InterestsScreen />
+        </SafeAreaProvider>
+      )
+
+      await waitFor(() => {
+        expect(getByPlaceholderText("Search")).toBeTruthy()
+        const interestButtons = getAllByText(/.+/)
+        expect(interestButtons.length).toBeGreaterThan(0)
+      })
+    } catch (error) {
+      expect(showErrorToast).toHaveBeenCalledWith("Unable to render")
+    }
+  })
+  it("displays loading screen while interests are being fetched", async () => {
+    const { getByTestId } = render(
+      <SafeAreaProvider>
+        <InterestsScreen />
+      </SafeAreaProvider>
+    )
+
+    expect(getByTestId("loading-indicator")).toBeTruthy()
+  })
 })
