@@ -9,6 +9,7 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps'
 import { globalStyles } from '../../../assets/global/globalStyles'
 import ProfilePicture from '../../../components/ProfilePicture/ProfilePicture'
 import { getEventData } from '../../../firebase/ManageEvents'
+import { BackArrow } from '../../../components/BackArrow/BackArrow'
 import { showErrorToast, showSuccessToast } from '../../../components/ToastMessage/toast'
 import { updateUserEvents } from '../../../firebase/User'
 import { User } from '../../../types/User'
@@ -72,10 +73,13 @@ const ViewEventScreen = () => {
         return <LoadingScreen />
     }
 
-    return (
-        <View style={styles.container}>
-            <View style={viewDetailsStyles.topBackground} />
-            <View style={viewDetailsStyles.detailsContainer}>
+  return (
+    <View style={styles.container}>
+        
+        <View style={viewDetailsStyles.topBackground} />
+        <BackArrow/>
+
+        <View style={viewDetailsStyles.detailsContainer}>
 
                 <Text style={[
                     globalStyles.boldText,
@@ -127,20 +131,21 @@ const ViewEventScreen = () => {
                     </MapView>
                 </View>
 
-                <Text style={[globalStyles.smallText, viewDetailsStyles.descriptionContainer]}>
-                    {event.description}
+            <Text style={[globalStyles.smallText, viewDetailsStyles.descriptionContainer]}>
+                {event.description}
+            </Text>
+
+            <TouchableOpacity
+                style={styles.participateButton}
+                onPress={() => {alert("Not implemented yet")}}>
+                <Text style={globalStyles.boldText}>
+                    Participate
                 </Text>
-
-                {/* Register Button */}
-                <TouchableOpacity
-                    onPress={() => registerToEvent()} // Assume registertoEvent takes an event ID
-                >
-                    <Text >Register to Event</Text>
-                </TouchableOpacity>
-
-            </View>
+            </TouchableOpacity>
+            
         </View>
-    )
+    </View>
+  )
 }
 
 export default ViewEventScreen

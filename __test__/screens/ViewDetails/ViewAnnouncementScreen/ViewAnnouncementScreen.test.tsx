@@ -3,6 +3,7 @@ import { render } from "@testing-library/react-native"
 import ViewAnnoucementScreen from "../../../../screens/ViewDetails/ViewAnnouncementScreen/ViewAnnouncementScreen"
 import { Point } from "react-native-maps"
 import { Announcement } from "../../../../types/Annoucement"
+import { NavigationContainer } from "@react-navigation/native"
 
 // Create a dummy Point
 const dummyPoint: Point = {
@@ -34,7 +35,11 @@ jest.mock("@react-navigation/native", () => {
 describe("ViewAnnouncementScreen", () => {
   
   it("renders correctly", () => {
-    const component = render(<ViewAnnoucementScreen />)
+    const component = render(
+      <NavigationContainer>
+        <ViewAnnoucementScreen />
+      </NavigationContainer>
+      )
     expect(component).toBeTruthy()
   })
   
