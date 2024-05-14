@@ -102,7 +102,7 @@ describe("InterestsScreen", () => {
 
     await waitFor(() => {
       fireEvent.press(getByTestId("Artificial Inteligence" + "ID"))
-      fireEvent.press(getByTestId("Artificial Inteligence" + "ID"))
+      fireEvent.press(getByTestId("Artificial Inteligence" + "IDlabel"))
       expect(queryByTestId("Artificial Inteligence" + "IDlabel")).toBeNull()
     })
   })
