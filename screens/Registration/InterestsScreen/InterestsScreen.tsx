@@ -84,15 +84,21 @@ const InterestsScreen = () => {
 
   //Handle the selection of an interest
   const toggleInterest = (interest: Interest) => {
-    const newSelectedInterests = [...selectedInterests]
-    if (newSelectedInterests.includes(interest.title)) {
-      newSelectedInterests.filter((label) => label !== interest.title)
-      setLabelArray((prev) => prev.filter((label) => label !== interest.title))
-    } else {
-      newSelectedInterests.push(interest.title)
-      setLabelArray([...labelArray, interest.title])
-    }
-    setSelectedInterests(newSelectedInterests)
+    setSelectedInterests((prevSelectedInterests) => {
+      if (prevSelectedInterests.includes(interest.title)) {
+        return prevSelectedInterests.filter((label) => label !== interest.title)
+      } else {
+        return [...prevSelectedInterests, interest.title]
+      }
+    })
+
+    setLabelArray((prev) => {
+      if (prev.includes(interest.title)) {
+        return prev.filter((label) => label !== interest.title)
+      } else {
+        return [...prev, interest.title]
+      }
+    })
   }
 
   //Handles the search bar
