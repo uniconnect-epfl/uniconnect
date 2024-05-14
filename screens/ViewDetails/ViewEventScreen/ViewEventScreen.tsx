@@ -137,7 +137,7 @@ const ViewEventScreen = () => {
 
             <TouchableOpacity
                 style={styles.participateButton}
-                onPress={() => {alert("Not implemented yet")}}>
+                onPress={() => registerToEvent()}>
                 <Text style={globalStyles.boldText}>
                     Participate
                 </Text>

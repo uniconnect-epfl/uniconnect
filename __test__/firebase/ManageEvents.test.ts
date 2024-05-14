@@ -1,6 +1,6 @@
 import { Firestore } from "firebase/firestore"
 import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
-import { createEvent, getAllFutureEvents, getAllPastEvents } from "../../firebase/ManageEvents"
+import { createEvent, getAllFutureEvents, getAllPastEvents, getEventData } from "../../firebase/ManageEvents"
 
 
 jest.mock("../../firebase/firebaseConfig", () => ({
@@ -33,6 +33,9 @@ jest.mock("firebase/firestore", () => {
                 { data: () => ({ title: "Past Event" }) },
                 { data: () => ({ title: "Future Event" }) },
             ],
+        })),
+        getDoc: jest.fn(() => ({
+            data: () => ({ title: "Event", location: "location", point: { x: 47.238458, y: 5.984155 }, description: "description", date: new Date(), imageUrl: "imageUrl"})
         })),
         query: jest.fn(() => ({})),
         where: jest.fn(() => ({})),
@@ -67,9 +70,8 @@ describe("manageEvents", () => {
         const point = { x: 47.238458, y: 5.984155 }
         const location = "location"
         const imageUrl = "imageUrl"
-        const uid = "123"
 
-        await createEvent(uid, title, description, date, point, location, imageUrl)
+        await createEvent(title, description, date, point, location, imageUrl)
         expect(showSuccessToast).toHaveBeenCalledWith("Event created successfully!")
     })
 
@@ -80,10 +82,13 @@ describe("manageEvents", () => {
         const point = { x: 47.238458, y: 5.984155 }
         const location = "location"
         const imageUrl = "imageUrl"
-        const uid = "123"
 
-        await createEvent(uid, title, description, date, point, location, imageUrl)
+        await createEvent(title, description, date, point, location, imageUrl)
         expect(showErrorToast).toHaveBeenCalledWith("There was an error storing your event data, please try again.")
+    })
+
+    it("should fetch a single event successfully", async () => {
+        await getEventData("123")
     })
 
     it("should fetch past events successfully", async () => {
