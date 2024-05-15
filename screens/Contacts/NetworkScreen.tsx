@@ -42,11 +42,6 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
   const [friends, setFriends] = useState<string[] | null>(null)
   const [contacts, setContacts] = useState<Contact[]>([])
 
-  const initializeContacts = async () => {
-    const contacts = await createContactListFromUsers(friends ?? [])
-    setContacts(contacts)
-  }
-
   useEffect(() => {
     let tempUserId = getAuth().currentUser?.uid
     if (tempUserId === undefined) {
@@ -83,17 +78,22 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
     if (user?.friends) {
       setFriends(user?.friends)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   useEffect(() => {
+    const createList = async () => {
+      const contacts = await createContactListFromUsers(friends ?? [])
+      setContacts(contacts)
+    }
     if (friends) {
-      initializeContacts()
+      createList()
     }
   }, [friends])
 
   useEffect(() => {
     if (contacts.length > 0) {
-      loadGraphData(userId ?? "-1", userContact, contacts).then((graph) => {
+      loadGraphData(userId, userContact, contacts).then((graph) => {
         setGraph(graph)
       })
     }

@@ -258,9 +258,9 @@ export async function friendsFromUID(uid: string): Promise<string[]> {
 
 export function createGraphfromContacts(
   contacts: Contact[],
-  uid: string
+  uid: string | undefined
 ): Graph {
-  return new Graph(contacts, uid)
+  return new Graph(contacts, uid ?? "-1")
 }
 
 function relevantContact(a: Contact, b: Contact): boolean {
