@@ -6,28 +6,27 @@ const styles = StyleSheet.create({
     borderColor: lightGray,
     borderRadius: 25,
     borderWidth: 1,
-    height: 50,
-    margin: 10,
+    height: 40,
+    marginTop: 5,
     paddingHorizontal: 30,
     width: "100%",
   },
-
   label: {
     color: black,
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-start",
-    marginTop: 10,
     paddingLeft: 20,
   },
-
+  labelContainer: {
+    width: "100%"
+  },
   section: {
     alignItems: "center",
-    flexDirection: "row",
     flex: 1,
     justifyContent: "center",
+    margin: 10,
     maxHeight: 70,
-    paddingHorizontal: 20,
   },
 })
 

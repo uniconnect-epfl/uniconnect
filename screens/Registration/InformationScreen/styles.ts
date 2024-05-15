@@ -63,7 +63,9 @@ const styles = StyleSheet.create({
   },
 
   container: {
+    alignItems: "center",
     flex: 1,
+    justifyContent: "flex-start",
   },
 
   date: {
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
     borderColor: lightGray,
     borderRadius: 25,
     borderWidth: 1,
-    height: 50,
+    height: 40,
     justifyContent: "center",
     paddingHorizontal: 30,
     width: "100%",
@@ -139,12 +141,9 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   section: {
-    display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
     paddingTop: 10,
-    width: "100%",
   },
 })
 
