@@ -127,7 +127,6 @@ const EventScreen = ({ onEventPress }: EventsScreenProps) => {
     <View style={styles.view}>
       <View style={styles.searchAndMap}>
         <InputField
-          label=""
           placeholder="Search..."
           value={searchQuery}
           onChangeText={setSearchQuery}

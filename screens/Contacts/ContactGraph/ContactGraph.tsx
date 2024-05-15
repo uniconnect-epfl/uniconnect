@@ -59,7 +59,6 @@ const ContactGraph = ({
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <InputField
-          label=""
           placeholder="Search..."
           value={searchText}
           onChangeText={(text) => {

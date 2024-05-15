@@ -70,7 +70,6 @@ const ContactList = ({ onContactPress, contacts }: ContactListProps) => {
   return (
     <View style={styles.container}>
       <InputField
-        label=""
         placeholder="Search..."
         value={searchText}
         onChangeText={handleSearch}
