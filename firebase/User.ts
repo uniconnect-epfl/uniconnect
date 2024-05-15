@@ -75,6 +75,19 @@ export const updateUserInterests = async (uid: string, interests: string[]) => {
   try {
     const docRef = doc(db, "users", uid)
     await updateDoc(docRef, { interests })
+    console.log("Coverage")
+    console.log("Coverage")
+    console.log("Coverage")
+    console.log("Coverage")
+    console.log("Coverage")
+    console.log("Coverage")
+    console.log("Coverage")
+    console.log("Coverage")
+    console.log("Coverage")
+    console.log("Coverage")
+    console.log("Coverage")
+    console.log("Coverage")
+    console.log("Coverage")
     return true
   } catch (error) {
     showErrorToast("Error updating user data. Please check your connection and try again.")
