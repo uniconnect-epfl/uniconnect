@@ -1,5 +1,5 @@
 import { render, fireEvent, waitFor, act } from "@testing-library/react-native"
-import ExploreScreen from "../../../screens/Home/ExploreScreen"
+import ExploreScreen from "../../../screens/Explore/ExploreScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import React from "react"
 import { Firestore } from "firebase/firestore"

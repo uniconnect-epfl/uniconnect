@@ -9,7 +9,7 @@
     "web": "expo start --web",
     "prepare": "husky",
     "lint": "eslint . --ext .ts,.tsx,.yml",
-    "test": "jest"
+    "test": "jest --runInBand --detectOpenHandles --forceExit"
   },
   "dependencies": {
     "@expo-google-fonts/jetbrains-mono": "0.2.3",

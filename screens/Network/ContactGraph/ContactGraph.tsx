@@ -216,7 +216,7 @@ export async function createContactListFromUsers(
     if (friendID) {
       const friend = await getUserData(friendID)
       const contact: Contact = {
-        uid: friend?.uid ?? "-1",
+        uid: friendID,
         firstName: friend?.firstName ?? "",
         lastName: friend?.lastName ?? "",
         profilePictureUrl: "",
@@ -267,7 +267,7 @@ function relevantContact(a: Contact, b: Contact): boolean {
   const interests = a.interests.filter((value) => b.interests.includes(value))
   const events = a.events.filter((value) => b.events.includes(value))
 
-  if (!(interests.length + events.length) || Math.random() < 0.5) return false
+  if (!(interests.length + events.length) || Math.random() < 0.25) return false
 
   return true
 }

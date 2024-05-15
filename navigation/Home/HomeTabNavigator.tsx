@@ -1,6 +1,6 @@
 import * as React from "react"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
-import ExploreScreen from "../../screens/Home/ExploreScreen"
+import ExploreScreen from "../../screens/Explore/ExploreScreen"
 import { TabBar } from "../../components/TabBar/TabBar"
 import { Header } from "../../components/Header/Header"
 import NetworkScreen from "../../screens/Network/NetworkScreen"

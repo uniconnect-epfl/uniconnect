@@ -22,8 +22,6 @@ interface Node {
   contact: Contact
   level: number
   outsideScreen?: boolean
-  outsideScreenX?: number
-  outsideScreenY?: number
 }
 
 /**

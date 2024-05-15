@@ -50,7 +50,7 @@ const NodeModal: React.FC<{
     } else {
       setTimeout(() => {
         setModalVisible(false)
-      }, 500)
+      }, 1000)
     }
   }, [visible])
 
@@ -60,6 +60,7 @@ const NodeModal: React.FC<{
       transparent={true}
       visible={modalVisible}
       onRequestClose={slideOutModal}
+      testID="modal"
     >
       {/* Make the modal disappear when the user taps outside of it */}
       <TouchableWithoutFeedback

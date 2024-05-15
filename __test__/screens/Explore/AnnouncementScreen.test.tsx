@@ -1,6 +1,6 @@
 import React from "react"
 import { render, waitFor } from "@testing-library/react-native"
-import AnnouncementScreen from "../../../screens/Home/AnnouncementScreen/AnnouncementScreen"
+import AnnouncementScreen from "../../../screens/Explore/AnnouncementScreen/AnnouncementScreen"
 import { Firestore } from "firebase/firestore"
 import { getAllAnnouncements } from "../../../firebase/ManageAnnouncements"
 
