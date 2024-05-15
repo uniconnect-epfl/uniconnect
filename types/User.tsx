@@ -9,4 +9,5 @@ export type User = {
   location: string
   selectedInterests: string[]
   profilePicture: string
+  events: string[]
 }

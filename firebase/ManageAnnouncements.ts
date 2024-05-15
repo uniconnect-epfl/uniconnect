@@ -4,10 +4,11 @@ import { showErrorToast, showSuccessToast } from "../components/ToastMessage/toa
 import { Point } from "react-native-maps"
 import { Announcement } from "../types/Annoucement"
 
-export async function createAnnouncement(uid: string, title: string, location: string, point: Point, description: string, interests: string[], date: string) {
+export async function createAnnouncement(title: string, location: string, point: Point, description: string, interests: string[], date: string) {
     try {
-        await setDoc(doc(collection(db, "announcements")), {
-            uid: uid,
+        const eventRef = doc(collection(db, "events"))
+        await setDoc(eventRef,{
+            uid: eventRef.id,
             title: title,
             location: location,
             point: point,
@@ -29,7 +30,7 @@ export const getAllAnnouncements = async () => {
         // Execute the query
         const querySnapshot = await getDocs(collection(db, "announcements"))
         const announcements: Announcement[] = querySnapshot.docs.map((doc) => ({
-            uid: doc.id,
+            uid: doc.data().uid,
             title: doc.data().title as string,
             location: doc.data().location as string,
             point: doc.data().point as Point,

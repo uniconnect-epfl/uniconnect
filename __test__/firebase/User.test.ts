@@ -24,16 +24,30 @@ jest.mock("firebase/auth", () => ({
 }))
 
 const mockSetDoc = jest.fn()
+const mockGetDoc = jest.fn()
+
+const mockUser: User = {
+  uid: "123",
+  email: "test@example.com",
+  firstName: "John",
+  friends: [],
+  lastName: "Doe",
+  date: new Date(),
+  description: "Test user",
+  location: "Test location",
+  selectedInterests: [],
+  events: ["123", "456", "789"]
+}
 
 jest.mock("firebase/firestore", () => ({
   getFirestore: jest.fn(() => ({} as Firestore)),
-  getDoc: jest.fn(() => ({})),
+  getDoc: jest.fn((...args) => mockGetDoc(...args)),
   doc: jest.fn(() => ({})),
   addDoc: jest.fn(),
   collection: jest.fn(() => ({})),
   serverTimestamp: jest.fn(() => ({})),
-  setDoc: mockSetDoc,
-  updateDoc: jest.fn()
+  updateDoc: jest.fn(),
+  setDoc: jest.fn((...args) => mockSetDoc(...args))
 }))
 
 jest.mock("../../components/ToastMessage/toast", () => ({
@@ -45,22 +59,48 @@ jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 )
 
-describe("User", () => {
+describe("updateUserEvents", () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
 
-  it("should return user data when successfully fetched", async () => {
-    const uid = "123"
+  it("should update user events successfully", async () => {
+    mockGetDoc.mockResolvedValueOnce({
+      data: () => mockUser
+    })
 
-    await getUserData(uid)
+    const uid = "123"
+    const eventId = "999"
+    const result = await updateUserEvents(uid, eventId)
+
+    expect(result).toBe(true)
+    expect(mockSetDoc).toHaveBeenCalledWith(expect.any(Object), {
+      events: ["123", "456", "789", eventId]
+    }, { merge: true })
   })
 
-  it("should show error toast and return null when fetching fails", async () => {
+  it("should not update user events if already registered", async () => {
+    mockGetDoc.mockResolvedValueOnce({
+      data: () => mockUser
+    })
+
     const uid = "123"
+    const eventId = "456" // Already in the events list
+    const result = await updateUserEvents(uid, eventId)
 
-    await getUserData(uid)
+    expect(result).toBe(false)
+    expect(mockSetDoc).not.toHaveBeenCalled()
+  })
 
+  it("should handle errors gracefully", async () => {
+    mockGetDoc.mockRejectedValueOnce(new Error("Firestore error"))
+
+    const uid = "123"
+    const eventId = "999"
+    const result = await updateUserEvents(uid, eventId)
+
+    expect(result).toBe(false)
+    expect(mockSetDoc).not.toHaveBeenCalled()
   })
 
   it("should update user data when successfully updated", async () => {

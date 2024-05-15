@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, SectionList, SectionListRenderItemInfo } from 'react-native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import { View, Text, SectionList, SectionListRenderItemInfo, TouchableOpacity } from 'react-native'
 import { styles } from './styles'// Ensure the paths are correct
 import AnnouncementCard from '../../../components/AnnoucementCard/AnnouncementCard'
 import { Announcement } from '../../../types/Annoucement'
@@ -8,7 +7,11 @@ import { getAllAnnouncements } from '../../../firebase/ManageAnnouncements'
 import { showErrorToast } from '../../../components/ToastMessage/toast'
 import LoadingScreen from '../../Loading/LoadingScreen'
 
-const AnnouncementScreen = () => {
+interface AnnouncementsScreenProps {
+  onAnnoucmentPress: (announcement: Announcement) => void
+}
+
+const AnnouncementScreen = ({ onAnnoucmentPress }: AnnouncementsScreenProps) => {
 
   //const [searchQuery, setSearchQuery] = useState("")
   const [isLoading, setIsLoading] = useState(true)
@@ -19,7 +22,6 @@ const AnnouncementScreen = () => {
     const fetchData = async () => {
       try {
         const announcements = await getAllAnnouncements() || [] // Fallback to an empty array if null
-        console.log(announcements)
         setAnnouncements(announcements)
         setIsLoading(false)
       } catch (error) {
@@ -37,25 +39,23 @@ const AnnouncementScreen = () => {
   // }
 
   const renderItem = ({ item }: SectionListRenderItemInfo<Announcement>) => (
-    <TouchableOpacity >
+    <TouchableOpacity
+      onPress={() => {onAnnoucmentPress(item)}}>
       <AnnouncementCard {...item} />
     </TouchableOpacity>
   )
 
   if (isLoading) {
     // Display a loading indicator while data is fetching
-    console.log("Loading...")
     return <LoadingScreen/>
   }
 
   if (announcements === null) {
     // Display a message if there are no announcements
-    console.log("No future announcements available.")
     return <Text>No future announcements available.</Text>
   }
 
   return (
-    console.log("Rendering..."),
     <View style={styles.view}>
       <View style={styles.searchAndMap}>
         {/* <TextInput
