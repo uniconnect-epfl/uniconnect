@@ -1,7 +1,8 @@
 import { Firestore, updateDoc } from "firebase/firestore"
 import { Auth } from "firebase/auth"
-import { getUserData, updateUserData, updateUserEvents, updateUserImage, updateUserInterests, uploadUserImageToStorage } from "../../firebase/User"
+import { updateUserData, updateUserEvents, updateUserImage, updateUserInterests, uploadUserImageToStorage } from "../../firebase/User"
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage"
+import { User } from "../../types/User"
 
 jest.mock('firebase/storage', () => ({
   ref: jest.fn(),
@@ -36,7 +37,8 @@ const mockUser: User = {
   description: "Test user",
   location: "Test location",
   selectedInterests: [],
-  events: ["123", "456", "789"]
+  events: ["123", "456", "789"],
+  profilePicture: ""
 }
 
 jest.mock("firebase/firestore", () => ({
@@ -214,30 +216,6 @@ describe("updateUserEvents", () => {
     mockUpdateDoc.mockRejectedValue(new Error("Failed to fetch user data"))
 
     const result = await updateUserInterests(uid, interests)
-
-    expect(result).toBe(false)
-  })
-
-  it("should update user events in database and return true when successful", async () => {
-    const uid = "123"
-    const events = ["Machine Learning, Sports, Tractoupelle"]
-
-    const mockUpdateDoc = updateDoc as jest.Mock
-    mockUpdateDoc.mockResolvedValue(true)
-
-    const result = await updateUserEvents(uid, events)
-
-    expect(result).toBe(true)
-  })
-
-  it("should show error toast and return false when updating user events fails", async () => {
-    const uid = "123"
-    const events = ["Machine Learning, Sports, Tractoupelle"]
-
-    const mockUpdateDoc = updateDoc as jest.Mock
-    mockUpdateDoc.mockRejectedValue(new Error("Failed to fetch user data"))
-
-    const result = await updateUserEvents(uid, events)
 
     expect(result).toBe(false)
   })

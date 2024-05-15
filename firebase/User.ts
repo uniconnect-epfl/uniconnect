@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc } from "firebase/firestore"
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
 import { db, storage } from "./firebaseConfig"
 import { showErrorToast } from "../components/ToastMessage/toast"
 import { User } from "../types/User"
