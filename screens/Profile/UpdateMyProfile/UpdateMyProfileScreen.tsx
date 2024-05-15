@@ -21,7 +21,7 @@ export const UpdateMyProfileScreen = () => {
   const route = useRoute<MapScreenRouteProp>()
   const navigation = useNavigation()
   const user = route.params.user
-  const [image, setImage] = useState(user.profilePicture)
+  const [image, setImage] = useState(user.profilePicture? user.profilePicture : "")
   const [imageLoading, setImageLoading] = useState(false)
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState(user.firstName)
