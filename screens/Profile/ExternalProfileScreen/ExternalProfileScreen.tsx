@@ -14,6 +14,7 @@ import { getAuth } from "firebase/auth"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import { getUserData } from "../../../firebase/User"
 import { User } from "../../../types/User"
+import { BackArrow } from "../../../components/BackArrow/BackArrow"
 
 type RootStackParamList = {
   ExternalProfile: {
@@ -75,7 +76,10 @@ const ExternalProfileScreen = () => {
   return (
 
     <View style={styles.container}>
+
       <View style={profileStyles.topBackground} />
+      <BackArrow/>
+
       <View style={profileStyles.profileContainer}>
 
         <View style={profileStyles.topProfileContainer}>

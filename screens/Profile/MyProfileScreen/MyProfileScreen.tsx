@@ -16,6 +16,7 @@ import { getAuth } from "firebase/auth"
 import { User } from "../../../types/User"
 import { getUserData } from "../../../firebase/User"
 import LoadingScreen from "../../Loading/LoadingScreen"
+import { BackArrow } from "../../../components/BackArrow/BackArrow"
 
 interface MyProfileScreenProps {
   navigation: NavigationProp<ParamListBase>
@@ -43,7 +44,10 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
   }
   return (
     <View style={styles.container}>
+
       <View style={profileStyles.topBackground} />
+      <BackArrow/>
+
       <View style={profileStyles.profileContainer}>
         <View style={profileStyles.topProfileContainer}>
           <GeneralProfile

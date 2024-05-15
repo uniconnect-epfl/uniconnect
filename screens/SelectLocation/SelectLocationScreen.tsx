@@ -4,6 +4,7 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import MapView, { Marker, PROVIDER_GOOGLE, Point, Region } from "react-native-maps"
 import { useEffect, useState } from "react"
 import { globalStyles } from "../../assets/global/globalStyles"
+import { BackArrow } from "../../components/BackArrow/BackArrow"
 
 type RootStackParamList = {
     SelectLocationScreen: {
@@ -33,6 +34,8 @@ export const SelectLocationScreen = () => {
 
     return (
       <View style={styles.container}>
+
+        <BackArrow />
 
         <View style={styles.header}>
             <Text style={[globalStyles.boldText, styles.screenTitle]}>

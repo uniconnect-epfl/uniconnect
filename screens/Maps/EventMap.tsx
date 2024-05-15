@@ -1,10 +1,10 @@
 import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps"
 import React from "react"
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import { View, Text, TouchableOpacity } from "react-native"
+import { RouteProp, useRoute } from "@react-navigation/native"
+import { View, Text } from "react-native"
 import styles from "./styles" // Import styles
-import { Ionicons } from "@expo/vector-icons"
 import { Event } from "../../types/Event"
+import { BackArrow } from "../../components/BackArrow/BackArrow"
 
 
 const INITIAL_REGION = {
@@ -24,17 +24,12 @@ type MapScreenRouteProp = RouteProp<RootStackParamList, 'EventMap'>;
 const EventMap = () => {
   const route = useRoute<MapScreenRouteProp>() 
   const events = route.params.events
-  const navigation = useNavigation()
-
 
   return (
     <View style={styles.container}>
       {/* Navigation Bar */}
+      <BackArrow/>
       <View style={styles.navigationBar}>
-        <TouchableOpacity testID='back-button' onPress={() => navigation.goBack} style={styles.backButton}>
-          {/* Using Ionicons for the back button icon */}
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
         <Text style={styles.screenTitle}>Event Map</Text>
       </View>
       <MapView

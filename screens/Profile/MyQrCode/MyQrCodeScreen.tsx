@@ -9,6 +9,7 @@ import { getAuth } from "firebase/auth"
 import { getUserData } from "../../../firebase/User"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import { User } from "../../../types/User"
+import { BackArrow } from "../../../components/BackArrow/BackArrow"
 
 const generateLink = (uid: string) => {
   // this create the deep link that can directly redirect in the app when scanned from outside
@@ -39,6 +40,9 @@ export const MyQrCodeScreen = () => {
   
   return (
     <View style={styles.container}>
+
+      <BackArrow/>
+      
         <View style={styles.contactContainer}>
           <View style={styles.textContainer}>
             <Text style={globalStyles.boldText}>{user.firstName}</Text>
