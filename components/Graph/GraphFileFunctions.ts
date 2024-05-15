@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { createGraphfromContacts } from "../../screens/Contacts/ContactGraph/ContactGraph"
+import { createGraphfromContacts } from "../../screens/Network/ContactGraph/ContactGraph"
 import { Contact } from "../../types/Contact"
 import Graph from "./Graph"
 
@@ -7,7 +7,7 @@ const GRAPH_STORAGE_KEY = "graph"
 const GRAPH_EXISTENCE_FLAG_KEY = "graph_exists"
 
 async function loadGraphData(
-  userId: string,
+  userId: string | undefined,
   userContact: Contact,
   contacts: Contact[]
 ): Promise<Graph> {
@@ -19,7 +19,7 @@ async function loadGraphData(
     } else {
       const newGraph = createGraphfromContacts(
         [userContact, ...contacts],
-        userId ?? "-1"
+        userId
       )
       await AsyncStorage.setItem(GRAPH_STORAGE_KEY, JSON.stringify(newGraph))
 

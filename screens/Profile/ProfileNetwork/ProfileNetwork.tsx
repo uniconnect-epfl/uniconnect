@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import { FlatList, TextInput } from "react-native-gesture-handler"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../../assets/global/globalStyles"
-import { mockContacts } from "../../Contacts/mockContacts"
+import { mockContacts } from "../../Network/mockContacts"
 import { Contact } from "../../../types/Contact"
 
 const RenderOneContact = ({ item }: { item: Contact }) => (

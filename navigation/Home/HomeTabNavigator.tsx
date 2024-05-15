@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import ExploreScreen from "../../screens/Home/ExploreScreen"
 import { TabBar } from "../../components/TabBar/TabBar"
 import { Header } from "../../components/Header/Header"
-import NetworkScreen from "../../screens/Contacts/NetworkScreen"
+import NetworkScreen from "../../screens/Network/NetworkScreen"
 import QrScanScreen from "../../screens/QrScan/QrScanScreen"
 
 const Tab = createBottomTabNavigator()

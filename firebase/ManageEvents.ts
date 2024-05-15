@@ -1,14 +1,14 @@
-import { DocumentData, Timestamp, collection, doc, getDocs, orderBy, query, setDoc, where } from "firebase/firestore"
+import { Timestamp, collection, doc, getDocs, orderBy, query, setDoc, where, getDoc, DocumentData } from "firebase/firestore"
 import { db } from "./firebaseConfig"
 import { showErrorToast, showSuccessToast } from "../components/ToastMessage/toast"
 import { Point } from "react-native-maps"
 import { Event } from "../types/Event"
 
-export async function createEvent(uid: string, title: string, description: string, date: Date, point: Point, location: string, imageUrl: string) {
+export async function createEvent(title: string, description: string, date: Date, point: Point, location: string, imageUrl: string): Promise<string | undefined> {
   try {
-    const newCityRef = doc(collection(db, "events"))
-    await setDoc(newCityRef, {
-      uid: uid,
+    const eventRef = doc(collection(db, "events"))
+    await setDoc(eventRef, {
+      uid: eventRef.id,
       title: title,
       point: point,
       location: location,
@@ -16,21 +16,23 @@ export async function createEvent(uid: string, title: string, description: strin
       description: description,
       imageUrl: imageUrl,
     })
-
     showSuccessToast("Event created successfully!")
+    return eventRef.id
   } catch (error) {
+
     showErrorToast("There was an error storing your event data, please try again.")
   }
+  return undefined
 }
 
-const formatEvent = (doc: DocumentData): Event => {
+const formatEvent = (doc): Event => {
   const data = doc.data()
   const data2 = doc.data() as Event
   const eventDate: Date = data.date.toDate()
 
   const event = {
     ...data2,
-    uid: doc.id,
+    uid: data.uid,
     date: eventDate,
     point: {
       x: data.point.x,
@@ -91,4 +93,29 @@ export const getAllFutureEvents = async () => {
     showErrorToast("Error fetching events. Please check your connection and try again.")
     return []
   }
+}
+
+export const getEventData = async (eventUid: string) => {
+  try {
+    const docRef = doc(db, "events", eventUid)
+    const docSnapshot = await getDoc(docRef)
+
+    if (docSnapshot.exists()) {
+      const data = docSnapshot.data() as DocumentData
+      const event: Event = {
+        uid: data.uid,
+        title: data.title,
+        location: data.location,
+        point: data.point,
+        description: data.description,
+        date: data.date.toDate(),  // Assuming 'date' is stored as a Firestore Timestamp
+        imageUrl: data.imageUrl,
+      }
+      return event
+    } else {
+      console.log("No such document!")
+      return undefined  
+    }
+  } catch (error) {
+    showErrorToast("Error fetching event data. Please check your connection and try again.")}
 }

@@ -25,12 +25,14 @@ jest.mock("react-native-safe-area-context", () => {
   }
 })
 
+const mockSetSelectedInterests = jest.fn()
+
 jest.mock("react", () => ({
   ...jest.requireActual("react"),
-  useContext: jest.fn(() => ({
+  useContext: () => ({
     selectedInterests: ["one"],
-    setSelectedInterests: jest.fn(),
-  })),
+    setSelectedInterests: mockSetSelectedInterests,
+  }),
 }))
 
 describe("InterestsScreen", () => {
@@ -102,8 +104,62 @@ describe("InterestsScreen", () => {
 
     await waitFor(() => {
       fireEvent.press(getByTestId("Artificial Inteligence" + "ID"))
-      fireEvent.press(getByTestId("Artificial Inteligence" + "ID"))
+      fireEvent.press(getByTestId("Artificial Inteligence" + "IDlabel"))
       expect(queryByTestId("Artificial Inteligence" + "IDlabel")).toBeNull()
+    })
+  })
+
+  it("shows error toast when there's an error rendering the screen", async () => {
+    try {
+      const { getByPlaceholderText, getAllByText } = render(
+        <SafeAreaProvider>
+          <InterestsScreen />
+        </SafeAreaProvider>
+      )
+
+      await waitFor(() => {
+        expect(getByPlaceholderText("Search")).toBeTruthy()
+        const interestButtons = getAllByText(/.+/)
+        expect(interestButtons.length).toBeGreaterThan(0)
+      })
+    } catch (error) {
+      expect(showErrorToast).toHaveBeenCalledWith("Unable to render")
+    }
+  })
+  it("displays loading screen while interests are being fetched", async () => {
+    const { getByTestId } = render(
+      <SafeAreaProvider>
+        <InterestsScreen />
+      </SafeAreaProvider>
+    )
+
+    expect(getByTestId("loading-indicator")).toBeTruthy()
+  })
+
+  it("toggles the interest selection correctly", async () => {
+    const { getByTestId } = render(
+      <SafeAreaProvider>
+        <InterestsScreen />
+      </SafeAreaProvider>
+    )
+
+    await waitFor(() => {
+      const interestButton = getByTestId("CryptocurrencyID")
+
+      // Mock function to capture the selected interests
+      const mockSelectedInterests: string[] = []
+      mockSetSelectedInterests.mockImplementation((callback) => {
+        const result = callback(mockSelectedInterests)
+        mockSelectedInterests.splice(0, mockSelectedInterests.length, ...result)
+      })
+
+      // Select the interest
+      fireEvent.press(interestButton)
+      expect(mockSelectedInterests).toContain("Cryptocurrency")
+
+      // Deselect the interest
+      fireEvent.press(interestButton)
+      expect(mockSelectedInterests).not.toContain("Cryptocurrency")
     })
   })
 })

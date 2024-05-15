@@ -4,7 +4,7 @@ import { black, white } from "../../assets/colors/colors"
 export const styles = StyleSheet.create({
   container: {
     backgroundColor: white,
-    flex: 1
+    flex: 1,
   },
   separationBar: {
     backgroundColor: black,

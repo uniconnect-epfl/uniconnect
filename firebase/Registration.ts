@@ -39,6 +39,7 @@ export async function storeInitialUserData(uid: string, email: string, firstName
   try {
     const docRef = doc(db, "users", uid)
     await setDoc(docRef, {
+      uid: docRef.id,
       email: email,
       firstName: firstName,
       lastName: lastName,

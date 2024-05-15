@@ -1,6 +1,6 @@
 import React from "react"
 import { render, fireEvent, act, waitFor } from "@testing-library/react-native"
-import NetworkScreen from "../../../screens/Contacts/NetworkScreen"
+import NetworkScreen from "../../../screens/Network/NetworkScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import {
   NavigationContainer,
