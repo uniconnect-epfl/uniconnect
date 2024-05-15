@@ -1,7 +1,6 @@
 import React, { SetStateAction, useEffect, useState } from "react"
 import { View } from "react-native"
 import { styles } from "./styles"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 import SectionTabs from "../../components/SectionTabs/SectionTabs"
 import { NavigationProp, ParamListBase } from "@react-navigation/native"
 import ContactList from "./ContactList/ContactList"
@@ -15,6 +14,7 @@ import { User } from "../../types/User"
 import { getUserData } from "../../firebase/User"
 import { getAuth } from "firebase/auth"
 import { loadGraphData } from "../../components/Graph/GraphFileFunctions"
+import LoadingScreen from "../Loading/LoadingScreen"
 
 interface NetworkScreenProps {
   navigation: NavigationProp<ParamListBase>
@@ -24,6 +24,8 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
   const [graph, setGraph] = useState<Graph>()
   const [user, setUser] = useState<User | null>(null)
   const [userId, setUserId] = useState<string | undefined>(undefined)
+
+  const [loaded, setLoaded] = useState(false)
 
   const [userContact, setUserContact] = useState<Contact>({
     uid: "-1",
@@ -44,26 +46,11 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
     const contacts = await createContactListFromUsers(friends ?? [])
     setContacts(contacts)
   }
-  useEffect(() => {
-    if (friends) {
-      console.log("Friends set: ", friends)
-      initializeContacts()
-    }
-  }, [friends])
-
-  useEffect(() => {
-    console.log("Contacts set: ", contacts)
-    if (contacts.length > 0) {
-      loadGraphData(userId ?? "-1", userContact, contacts).then((graph) => {
-        setGraph(graph)
-      })
-    }
-  }, [contacts])
 
   useEffect(() => {
     let tempUserId = getAuth().currentUser?.uid
     if (tempUserId === undefined) {
-      tempUserId = "fwLsAGVKvqZl3gb0S28bDtN6Yvd2"
+      tempUserId = "dFcpWnfaNTOWBFyJnoJSIL6xyi32"
     }
     setUserId(tempUserId)
   }, [navigation])
@@ -71,7 +58,6 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
   useEffect(() => {
     const fetchData = async () => {
       if (userId) {
-        console.log("User ID set: ", userId)
         setUser(await getUserData(userId))
       }
     }
@@ -80,9 +66,8 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
 
   useEffect(() => {
     if (user) {
-      console.log("User set: ", user)
       const contact: Contact = {
-        uid: user?.uid ?? "-1",
+        uid: userId ?? "-1",
         firstName: user?.firstName ?? "",
         lastName: user?.lastName ?? "",
         profilePictureUrl:
@@ -100,11 +85,30 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
     }
   }, [user])
 
+  useEffect(() => {
+    if (friends) {
+      initializeContacts()
+    }
+  }, [friends])
+
+  useEffect(() => {
+    if (contacts.length > 0) {
+      loadGraphData(userId ?? "-1", userContact, contacts).then((graph) => {
+        setGraph(graph)
+      })
+    }
+  }, [contacts])
+
+  useEffect(() => {
+    if (graph && !loaded) {
+      setLoaded(true)
+    }
+  }, [graph])
+
   const [selectedTab, setSelectedTab] = useState("Graph")
-  const insets = useSafeAreaInsets()
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={styles.container}>
       <SectionTabs
         tabs={["Graph", "List"]}
         startingTab="Graph"
@@ -112,8 +116,9 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
           setSelectedTab(tab)
         }}
       />
+      {!loaded && <LoadingScreen />}
 
-      {selectedTab === "Graph" && graph && userId && (
+      {loaded && selectedTab === "Graph" && graph && userId && (
         <ContactGraph
           onContactPress={(uid) =>
             navigation.navigate("ExternalProfile", {
@@ -125,7 +130,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
           userContact={userContact}
         />
       )}
-      {selectedTab === "List" && (
+      {loaded && selectedTab === "List" && (
         <ContactList
           onContactPress={(uid) =>
             navigation.navigate("ExternalProfile", {

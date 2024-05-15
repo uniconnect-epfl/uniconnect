@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"
+
 import {
   ActivityIndicator,
   Dimensions,
@@ -62,7 +63,7 @@ const CENTER_WIDTH = WIDTH / 2 // Center X-coordinates of the screen
 const CENTER_HEIGHT = HEIGHT / 2 // Center Y-coordinates of the screen
 const INITIAL_SCALE = 20 // Initial scale of the graph
 const DEFAULT_SCALE = 1 // Default scale of the graph
-const MODAL_SCALE = 4 // Scale of the graph when a node is clicked
+const MODAL_SCALE = 8 // Scale of the graph when a node is clicked
 
 // Constants used for the animation
 const ANIMATION_DURATION = 500 // Duration of the animation in milliseconds
@@ -104,11 +105,6 @@ const ForceDirectedGraph: React.FC<{
   ) => {
     setAnimationStarted(true)
     Animated.parallel([
-      Animated.timing(transitionScale, {
-        toValue: animationScale,
-        duration: ANIMATION_DURATION,
-        useNativeDriver: true,
-      }),
       Animated.timing(transitionTranslateX, {
         toValue: animationX,
         duration: ANIMATION_DURATION,
@@ -116,6 +112,11 @@ const ForceDirectedGraph: React.FC<{
       }),
       Animated.timing(transitionTranslateY, {
         toValue: animationY,
+        duration: ANIMATION_DURATION,
+        useNativeDriver: true,
+      }),
+      Animated.timing(transitionScale, {
+        toValue: animationScale,
         duration: ANIMATION_DURATION,
         useNativeDriver: true,
       }),
@@ -182,8 +183,11 @@ const ForceDirectedGraph: React.FC<{
 
   useEffect(() => {
     if (modalPressedOut) {
-      zoomAndTranslate(DEFAULT_SCALE, 0, 0)
-      setAnimationStarted(false)
+      setTimeout(() => {
+        zoomAndTranslate(DEFAULT_SCALE, 0, 0)
+        setAnimationStarted(false)
+        setTotalOffset({ x: 0, y: 0 })
+      }, 100)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalPressedOut])
@@ -217,6 +221,7 @@ const ForceDirectedGraph: React.FC<{
     setLoad(true)
     transitionTranslateX.setValue(0)
     transitionTranslateY.setValue(0)
+    setTotalOffset({ x: 0, y: 0 })
     zoomAndTranslate(DEFAULT_SCALE, 0, 0)
     setTimeout(() => {
       setAnimationStarted(false)
@@ -369,29 +374,51 @@ const ForceDirectedGraph: React.FC<{
 
       {/* Allow the node to be clicked and / or dragged */}
       <TouchableWithoutFeedback
+        onLayout={(event) => {
+          const layout = event.nativeEvent.layout
+          if (
+            layout.x < 0 ||
+            layout.y < 0 ||
+            layout.x + layout.width > WIDTH ||
+            layout.y + layout.height > HEIGHT
+          ) {
+            node.outsideScreen = true
+          } else {
+            node.outsideScreen = false
+          }
+        }}
         onPress={() => {
           setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
         }}
         onPressIn={() => {
-          console.log("onPressIn")
           handlePressIn(
             () => {
               setClickedNodeID(node.id)
             },
             () => {
-              onModalPress(node.id)
-              zoomAndTranslate(
-                MODAL_SCALE,
-                (CENTER_WIDTH - coordX(node)) * scale,
-                (CENTER_HEIGHT - coordY(node)) * scale
-              )
-              setAnimationStarted(false)
+              if (node.outsideScreen) {
+                showErrorToast("You cannot select a node outside the screen.")
+                setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
+              } else {
+                onModalPress(node.id)
+
+                // Adjust the zoom and translate to account for the scale
+                zoomAndTranslate(
+                  MODAL_SCALE / scale,
+                  (CENTER_WIDTH - coordX(node)) * scale,
+                  (CENTER_HEIGHT - coordY(node)) * scale
+                )
+                setAnimationStarted(false)
+              }
             }
           )
         }}
         onLongPress={() => {
           Vibration.vibrate()
-          if (node.level > 2) {
+          if (node.outsideScreen) {
+            showErrorToast("You cannot select a node outside the screen.")
+            setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
+          } else if (node.level > 2) {
             showErrorToast("You can only view friends of friends")
             setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
           } else {

@@ -11,6 +11,9 @@ async function loadGraphData(
   userContact: Contact,
   contacts: Contact[]
 ): Promise<Graph> {
+  console.log("User id: ", userId)
+  console.log("User contact: ", userContact)
+  console.log("Contacts: ", contacts)
   try {
     const graphData = await AsyncStorage.getItem(GRAPH_STORAGE_KEY)
     if (graphData) {
