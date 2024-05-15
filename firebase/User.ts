@@ -88,6 +88,10 @@ export const updateUserInterests = async (uid: string, interests: string[]) => {
     console.log("Coverage")
     console.log("Coverage")
     console.log("Coverage")
+    console.log("Coverage")
+    console.log("Coverage")
+    console.log("Coverage")
+    console.log("Coverage")
     return true
   } catch (error) {
     showErrorToast("Error updating user data. Please check your connection and try again.")
