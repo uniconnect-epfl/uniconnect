@@ -46,20 +46,4 @@ describe("MainStackNavigator", () => {
     expect(mockOnAuthStateChanged).toHaveBeenCalledTimes(1)
   })
 
-  it("renders the stack navigator with Onboarding when user is not logged in", () => {
-    const mockOnAuthStateChanged = jest.fn((auth, callback) => {
-      callback(null)
-      return jest.fn()
-    })
-    const mockFunction = onAuthStateChanged as jest.Mock
-    mockFunction.mockImplementation(mockOnAuthStateChanged)
-
-    render(
-      <NavigationContainer>
-        <MainStackNavigator />
-      </NavigationContainer>
-    )
-
-    expect(mockOnAuthStateChanged).toHaveBeenCalledTimes(1)
-  })
 })

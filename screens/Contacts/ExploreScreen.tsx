@@ -169,7 +169,7 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
             (/*uid*/) =>
               // This is hardcoded for now but will be just the uid when we'll have implemented friends
               navigation.navigate("ExternalProfile", {
-                externalUserUid: "5AsCcApHTEdn2YW7IB8DOClVTZw1",
+                externalUserUid: "tRYR88caulVLCJMlh7LzkJB1BY43",
               })
           }
           contacts={contacts}
@@ -182,7 +182,7 @@ const ExploreScreen = ({ navigation }: ContactListScreenProps) => {
             (/*uid*/) =>
               // This is hardcoded for now but will be just the uid when we'll have implemented friends
               navigation.navigate("ExternalProfile", {
-                externalUserUid: "5AsCcApHTEdn2YW7IB8DOClVTZw1",
+                externalUserUid: "tRYR88caulVLCJMlh7LzkJB1BY43",
               })
           }
           graph={graph}

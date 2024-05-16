@@ -3,9 +3,10 @@ import { View, TextInput, Text, TextInputProps } from "react-native"
 import { globalStyles } from "../../assets/global/globalStyles"
 
 import styles from "./styles"
+import { lightGray } from "../../assets/colors/colors"
 
 interface InputFieldProps extends TextInputProps {
-  label: string
+  label?: string
   placeholder?: string
   value?: string
   onChangeText?: (text: string) => void
@@ -20,9 +21,16 @@ const InputField = forwardRef<TextInput, InputFieldProps>(function InputField(
     props
   return (
     <View style={styles.section}>
-      <Text style={[styles.label, globalStyles.text]}>{label}</Text>
+
+      { (label && label !== "") && (
+        <View style={styles.labelContainer}>
+          <Text style={[styles.label, globalStyles.text]}>{label}</Text> 
+        </View>
+      )}
+      
       <TextInput
         placeholder={placeholder}
+        placeholderTextColor={lightGray}
         style={[styles.input, globalStyles.text]}
         value={value}
         onChangeText={onChangeText}

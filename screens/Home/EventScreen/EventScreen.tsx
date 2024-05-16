@@ -2,7 +2,6 @@ import React, { useEffect } from "react"
 import {
   View,
   Text,
-  TextInput,
   SectionList,
   SectionListRenderItemInfo,
   Pressable,
@@ -23,8 +22,8 @@ import { Event } from "../../../types/Event"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import { StackNavigationProp } from "@react-navigation/stack"
+import InputField from '../../../components/InputField/InputField'
 import { getUserData } from "../../../firebase/User"
-
 
 interface EventsScreenProps {
   onEventPress: (event: Event) => void
@@ -162,12 +161,12 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
   return (
     <View style={styles.view}>
       <View style={styles.searchAndMap}>
-        <TextInput
+        <InputField
           placeholder="Search..."
-          style={styles.input}
           value={searchQuery}
           onChangeText={setSearchQuery}
-        />
+          onSubmitEditing={() => {}}
+      />
         <TouchableOpacity
           style={styles.map}
           onPress={() => navigation.navigate("EventMap", { events: filteredFutureEvents })}
