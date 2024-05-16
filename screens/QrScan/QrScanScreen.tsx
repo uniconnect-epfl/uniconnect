@@ -34,6 +34,7 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
   }, [isFocused])
 
   const handleUser = async (id : string) => {
+    console.log("Scanned user id: " + id)
     if(id === userId){
       showErrorToast("This is you!")
     } else {
@@ -41,7 +42,7 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
       if(scannedUser === null || scannedUser === undefined){
         showErrorToast("User not found")
       } else {
-        navigation.navigate("ExternalProfile", {uid: id})
+        navigation.navigate("ExternalProfile", {externalUserUid: id})
       }
     }
   }
