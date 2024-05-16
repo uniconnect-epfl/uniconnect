@@ -34,7 +34,6 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
   }, [isFocused])
 
   const handleUser = async (id : string) => {
-    console.log("Scanned user id: " + id)
     if(id === userId){
       showErrorToast("This is you!")
     } else {
