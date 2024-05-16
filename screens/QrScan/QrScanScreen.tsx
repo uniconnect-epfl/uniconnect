@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native"
-import { Camera } from "expo-camera"
+import { BarcodeScanningResult, CameraView, useCameraPermissions } from "expo-camera"
 import { styles } from "./styles"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { NavigationProp, ParamListBase, useIsFocused } from "@react-navigation/native"
@@ -18,7 +18,7 @@ interface ScanQrScreenProps{
 const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
   // for the camera management
   const isFocused = useIsFocused()
-  const [permission, requestPermission] = Camera.useCameraPermissions()
+  const [permission, requestPermission] = useCameraPermissions()
   const [showCamera, setShowCamera] = useState(false)
   const [isScanning, setIsScanning] = useState(false)
   // current user
@@ -94,10 +94,13 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
 
       <Text style={[globalStyles.text, styles.scanAQrText]}>Scan a QR code</Text>
       {showCamera ? (
-        <Camera 
+        <CameraView
           testID="camera"
           style={styles.camera}
-          onBarCodeScanned={(result) => {
+          barcodeScannerSettings={{
+            barcodeTypes: ["qr"],
+          }}
+          onBarcodeScanned={(result: BarcodeScanningResult) => {
             if(!isScanning) {
               setIsScanning(true)
               debouncedQr(result.data)
