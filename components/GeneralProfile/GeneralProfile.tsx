@@ -8,23 +8,24 @@ import { globalStyles } from "../../assets/global/globalStyles"
 interface GeneralProfileProps {
     name: string,
     surname: string,
-    location: string
+    location: string,
+    profilePicture: string
 }
 
 const GeneralProfile: React.FC<GeneralProfileProps> = ({ 
     name,
     surname,
-    location
+    location,
+    profilePicture
 }) => {
-  const profilePictureUrl = ""
 
   return (
     <View style={styles.container}>
 
-        {profilePictureUrl ? (
+        {profilePicture !== "" ? (
             <Image
                 style={styles.profilePicture}
-                source={{ uri: profilePictureUrl }}
+                source={{ uri: profilePicture }}
             />
         ) : (
             <View style={styles.profilePicture}>
