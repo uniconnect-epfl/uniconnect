@@ -1,36 +1,32 @@
 import React from "react"
-import { View, Image, Text } from "react-native"
+import { View, Text } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { styles } from "./styles"
 import { black } from "../../assets/colors/colors"
 import { globalStyles } from "../../assets/global/globalStyles"
+import ProfilePicture from "../ProfilePicture/ProfilePicture"
 
 interface GeneralProfileProps {
     name: string,
     surname: string,
-    location: string
+    location: string,
+    profilePictureUrl?: string,
 }
 
 const GeneralProfile: React.FC<GeneralProfileProps> = ({ 
     name,
     surname,
-    location
+    location,
+    profilePictureUrl = ""
 }) => {
-  const profilePictureUrl = ""
 
   return (
     <View style={styles.container}>
 
-        {profilePictureUrl ? (
-            <Image
-                style={styles.profilePicture}
-                source={{ uri: profilePictureUrl }}
-            />
-        ) : (
-            <View style={styles.profilePicture}>
-                <Ionicons name="person" size={45} color={black} />
-            </View>
-        )}
+        <ProfilePicture
+            size={85}
+            pictureUrl={profilePictureUrl}
+        />
 
         <Text style={globalStyles.boldText}>{name} {surname}</Text>
 

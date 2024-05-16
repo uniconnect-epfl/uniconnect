@@ -57,13 +57,15 @@ export const ProfileNetwork = () => {
 
   return (
     <View style={styles.container}>
-      <InputField
-        label=""
-        placeholder="Search..."
-        value={searchText}
-        onChangeText={handleSearch}
-        onSubmitEditing={() => {}}
-      />
+
+      <View style={styles.searchBarContainer}>
+        <InputField
+          placeholder="Search..."
+          value={searchText}
+          onChangeText={handleSearch}
+          onSubmitEditing={() => {}}
+        />
+      </View>
 
       <FlatList
         style={styles.list}

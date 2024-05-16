@@ -50,4 +50,8 @@ export const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "flex-start"
     },
+    searchBarContainer: {
+        height: 70,
+        width: "100%", 
+    },
 })
