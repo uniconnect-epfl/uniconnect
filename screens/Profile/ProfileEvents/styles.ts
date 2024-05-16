@@ -5,5 +5,10 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         flex: 1,
         justifyContent: "center",
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: "bold",
+        marginBottom: 10,
     }
 })

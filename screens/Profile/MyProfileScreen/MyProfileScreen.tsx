@@ -31,12 +31,15 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
     const fetchData = async () => {
       setLoading(true)
       if (userId) {
+        console.log(userId)
         setUser(await getUserData(userId))
+        console.log(user)
       }
       setLoading(false)
     }
     fetchData()
-  }, [userId])
+    console.log(user)
+  }, [])
 
   if (loading || !user) {
     return <LoadingScreen />
