@@ -40,7 +40,7 @@ export const profileStyles = StyleSheet.create({
         backgroundColor: white,
         marginTop: "7%",
         paddingHorizontal: "2.5%",
-        width: "auto",
+       
     },
   
     topProfileContainer: {
