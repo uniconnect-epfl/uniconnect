@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import { lightPeach, peach } from "../../assets/colors/colors"
+import { lightPeach, peach, white } from "../../assets/colors/colors"
 
 export const profileStyles = StyleSheet.create({
     button: {
@@ -36,16 +36,13 @@ export const profileStyles = StyleSheet.create({
         borderColor: lightPeach,
     },
     profileContainer: {
-        flex: 1,
-        marginTop: "35%",
+
+        backgroundColor: white,
+        marginTop: "7%",
         paddingHorizontal: "2.5%",
+       
     },
-    topBackground: {
-        backgroundColor: lightPeach,
-        height: "20%",
-        position: "absolute",
-        width: "100%"
-    },
+  
     topProfileContainer: {
         flexDirection: "row",
     },
