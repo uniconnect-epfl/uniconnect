@@ -4,7 +4,6 @@ import {
   Text,
   FlatList,
   Image,
-  TextInput,
   TouchableOpacity,
 } from "react-native"
 import { styles } from "./styles"
@@ -12,6 +11,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import { black } from "../../../assets/colors/colors"
 import { Contact } from "../../../types/Contact"
+import InputField from "../../../components/InputField/InputField"
 
 interface ContactListProps {
   onContactPress: (uid: string) => void
@@ -69,14 +69,15 @@ const ContactList = ({ onContactPress, contacts }: ContactListProps) => {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={[globalStyles.text, styles.searchBar]}
+      <InputField
         placeholder="Search..."
         value={searchText}
         onChangeText={handleSearch}
+        onSubmitEditing={() => {}}
       />
 
       <FlatList
+        style={styles.listContainer}
         data={filteredContacts}
         renderItem={RenderOneContact}
         keyExtractor={(contact) => contact.uid}

@@ -36,12 +36,14 @@ export const profileStyles = StyleSheet.create({
         borderColor: lightPeach,
     },
     profileContainer: {
+        flex: 1,
+        marginTop: "35%",
         paddingHorizontal: "2.5%",
-        width: "100%"
     },
     topBackground: {
         backgroundColor: lightPeach,
         height: "20%",
+        position: "absolute",
         width: "100%"
     },
     topProfileContainer: {

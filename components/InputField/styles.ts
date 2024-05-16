@@ -6,35 +6,27 @@ const styles = StyleSheet.create({
     borderColor: lightGray,
     borderRadius: 25,
     borderWidth: 1,
-    height: 50,
+    height: 40,
+    marginTop: 5,
     paddingHorizontal: 30,
     width: "100%",
   },
-
   label: {
     color: black,
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-start",
-    marginTop: 10,
     paddingLeft: 20,
   },
-
+  labelContainer: {
+    width: "100%"
+  },
   section: {
-    display: "flex",
-    flexDirection: "column",
+    alignItems: "center",
+    flex: 1,
     justifyContent: "center",
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    width: "100%",
-  },
-
-  sectionFirst: {
-    paddingTop: 60,
-  },
-
-  sectionLast: {
-    paddingBottom: 65,
+    margin: 10,
+    maxHeight: 70,
   },
 })
 

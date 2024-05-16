@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import { lightGray, lightPeach, peach } from "../../../assets/colors/colors"
+import { lightPeach, peach } from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
     contactCard: {
@@ -50,13 +50,8 @@ export const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "flex-start"
     },
-    searchBar: {
-        borderColor: lightGray,
-        borderRadius: 40,
-        borderWidth: 1,
-        height: 40,
-        margin: 10,
-        padding: 20,
-        width: "100%"
-    }, 
+    searchBarContainer: {
+        height: 70,
+        width: "100%", 
+    },
 })

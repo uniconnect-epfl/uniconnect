@@ -84,6 +84,7 @@ const ExternalProfileScreen = () => {
             name={externalUser.firstName}
             surname={externalUser.lastName}
             location={externalUser.location}
+            profilePicture={externalUser.profilePicture}
           />
           
           {isFriend ? (

@@ -1,9 +1,10 @@
 import React from "react"
-import { View, Image, Text } from "react-native"
+import { View, Text } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { styles } from "./styles"
 import { black } from "../../assets/colors/colors"
 import { globalStyles } from "../../assets/global/globalStyles"
+import ProfilePicture from "../ProfilePicture/ProfilePicture"
 
 interface GeneralProfileProps {
     name: string,
@@ -22,16 +23,10 @@ const GeneralProfile: React.FC<GeneralProfileProps> = ({
   return (
     <View style={styles.container}>
 
-        {profilePicture !== "" ? (
-            <Image
-                style={styles.profilePicture}
-                source={{ uri: profilePicture }}
+        <ProfilePicture
+            size={80}
+            pictureUrl={profilePicture}
             />
-        ) : (
-            <View style={styles.profilePicture}>
-                <Ionicons name="person" size={45} color={black} />
-            </View>
-        )}
 
         <Text style={globalStyles.boldText}>{name} {surname}</Text>
 
