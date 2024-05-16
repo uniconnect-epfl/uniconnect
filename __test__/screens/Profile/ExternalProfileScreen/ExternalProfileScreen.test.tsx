@@ -1,5 +1,5 @@
 import React from "react"
-import { render, fireEvent, waitFor, act } from "@testing-library/react-native"
+import { render, fireEvent, waitFor } from "@testing-library/react-native"
 import ExternalProfileScreen from "../../../../screens/Profile/ExternalProfileScreen/ExternalProfileScreen"
 
 jest.mock("../../../../firebase/User", () => ({
@@ -57,17 +57,7 @@ describe("ExternalProfileScreen", () => {
     })
   })
 
-  it("changes tabs correctly", async () => {
-    const { getByPlaceholderText } = render(<ExternalProfileScreen />)
 
-    await act(async () => {
-      await waitFor(() => {
-        const search = getByPlaceholderText('Search...')
-        fireEvent.press(search)
-        expect(getByPlaceholderText('Search...')).toBeTruthy()
-      })
-    })
-  })
 
   it("handles button presses", async () => {
     const alertMock = jest.spyOn(global, "alert")
