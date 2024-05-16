@@ -2,7 +2,7 @@ import React from "react"
 import { act, fireEvent, render } from "@testing-library/react-native"
 import QrScanScreen from "../../../screens/QrScan/QrScanScreen"
 import { NavigationContainer, NavigationProp, ParamListBase } from "@react-navigation/native"
-import { Camera } from "expo-camera"
+import { useCameraPermissions } from "expo-camera"
 import { useDebouncedCallback } from "use-debounce"
 import { showErrorToast } from "../../../components/ToastMessage/toast"
 
@@ -52,34 +52,21 @@ jest.mock("expo-linking", () => ({
   createURL: jest.fn().mockImplementation((path) => `uniconnect://${path}`),
 }))
 
-jest.mock("expo-camera", () => {
-    const actual = jest.requireActual("expo-camera")
+jest.mock('expo-camera', () => {
+  const originalModule = jest.requireActual('expo-camera')
+  const ReactNative = jest.requireActual('react-native')
 
-    const camera = actual.Camera
-
-    camera.useCameraPermissions = jest.fn().mockImplementation(() => {
-
-        const requestPermission = () => {
-            console.log("request permission called")
-            return Promise.resolve({ status: "denied" })
-        }
-
-        const permission = "granted" // set the value you want
-
-        return [
-            permission, 
-            requestPermission
-          
-        ]
-    })
-
-    console.log("camera", camera)
-
-    return {
-        __esModule: true,
-        ...actual,
-        Camera: camera
-    }
+  return {
+    ...originalModule,
+    useCameraPermissions: jest.fn(() => {}),
+    CameraView: jest.fn().mockImplementation(({ onBarcodeScanned }) => {
+      return (
+        <ReactNative.View testID="camera">
+          <ReactNative.Button title="Mock Scan" onPress={() => onBarcodeScanned({ data: 'contact/mockUserId' })} />
+        </ReactNative.View>
+      )
+    }),
+  }
 })
 
 jest.mock("use-debounce", () => ({
@@ -92,19 +79,10 @@ jest.mock("../../../components/ToastMessage/toast", () => ({
 
 describe("QrScanScreen", () => {
 
-    it("renders correctly", () => {
-        const component = render(
-          <NavigationContainer>
-            <QrScanScreen navigation={mockNavigation}/>
-          </NavigationContainer>
-        )
-        expect(component).toBeTruthy()
-    })
-
     it("renders the camera when permissions are granted", () => {
-        (Camera.useCameraPermissions as jest.Mock).mockImplementation(() => [{
-          granted: true
-      }, jest.fn()])
+      const requestPermissionMock = jest.fn()
+      const mockUseCameraPermissions = useCameraPermissions as jest.Mock
+      mockUseCameraPermissions.mockReturnValue([{ granted: true }, requestPermissionMock])
 
       const { getByTestId } = render(
         <NavigationContainer>
@@ -115,9 +93,9 @@ describe("QrScanScreen", () => {
     })
   
     it("handles barcode scanned with same id", () => {
-      (Camera.useCameraPermissions as jest.Mock).mockImplementation(() => [{
-          granted: true
-      }, jest.fn()])
+      const requestPermissionMock = jest.fn()
+      const mockUseCameraPermissions = useCameraPermissions as jest.Mock
+      mockUseCameraPermissions.mockReturnValue([{ granted: true }, requestPermissionMock])
       const { getByTestId } = render(
         <NavigationContainer>
           <QrScanScreen navigation={mockNavigation}/>
@@ -132,9 +110,9 @@ describe("QrScanScreen", () => {
     })
 
     it("handles barcode scanned with event", () => {
-      (Camera.useCameraPermissions as jest.Mock).mockImplementation(() => [{
-          granted: true
-      }, jest.fn()])
+      const requestPermissionMock = jest.fn()
+      const mockUseCameraPermissions = useCameraPermissions as jest.Mock
+      mockUseCameraPermissions.mockReturnValue([{ granted: true }, requestPermissionMock])
       const { getByTestId } = render(
         <NavigationContainer>
           <QrScanScreen navigation={mockNavigation}/>
@@ -148,9 +126,9 @@ describe("QrScanScreen", () => {
     })
 
     it("handles barcode scanned with same contact id", () => {
-      (Camera.useCameraPermissions as jest.Mock).mockImplementation(() => [{
-          granted: true
-      }, jest.fn()])
+      const requestPermissionMock = jest.fn()
+      const mockUseCameraPermissions = useCameraPermissions as jest.Mock
+      mockUseCameraPermissions.mockReturnValue([{ granted: true }, requestPermissionMock])
       const { getByTestId } = render(
         <NavigationContainer>
           <QrScanScreen navigation={mockNavigation}/>
@@ -164,9 +142,9 @@ describe("QrScanScreen", () => {
     })
   
     it("requests permission when not granted", () => {
-      (Camera.useCameraPermissions as jest.Mock).mockImplementation(() => [{
-          granted: false
-      }, jest.fn()])
+      const requestPermissionMock = jest.fn()
+      const mockUseCameraPermissions = useCameraPermissions as jest.Mock
+      mockUseCameraPermissions.mockReturnValue([{ granted: false }, requestPermissionMock])
       const { getByText } = render(
         <NavigationContainer>
           <QrScanScreen navigation={mockNavigation}/>
@@ -176,9 +154,9 @@ describe("QrScanScreen", () => {
     })
 
     it("debounces QR code scan results correctly 1", () => {
-      (Camera.useCameraPermissions as jest.Mock).mockImplementation(() => [{
-        granted: true
-      }, jest.fn()])
+      const requestPermissionMock = jest.fn()
+      const mockUseCameraPermissions = useCameraPermissions as jest.Mock
+      mockUseCameraPermissions.mockReturnValue([{ granted: true }, requestPermissionMock])
       const { getByTestId } = render(
         <NavigationContainer>
           <QrScanScreen navigation={mockNavigation}/>
@@ -211,9 +189,9 @@ describe("QrScanScreen", () => {
     })
 
     it("debounces QR code scan results correctly 2", () => {
-      (Camera.useCameraPermissions as jest.Mock).mockImplementation(() => [{
-        granted: true
-      }, jest.fn()])
+      const requestPermissionMock = jest.fn()
+      const mockUseCameraPermissions = useCameraPermissions as jest.Mock
+      mockUseCameraPermissions.mockReturnValue([{ granted: true }, requestPermissionMock])
       const { getByTestId } = render(
         <NavigationContainer>
           <QrScanScreen navigation={mockNavigation}/>
