@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
     height: screenHeight * 0.24,  
     margin: 5,  
     overflow: 'hidden',
-    width: screenWidth * 0.435,
+    width: screenWidth * 0.42,
   },
   description: {
     

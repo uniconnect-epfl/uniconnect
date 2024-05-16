@@ -28,7 +28,7 @@ import { getUserData } from "../../../firebase/User"
 
 interface EventsScreenProps {
   onEventPress: (event: Event) => void
-  userID?: string // Make userID optional for general events or specific user events
+  userID?: string 
 }
 
 type RootStackParamList = {
@@ -49,12 +49,14 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
   const [loading, setLoading] = React.useState(true)
 
   useEffect(() => {
+
     const loadEvents = async () => {
       try {
         setLoading(true)
-
+        console.log(userID)
         if (userID) {
           const userData = await getUserData(userID)
+          console.log(userData)
           if (userData) {
             const userEvents = userData.events
             const fetchedFutureEvents = await getAllFutureEvents()
@@ -62,6 +64,9 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 
             const userFutureEvents = fetchedFutureEvents.filter(event => userEvents.includes(event.uid))
             const userPastEvents = fetchedPastEvents.filter(event => userEvents.includes(event.uid))
+
+            console.log(userFutureEvents)
+            console.log(userPastEvents)
 
             setFutureEvents(userFutureEvents)
             setPastEvents(userPastEvents)

@@ -53,8 +53,8 @@ export const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    
-    justifyContent: 'space-evenly',
+   
+    justifyContent: 'space-between',
   },
   searchAndMap: {
     alignItems: "center",

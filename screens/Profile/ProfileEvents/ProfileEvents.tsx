@@ -1,4 +1,4 @@
-import { View, Text } from "react-native"
+import { View } from "react-native"
 import { styles } from "./styles"
 import React from "react"
 import { getAuth } from "firebase/auth"
@@ -11,7 +11,6 @@ export const ProfileEvents = () => {
   
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Events</Text>
       <EventScreen onEventPress={(event) => navigation.navigate("ViewEvent", {eventUid: event.uid})} userID={userId} />
     </View>
   )
