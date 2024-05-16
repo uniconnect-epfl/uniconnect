@@ -39,13 +39,15 @@ export async function storeInitialUserData(uid: string, email: string, firstName
   try {
     const docRef = doc(db, "users", uid)
     await setDoc(docRef, {
+      uid: uid,
       email: email,
       firstName: firstName,
       lastName: lastName,
       date: date,
       location: location,
       description: description,
-      selectedInterests: selectedInterests
+      selectedInterests: selectedInterests,
+      profilePicture: ""
     })
   } catch (error) {
     showErrorToast("There was an error storing your user data, please try again.")

@@ -21,6 +21,7 @@ import { RegistrationContext } from "../../contexts/RegistrationContext"
 import EventScreen from "../../screens/Home/EventScreen/EventScreen"
 import ViewEventScreen from "../../screens/ViewDetails/ViewEventScreen/ViewEventScreen"
 import ViewAnnoucementScreen from "../../screens/ViewDetails/ViewAnnouncementScreen/ViewAnnouncementScreen"
+import { SelectLocationScreen } from "../../screens/SelectLocation/SelectLocationScreen"
 
 const Stack = createStackNavigator()
 
@@ -89,11 +90,7 @@ const MainStackNavigator: React.FC = () => {
         setSelectedInterests,
       }}
     >
-      <Stack.Navigator
-        initialRouteName={
-          user ? ( "HomeTabs") : "Onboarding"
-        }
-      >
+      <Stack.Navigator initialRouteName={user ? "HomeTabs" : "Onboarding"}>
         {user ? (
           <>
             <Stack.Screen
@@ -148,6 +145,11 @@ const MainStackNavigator: React.FC = () => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="Description"
+              component={DescriptionScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="ViewEvent"
               component={ViewEventScreen}
               options={{ headerShown: false }}
@@ -155,6 +157,11 @@ const MainStackNavigator: React.FC = () => {
             <Stack.Screen
               name="ViewAnnouncement"
               component={ViewAnnoucementScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SelectLocation"
+              component={SelectLocationScreen}
               options={{ headerShown: false }}
             />
           </>

@@ -3,15 +3,16 @@ import { black, lightPeach } from "../../assets/colors/colors"
 
 export const viewDetailsStyles = StyleSheet.create({
     descriptionContainer: {
-        margin: "5%",
+        height: "25%",
+        marginVertical: "3%",
     },
     detailsContainer: {
         flex: 1,
-        margin: "5%",
+        margin: "2.5%",
         width: "90%",
     },
     detailsText: {
-        marginVertical: 3,
+        marginVertical: 1,
         textAlign: "left",
     },
     profileContainer: {
@@ -24,10 +25,10 @@ export const viewDetailsStyles = StyleSheet.create({
         backgroundColor: black,
         borderRadius: 1,
         height: 1,
-        marginTop: 8,
+        marginTop: 3,
     },
     title: {
-        fontSize: 30,
+        fontSize: 25,
     },
     topBackground: {
         backgroundColor: lightPeach,

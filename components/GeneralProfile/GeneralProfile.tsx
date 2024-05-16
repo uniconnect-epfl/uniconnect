@@ -10,23 +10,23 @@ interface GeneralProfileProps {
     name: string,
     surname: string,
     location: string,
-    profilePictureUrl?: string,
+    profilePicture: string
 }
 
 const GeneralProfile: React.FC<GeneralProfileProps> = ({ 
     name,
     surname,
     location,
-    profilePictureUrl = ""
+    profilePicture
 }) => {
 
   return (
     <View style={styles.container}>
 
         <ProfilePicture
-            size={85}
-            pictureUrl={profilePictureUrl}
-        />
+            size={80}
+            pictureUrl={profilePicture}
+            />
 
         <Text style={globalStyles.boldText}>{name} {surname}</Text>
 

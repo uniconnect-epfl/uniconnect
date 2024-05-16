@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import {
   View,
   Text,
@@ -19,6 +19,7 @@ import Label from "../../../components/Label/Label"
 import { fetchInterests, Interest } from "../../../firebase/Interests"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import useKeyboardVisibility from "../../../hooks/useKeyboardVisibility"
+import { RegistrationContext } from "../../../contexts/RegistrationContext"
 
 interface InterestButtonProps {
   interest: Interest
@@ -55,9 +56,8 @@ const InterestsScreen = () => {
   const [interests, setInterests] = useState<Interest[]>([])
   const [filteredInterests, setFilteredInterests] = useState<Interest[]>([])
   const [labelArray, setLabelArray] = useState<string[]>([])
-  const [selectedInterests, setSelectedInterests] = useState<Set<string>>(
-    new Set([])
-  )
+  const { selectedInterests, setSelectedInterests } =
+    useContext(RegistrationContext)
   const [isLoading, setIsLoading] = useState(true)
   const keyboardVisible = useKeyboardVisibility()
 
@@ -77,7 +77,7 @@ const InterestsScreen = () => {
 
   const handleRemoveInterest = (interest: string) => {
     setSelectedInterests(
-      (prev) => new Set([...prev].filter((label) => label !== interest))
+      selectedInterests.filter((label) => label !== interest)
     )
     setLabelArray((prev) => prev.filter((label) => label !== interest))
   }
@@ -85,14 +85,19 @@ const InterestsScreen = () => {
   //Handle the selection of an interest
   const toggleInterest = (interest: Interest) => {
     setSelectedInterests((prevSelectedInterests) => {
-      const newSelected = new Set(prevSelectedInterests)
-      if (newSelected.has(interest.title)) {
-        newSelected.delete(interest.title)
+      if (prevSelectedInterests.includes(interest.title)) {
+        return prevSelectedInterests.filter((label) => label !== interest.title)
       } else {
-        newSelected.add(interest.title)
+        return [...prevSelectedInterests, interest.title]
       }
-      setLabelArray(Array.from(newSelected))
-      return newSelected
+    })
+
+    setLabelArray((prev) => {
+      if (prev.includes(interest.title)) {
+        return prev.filter((label) => label !== interest.title)
+      } else {
+        return [...prev, interest.title]
+      }
     })
   }
 
@@ -113,7 +118,7 @@ const InterestsScreen = () => {
   const renderItem = ({ item }: { item: Interest }) => (
     <InterestButton
       interest={item}
-      selected={selectedInterests.has(item.title)}
+      selected={selectedInterests.includes(item.title)}
       onSelect={(interest: Interest) => toggleInterest(interest)}
       testID={item.title + "ID"}
     />
@@ -146,7 +151,7 @@ const InterestsScreen = () => {
           onChangeText={handleSearch}
         />
 
-        {selectedInterests.size !== 0 && (
+        {selectedInterests.length !== 0 && (
           <ScrollView
             horizontal={false}
             style={styles.labelView}
