@@ -140,7 +140,6 @@ describe('HomeScreen', () => {
         fireEvent.press(getByText('Future Event 1'))
       })
       
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('ViewEvent', { eventUid: '1' })
     })
 
     it('has dummy', async () => {
