@@ -12,14 +12,6 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "plugins": [
-      [
-        "expo-camera",
-        {
-          "cameraPermission": "Allow Uniconnect to access your camera"
-        }
-      ]
-    ],
     "assetBundlePatterns": [
       "**/*"
     ],
