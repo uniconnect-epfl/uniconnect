@@ -58,6 +58,7 @@ jest.mock('expo-camera', () => {
   return {
     ...jest.requireActual('expo-camera'),
     useCameraPermissions: jest.fn(() => {}),
+    // god forgive me this
     // eslint-disable-next-line react/prop-types
     CameraView: ({ onBarcodeScanned, ...props }) => (
       <ReactNative.View
@@ -119,9 +120,9 @@ describe("QrScanScreen", () => {
         </NavigationContainer>
       )
       act(() => {
-        fireEvent(getByTestId("camera"), "onBarcodeScanned", {
-          nativeEvent: { type: "qr", data: "event/123" }
-        })
+        fireEvent(getByTestId("camera"), "onBarcodeScanned", 
+          { type: "qr", data: "event/123" }
+        )
       })
     })
 
@@ -135,9 +136,9 @@ describe("QrScanScreen", () => {
         </NavigationContainer>
       )
       act(() => {
-        fireEvent(getByTestId("camera"), "onBarcodeScanned", {
-          nativeEvent: { type: "qr", data: "contact/123" }
-        })
+        fireEvent(getByTestId("camera"), "onBarcodeScanned", 
+          { type: "qr", data: "contact/123" }
+        )
       })
     })
   
@@ -164,23 +165,23 @@ describe("QrScanScreen", () => {
       )      
       // Simulate QR code scans
       act(() => {
-        fireEvent(getByTestId("camera"), "onBarcodeScanned", {
-          nativeEvent: { type: "qr", data: "contact/123" }
-        })
+        fireEvent(getByTestId("camera"), "onBarcodeScanned", 
+          { type: "qr", data: "contact/123" }
+        )
       })
       act(() => {
-        fireEvent(getByTestId("camera"), "onBarcodeScanned", {
-          nativeEvent: { type: "qr", data: "contact/123" }
-        })
+        fireEvent(getByTestId("camera"), "onBarcodeScanned", 
+          { type: "qr", data: "contact/123" }
+        )
       })
   
       // Fast forward time by 300ms
       jest.advanceTimersByTime(300)
 
       act(() => {
-        fireEvent(getByTestId("camera"), "onBarcodeScanned", {
-          nativeEvent: { type: "qr", data: "contact/123" }
-        })
+        fireEvent(getByTestId("camera"), "onBarcodeScanned", 
+          { type: "qr", data: "contact/123" }
+        )
       })
   
       // Assert debounced function was called
@@ -199,23 +200,23 @@ describe("QrScanScreen", () => {
       )      
       // Simulate QR code scans
       act(() => {
-        fireEvent(getByTestId("camera"), "onBarcodeScanned", {
-          nativeEvent: { type: "qr", data: "contact/321" }
-        })
+        fireEvent(getByTestId("camera"), "onBarcodeScanned", 
+          { type: "qr", data: "contact/321" }
+        )
       })
       act(() => {
-        fireEvent(getByTestId("camera"), "onBarcodeScanned", {
-          nativeEvent: { type: "qr", data: "contact/321" }
-        })
+        fireEvent(getByTestId("camera"), "onBarcodeScanned", 
+          { type: "qr", data: "contact/321" }
+        )
       })
   
       // Fast forward time by 300ms
       jest.advanceTimersByTime(300)
 
       act(() => {
-        fireEvent(getByTestId("camera"), "onBarcodeScanned", {
-          nativeEvent: { type: "qr", data: "contact/321" }
-        })
+        fireEvent(getByTestId("camera"), "onBarcodeScanned", 
+          { type: "qr", data: "contact/321" }
+        )
       })
   
       // Assert debounced function was called
