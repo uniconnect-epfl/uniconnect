@@ -130,6 +130,19 @@ describe('HomeScreen', () => {
       fireEvent.press(getByText('Events'))
     })
 
+    it('can navigate to the event page', async () => {
+      const { getByText } = render(
+        <SafeAreaProvider>
+          <HomeScreen navigation={mockNavigation}/>
+        </SafeAreaProvider>
+      )
+      await waitFor(() => {
+        fireEvent.press(getByText('Future Event 1'))
+      })
+      
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('ViewEvent', { eventUid: '1' })
+    })
+
     it('has dummy', async () => {
       const { getByText } = render(
         <SafeAreaProvider>
