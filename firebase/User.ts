@@ -23,20 +23,24 @@ export const updateUserData = async (uid: string, newData: Partial<User>) => {
     await updateDoc(docRef, newData)
     return true
   } catch (error) {
-    showErrorToast("Error updating user data. Please check your connection and try again.")
+    showErrorToast(
+      "Error updating user data. Please check your connection and try again."
+    )
     return false
   }
 }
 
 export const uploadUserImageToStorage = async (uid: string, uri: string) => {
   let url = ""
-  const blob: Blob|null = await new Promise((resolve) => {
+  const blob: Blob | null = await new Promise((resolve) => {
     const xhr = new XMLHttpRequest()
     xhr.onload = () => {
       resolve(xhr.response)
     }
     xhr.onerror = () => {
-      showErrorToast("Network request failed. Please check your connection and try again.")
+      showErrorToast(
+        "Network request failed. Please check your connection and try again."
+      )
       resolve(null)
     }
     xhr.responseType = "blob"
@@ -49,11 +53,13 @@ export const uploadUserImageToStorage = async (uid: string, uri: string) => {
 
   const fileRef = ref(storage, `users/${uid}.jpg`)
 
-  try{
+  try {
     await uploadBytes(fileRef, blob)
     url = await getDownloadURL(fileRef)
   } catch (error) {
-    showErrorToast("Error storing image. Please check your connection and try again.")
+    showErrorToast(
+      "Error storing image. Please check your connection and try again."
+    )
     return null
   }
   return url
@@ -65,7 +71,9 @@ export const updateUserImage = async (uid: string, url: string) => {
     await updateDoc(docRef, { profilePicture: url })
     return true
   } catch (error) {
-    showErrorToast("Error updating user data. Please check your connection and try again.")
+    showErrorToast(
+      "Error updating user data. Please check your connection and try again."
+    )
     return false
   }
 }
@@ -75,52 +83,96 @@ export const updateUserInterests = async (uid: string, interests: string[]) => {
   try {
     const docRef = doc(db, "users", uid)
     await updateDoc(docRef, { interests })
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
-    console.log("Coverage")
     return true
   } catch (error) {
-    showErrorToast("Error updating user data. Please check your connection and try again.")
+    showErrorToast(
+      "Error updating user data. Please check your connection and try again."
+    )
     return false
   }
 }
 
-export const updateUserEvents = async (uid: string, eventId: string) : Promise<boolean> => {
+export const updateUserEvents = async (
+  uid: string,
+  eventId: string
+): Promise<boolean> => {
   try {
     //read events array and add new event
     const docRef = doc(db, "users", uid)
     const user = await getDoc(docRef)
     const user2 = user.data() as User
     let userEvents = user2.events
-    if (userEvents !== undefined){
+    if (userEvents !== undefined) {
       userEvents.forEach((event) => {
         if (event === eventId) {
           throw new Error("You are already registered to this event.")
         }
       })
       userEvents.push(eventId)
-    }else{
+    } else {
       userEvents = [eventId]
     }
-    await setDoc(docRef,{
-      events: userEvents,
-    }, { merge: true })
+    await setDoc(
+      docRef,
+      {
+        events: userEvents,
+      },
+      { merge: true }
+    )
     return true
   } catch (error) {
     return false
+  }
+}
+
+export const addFriend = async (user1: User, user2: User) => {
+  try {
+    // Get user1 data
+    const user1Ref = doc(db, "users", user1.uid)
+    const user1Doc = await getDoc(user1Ref)
+    const user1Data = user1Doc.data() as User
+
+    // Get user2 data
+    const user2Ref = doc(db, "users", user2.uid)
+    const user2Doc = await getDoc(user2Ref)
+    const user2Data = user2Doc.data() as User
+
+    // Update friends lists
+    const updatedUser1Friends = [...user1Data.friends, user2.uid]
+    const updatedUser2Friends = [...user2Data.friends, user1.uid]
+
+    // Set updated data
+    await setDoc(user1Ref, { friends: updatedUser1Friends }, { merge: true })
+    await setDoc(user2Ref, { friends: updatedUser2Friends }, { merge: true })
+  } catch (error) {
+    showErrorToast("Error updating your contacts list. Please try again.")
+  }
+}
+
+export const removeFriend = async (user1: User, user2: User) => {
+  try {
+    // Get user1 data
+    const user1Ref = doc(db, "users", user1.uid)
+    const user1Doc = await getDoc(user1Ref)
+    const user1Data = user1Doc.data() as User
+
+    // Get user2 data
+    const user2Ref = doc(db, "users", user2.uid)
+    const user2Doc = await getDoc(user2Ref)
+    const user2Data = user2Doc.data() as User
+
+    // Remove each user from the other user's friends list
+    const updatedUser1Friends = user1Data.friends.filter(
+      (friendUid) => friendUid !== user2.uid
+    )
+    const updatedUser2Friends = user2Data.friends.filter(
+      (friendUid) => friendUid !== user1.uid
+    )
+
+    // Set updated data
+    await setDoc(user1Ref, { friends: updatedUser1Friends }, { merge: true })
+    await setDoc(user2Ref, { friends: updatedUser2Friends }, { merge: true })
+  } catch (error) {
+    showErrorToast("Error removing contact from your contacts")
   }
 }
