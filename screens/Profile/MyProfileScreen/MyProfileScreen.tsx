@@ -53,12 +53,13 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
             name={user.firstName}
             surname={user.lastName}
             location={user.location}
+            profilePicture={user.profilePicture}
           />
 
           <View style={profileStyles.buttonsContainer}>
             <TouchableOpacity
               style={profileStyles.button}
-              onPress={() => navigation.navigate("UpdateProfile")}
+              onPress={() => navigation.navigate("UpdateProfile", { user: user } )}
             >
               <Text style={[globalStyles.boldText, profileStyles.buttonText]}>
                 Update

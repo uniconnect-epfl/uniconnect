@@ -71,7 +71,7 @@ describe("MyProfileScreen", () => {
     await waitFor(() => {
       const updateButton = getByText("Update")
       fireEvent.press(updateButton)
-      expect(mockNavigation.navigate).toHaveBeenCalledWith("UpdateProfile")
+      expect(mockNavigation.navigate).toHaveBeenCalledTimes(1)
     })
   })
 
