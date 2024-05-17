@@ -14,14 +14,18 @@ import { getAuth } from "firebase/auth"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import { getUserData } from "../../../firebase/User"
 import { User } from "../../../types/User"
+import { addFriend, removeFriend } from "../../../firebase/User"
 
 type RootStackParamList = {
   ExternalProfile: {
-      externalUserUid: string;
+    externalUserUid: string
   }
 }
 
-type ExternalProfileScreenRouteProp = RouteProp<RootStackParamList, "ExternalProfile">
+type ExternalProfileScreenRouteProp = RouteProp<
+  RootStackParamList,
+  "ExternalProfile"
+>
 
 const ExternalProfileScreen = () => {
   const { externalUserUid } = useRoute<ExternalProfileScreenRouteProp>().params
@@ -34,12 +38,12 @@ const ExternalProfileScreen = () => {
 
   const [selectedTab, setSelectedTab] = useState("Network")
   const [isFriend, setIsFriend] = useState(false)
-  
+
   useEffect(() => {
     // load the user of the app
     const fetchData = async () => {
       setUserLoading(true)
-      if(userId){
+      if (userId) {
         setUser(await getUserData(userId))
       }
       setUserLoading(false)
@@ -51,7 +55,7 @@ const ExternalProfileScreen = () => {
     // load the user of which we want to see the profile
     const fetchData = async () => {
       setExternalUserLoading(true)
-      if(externalUserUid){
+      if (externalUserUid) {
         setExternalUser(await getUserData(externalUserUid))
       }
       setExternalUserLoading(false)
@@ -60,78 +64,93 @@ const ExternalProfileScreen = () => {
   }, [externalUserUid])
 
   useEffect(() => {
-    if(user && externalUser){
-      // this will just check if the two are friends when we'll have implemented friends
-      setIsFriend(true)
-    } else {
-      setIsFriend(false)
+    if (user && externalUser) {
+      if (user.friends.includes(externalUser.uid)) {
+        setIsFriend(true)
+      } else {
+        setIsFriend(false)
+      }
     }
   }, [user, externalUser])
 
-  if(userLoading || !user || externalUserLoading || !externalUser){
-    return <LoadingScreen/>
+  if (userLoading || !user || externalUserLoading || !externalUser) {
+    return <LoadingScreen />
   }
 
   return (
-
     <View style={styles.container}>
       <View style={profileStyles.profileContainer}>
-
         <View style={profileStyles.topProfileContainer}>
-
           <GeneralProfile
             name={externalUser.firstName}
             surname={externalUser.lastName}
             location={externalUser.location}
             profilePicture={externalUser.profilePicture}
           />
-          
+
           {isFriend ? (
             <View style={profileStyles.buttonsContainer}>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={profileStyles.button}
-                onPress={() => alert("To come")}>
-                <Text style={[globalStyles.boldText, profileStyles.buttonText]}>Message</Text>
+                onPress={() => alert("To come")}
+              >
+                <Text style={[globalStyles.boldText, profileStyles.buttonText]}>
+                  Message
+                </Text>
               </TouchableOpacity>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[profileStyles.button, styles.invertedButtonColors]}
-                onPress={() => alert("To come")}>
+                onPress={() => {
+                  removeFriend(user, externalUser)
+                }}
+              >
                 <View style={profileStyles.horizontalContainer}>
-                  <Text style={[globalStyles.boldText, profileStyles.buttonText]}>Remove</Text>
+                  <Text
+                    style={[globalStyles.boldText, profileStyles.buttonText]}
+                  >
+                    Remove
+                  </Text>
                 </View>
               </TouchableOpacity>
             </View>
           ) : (
             <View style={profileStyles.buttonsContainer}>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[profileStyles.button, styles.uniqueButton]}
-                onPress={() => alert("To come")}>
+                onPress={() => {
+                  addFriend(user, externalUser)
+                }}
+              >
                 <View style={profileStyles.horizontalContainer}>
-                  <Text style={[globalStyles.boldText, profileStyles.buttonText]}>Add</Text>
+                  <Text
+                    style={[globalStyles.boldText, profileStyles.buttonText]}
+                    testID="addbutton"
+                  >
+                    Add
+                  </Text>
                 </View>
               </TouchableOpacity>
             </View>
           )}
-
         </View>
 
         <ExpandableDescription description={externalUser.description} />
 
-        <SectionTabs 
+        <SectionTabs
           tabs={["Events", "Interests", "Network"]}
           startingTab={selectedTab}
-          onTabChange={tab => {setSelectedTab(tab)}}
+          onTabChange={(tab) => {
+            setSelectedTab(tab)
+          }}
         />
 
         <View style={styles.separatorLine} />
 
-        { selectedTab === "Events" && <ProfileEvents /> }
-        { selectedTab === "Interests" && <ProfileInterests /> }
-        { selectedTab === "Network" && <ProfileNetwork /> }
-
+        {selectedTab === "Events" && <ProfileEvents />}
+        {selectedTab === "Interests" && <ProfileInterests />}
+        {selectedTab === "Network" && <ProfileNetwork />}
       </View>
     </View>
-
   )
 }
 
