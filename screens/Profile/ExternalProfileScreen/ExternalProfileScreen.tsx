@@ -100,7 +100,11 @@ const ExternalProfileScreen = () => {
               <TouchableOpacity
                 style={[profileStyles.button, styles.invertedButtonColors]}
                 onPress={() => {
-                  removeFriend(user, externalUser)
+                  const removeFriendInternal = async () => {
+                    await removeFriend(user, externalUser)
+                    setIsFriend(false)
+                  }
+                  removeFriendInternal()
                 }}
               >
                 <View style={profileStyles.horizontalContainer}>
@@ -117,7 +121,11 @@ const ExternalProfileScreen = () => {
               <TouchableOpacity
                 style={[profileStyles.button, styles.uniqueButton]}
                 onPress={() => {
-                  addFriend(user, externalUser)
+                  const addFriendInternal = async () => {
+                    await addFriend(user, externalUser)
+                    setIsFriend(true)
+                  }
+                  addFriendInternal()
                 }}
               >
                 <View style={profileStyles.horizontalContainer}>
