@@ -12,9 +12,8 @@ import { ProfileNetwork } from "../ProfileNetwork/ProfileNetwork"
 import { RouteProp, useRoute } from "@react-navigation/native"
 import { getAuth } from "firebase/auth"
 import LoadingScreen from "../../Loading/LoadingScreen"
-import { getUserData } from "../../../firebase/User"
+import { getUserData, addFriend, removeFriend } from "../../../firebase/User"
 import { User } from "../../../types/User"
-import { addFriend, removeFriend } from "../../../firebase/User"
 
 type RootStackParamList = {
   ExternalProfile: {
