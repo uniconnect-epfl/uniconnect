@@ -43,16 +43,10 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
   const [contacts, setContacts] = useState<Contact[] | null>(null)
 
   useEffect(() => {
-    setUserId(getAuth().currentUser?.uid ?? "fwLsAGVKvqZl3gb0S28bDtN6Yvd2")
+    setUserId(getAuth().currentUser?.uid ?? "dFcpWnfaNTOWBFyJnoJSIL6xyi32")
   }, [navigation])
 
   useEffect(() => {
-    console.log("-------------------------------------------------------")
-    console.log(
-      "USERID ------------------------------------------------",
-      userId
-    )
-    console.log("-------------------------------------------------------")
     const fetchData = async () => {
       if (userId) {
         setUser(await getUserData(userId))
