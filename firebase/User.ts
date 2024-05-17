@@ -130,22 +130,37 @@ export const addFriend = async (user1: User, user2: User) => {
     // Get user1 data
     const user1Ref = doc(db, "users", user1.uid)
     const user1Doc = await getDoc(user1Ref)
-    const user1Data = user1Doc.data() as User
+    const user1Data = user1Doc.data() as User | undefined
+
+    if (!user1Data) {
+      throw new Error("User1 data not found")
+    }
 
     // Get user2 data
     const user2Ref = doc(db, "users", user2.uid)
     const user2Doc = await getDoc(user2Ref)
-    const user2Data = user2Doc.data() as User
+    const user2Data = user2Doc.data() as User | undefined
+
+    if (!user2Data) {
+      throw new Error("User2 data not found")
+    }
 
     // Update friends lists
-    const updatedUser1Friends = [...user1Data.friends, user2.uid]
-    const updatedUser2Friends = [...user2Data.friends, user1.uid]
+    const updatedUser1Friends = user1Data.friends
+      ? [...user1Data.friends, user2.uid]
+      : [user2.uid]
+    const updatedUser2Friends = user2Data.friends
+      ? [...user2Data.friends, user1.uid]
+      : [user1.uid]
 
     // Set updated data
     await setDoc(user1Ref, { friends: updatedUser1Friends }, { merge: true })
     await setDoc(user2Ref, { friends: updatedUser2Friends }, { merge: true })
+    console.log(updatedUser1Friends)
+    return true
   } catch (error) {
     showErrorToast("Error updating your contacts list. Please try again.")
+    return false
   }
 }
 
@@ -154,25 +169,36 @@ export const removeFriend = async (user1: User, user2: User) => {
     // Get user1 data
     const user1Ref = doc(db, "users", user1.uid)
     const user1Doc = await getDoc(user1Ref)
-    const user1Data = user1Doc.data() as User
+    const user1Data = user1Doc.data() as User | undefined
+
+    if (!user1Data) {
+      throw new Error("User1 data not found")
+    }
 
     // Get user2 data
     const user2Ref = doc(db, "users", user2.uid)
     const user2Doc = await getDoc(user2Ref)
-    const user2Data = user2Doc.data() as User
+    const user2Data = user2Doc.data() as User | undefined
+
+    if (!user2Data) {
+      throw new Error("User2 data not found")
+    }
 
     // Remove each user from the other user's friends list
-    const updatedUser1Friends = user1Data.friends.filter(
-      (friendUid) => friendUid !== user2.uid
-    )
-    const updatedUser2Friends = user2Data.friends.filter(
-      (friendUid) => friendUid !== user1.uid
-    )
+    const updatedUser1Friends = user1Data.friends
+      ? user1Data.friends.filter((friendUid) => friendUid !== user2.uid)
+      : []
+    const updatedUser2Friends = user2Data.friends
+      ? user2Data.friends.filter((friendUid) => friendUid !== user1.uid)
+      : []
 
     // Set updated data
     await setDoc(user1Ref, { friends: updatedUser1Friends }, { merge: true })
     await setDoc(user2Ref, { friends: updatedUser2Friends }, { merge: true })
+
+    return true
   } catch (error) {
     showErrorToast("Error removing contact from your contacts")
+    return false
   }
 }

@@ -31,13 +31,12 @@ const ExternalProfileScreen = () => {
   const { externalUserUid } = useRoute<ExternalProfileScreenRouteProp>().params
   const [externalUser, setExternalUser] = useState<User | null>(null)
   const [externalUserLoading, setExternalUserLoading] = useState(true)
-
   const userId = getAuth().currentUser?.uid
   const [user, setUser] = useState<User | null>(null)
   const [userLoading, setUserLoading] = useState(true)
-
   const [selectedTab, setSelectedTab] = useState("Network")
   const [isFriend, setIsFriend] = useState(false)
+  const userFriends: Array<string> | undefined = user?.friends
 
   useEffect(() => {
     // load the user of the app
@@ -65,13 +64,13 @@ const ExternalProfileScreen = () => {
 
   useEffect(() => {
     if (user && externalUser) {
-      if (user.friends.includes(externalUser.uid)) {
+      if (userFriends?.includes(externalUser.uid)) {
         setIsFriend(true)
       } else {
         setIsFriend(false)
       }
     }
-  }, [user, externalUser])
+  }, [user, externalUser, userFriends])
 
   if (userLoading || !user || externalUserLoading || !externalUser) {
     return <LoadingScreen />
