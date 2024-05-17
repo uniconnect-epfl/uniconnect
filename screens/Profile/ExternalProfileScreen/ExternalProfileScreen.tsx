@@ -12,34 +12,36 @@ import { ProfileNetwork } from "../ProfileNetwork/ProfileNetwork"
 import { RouteProp, useRoute } from "@react-navigation/native"
 import { getAuth } from "firebase/auth"
 import LoadingScreen from "../../Loading/LoadingScreen"
-import { getUserData } from "../../../firebase/User"
+import { getUserData, addFriend, removeFriend } from "../../../firebase/User"
 import { User } from "../../../types/User"
 
 type RootStackParamList = {
   ExternalProfile: {
-      externalUserUid: string;
+    externalUserUid: string
   }
 }
 
-type ExternalProfileScreenRouteProp = RouteProp<RootStackParamList, "ExternalProfile">
+type ExternalProfileScreenRouteProp = RouteProp<
+  RootStackParamList,
+  "ExternalProfile"
+>
 
 const ExternalProfileScreen = () => {
   const { externalUserUid } = useRoute<ExternalProfileScreenRouteProp>().params
   const [externalUser, setExternalUser] = useState<User | null>(null)
   const [externalUserLoading, setExternalUserLoading] = useState(true)
-
   const userId = getAuth().currentUser?.uid
   const [user, setUser] = useState<User | null>(null)
   const [userLoading, setUserLoading] = useState(true)
-
   const [selectedTab, setSelectedTab] = useState("Network")
   const [isFriend, setIsFriend] = useState(false)
-  
+  const userFriends: Array<string> | undefined = user?.friends
+
   useEffect(() => {
     // load the user of the app
     const fetchData = async () => {
       setUserLoading(true)
-      if(userId){
+      if (userId) {
         setUser(await getUserData(userId))
       }
       setUserLoading(false)
@@ -51,7 +53,7 @@ const ExternalProfileScreen = () => {
     // load the user of which we want to see the profile
     const fetchData = async () => {
       setExternalUserLoading(true)
-      if(externalUserUid){
+      if (externalUserUid) {
         setExternalUser(await getUserData(externalUserUid))
       }
       setExternalUserLoading(false)
@@ -60,78 +62,101 @@ const ExternalProfileScreen = () => {
   }, [externalUserUid])
 
   useEffect(() => {
-    if(user && externalUser){
-      // this will just check if the two are friends when we'll have implemented friends
-      setIsFriend(true)
-    } else {
-      setIsFriend(false)
+    if (user && externalUser) {
+      if (userFriends?.includes(externalUser.uid)) {
+        setIsFriend(true)
+      } else {
+        setIsFriend(false)
+      }
     }
-  }, [user, externalUser])
+  }, [user, externalUser, userFriends])
 
-  if(userLoading || !user || externalUserLoading || !externalUser){
-    return <LoadingScreen/>
+  if (userLoading || !user || externalUserLoading || !externalUser) {
+    return <LoadingScreen />
   }
 
   return (
-
     <View style={styles.container}>
       <View style={profileStyles.profileContainer}>
-
         <View style={profileStyles.topProfileContainer}>
-
           <GeneralProfile
             name={externalUser.firstName}
             surname={externalUser.lastName}
             location={externalUser.location}
             profilePicture={externalUser.profilePicture}
           />
-          
+
           {isFriend ? (
             <View style={profileStyles.buttonsContainer}>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={profileStyles.button}
-                onPress={() => alert("To come")}>
-                <Text style={[globalStyles.boldText, profileStyles.buttonText]}>Message</Text>
+                onPress={() => alert("To come")}
+              >
+                <Text style={[globalStyles.boldText, profileStyles.buttonText]}>
+                  Message
+                </Text>
               </TouchableOpacity>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[profileStyles.button, styles.invertedButtonColors]}
-                onPress={() => alert("To come")}>
+                onPress={() => {
+                  const removeFriendInternal = async () => {
+                    await removeFriend(user, externalUser)
+                    setIsFriend(false)
+                  }
+                  removeFriendInternal()
+                }}
+              >
                 <View style={profileStyles.horizontalContainer}>
-                  <Text style={[globalStyles.boldText, profileStyles.buttonText]}>Remove</Text>
+                  <Text
+                    style={[globalStyles.boldText, profileStyles.buttonText]}
+                  >
+                    Remove
+                  </Text>
                 </View>
               </TouchableOpacity>
             </View>
           ) : (
             <View style={profileStyles.buttonsContainer}>
-              <TouchableOpacity 
+              <TouchableOpacity
                 style={[profileStyles.button, styles.uniqueButton]}
-                onPress={() => alert("To come")}>
+                onPress={() => {
+                  const addFriendInternal = async () => {
+                    await addFriend(user, externalUser)
+                    setIsFriend(true)
+                  }
+                  addFriendInternal()
+                }}
+              >
                 <View style={profileStyles.horizontalContainer}>
-                  <Text style={[globalStyles.boldText, profileStyles.buttonText]}>Add</Text>
+                  <Text
+                    style={[globalStyles.boldText, profileStyles.buttonText]}
+                    testID="addbutton"
+                  >
+                    Add
+                  </Text>
                 </View>
               </TouchableOpacity>
             </View>
           )}
-
         </View>
 
         <ExpandableDescription description={externalUser.description} />
 
-        <SectionTabs 
+        <SectionTabs
           tabs={["Events", "Interests", "Network"]}
           startingTab={selectedTab}
-          onTabChange={tab => {setSelectedTab(tab)}}
+          onTabChange={(tab) => {
+            setSelectedTab(tab)
+          }}
         />
 
         <View style={styles.separatorLine} />
 
-        { selectedTab === "Events" && <ProfileEvents /> }
-        { selectedTab === "Interests" && <ProfileInterests /> }
-        { selectedTab === "Network" && <ProfileNetwork /> }
-
+        {selectedTab === "Events" && <ProfileEvents />}
+        {selectedTab === "Interests" && <ProfileInterests />}
+        {selectedTab === "Network" && <ProfileNetwork />}
       </View>
     </View>
-
   )
 }
 
