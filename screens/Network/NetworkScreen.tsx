@@ -47,6 +47,12 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
   }, [navigation])
 
   useEffect(() => {
+    console.log("-------------------------------------------------------")
+    console.log(
+      "USERID ------------------------------------------------",
+      userId
+    )
+    console.log("-------------------------------------------------------")
     const fetchData = async () => {
       if (userId) {
         setUser(await getUserData(userId))
