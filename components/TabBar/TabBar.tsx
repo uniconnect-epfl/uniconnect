@@ -27,12 +27,7 @@ export const TabBar = ({
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key]
         const label =
-          options.tabBarLabel !== undefined
-            ? options.tabBarLabel.toString()
-            : options.title !== undefined
-            ? options.title
-            : route.name
-
+          options.tabBarLabel?.toString() ?? options.title ?? route.name
         const focused = state.index === index
 
         const onPress = () => {

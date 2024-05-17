@@ -43,11 +43,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
   const [contacts, setContacts] = useState<Contact[] | null>(null)
 
   useEffect(() => {
-    let tempUserId = getAuth().currentUser?.uid
-    if (tempUserId === undefined) {
-      tempUserId = "dFcpWnfaNTOWBFyJnoJSIL6xyi32"
-    }
-    setUserId(tempUserId)
+    setUserId(getAuth().currentUser?.uid ?? "fwLsAGVKvqZl3gb0S28bDtN6Yvd2")
   }, [navigation])
 
   useEffect(() => {
@@ -57,7 +53,6 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
       }
     }
     fetchData()
-    console.log("USER ID: ", userId)
   }, [userId])
 
   useEffect(() => {
@@ -91,7 +86,6 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
       if (friends.length > 0) {
         createList()
       } else {
-        console.log("HERE")
         setContacts([])
       }
     }
@@ -136,7 +130,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
           userContact={userContact}
         />
       )}
-      {loaded && selectedTab === "List" && (
+      {loaded && selectedTab === "List" && contacts && (
         <ContactList
           onContactPress={(uid) =>
             navigation.navigate("ExternalProfile", {
