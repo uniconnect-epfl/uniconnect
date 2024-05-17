@@ -146,17 +146,17 @@ export const addFriend = async (user1: User, user2: User) => {
     }
 
     // Update friends lists
-    const updatedUser1Friends = user1Data.friends
+    const updatedUser1Friend = user1Data.friends
       ? [...user1Data.friends, user2.uid]
       : [user2.uid]
-    const updatedUser2Friends = user2Data.friends
+    const updatedUser2Friend = user2Data.friends
       ? [...user2Data.friends, user1.uid]
       : [user1.uid]
 
     // Set updated data
-    await setDoc(user1Ref, { friends: updatedUser1Friends }, { merge: true })
-    await setDoc(user2Ref, { friends: updatedUser2Friends }, { merge: true })
-    console.log(updatedUser1Friends)
+    await setDoc(user1Ref, { friends: updatedUser1Friend }, { merge: true })
+    await setDoc(user2Ref, { friends: updatedUser2Friend }, { merge: true })
+
     return true
   } catch (error) {
     showErrorToast("Error updating your contacts list. Please try again.")
@@ -167,18 +167,18 @@ export const addFriend = async (user1: User, user2: User) => {
 export const removeFriend = async (user1: User, user2: User) => {
   try {
     // Get user1 data
-    const user1Ref = doc(db, "users", user1.uid)
-    const user1Doc = await getDoc(user1Ref)
-    const user1Data = user1Doc.data() as User | undefined
+    const user1Refs = doc(db, "users", user1.uid)
+    const user1Docs = await getDoc(user1Refs)
+    const user1Data = user1Docs.data() as User | undefined
 
     if (user1Data == undefined) {
       throw new Error("User1 data not found")
     }
 
     // Get user2 data
-    const user2Ref = doc(db, "users", user2.uid)
-    const user2Doc = await getDoc(user2Ref)
-    const user2Data = user2Doc.data() as User | undefined
+    const user2Refs = doc(db, "users", user2.uid)
+    const user2Docs = await getDoc(user2Refs)
+    const user2Data = user2Docs.data() as User | undefined
 
     if (user2Data == undefined) {
       throw new Error("User2 data not found")
@@ -193,8 +193,8 @@ export const removeFriend = async (user1: User, user2: User) => {
       : []
 
     // Set updated data
-    await setDoc(user1Ref, { friends: updatedUser1Friends }, { merge: true })
-    await setDoc(user2Ref, { friends: updatedUser2Friends }, { merge: true })
+    await setDoc(user1Refs, { friends: updatedUser1Friends }, { merge: true })
+    await setDoc(user2Refs, { friends: updatedUser2Friends }, { merge: true })
 
     return true
   } catch (error) {
