@@ -171,7 +171,7 @@ export const removeFriend = async (user1: User, user2: User) => {
     const user1Doc = await getDoc(user1Ref)
     const user1Data = user1Doc.data() as User | undefined
 
-    if (!user1Data) {
+    if (user1Data == undefined) {
       throw new Error("User1 data not found")
     }
 
@@ -180,7 +180,7 @@ export const removeFriend = async (user1: User, user2: User) => {
     const user2Doc = await getDoc(user2Ref)
     const user2Data = user2Doc.data() as User | undefined
 
-    if (!user2Data) {
+    if (user2Data == undefined) {
       throw new Error("User2 data not found")
     }
 
