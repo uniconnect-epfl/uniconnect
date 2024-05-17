@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native"
-import { Camera } from "expo-camera"
+import { BarcodeScanningResult, CameraView, useCameraPermissions } from "expo-camera"
 import { styles } from "./styles"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { NavigationProp, ParamListBase, useIsFocused } from "@react-navigation/native"
@@ -18,8 +18,9 @@ interface ScanQrScreenProps{
 const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
   // for the camera management
   const isFocused = useIsFocused()
-  const [permission, requestPermission] = Camera.useCameraPermissions()
+  const [permission, requestPermission] = useCameraPermissions()
   const [showCamera, setShowCamera] = useState(false)
+  const [isScanning, setIsScanning] = useState(false)
   // current user
   const userId = getAuth().currentUser?.uid
 
@@ -40,7 +41,7 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
       if(scannedUser === null || scannedUser === undefined){
         showErrorToast("User not found")
       } else {
-        navigation.navigate("ExternalProfile", {uid: id})
+        navigation.navigate("ExternalProfile", {externalUserUid: id})
       }
     }
   }
@@ -58,6 +59,7 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
       else if (route === "event") handleEvent(id)
       else showErrorToast("Qr code not recognized")
     }
+    setIsScanning(false)
   }, 300)
 
   if (!permission) {
@@ -92,10 +94,18 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
 
       <Text style={[globalStyles.text, styles.scanAQrText]}>Scan a QR code</Text>
       {showCamera ? (
-        <Camera 
+        <CameraView
           testID="camera"
           style={styles.camera}
-          onBarCodeScanned={(result) => debouncedQr(result.data)}
+          barcodeScannerSettings={{
+            barcodeTypes: ["qr"],
+          }}
+          onBarcodeScanned={(result: BarcodeScanningResult) => {
+            if(!isScanning) {
+              setIsScanning(true)
+              debouncedQr(result.data)
+            }
+          }}
         />
       ) : (
         <View style={styles.container}>

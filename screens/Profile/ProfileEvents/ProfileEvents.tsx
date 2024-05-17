@@ -1,43 +1,22 @@
-import { View, Text } from "react-native"
+import { View } from "react-native"
 import { styles } from "./styles"
-import React, { useEffect, useState } from "react"
+import React from "react"
 import { getAuth } from "firebase/auth"
-import { User } from "../../../types/User"
-import { getUserData } from "../../../firebase/User"
-import LoadingScreen from "../../Loading/LoadingScreen"
+import EventScreen from "../../Explore/EventScreen/EventScreen"
+import { useNavigation } from "@react-navigation/native"
 
 export const ProfileEvents = () => {
   const userId = getAuth().currentUser?.uid
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [events, setEvents] = useState<string[]>([])
+  const navigation = useNavigation()
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      if (userId) {
-        setUser(await getUserData(userId))
-      }
-      setLoading(false)
-    }
-    fetchData()
-  }, [userId])
-
-  useEffect(() => {
-    if (user) {
-      const eventsId = user.events
-      setEvents(eventsId)
-    }
-      }, [user, userId])
-
-  
-  if (loading || !user) {
-    return <LoadingScreen />
-  }
   return (
     <View style={styles.container}>
-      <Text>profile events</Text>
-      <Text>{events}</Text>
+      <EventScreen
+        onEventPress={(event) =>
+          navigation.navigate("ViewEvent", { eventUid: event.uid })
+        }
+        userID={userId}
+      />
     </View>
   )
 }

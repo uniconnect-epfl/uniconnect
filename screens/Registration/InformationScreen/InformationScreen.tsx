@@ -43,7 +43,9 @@ const InformationScreen: React.FC = () => {
   const opacity = !hasBeenTouched ? 0.2 : 1
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+    <TouchableWithoutFeedback 
+      style={styles.container}
+      onPress={() => Keyboard.dismiss()}>
       <View
         style={[
           styles.container,

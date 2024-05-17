@@ -8,10 +8,10 @@ import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../assets/global/globalStyles"
 
 type IconName =
-  | "home"
-  | "home-outline"
-  | "duplicate"
-  | "duplicate-outline"
+  | "globe"
+  | "globe-outline"
+  | "magnet"
+  | "magnet-outline"
   | "compass"
   | "compass-outline"
 
@@ -52,9 +52,9 @@ export const TabBar = ({
         let iconName: IconName = "home"
 
         if (route.name === "Network")
-          iconName = focused ? "home" : "home-outline"
+          iconName = focused ? "globe" : "globe-outline"
         if (route.name === "Add")
-          iconName = focused ? "duplicate" : "duplicate-outline"
+          iconName = focused ? "magnet" : "magnet-outline"
         if (route.name === "Explore")
           iconName = focused ? "compass" : "compass-outline"
 

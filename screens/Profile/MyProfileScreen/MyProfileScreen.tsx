@@ -31,31 +31,35 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
     const fetchData = async () => {
       setLoading(true)
       if (userId) {
+        console.log(userId)
         setUser(await getUserData(userId))
+        console.log(user)
       }
       setLoading(false)
     }
     fetchData()
-  }, [userId])
+    console.log(user)
+  }, [])
 
   if (loading || !user) {
     return <LoadingScreen />
   }
   return (
     <View style={styles.container}>
-      <View style={profileStyles.topBackground} />
+      
       <View style={profileStyles.profileContainer}>
         <View style={profileStyles.topProfileContainer}>
           <GeneralProfile
             name={user.firstName}
             surname={user.lastName}
             location={user.location}
+            profilePicture={user.profilePicture}
           />
 
           <View style={profileStyles.buttonsContainer}>
             <TouchableOpacity
               style={profileStyles.button}
-              onPress={() => navigation.navigate("UpdateProfile")}
+              onPress={() => navigation.navigate("UpdateProfile", { user: user } )}
             >
               <Text style={[globalStyles.boldText, profileStyles.buttonText]}>
                 Update

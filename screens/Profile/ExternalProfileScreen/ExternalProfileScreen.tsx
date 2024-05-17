@@ -75,7 +75,6 @@ const ExternalProfileScreen = () => {
   return (
 
     <View style={styles.container}>
-      <View style={profileStyles.topBackground} />
       <View style={profileStyles.profileContainer}>
 
         <View style={profileStyles.topProfileContainer}>
@@ -84,6 +83,7 @@ const ExternalProfileScreen = () => {
             name={externalUser.firstName}
             surname={externalUser.lastName}
             location={externalUser.location}
+            profilePicture={externalUser.profilePicture}
           />
           
           {isFriend ? (

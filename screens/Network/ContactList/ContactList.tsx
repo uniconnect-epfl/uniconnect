@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import {
   View,
   Text,
   FlatList,
   Image,
-  TextInput,
   TouchableOpacity,
 } from "react-native"
 import { styles } from "./styles"
@@ -12,6 +11,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import { black } from "../../../assets/colors/colors"
 import { Contact } from "../../../types/Contact"
+import InputField from "../../../components/InputField/InputField"
 
 interface ContactListProps {
   onContactPress: (uid: string) => void
@@ -19,13 +19,8 @@ interface ContactListProps {
 }
 
 const ContactList = ({ onContactPress, contacts }: ContactListProps) => {
-  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([])
-  const [searchText, setSearchText] = useState<string>("")
-
-  useEffect(() => {
-    if (contacts.length === 0) return
-    setFilteredContacts(contacts)
-  }, [contacts])
+  const [filteredContacts, setFilteredContacts] = useState(contacts)
+  const [searchText, setSearchText] = useState("")
 
   const handleSearch = (text: string) => {
     setSearchText(text)
@@ -74,16 +69,18 @@ const ContactList = ({ onContactPress, contacts }: ContactListProps) => {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={styles.searchBar}
+      <InputField
         placeholder="Search..."
         value={searchText}
         onChangeText={handleSearch}
+        onSubmitEditing={() => {}}
       />
+
       <FlatList
+        style={styles.listContainer}
         data={filteredContacts}
-        keyExtractor={(contact) => contact.uid}
         renderItem={RenderOneContact}
+        keyExtractor={(contact) => contact.uid}
       />
     </View>
   )

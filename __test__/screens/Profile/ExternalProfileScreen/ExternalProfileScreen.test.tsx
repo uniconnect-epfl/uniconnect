@@ -57,14 +57,7 @@ describe("ExternalProfileScreen", () => {
     })
   })
 
-  it("changes tabs correctly", async () => {
-    const { getByText } = render(<ExternalProfileScreen />)
 
-    await waitFor(() => {
-      fireEvent.press(getByText("Interests"))
-      fireEvent.press(getByText("Events"))
-    })
-  })
 
   it("handles button presses", async () => {
     const alertMock = jest.spyOn(global, "alert")

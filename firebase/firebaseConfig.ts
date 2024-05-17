@@ -1,8 +1,9 @@
 //@ts-expect-error - getReatNativePersistence is not a named export
 import { initializeAuth, getReactNativePersistence } from "firebase/auth"
-import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage"
-import { initializeApp } from "firebase/app"
+import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage'
+import { initializeApp } from "firebase/app" 
 import { getFirestore } from "firebase/firestore"
+import { getStorage } from "firebase/storage"
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -24,3 +25,4 @@ export const db = getFirestore(FIREBASE_APP)
 export const auth = initializeAuth(FIREBASE_APP, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage),
 })
+export const storage = getStorage(FIREBASE_APP)

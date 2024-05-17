@@ -8,5 +8,6 @@ export type User = {
   description: string
   location: string
   selectedInterests: string[]
+  profilePicture: string
   events: string[]
 }

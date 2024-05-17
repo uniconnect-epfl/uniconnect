@@ -40,7 +40,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
   })
 
   const [friends, setFriends] = useState<string[] | null>(null)
-  const [contacts, setContacts] = useState<Contact[]>([])
+  const [contacts, setContacts] = useState<Contact[] | null>(null)
 
   useEffect(() => {
     let tempUserId = getAuth().currentUser?.uid
@@ -57,6 +57,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
       }
     }
     fetchData()
+    console.log("USER ID: ", userId)
   }, [userId])
 
   useEffect(() => {
@@ -87,12 +88,17 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
       setContacts(contacts)
     }
     if (friends) {
-      createList()
+      if (friends.length > 0) {
+        createList()
+      } else {
+        console.log("HERE")
+        setContacts([])
+      }
     }
   }, [friends])
 
   useEffect(() => {
-    if (contacts.length > 0) {
+    if (contacts) {
       loadGraphData(userId, userContact, contacts).then((graph) => {
         setGraph(graph)
       })

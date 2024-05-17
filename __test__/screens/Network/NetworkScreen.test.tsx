@@ -10,6 +10,7 @@ import {
 import { FirebaseError } from "firebase/app"
 import { Auth } from "firebase/auth"
 import { User } from "../../../types/User"
+import { loginEmailPassword } from "../../../firebase/Login"
 
 // Mock AsyncStorage methods
 jest.mock("@react-native-async-storage/async-storage", () => ({
@@ -89,8 +90,9 @@ jest.mock("firebase/auth", () => ({
     }),
 }))
 
-beforeAll(() => {
+beforeAll(async () => {
   global.alert = jest.fn()
+  await loginEmailPassword("gasthoral@gmail.com", "Abcdefg123")
 })
 
 describe("NetworkScreen", () => {
@@ -124,7 +126,7 @@ describe("NetworkScreen", () => {
 
     await waitFor(
       () => {
-        const profileButton = component.getByText("gg aa")
+        const profileButton = component.getByText("Gustave Charles")
         fireEvent.press(profileButton)
         expect(mockNavigation.navigate).toHaveBeenCalled()
       },
@@ -351,10 +353,10 @@ describe("NetworkScreen", () => {
       })
 
       act(() => {
-        fireEvent.changeText(searchBar, "gg")
+        fireEvent.changeText(searchBar, "Gustave")
       })
 
-      expect(searchBar.props.value).toBe("gg")
+      expect(searchBar.props.value).toBe("Gustave")
 
       act(() => {
         fireEvent(touchable, "press")
@@ -381,10 +383,10 @@ describe("NetworkScreen", () => {
       expect(searchBar).toBeTruthy()
 
       act(() => {
-        fireEvent.changeText(searchBar, "gg")
+        fireEvent.changeText(searchBar, "Gustave")
       })
 
-      expect(searchBar.props.value).toBe("gg")
+      expect(searchBar.props.value).toBe("Gustave")
     })
   })
 })
