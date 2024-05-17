@@ -18,7 +18,7 @@ const NodeModal: React.FC<{
   onPressOut: () => void
   onContactPress: (uid: string) => void
 }> = ({ node, visible, onPressOut, onContactPress }) => {
-  const translateY = useRef(new Animated.Value(0)).current
+  const translateY = useRef(new Animated.Value(3)).current
 
   const [modalVisible, setModalVisible] = useState(false)
 
