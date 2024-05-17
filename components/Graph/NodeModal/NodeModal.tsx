@@ -35,9 +35,9 @@ const NodeModal: React.FC<{
     // Fast animation to move to final position
     const fastAnimation = Animated.timing(translateY, {
       toValue: 0, // Move slightly above the final position
-      duration: 1500, // Fast duration
+      duration: 2000, // Fast duration
       useNativeDriver: true,
-      easing: Easing.elastic(3), // Use the elastic easing
+      easing: Easing.elastic(2), // Use the elastic easing
     })
 
     fastAnimation.start()
