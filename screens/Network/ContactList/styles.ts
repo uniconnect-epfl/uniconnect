@@ -1,16 +1,17 @@
 import { StyleSheet } from "react-native"
-import { lightPeach, peach } from "../../../assets/colors/colors"
+import { lightGray, lightPeach, peach } from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
   cardContainer: {
     alignItems: "center",
+    alignSelf: "center",
     backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: 100,
     height: 80,
     justifyContent: "center",
     marginVertical: 5,
-    width: "100%",
+    width: "90%",
   },
   container: {
     flex: 1,
@@ -28,9 +29,6 @@ export const styles = StyleSheet.create({
     paddingRight: "5%",
     width: "100%",
   },
-  listContainer: {
-    flex: 1,
-  },
   profilePicture: {
     alignItems: "center",
     borderColor: peach,
@@ -41,5 +39,15 @@ export const styles = StyleSheet.create({
     left: 0,
     position: "absolute",
     width: 80,
+  },
+  searchBar: {
+    alignSelf: "center",
+    borderColor: lightGray,
+    borderRadius: 40,
+    borderWidth: 1,
+    height: 40,
+    marginVertical: 10,
+    padding: 20,
+    width: "90%",
   },
 })
