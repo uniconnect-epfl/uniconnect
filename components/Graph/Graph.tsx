@@ -21,7 +21,6 @@ interface Node {
   magicSelected?: boolean
   contact: Contact
   level: number
-  outsideScreen?: boolean
 }
 
 /**
@@ -178,9 +177,35 @@ function getNodes(graph: Graph): Node[] {
  */
 function deleteNode(graph: Graph, id: string) {
   graph.nodes = graph.nodes.filter((node) => node.id !== id)
-  graph.links = graph.links.filter((link) => {
-    return link.source !== id && link.target !== id
-  })
+  graph.links = graph.links.filter(
+    (link) => link.source !== id && link.target !== id
+  )
+}
+
+/**
+ * Function to delete a link from the graph
+ * @param graph - The graph
+ * @param source - The unique identifier of the source node
+ * @param target - The unique identifier of the target node
+ * @returns void
+ */
+function deleteLink(graph: Graph, source: string, target: string) {
+  graph.links = graph.links.filter(
+    (link) => link.source !== source || link.target !== target
+  )
+}
+
+/**
+ * Function to get a link by the unique identifiers of the source and target nodes
+ * @param graph - The graph
+ * @param source - The unique identifier of the source node
+ * @param target - The unique identifier of the target node
+ * @returns The link with the specified unique identifiers of the source and target nodes
+ */
+function getLink(graph: Graph, source: string, target: string): Link {
+  return graph.links.find(
+    (link) => link.source === source && link.target === target
+  ) as Link
 }
 
 /**
@@ -220,6 +245,8 @@ export {
   getNodeById,
   getNodes,
   deleteNode,
+  deleteLink,
+  getLink,
   getLinks,
   getInitialized,
   setInitialized,

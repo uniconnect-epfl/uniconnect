@@ -16,12 +16,12 @@ import * as WebBrowser from "expo-web-browser"
 import * as Linking from "expo-linking"
 
 // import HomeScreen from "./screens/Home/HomeScreen"
+import { destroyGraphFileIfExists } from "./screens/Contacts/ExploreScreen"
 
 // Call the function to destroy the graph file when the app launches
 destroyGraphFileIfExists()
 
 import Toast from "react-native-toast-message"
-import { destroyGraphFileIfExists } from "./components/Graph/GraphFileFunctions"
 
 SplashScreen.preventAutoHideAsync()
 

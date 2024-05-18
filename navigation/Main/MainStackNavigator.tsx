@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import OnboardingScreen from "../../screens/Onboarding/OnboardingScreen"
 import InformationScreen from "../../screens/Registration/InformationScreen/InformationScreen"
 import InterestsScreen from "../../screens/Registration/InterestsScreen/InterestsScreen"
-import ExploreTabNavigator from "../Home/HomeTabNavigator"
+import HomeTabNavigator from "../Home/HomeTabNavigator"
 import { MyProfileScreen } from "../../screens/Profile/MyProfileScreen/MyProfileScreen"
 import { SettingsScreen } from "../../screens/Settings/SettingsScreen"
 import AuthenticationScreen from "../../screens/Registration/AuthenticationScreen/AuthenticationScreen"
@@ -18,7 +18,7 @@ import LoadingScreen from "../../screens/Loading/LoadingScreen"
 import MapsScreen from "../../screens/Maps/EventMap"
 import { isNewUser, storeInitialUserData } from "../../firebase/Registration"
 import { RegistrationContext } from "../../contexts/RegistrationContext"
-import EventScreen from "../../screens/Explore/EventScreen/EventScreen"
+import EventScreen from "../../screens/Home/EventScreen/EventScreen"
 import ViewEventScreen from "../../screens/ViewDetails/ViewEventScreen/ViewEventScreen"
 import ViewAnnoucementScreen from "../../screens/ViewDetails/ViewAnnouncementScreen/ViewAnnouncementScreen"
 import { SelectLocationScreen } from "../../screens/SelectLocation/SelectLocationScreen"
@@ -90,12 +90,12 @@ const MainStackNavigator: React.FC = () => {
         setSelectedInterests,
       }}
     >
-      <Stack.Navigator initialRouteName={user ? "ExploreTabs" : "Onboarding"}>
+      <Stack.Navigator initialRouteName={user ? "HomeTabs" : "Onboarding"}>
         {user ? (
           <>
             <Stack.Screen
-              name="ExploreTabs"
-              component={ExploreTabNavigator}
+              name="HomeTabs"
+              component={HomeTabNavigator}
               options={{ headerShown: false }}
             />
             <Stack.Screen

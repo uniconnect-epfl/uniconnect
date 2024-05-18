@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
-
 import {
   ActivityIndicator,
+  View,
   Dimensions,
   TouchableWithoutFeedback,
   Vibration,
@@ -11,12 +11,9 @@ import Svg, {
   Circle,
   G,
   Line,
-  ClipPath,
   Text as SVGText,
   Image,
-  Defs,
-  RadialGradient,
-  Stop,
+  ClipPath,
 } from "react-native-svg"
 
 import styles from "./styles"
@@ -43,7 +40,7 @@ import { globalStyles } from "../../../assets/global/globalStyles"
 import { showErrorToast } from "../../ToastMessage/toast"
 
 // Constants used for the gestures
-const DOUBLE_PRESS_DURATION = 300 // When the press is more longer than 100ms, we consider that it is intended for dragging a node
+const DOUBLE_PRESS_DURATION = 200 // When the press is more longer than 100ms, we consider that it is intended for dragging a node
 const PAN_GESTURE_MIN_MAX_POINTERS = 1 // Minimum and maximum number of pointers for the pan gesture (i.e., one finger)
 const DEFAULT_CLICKED_NODE_ID = ""
 
@@ -63,7 +60,7 @@ const CENTER_WIDTH = WIDTH / 2 // Center X-coordinates of the screen
 const CENTER_HEIGHT = HEIGHT / 2 // Center Y-coordinates of the screen
 const INITIAL_SCALE = 20 // Initial scale of the graph
 const DEFAULT_SCALE = 1 // Default scale of the graph
-const MODAL_SCALE = 8 // Scale of the graph when a node is clicked
+const MODAL_SCALE = 4 // Scale of the graph when a node is clicked
 
 // Constants used for the animation
 const ANIMATION_DURATION = 500 // Duration of the animation in milliseconds
@@ -82,7 +79,6 @@ const ForceDirectedGraph: React.FC<{
   modalPressedOut: boolean
   onModalPress: (uid: string) => void
   onMagicPress: (uid: string) => void
-  reload?: () => void
 }> = ({
   graph,
   constrainedNodeId,
@@ -90,21 +86,22 @@ const ForceDirectedGraph: React.FC<{
   modalPressedOut,
   onModalPress,
   onMagicPress,
-  reload,
 }) => {
   const [transitionScale] = useState(new Animated.Value(20))
   const [transitionTranslateX] = useState(new Animated.Value(0))
   const [transitionTranslateY] = useState(new Animated.Value(0))
-
-  const [animationStarted, setAnimationStarted] = useState(false)
 
   const zoomAndTranslate = (
     animationScale: number,
     animationX: number,
     animationY: number
   ) => {
-    setAnimationStarted(true)
     Animated.parallel([
+      Animated.timing(transitionScale, {
+        toValue: animationScale,
+        duration: ANIMATION_DURATION,
+        useNativeDriver: true,
+      }),
       Animated.timing(transitionTranslateX, {
         toValue: animationX,
         duration: ANIMATION_DURATION,
@@ -112,11 +109,6 @@ const ForceDirectedGraph: React.FC<{
       }),
       Animated.timing(transitionTranslateY, {
         toValue: animationY,
-        duration: ANIMATION_DURATION,
-        useNativeDriver: true,
-      }),
-      Animated.timing(transitionScale, {
-        toValue: animationScale,
         duration: ANIMATION_DURATION,
         useNativeDriver: true,
       }),
@@ -158,36 +150,9 @@ const ForceDirectedGraph: React.FC<{
     </ClipPath>
   )
 
-  const animationMask = (
-    id: string,
-    cx: number,
-    cy: number,
-    radius: number
-  ) => (
-    <Defs>
-      <RadialGradient
-        id={id}
-        cx={cx}
-        cy={cy}
-        rx={radius}
-        ry={radius}
-        fx={cx}
-        fy={cy}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset="0" stopColor="#000" stopOpacity="0.5" />
-        <Stop offset="1" stopColor="#fff" stopOpacity="0.75" />
-      </RadialGradient>
-    </Defs>
-  )
-
   useEffect(() => {
     if (modalPressedOut) {
-      setTimeout(() => {
-        zoomAndTranslate(DEFAULT_SCALE, 0, 0)
-        setAnimationStarted(false)
-        setTotalOffset({ x: 0, y: 0 })
-      }, 100)
+      zoomAndTranslate(DEFAULT_SCALE, 0, 0)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalPressedOut])
@@ -211,9 +176,6 @@ const ForceDirectedGraph: React.FC<{
       )
       // Set the graph as initialized to avoid running the algorithm again
       setInitialized(graph, true)
-      if (reload) {
-        reload()
-      }
     } else {
       // If the graph is already initialized, we don't need to run the algorithm again as the nodes are already positioned
       setNodes(getNodes(graph))
@@ -221,11 +183,7 @@ const ForceDirectedGraph: React.FC<{
     setLoad(true)
     transitionTranslateX.setValue(0)
     transitionTranslateY.setValue(0)
-    setTotalOffset({ x: 0, y: 0 })
     zoomAndTranslate(DEFAULT_SCALE, 0, 0)
-    setTimeout(() => {
-      setAnimationStarted(false)
-    }, ANIMATION_DURATION)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [graph, constrainedNodeId, magicNodeId])
 
@@ -264,9 +222,7 @@ const ForceDirectedGraph: React.FC<{
 
   // Handle Zooming
   const handlePinchGestureEvent = (event: {
-    nativeEvent: {
-      scale: React.SetStateAction<number>
-    }
+    nativeEvent: { scale: React.SetStateAction<number> }
   }) => {
     setScale(Number(event.nativeEvent.scale) * Number(lastScale))
   }
@@ -356,12 +312,6 @@ const ForceDirectedGraph: React.FC<{
           coordY(node),
           DEFAULT_NODE_SIZE / node.level
         )}
-        {animationMask(
-          `mask-${node.id}`,
-          coordX(node),
-          coordY(node),
-          DEFAULT_NODE_SIZE / node.level
-        )}
       </G>
       {/* Circle to highlight the node when it is selected */}
       <Circle
@@ -374,19 +324,6 @@ const ForceDirectedGraph: React.FC<{
 
       {/* Allow the node to be clicked and / or dragged */}
       <TouchableWithoutFeedback
-        onLayout={(event) => {
-          const layout = event.nativeEvent.layout
-          if (
-            layout.x < 0 ||
-            layout.y < 0 ||
-            layout.x + layout.width > WIDTH ||
-            layout.y + layout.height > HEIGHT
-          ) {
-            node.outsideScreen = true
-          } else {
-            node.outsideScreen = false
-          }
-        }}
         onPress={() => {
           setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
         }}
@@ -396,29 +333,18 @@ const ForceDirectedGraph: React.FC<{
               setClickedNodeID(node.id)
             },
             () => {
-              if (node.outsideScreen) {
-                showErrorToast("You cannot select a node outside the screen.")
-                setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-              } else {
-                onModalPress(node.id)
-
-                // Adjust the zoom and translate to account for the scale
-                zoomAndTranslate(
-                  MODAL_SCALE / scale,
-                  (CENTER_WIDTH - coordX(node)) * scale,
-                  (CENTER_HEIGHT - coordY(node)) * scale
-                )
-                setAnimationStarted(false)
-              }
+              onModalPress(node.id)
+              zoomAndTranslate(
+                MODAL_SCALE,
+                (CENTER_WIDTH - coordX(node)) * scale,
+                (CENTER_HEIGHT - coordY(node)) * scale
+              )
             }
           )
         }}
         onLongPress={() => {
           Vibration.vibrate()
-          if (node.outsideScreen) {
-            showErrorToast("You cannot select a node outside the screen.")
-            setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-          } else if (node.level > 2) {
+          if (node.level > 2) {
             showErrorToast("You can only view friends of friends")
             setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
           } else {
@@ -446,47 +372,22 @@ const ForceDirectedGraph: React.FC<{
             setTimeout(() => {
               onMagicPress(node.id)
               setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-            }, ANIMATION_DURATION)
+            }, 2 * ANIMATION_DURATION)
           }
         }}
-        hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
       >
-        <G>
-          {/* Profile picture of the node */}
-          {node.contact.profilePictureUrl === "" ? (
-            <Image
-              key={node.id + "image"}
-              x={coordX(node) - DEFAULT_NODE_SIZE / node.level}
-              y={coordY(node) - DEFAULT_NODE_SIZE / node.level}
-              width={(2 * DEFAULT_NODE_SIZE) / node.level}
-              height={(2 * DEFAULT_NODE_SIZE) / node.level}
-              href={require("../../../assets/default_profile_picture.png")}
-              clipPath={`url(#clipPath-${node.id})`}
-              preserveAspectRatio="xMidYMid slice"
-              testID={"node-" + node.id}
-            />
-          ) : (
-            <Image
-              key={node.id + "image"}
-              x={coordX(node) - DEFAULT_NODE_SIZE / node.level}
-              y={coordY(node) - DEFAULT_NODE_SIZE / node.level}
-              width={(2 * DEFAULT_NODE_SIZE) / node.level}
-              height={(2 * DEFAULT_NODE_SIZE) / node.level}
-              xlinkHref={node.contact.profilePictureUrl}
-              clipPath={`url(#clipPath-${node.id})`}
-              preserveAspectRatio="xMidYMid slice"
-              testID={"node-" + node.id}
-            />
-          )}
-
-          <Circle
-            key={node.id + "mask"}
-            cx={coordX(node)}
-            cy={coordY(node)}
-            r={DEFAULT_NODE_SIZE / node.level}
-            fill={animationStarted ? `url(#mask-${node.id})` : transparent}
-          />
-        </G>
+        {/* Profile picture of the node */}
+        <Image
+          key={node.id + "image"}
+          x={coordX(node) - DEFAULT_NODE_SIZE / node.level}
+          y={coordY(node) - DEFAULT_NODE_SIZE / node.level}
+          width={(2 * DEFAULT_NODE_SIZE) / node.level}
+          height={(2 * DEFAULT_NODE_SIZE) / node.level}
+          xlinkHref={node.contact.profilePictureUrl}
+          clipPath={`url(#clipPath-${node.id})`}
+          preserveAspectRatio="xMidYMid slice"
+          testID={"node-" + node.id}
+        />
       </TouchableWithoutFeedback>
 
       {/* Text to display the name of the node if it is not your own */}
@@ -528,22 +429,29 @@ const ForceDirectedGraph: React.FC<{
           simultaneousHandlers={pinchRef}
           testID="pan-handler"
         >
-          <Animated.View
-            style={{
-              transform: [
-                { scale: transitionScale },
-                { translateX: transitionTranslateX },
-                { translateY: transitionTranslateY },
-              ],
-            }}
-          >
-            <Svg width={WIDTH} height={HEIGHT}>
-              <G scale={scale} originX={CENTER_WIDTH} originY={CENTER_HEIGHT}>
-                {LINKS}
-                {NODES}
-              </G>
-            </Svg>
-          </Animated.View>
+          <View style={styles.container}>
+            <Animated.View
+              style={{
+                transform: [
+                  { scale: transitionScale },
+                  { translateX: transitionTranslateX },
+                  { translateY: transitionTranslateY },
+                ],
+              }}
+            >
+              <Svg width={WIDTH} height={HEIGHT}>
+                <G
+                  scale={scale}
+                  originX={CENTER_WIDTH}
+                  originY={CENTER_HEIGHT}
+                  testID="group"
+                >
+                  {LINKS}
+                  {NODES}
+                </G>
+              </Svg>
+            </Animated.View>
+          </View>
         </PanGestureHandler>
       </PinchGestureHandler>
     </GestureHandlerRootView>

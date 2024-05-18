@@ -52,16 +52,19 @@ const AuthenticationScreen: React.FC = () => {
   }
 
   const submitForm = async () => {
-    if (!isPassword()) {
+    if(!isPassword()) {
       showErrorToast("Password must be at least 8 characters long")
       return
-    } else if (!doPasswordsMatch()) {
+    }
+    else if(!doPasswordsMatch()) {
       showErrorToast("Passwords do not match")
       return
-    } else if (!isEmail()) {
+    }
+    else if(!isEmail()) {
       showErrorToast("Please enter a valid email address")
       return
-    } else if (!doEmailsMatch()) {
+    }
+    else if(!doEmailsMatch()) {
       showErrorToast("Emails do not match")
       return
     }
@@ -70,12 +73,7 @@ const AuthenticationScreen: React.FC = () => {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View
-        style={[
-          styles.view,
-          { paddingBottom: insets.bottom, paddingTop: insets.top },
-        ]}
-      >
+      <View style={[styles.view, {paddingBottom: insets.bottom, paddingTop: insets.top }]}>
         <Image
           source={require("../../../assets/icon.png")}
           style={styles.image}
@@ -103,6 +101,7 @@ const AuthenticationScreen: React.FC = () => {
         ></InputField>
 
         <View style={styles.container}>
+
           <View style={styles.phrase}>
             {!doPasswordsMatch() && <Entypo name="cross" color={red} />}
             {doPasswordsMatch() && <AntDesign name="check" color={green} />}
@@ -144,15 +143,11 @@ const AuthenticationScreen: React.FC = () => {
           value={confirmEmail}
           ref={thirdRef}
         ></InputField>
-        {!keyboardVisible && (
-          <View style={[styles.absolute, { paddingBottom: insets.bottom }]}>
-            <LowBar
-              nextScreen="ExploreTabs"
-              buttonText="Confirm"
-              authenticate={submitForm}
-            />
+        {!keyboardVisible &&
+          <View style={[styles.absolute, {paddingBottom: insets.bottom}]}>
+            <LowBar nextScreen="HomeTabs" buttonText="Confirm" authenticate={submitForm} />
           </View>
-        )}
+        }
       </View>
     </TouchableWithoutFeedback>
   )
