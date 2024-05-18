@@ -244,5 +244,13 @@ describe("manageEvents", () => {
       expect(events).toEqual([])
       expect(showErrorToast).toHaveBeenCalledWith("Error fetching events. Please check your connection and try again.")
     })
+
+    it("should handle error and return empty array", async () => {
+      getDocs.mockRejectedValueOnce(new Error("Failed to fetch"))
+
+      await getEventData("123")
+
+      expect(showErrorToast).toHaveBeenCalledWith("Error fetching event data. Please check your connection and try again.")
+    })
   })
 })
