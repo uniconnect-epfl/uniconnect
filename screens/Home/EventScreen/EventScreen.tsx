@@ -197,9 +197,10 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
           showsVerticalScrollIndicator={false}
           stickySectionHeadersEnabled={false}
           refreshControl={
-            <RefreshControl
+            <RefreshControl 
               refreshing={refreshing}
               onRefresh={onRefresh}
+              testID="refresh-control"
             />}
         />
       </View>
