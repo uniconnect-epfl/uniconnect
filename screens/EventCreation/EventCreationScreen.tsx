@@ -40,12 +40,6 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
 
   const publish = async () => {
     // send the data to the backend
-    console.log("Publishing event...")
-    console.log("Title:", title)
-    console.log("Location:", location)
-    console.log("Description:", description)
-    console.log("Date:", date.toISOString())
-    console.log("Interests:", interests)
 
     if (isAnnouncement) {
       newAnnouncement()

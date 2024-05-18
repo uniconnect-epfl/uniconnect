@@ -50,13 +50,15 @@ describe("manageEvents", () => {
     it("should create an event and display success message", async () => {
       const title = "test title"
       const description = "description"
-      const date = new Date()
+      const date = new Date().toISOString()
       const point: Point = { x: 47.238458, y: 5.984155 }
       const location = "location"
       const imageUrl = "imageUrl"
+      const host = "123"
+      const participants = [host]
 
       doc.mockReturnValueOnce({ id: "123" })
-      await createEvent(title, description, date, point, location, imageUrl)
+      await createEvent(title, description, date, point, location, imageUrl,host )
 
       expect(setDoc).toHaveBeenCalledWith(expect.any(Object), {
         uid: "123",
@@ -66,6 +68,8 @@ describe("manageEvents", () => {
         date,
         description,
         imageUrl,
+        participants,
+        host,
       })
       expect(showSuccessToast).toHaveBeenCalledWith("Event created successfully!")
     })
@@ -73,14 +77,15 @@ describe("manageEvents", () => {
     it("should handle error and display error message", async () => {
       const title = "not test title"
       const description = "description"
-      const date = new Date()
+      const date = new Date().toISOString()
       const point: Point = { x: 47.238458, y: 5.984155 }
       const location = "location"
       const imageUrl = "imageUrl"
+      const userId = "123"
 
       setDoc.mockRejectedValueOnce(new Error("Failed to store event"))
 
-      await createEvent(title, description, date, point, location, imageUrl)
+      await createEvent(title, description, date, point, location, imageUrl, userId)
 
       expect(showErrorToast).toHaveBeenCalledWith("There was an error storing your event data, please try again.")
     })
@@ -89,14 +94,20 @@ describe("manageEvents", () => {
   describe("getEventData", () => {
     it("should fetch a single event successfully", async () => {
       const eventUid = "123"
+      const date = new Date().toISOString()
+      const host = "123"
+      const participants = [host]
+
       const mockEvent = {
         uid: eventUid,
         title: "Event",
         location: "location",
         point: { x: 47.238458, y: 5.984155 },
         description: "description",
-        date: Timestamp.fromDate(new Date()),
+        date: date,
         imageUrl: "imageUrl",
+        participants,
+        host,
       }
 
       getDoc.mockResolvedValueOnce({
@@ -112,8 +123,10 @@ describe("manageEvents", () => {
         location: "location",
         point: { x: 47.238458, y: 5.984155 },
         description: "description",
-        date: expect.any(Date),
+        date: date,
         imageUrl: "imageUrl",
+        participants,
+        host,
       })
     })
 

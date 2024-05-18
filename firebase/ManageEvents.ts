@@ -84,7 +84,6 @@ export const getAllFutureEvents = async () => {
       host: doc.data().host as string
     })
     )
-    console.log("events un fetching", events)
     return events
   } catch (error) {
     showErrorToast("Error fetching events. Please check your connection and try again.")
