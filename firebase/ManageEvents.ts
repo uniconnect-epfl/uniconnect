@@ -27,6 +27,20 @@ export async function createEvent(title: string, description: string, date: stri
   return undefined
 }
 
+const formatEvent = (doc: DocumentData) => {
+  return {
+    uid: doc.data().uid as string,
+    title: doc.data().title as string,
+    location: doc.data().location as string,
+    point: doc.data().point as Point,
+    description: doc.data().description as string,
+    date: doc.data().date as string,
+    imageUrl: doc.data().imageUrl as string,
+    participants: doc.data().participants as string[],
+    host: doc.data().host as string
+  }
+}
+
 export const getAllPastEvents = async () => {
   try {
     // Reference to the events collection
@@ -39,17 +53,9 @@ export const getAllPastEvents = async () => {
     const q = query(eventsRef, where("date", "<", nowIsoString), orderBy("date", "desc"))
     // Execute the query
     const querySnapshot = await getDocs(q)
-    const events: Event[] = querySnapshot.docs.map((doc) => ({
-      uid: doc.data().uid as string,
-      title: doc.data().title as string,
-      location: doc.data().location as string,
-      point: doc.data().point as Point,
-      description: doc.data().description as string,
-      date: doc.data().date as string,
-      imageUrl: doc.data().imageUrl as string,
-      participants: doc.data().participants as string[],
-      host: doc.data().host as string
-    })
+    const events: Event[] = querySnapshot.docs.map((doc) => (
+      formatEvent(doc)
+    )
     )
     return events
   } catch (error) {
@@ -71,17 +77,9 @@ export const getAllFutureEvents = async () => {
 
     // Execute the query
     const querySnapshot = await getDocs(q)
-    const events: Event[] = querySnapshot.docs.map((doc) => ({
-      uid: doc.data().uid as string,
-      title: doc.data().title as string,
-      location: doc.data().location as string,
-      point: doc.data().point as Point,
-      description: doc.data().description as string,
-      date: doc.data().date as string,
-      imageUrl: doc.data().imageUrl as string,
-      participants: doc.data().participants as string[],
-      host: doc.data().host as string
-    })
+    const events: Event[] = querySnapshot.docs.map((doc) => (
+      formatEvent(doc)
+    )
     )
     return events
   } catch (error) {
