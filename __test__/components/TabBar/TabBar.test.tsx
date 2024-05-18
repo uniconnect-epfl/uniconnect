@@ -4,27 +4,27 @@ import { NavigationContainer } from "@react-navigation/native"
 import HomeTabNavigator from "../../../navigation/Home/HomeTabNavigator"
 import { Firestore } from "firebase/firestore"
 
-jest.mock('@react-native-async-storage/async-storage', () =>
-  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+jest.mock("@react-native-async-storage/async-storage", () =>
+  require("@react-native-async-storage/async-storage/jest/async-storage-mock")
 )
 
 jest.mock("../../../firebase/User", () => ({
   getUserData: jest.fn(() => ({
     firstName: "John",
     lastName: "Doe",
-    location: "London"
-  }))
+    location: "London",
+  })),
 }))
 
 jest.mock("firebase/auth", () => ({
   getReactNativePersistence: jest.fn(() => ({})),
   initializeAuth: jest.fn(() => ({})),
-  onAuthStateChanged: jest.fn(() => ({uid: '123'})),
-  getAuth: jest.fn(() => ({currentUser: {uid: '123'}}))
+  onAuthStateChanged: jest.fn(() => ({ uid: "123" })),
+  getAuth: jest.fn(() => ({ currentUser: { uid: "123" } })),
 }))
 
 jest.mock("../../../firebase/firebaseConfig", () => ({
-  db: jest.fn(() => ({} as Firestore))
+  db: jest.fn(() => ({} as Firestore)),
 }))
 
 const mockNavigate = jest.fn()
@@ -56,28 +56,28 @@ describe("TabBar", () => {
       </NavigationContainer>
     )
 
-    const home = getByText("Home")
-    const connections = getByText("Connections")
+    const network = getByText("Network")
+    const add = getByText("Add")
     const explore = getByText("Explore")
 
     await act(async () => {
-      fireEvent.press(home)
+      fireEvent.press(explore)
       await waitFor(() => {
         expect(getByText("Map View")).toBeTruthy()
       })
     })
 
     await act(async () => {
-      fireEvent.press(connections)
+      fireEvent.press(add)
       await waitFor(() => {
-        expect(getByText("Connections")).toBeTruthy()
+        expect(getByText("Add")).toBeTruthy()
       })
     })
 
     await act(async () => {
-      fireEvent.press(explore)
+      fireEvent.press(network)
       await waitFor(() => {
-        expect(getByText("Plain View")).toBeTruthy()
+        expect(getByText("Graph")).toBeTruthy()
       })
     })
   })
