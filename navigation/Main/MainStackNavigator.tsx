@@ -22,7 +22,7 @@ import EventScreen from "../../screens/Home/EventScreen/EventScreen"
 import ViewEventScreen from "../../screens/ViewDetails/ViewEventScreen/ViewEventScreen"
 import ViewAnnoucementScreen from "../../screens/ViewDetails/ViewAnnouncementScreen/ViewAnnouncementScreen"
 import { SelectLocationScreen } from "../../screens/SelectLocation/SelectLocationScreen"
-
+import { AboutScreen } from "../../screens/Settings/AboutScreen/AboutScreen"
 const Stack = createStackNavigator()
 
 const MainStackNavigator: React.FC = () => {
@@ -162,6 +162,11 @@ const MainStackNavigator: React.FC = () => {
             <Stack.Screen
               name="SelectLocation"
               component={SelectLocationScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="About"
+              component={AboutScreen}
               options={{ headerShown: false }}
             />
           </>
