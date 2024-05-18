@@ -11,7 +11,11 @@ interface LowBarProps {
   authenticate?: () => void
 }
 
-const LowBar: React.FC<LowBarProps> = ({ nextScreen, buttonText, authenticate= () => {} }) => {
+const LowBar: React.FC<LowBarProps> = ({
+  nextScreen,
+  buttonText,
+  authenticate = () => {},
+}) => {
   const navigation = useNavigation()
   const textB = buttonText ? buttonText : "Next"
 
@@ -26,7 +30,11 @@ const LowBar: React.FC<LowBarProps> = ({ nextScreen, buttonText, authenticate= (
 
       <TouchableOpacity
         style={styles.buttonSmall}
-        onPress={() => nextScreen === "HomeTabs" ? authenticate() : navigation.navigate(nextScreen as never)}
+        onPress={() =>
+          nextScreen === "ExploreTabs"
+            ? authenticate()
+            : navigation.navigate(nextScreen as never)
+        }
       >
         <Text style={[styles.buttonText, globalStyles.text]}>{textB}</Text>
       </TouchableOpacity>
