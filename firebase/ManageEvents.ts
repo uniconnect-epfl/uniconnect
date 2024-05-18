@@ -37,7 +37,6 @@ export const getAllPastEvents = async () => {
 
     // This query retrieves events where the eventDate is less than the current date and time.
     const q = query(eventsRef, where("date", "<", nowIsoString), orderBy("date", "desc"))
-
     // Execute the query
     const querySnapshot = await getDocs(q)
     const events: Event[] = querySnapshot.docs.map((doc) => ({
