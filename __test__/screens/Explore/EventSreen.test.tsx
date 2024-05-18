@@ -1,6 +1,6 @@
 
 import { render} from '@testing-library/react-native'
-import EventScreen from '../../../screens/Home/EventScreen/EventScreen'
+import EventScreen from '../../../screens/Explore/EventScreen/EventScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import React from 'react'
 import { Firestore } from 'firebase/firestore'
