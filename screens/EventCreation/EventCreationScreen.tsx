@@ -44,7 +44,7 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
     console.log("Title:", title)
     console.log("Location:", location)
     console.log("Description:", description)
-    console.log("Date:", date.toDateString())
+    console.log("Date:", date.toISOString())
     console.log("Interests:", interests)
 
     if (isAnnouncement) {
@@ -75,7 +75,7 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
       showErrorToast("You must be logged in to create an event")
       return
     }
-    const eventId = await createEvent(title, description, date,{ x: 47.238458, y: 5.984155 }, location, "imageUrl")
+    const eventId = await createEvent(title, description, date.toISOString(),{ x: 47.238458, y: 5.984155 }, location, "imageUrl", userId)
     if (eventId && user) {
       await updateUserEvents(user.uid, eventId)
       showSuccessToast("Event created successfully")

@@ -64,8 +64,8 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
             const userFutureEvents = fetchedFutureEvents.filter(event => userEvents.includes(event.uid))
             const userPastEvents = fetchedPastEvents.filter(event => userEvents.includes(event.uid))
 
-            console.log(userFutureEvents)
-            console.log(userPastEvents)
+            console.log("future events", userFutureEvents)
+            console.log("past eventes", userPastEvents)
 
             setFutureEvents(userFutureEvents)
             setPastEvents(userPastEvents)
