@@ -8,6 +8,7 @@ import {
   DefaultSectionT,
   SectionListData,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native"
 import EventCard from "../../../components/EventCard/EventCard"
 import { styles } from "./styles"
@@ -36,6 +37,7 @@ type RootStackParamList = {
   }
 }
 
+
 const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
@@ -46,16 +48,16 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
   const [sections, setSections] = React.useState<SectionListData<Event[], DefaultSectionT>[]>([])
   const [searchQuery, setSearchQuery] = React.useState("")
   const [loading, setLoading] = React.useState(true)
+  const [refreshing, setRefreshing] = React.useState(false)
+
 
   useEffect(() => {
 
     const loadEvents = async () => {
       try {
         setLoading(true)
-        console.log(userID)
         if (userID) {
           const userData = await getUserData(userID)
-          console.log(userData)
           if (userData) {
             const userEvents = userData.events
             const fetchedFutureEvents = await getAllFutureEvents()
@@ -63,9 +65,6 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 
             const userFutureEvents = fetchedFutureEvents.filter(event => userEvents.includes(event.uid))
             const userPastEvents = fetchedPastEvents.filter(event => userEvents.includes(event.uid))
-
-            console.log(userFutureEvents)
-            console.log(userPastEvents)
 
             setFutureEvents(userFutureEvents)
             setPastEvents(userPastEvents)
@@ -126,7 +125,7 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 
   function groupEventsByTwo(events: Event[]) {
     const grouped = []
-    for (let i = 0; i < events.length; i += 2) {
+    for (let i = 0; i < events.length ;i += 2) {
       if (i + 1 < events.length) {
         grouped.push([events[i], events[i + 1]])
       } else {
@@ -156,6 +155,20 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
     </View>
   )
 
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true)
+    try {
+      // Call your event fetching function here
+      setFutureEvents(await getAllFutureEvents())
+      setPastEvents(await getAllPastEvents())
+    } catch (error) {
+      showErrorToast("Error fetching events. Please check your connection and try again.")
+    } finally {
+      setRefreshing(false)
+    }
+  }, [])  
+
   if (loading) return <LoadingScreen />
 
   return (
@@ -181,6 +194,11 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
           renderSectionHeader={renderSectionHeader}
           showsVerticalScrollIndicator={false}
           stickySectionHeadersEnabled={false}
+          refreshControl={
+            <RefreshControl 
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              />}
         />
       </View>
     </View>

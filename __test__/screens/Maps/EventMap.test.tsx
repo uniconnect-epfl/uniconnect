@@ -45,7 +45,7 @@ describe('Map', () => {
             <Map/>
             )
 
-        const markers = getByText("5/3/2024")
+        const markers = getByText("May 3, 2024")
         expect(markers).toBeTruthy()
         expect(getByText('Balelek 2023')).toBeTruthy() // Check for the title
         expect(getByText('EPFL, Agora')).toBeTruthy() // Check for the location
@@ -56,7 +56,7 @@ describe('Map', () => {
         const { getByText } = render(<Map />)
         const title = getByText('Balelek 2023')
         const location = getByText('EPFL, Agora')
-        const date = getByText('5/3/2024')
+        const date = getByText('May 3, 2024')
 
         expect(title).toBeTruthy()
         expect(location).toBeTruthy()
