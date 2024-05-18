@@ -37,6 +37,7 @@ type RootStackParamList = {
   }
 }
 
+
 const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
@@ -154,16 +155,13 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
     </View>
   )
 
+
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true)
     try {
       // Call your event fetching function here
-      const fetchedFutureEvents = await getAllFutureEvents()
-      const fetchedPastEvents = await getAllPastEvents()
-      setFutureEvents(fetchedFutureEvents)
-      setPastEvents(fetchedPastEvents)
-      setFilteredFutureEvents(fetchedFutureEvents)
-      setFilteredPastEvents(fetchedPastEvents)
+      setFutureEvents(await getAllFutureEvents())
+      setPastEvents(await getAllPastEvents())
     } catch (error) {
       showErrorToast("Error fetching events. Please check your connection and try again.")
     } finally {
@@ -200,8 +198,7 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
             <RefreshControl 
               refreshing={refreshing}
               onRefresh={onRefresh}
-              testID="refresh-control"
-            />}
+              />}
         />
       </View>
     </View>

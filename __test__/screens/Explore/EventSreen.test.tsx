@@ -1,11 +1,10 @@
 
-import { render} from '@testing-library/react-native'
+import { render } from '@testing-library/react-native'
 import EventScreen from '../../../screens/Explore/EventScreen/EventScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import React from 'react'
 import { Firestore } from 'firebase/firestore'
 import { NavigationProp, ParamListBase } from '@react-navigation/native'
-import { getAllFutureEvents, getAllPastEvents } from '../../../firebase/ManageEvents'
 
 
 jest.mock("../../../firebase/firebaseConfig", () => ({
@@ -13,12 +12,12 @@ jest.mock("../../../firebase/firebaseConfig", () => ({
 }))
 
 jest.mock('react-native-safe-area-context', () => {
-  const inset = {top: 0, right: 0, bottom: 0, left: 0}
+  const inset = { top: 0, right: 0, bottom: 0, left: 0 }
   return {
-    SafeAreaProvider: jest.fn(({children}) => children),
-    SafeAreaConsumer: jest.fn(({children}) => children(inset)),
+    SafeAreaProvider: jest.fn(({ children }) => children),
+    SafeAreaConsumer: jest.fn(({ children }) => children(inset)),
     useSafeAreaInsets: jest.fn(() => inset),
-    useSafeAreaFrame: jest.fn(() => ({x: 0, y: 0, width: 390, height: 844})),
+    useSafeAreaFrame: jest.fn(() => ({ x: 0, y: 0, width: 390, height: 844 })),
   }
 })
 jest.mock('@react-native-async-storage/async-storage', () =>
@@ -60,27 +59,25 @@ jest.mock('../../../firebase/ManageEvents', () => ({
 }))
 
 describe('EventScreen', () => {
-    const mockOnEventPress = jest.fn()  // Mock function for onEventPress
 
-    it('refreshes events correctly when user swipes down', async () => {
-        getAllFutureEvents.mockResolvedValue([{ id: '1', title: 'Updated Future Event', date: '2024-01-05' }])
-        getAllPastEvents.mockResolvedValue([{ id: '2', title: 'Updated Past Event', date: '2022-01-05' }])
-    
-        render(
-          <SafeAreaProvider>
-            <EventScreen onEventPress={mockOnEventPress}/>
-          </SafeAreaProvider>
-        )
+  it('refresh', async () => {
 
-        // await waitFor(() => {
-        //     getByTestId('loading-indicator').props.onLoadEnd()
-        // })
-          
-        // fireEvent(getByTestId('refresh-control'), 'onRefresh')
-        
-        // await waitFor(() => {
-        //   expect(getAllFutureEvents).toHaveBeenCalledTimes(1)
-        //   expect(getAllPastEvents).toHaveBeenCalledTimes(1)
-        // })
-    })
+    const { debug } = render(
+      <SafeAreaProvider>
+        <EventScreen onEventPress={() => { }} userID='123' />
+      </SafeAreaProvider>
+    )
+    debug()
+
+    // await waitFor(() => {
+    // const refreshControl = getByTestId('refresh-control');
+    // fireEvent(refreshControl, 'onRefresh');
+    // })
+
+    // await waitFor(() => {
+    //   expect(getAllFutureEvents).toHaveBeenCalled()
+    //   expect(getAllPastEvents).toHaveBeenCalled()
+    // })
+  })
+
 })
