@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { Text, View, TouchableOpacity } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import ExpandableDescription from "../../../components/ExpandableDescription/ExpandableDescription"
@@ -28,16 +28,17 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
   const [loading, setLoading] = useState(true)
   const insets = useSafeAreaInsets()
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      if (userId) {
-        setUser(await getUserData(userId))
-      }
-      setLoading(false)
+  const fetchData = useCallback(async () => {
+    setLoading(true)
+    if (userId) {
+      setUser(await getUserData(userId))
     }
+    setLoading(false)
+  }, [userId])
+
+  useEffect(() => {
     fetchData()
-  }, [])
+  }, [fetchData])
 
 
   if (loading || !user) {
@@ -62,7 +63,7 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
           <View style={profileStyles.buttonsContainer}>
             <TouchableOpacity
               style={profileStyles.button}
-              onPress={() => navigation.navigate("UpdateProfile", { user: user } )}
+              onPress={() => navigation.navigate("UpdateProfile", { user: user, fetchData: fetchData } )}
             >
               <Text style={[globalStyles.boldText, profileStyles.buttonText]}>
                 Update
