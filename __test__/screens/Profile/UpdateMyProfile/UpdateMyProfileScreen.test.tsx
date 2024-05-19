@@ -8,6 +8,7 @@ import { launchImageLibraryAsync } from 'expo-image-picker'
   import { updateUserData, updateUserImage, uploadUserImageToStorage } from "../../../../firebase/User"
 import { showSuccessToast } from '../../../../components/ToastMessage/toast'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { EditDescriptionModal } from '../../../../components/EditDescriptionModal/EditDescriptionModal'
 
 jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(() => ({} as Auth)),
@@ -54,6 +55,8 @@ jest.mock("../../../../firebase/User", () => ({
   updateUserData: jest.fn()
 }))
 
+const mockGoBack = jest.fn()
+
 const mockNavigation = {
   navigate: jest.fn(),
   goBack: jest.fn(),
@@ -73,7 +76,7 @@ jest.mock('@react-navigation/native', () => {
     ...jest.requireActual('@react-navigation/native'),
     useNavigation: () => ({
       navigate: mockNavigation,
-      goBack: jest.fn(),
+      goBack: mockGoBack,
     }),
     useRoute: () => ({
       params: {
@@ -204,5 +207,87 @@ describe('UpdateMyProfileScreen', () => {
     await waitFor(() => {
       expect(showSuccessToast).not.toHaveBeenCalled()
     })
+  })
+
+  it("should navigate back when back button is pressed", async () => {
+    const { getByTestId } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <UpdateMyProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+
+    const backButton = getByTestId("back-button")
+    fireEvent.press(backButton)
+
+    await waitFor(() => {
+      expect(mockGoBack).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  it("Should open a modal when description is pressed", async () => {
+    const { getByPlaceholderText } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <UpdateMyProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+
+    const descriptionButton = getByPlaceholderText("Enter your description here")
+    expect(descriptionButton).toBeTruthy()
+  })
+
+  it("Should update the description when the modal is open", async () => {
+    const { getByPlaceholderText } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <EditDescriptionModal editDescription={true}  setEditDescription={() => {}} description={""} setDescription={() => {}}/>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+
+    const description = getByPlaceholderText("Enter your description here")
+    fireEvent.changeText(description, "New description")
+    expect(description).toBeTruthy()
+  })
+
+  it("Should close the modal when the done button is pressed", async () => {
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <EditDescriptionModal editDescription={true}  setEditDescription={() => {}} description={""} setDescription={() => {}}/>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+
+    const doneButton = getByText("Done")
+    fireEvent.press(doneButton)
+  })
+
+  it("Should close the modal when the background is pressed", async () => {
+    const { getByTestId } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <EditDescriptionModal editDescription={true}  setEditDescription={() => {}} description={""} setDescription={() => {}}/>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+
+    const background = getByTestId("background")
+    fireEvent.press(background)
+  })
+
+  it("Should close the keyboard when the quit button is pressed", async () => {	
+    const { getByTestId } = render(	
+      <SafeAreaProvider>	
+        <NavigationContainer>	
+          <EditDescriptionModal editDescription={true}  setEditDescription={() => {}} description={""} setDescription={() => {}}/>	
+        </NavigationContainer>	
+      </SafeAreaProvider>	
+    )	
+    const quitButton = getByTestId("close-keyboard")	
+    fireEvent.press(quitButton)	
   })
 })

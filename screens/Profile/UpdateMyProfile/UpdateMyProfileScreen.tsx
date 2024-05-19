@@ -112,6 +112,7 @@ export const UpdateMyProfileScreen = () => {
               />
               <InputField
                 label="Description"
+                placeholder="Enter your description here"
                 value={description}
                 editable={false}
                 onPress={() => setEditDescription(true)}
