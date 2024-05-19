@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import ExpandableDescription from "../../../components/ExpandableDescription/ExpandableDescription"
 import GeneralProfile from "../../../components/GeneralProfile/GeneralProfile"
-import { black } from "../../../assets/colors/colors"
+import { black, peach } from "../../../assets/colors/colors"
 import { NavigationProp, ParamListBase } from "@react-navigation/native"
 import { profileStyles } from "../profileStyles"
 import { styles } from "./styles"
@@ -11,11 +11,11 @@ import { globalStyles } from "../../../assets/global/globalStyles"
 import SectionTabs from "../../../components/SectionTabs/SectionTabs"
 import { ProfileEvents } from "../ProfileEvents/ProfileEvents"
 import { ProfileInterests } from "../ProfileInterests/ProfileInterests"
-
 import { getAuth } from "firebase/auth"
 import { User } from "../../../types/User"
 import { getUserData } from "../../../firebase/User"
 import LoadingScreen from "../../Loading/LoadingScreen"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 interface MyProfileScreenProps {
   navigation: NavigationProp<ParamListBase>
@@ -26,28 +26,31 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
   const userId = getAuth().currentUser?.uid
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const insets = useSafeAreaInsets()
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true)
       if (userId) {
-        console.log(userId)
         setUser(await getUserData(userId))
-        console.log(user)
       }
       setLoading(false)
     }
     fetchData()
-    console.log(user)
   }, [])
+
 
   if (loading || !user) {
     return <LoadingScreen />
   }
   return (
     <View style={styles.container}>
-      
-      <View style={profileStyles.profileContainer}>
+      <View style={[profileStyles.profileContainer, {paddingTop: insets.top + 5}]}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} testID="back-button">
+            <Ionicons name="arrow-back-outline" size={24} color={peach} />
+          </TouchableOpacity>
+        </View>
         <View style={profileStyles.topProfileContainer}>
           <GeneralProfile
             name={user.firstName}
@@ -86,8 +89,6 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
           startingTab="Events"
           onTabChange={setSelectedTab}
         />
-
-        <View style={styles.separatorLine} />
 
         {selectedTab === "Events" && <ProfileEvents />}
         {selectedTab === "Interests" && <ProfileInterests />}
