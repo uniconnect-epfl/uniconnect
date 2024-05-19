@@ -7,6 +7,7 @@ import { NavigationContainer, NavigationProp, ParamListBase } from '@react-navig
 import { launchImageLibraryAsync } from 'expo-image-picker'
   import { updateUserData, updateUserImage, uploadUserImageToStorage } from "../../../../firebase/User"
 import { showSuccessToast } from '../../../../components/ToastMessage/toast'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(() => ({} as Auth)),
@@ -91,6 +92,16 @@ jest.mock('@react-navigation/native', () => {
   }
 })
 
+jest.mock('react-native-safe-area-context', () => {
+  const inset = { top: 0, right: 0, bottom: 0, left: 0 }
+  return {
+    SafeAreaProvider: jest.fn(({ children }) => children),
+    SafeAreaConsumer: jest.fn(({ children }) => children(inset)),
+    useSafeAreaInsets: jest.fn(() => inset),
+    useSafeAreaFrame: jest.fn(() => ({ x: 0, y: 0, width: 390, height: 844 })),
+  }
+})
+
 describe('UpdateMyProfileScreen', () => {
   afterEach(() => {
     jest.clearAllMocks()
@@ -98,18 +109,22 @@ describe('UpdateMyProfileScreen', () => {
   
   it('renders correctly', () => {
     const component = render(
-    <NavigationContainer>
-      <UpdateMyProfileScreen />
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <UpdateMyProfileScreen />
+      </NavigationContainer>
+    </SafeAreaProvider>
     )
     expect(component).toBeTruthy()
   })
 
   it('should call uploadUserImageToStorage and updateUserImage when image is picked', async () => {
-    const { getByText } = render(
+    const { getByTestId } = render(
+      <SafeAreaProvider>
       <NavigationContainer>
         <UpdateMyProfileScreen />
       </NavigationContainer>
+    </SafeAreaProvider>
     )
     const mockResult = {
       canceled: false,
@@ -121,15 +136,17 @@ describe('UpdateMyProfileScreen', () => {
     const mockUploadUserImageToStorage = uploadUserImageToStorage as jest.Mock
     mockUploadUserImageToStorage.mockResolvedValue('image-url')
 
-    const updateButton = getByText("Update my profile picture")
+    const updateButton = getByTestId("update-profile-picture")
     fireEvent.press(updateButton)
   })
 
   it('should not call uploadUserImageToStorage and updateUserImage when image picking is canceled', async () => {
-    const { getByText } = render(
-      <NavigationContainer>
-        <UpdateMyProfileScreen />
-      </NavigationContainer>
+    const { getByTestId } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <UpdateMyProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
     )
 
     const mockResult = {
@@ -141,7 +158,7 @@ describe('UpdateMyProfileScreen', () => {
     mockUploadUserImageToStorage.mockResolvedValue('image-url')
 
     await waitFor(() => {
-      const updateButton = getByText("Update my profile picture")
+      const updateButton = getByTestId("update-profile-picture")
       fireEvent.press(updateButton)
       expect(uploadUserImageToStorage).not.toHaveBeenCalled()
       expect(updateUserImage).not.toHaveBeenCalled()
@@ -150,9 +167,11 @@ describe('UpdateMyProfileScreen', () => {
 
   it("should show success toast and navigate back when user data is updated", async () => {
     const { getByText } = render(
-      <NavigationContainer>
-        <UpdateMyProfileScreen />
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <UpdateMyProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
     )
 
     const mockUpdateUserData = updateUserData as jest.Mock
@@ -168,9 +187,11 @@ describe('UpdateMyProfileScreen', () => {
 
   it("should show error toast when user data is not updated", async () => {
     const { getByText } = render(
-      <NavigationContainer>
-        <UpdateMyProfileScreen />
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <UpdateMyProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
     )
 
     const mockUpdateUserData = updateUserData as jest.Mock
