@@ -2,6 +2,9 @@ import { StyleSheet } from "react-native"
 import { black, lightPeach, peach, white } from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
+    activityIndicator: {
+      marginVertical: 5
+    },
     buttonText: {
       fontSize: 16,
     },

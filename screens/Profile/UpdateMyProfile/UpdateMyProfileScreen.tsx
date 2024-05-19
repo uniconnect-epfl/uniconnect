@@ -93,7 +93,7 @@ export const UpdateMyProfileScreen = () => {
                 <Ionicons name="create" size={26} color={peach} />
               </Pressable>
             </View>
-            {imageLoading && <ActivityIndicator size="large" color={peach} />}
+            {imageLoading && <ActivityIndicator size="large" color={peach} style={styles.activityIndicator} />}
             <View style={styles.inputs}>
               <InputField
                 label="First Name"

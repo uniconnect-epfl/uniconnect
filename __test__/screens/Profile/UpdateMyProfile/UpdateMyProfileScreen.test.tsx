@@ -86,7 +86,8 @@ jest.mock('@react-navigation/native', () => {
           description: "",
           selectedInterests: [],
           profilePicture: ""
-        }
+        },
+        fetchData: jest.fn()
       }
     }),
   }
