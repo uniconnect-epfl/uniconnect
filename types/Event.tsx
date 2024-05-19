@@ -7,7 +7,9 @@ export type Event = {
     title: string
     location: string
     point: Point
-    date: Date
+    date: string
     description: string
     imageUrl: string
+    participants: string[]
+    host: string
   }

@@ -26,6 +26,15 @@ const EventMap = () => {
   const events = route.params.events
   const navigation = useNavigation()
 
+  const computeEventDate = (date: string) => {
+    const eventDate = new Date(date).toLocaleDateString("en-US", {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+    return eventDate
+  }
+
 
   return (
     <View style={styles.container}>
@@ -58,7 +67,7 @@ const EventMap = () => {
                 {/* Next feature to add it allow to move to the Event page clicking on the event */}
                 <Text style={styles.calloutTextTitle}>{event.title}</Text>
                 <Text style={styles.calloutTextLocation}>{event.location}</Text>
-                <Text>{event.date.toLocaleDateString()}</Text>
+                <Text>{computeEventDate(event.date)}</Text>
               </View>
             </Callout>
           </Marker>

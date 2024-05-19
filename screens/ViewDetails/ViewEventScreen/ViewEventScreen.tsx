@@ -32,6 +32,7 @@ const ViewEventScreen = () => {
     const [loading, setLoading] = useState(true)
     const userId = getAuth().currentUser?.uid
     const [user, setUser] = useState<User | null>(null)
+    const [dateInISO, setDateInISO] = useState<string | null>(null)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -57,6 +58,17 @@ const ViewEventScreen = () => {
         fetchData()
     }, [eventUid])
 
+    useEffect(() => {
+        if (event) {
+            const displayDate = new Date(event.date as string).toLocaleDateString("en-US", {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            })
+            setDateInISO(displayDate)
+        }
+    }, [event])
+
 
 
     const registerToEvent = async () => {
@@ -73,13 +85,13 @@ const ViewEventScreen = () => {
         return <LoadingScreen />
     }
 
-  return (
-    <View style={styles.container}>
-        
-        <View style={viewDetailsStyles.topBackground} />
-        <BackArrow/>
+    return (
+        <View style={styles.container}>
 
-        <View style={viewDetailsStyles.detailsContainer}>
+            <View style={viewDetailsStyles.topBackground} />
+            <BackArrow />
+
+            <View style={viewDetailsStyles.detailsContainer}>
 
                 <Text style={[
                     globalStyles.boldText,
@@ -92,7 +104,7 @@ const ViewEventScreen = () => {
                     Travel - Holidays - Work
                 </Text>
                 <Text style={[globalStyles.smallText, viewDetailsStyles.detailsText]}>
-                    {event.date.toDateString()}
+                    {dateInISO}
                 </Text>
 
                 <TouchableOpacity
@@ -131,21 +143,21 @@ const ViewEventScreen = () => {
                     </MapView>
                 </View>
 
-            <Text style={[globalStyles.smallText, viewDetailsStyles.descriptionContainer]}>
-                {event.description}
-            </Text>
-
-            <TouchableOpacity
-                style={styles.participateButton}
-                onPress={() => registerToEvent()}>
-                <Text style={globalStyles.boldText}>
-                    Participate
+                <Text style={[globalStyles.smallText, viewDetailsStyles.descriptionContainer]}>
+                    {event.description}
                 </Text>
-            </TouchableOpacity>
-            
+
+                <TouchableOpacity
+                    style={styles.participateButton}
+                    onPress={() => registerToEvent()}>
+                    <Text style={globalStyles.boldText}>
+                        Participate
+                    </Text>
+                </TouchableOpacity>
+
+            </View>
         </View>
-    </View>
-  )
+    )
 }
 
 export default ViewEventScreen
