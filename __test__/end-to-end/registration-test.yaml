@@ -1,9 +1,10 @@
 # flow.yaml
 
+#replace by the right appId
 appId: com.alexandremrt.uniconnect
 ---
-- "launchApp"
-- startRecording
+- launchApp
+- startRecording: recording
 - tapOn: "Dont have an account?"
 - tapOn: "First name"
 - inputText: "Alex"
