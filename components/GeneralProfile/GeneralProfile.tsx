@@ -22,13 +22,12 @@ const GeneralProfile: React.FC<GeneralProfileProps> = ({
 
   return (
     <View style={styles.container}>
-
         <ProfilePicture
             size={80}
             pictureUrl={profilePicture}
-            />
+        />
 
-        <Text style={globalStyles.boldText}>{name} {surname}</Text>
+        <Text style={[globalStyles.boldText, styles.nameText]}>{name} {surname}</Text>
 
         <View style={styles.horizontalContainer}>
             <Ionicons name="location-outline" size={13} color={black} />

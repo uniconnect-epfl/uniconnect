@@ -2,6 +2,7 @@ import React from "react"
 import { render, fireEvent, waitFor } from "@testing-library/react-native"
 import { MyProfileScreen } from "../../../../screens/Profile/MyProfileScreen/MyProfileScreen"
 import { NavigationProp, ParamListBase } from "@react-navigation/native"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 
 const mockNavigation = {
   navigate: jest.fn(),
@@ -53,11 +54,25 @@ jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(() => ({currentUser: {uid: '123'}}))
 }))
 
+jest.mock('react-native-safe-area-context', () => {
+  const inset = { top: 0, right: 0, bottom: 0, left: 0 }
+  return {
+    SafeAreaProvider: jest.fn(({ children }) => children),
+    SafeAreaConsumer: jest.fn(({ children }) => children(inset)),
+    useSafeAreaInsets: jest.fn(() => inset),
+    useSafeAreaFrame: jest.fn(() => ({ x: 0, y: 0, width: 390, height: 844 })),
+  }
+})
+
 
 describe("MyProfileScreen", () => {
 
   it("renders correctly", async () => {
-    const { getByText } = render(<MyProfileScreen navigation={mockNavigation}/>)
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <MyProfileScreen navigation={mockNavigation}/>
+      </SafeAreaProvider>
+    )
     
     await waitFor(() => {
       expect(getByText("Update")).toBeTruthy()
@@ -66,7 +81,11 @@ describe("MyProfileScreen", () => {
   })
 
   it("navigates to update profile when update button is pressed", async () => {
-    const { getByText } = render(<MyProfileScreen navigation={mockNavigation}/>)
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <MyProfileScreen navigation={mockNavigation}/>
+      </SafeAreaProvider>
+    )
 
     await waitFor(() => {
       const updateButton = getByText("Update")
@@ -76,7 +95,11 @@ describe("MyProfileScreen", () => {
   })
 
   it("navigates to my QR code when QR button is pressed", async () => {
-    const { getByText } = render(<MyProfileScreen navigation={mockNavigation}/>)
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <MyProfileScreen navigation={mockNavigation}/>
+      </SafeAreaProvider>
+    )
 
     await waitFor(() => {
       const qrButton = getByText("QR")
