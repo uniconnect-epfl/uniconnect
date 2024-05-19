@@ -110,13 +110,16 @@ export const UpdateMyProfileScreen = () => {
                 value={location}
                 onChangeText={setLocation}
               />
-              <InputField
-                label="Description"
-                placeholder="Enter your description here"
-                value={description}
-                editable={false}
-                onPress={() => setEditDescription(true)}
-              />
+              <Pressable style={styles.main} onPress={() => setEditDescription(true)}>
+                <InputField
+                  label="Description"
+                  placeholder="Enter your description here"
+                  value={description}
+                  editable={false}
+                  onPress={() => setEditDescription(true)}
+                  pointerEvents="none"
+                />
+              </Pressable>
             </View>
             {!keyboardVisible &&
               <Pressable onPress={submitChanges} style={styles.submitButton}>
