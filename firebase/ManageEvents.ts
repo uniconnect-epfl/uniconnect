@@ -1,10 +1,10 @@
-import { Timestamp, collection, doc, getDocs, orderBy, query, setDoc, where, getDoc, DocumentData } from "firebase/firestore"
+import { collection, doc, getDocs, orderBy, query, setDoc, where, getDoc, DocumentData } from "firebase/firestore"
 import { db } from "./firebaseConfig"
 import { showErrorToast, showSuccessToast } from "../components/ToastMessage/toast"
 import { Point } from "react-native-maps"
 import { Event } from "../types/Event"
 
-export async function createEvent(title: string, description: string, date: Date, point: Point, location: string, imageUrl: string): Promise<string | undefined> {
+export async function createEvent(title: string, description: string, date: string, point: Point, location: string, imageUrl: string, userId: string): Promise<string | undefined> {
   try {
     const eventRef = doc(collection(db, "events"))
     await setDoc(eventRef, {
@@ -15,6 +15,8 @@ export async function createEvent(title: string, description: string, date: Date
       date: date,
       description: description,
       imageUrl: imageUrl,
+      participants: [userId],
+      host: userId
     })
     showSuccessToast("Event created successfully!")
     return eventRef.id
@@ -25,22 +27,18 @@ export async function createEvent(title: string, description: string, date: Date
   return undefined
 }
 
-const formatEvent = (doc): Event => {
-  const data = doc.data()
-  const data2 = doc.data() as Event
-  const eventDate: Date = data.date.toDate()
-
-  const event = {
-    ...data2,
-    uid: data.uid,
-    date: eventDate,
-    point: {
-      x: data.point.x,
-      y: data.point.y
-    }
+const formatEvent = (doc: DocumentData) => {
+  return {
+    uid: doc.data().uid as string,
+    title: doc.data().title as string,
+    location: doc.data().location as string,
+    point: doc.data().point as Point,
+    description: doc.data().description as string,
+    date: doc.data().date as string,
+    imageUrl: doc.data().imageUrl as string,
+    participants: doc.data().participants as string[],
+    host: doc.data().host as string
   }
-  return event
-
 }
 
 export const getAllPastEvents = async () => {
@@ -49,18 +47,16 @@ export const getAllPastEvents = async () => {
     const eventsRef = collection(db, "events")
 
     // Create a query against the collection.
-    // This query retrieves events where the eventDate is less than the current date and time.
-    const q = query(eventsRef, where("date", "<", new Date()), orderBy("date", "desc"))
+    const nowIsoString = new Date().toISOString()
 
+    // This query retrieves events where the eventDate is less than the current date and time.
+    const q = query(eventsRef, where("date", "<", nowIsoString), orderBy("date", "desc"))
     // Execute the query
     const querySnapshot = await getDocs(q)
-    const events: Event[] = []
-
-    // Iterate through each doc in the querySnapshot and push its data into the events array
-    querySnapshot.forEach((doc) => {
-      events.push(formatEvent(doc))
-    })
-
+    const events: Event[] = querySnapshot.docs.map((doc) => (
+      formatEvent(doc)
+    )
+    )
     return events
   } catch (error) {
     showErrorToast("Error fetching events. Please check your connection and try again.")
@@ -73,21 +69,18 @@ export const getAllFutureEvents = async () => {
     // Reference to the events collection
     const eventsRef = collection(db, "events")
 
-    const now = Timestamp.fromDate(new Date())
+    const nowIsoString = new Date().toISOString()
 
     // Create a query against the collection.
     // This query retrieves events where the eventDate is greater than the current date and time.
-    const q = query(eventsRef, where("date", ">", now), orderBy("date", "asc"))
+    const q = query(eventsRef, where("date", ">", nowIsoString), orderBy("date", "asc"))
 
     // Execute the query
     const querySnapshot = await getDocs(q)
-    const events: Event[] = []
-
-    // Iterate through each doc in the querySnapshot and push its data into the events array
-    querySnapshot.forEach((doc) => {
-      events.push(formatEvent(doc))
-    })
-
+    const events: Event[] = querySnapshot.docs.map((doc) => (
+      formatEvent(doc)
+    )
+    )
     return events
   } catch (error) {
     showErrorToast("Error fetching events. Please check your connection and try again.")
@@ -108,14 +101,17 @@ export const getEventData = async (eventUid: string) => {
         location: data.location,
         point: data.point,
         description: data.description,
-        date: data.date.toDate(),  // Assuming 'date' is stored as a Firestore Timestamp
+        date: data.date,  // Assuming 'date' is stored as a Firestore Timestamp
         imageUrl: data.imageUrl,
+        participants: data.participants,
+        host: data.host
       }
       return event
     } else {
       console.log("No such document!")
-      return undefined  
+      return undefined
     }
   } catch (error) {
-    showErrorToast("Error fetching event data. Please check your connection and try again.")}
+    showErrorToast("Error fetching event data. Please check your connection and try again.")
+  }
 }

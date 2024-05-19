@@ -40,7 +40,6 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
     fetchData()
   }, [fetchData])
 
-
   if (loading || !user) {
     return <LoadingScreen />
   }
