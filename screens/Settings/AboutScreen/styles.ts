@@ -8,8 +8,6 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingBottom: 100,
   },
-  header: {
-  },
 
   image: {
     marginRight: 30,
@@ -19,5 +17,9 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 20,
     textAlign: "center",
+  },
+  title: {
+    fontSize: 30,
+    paddingTop: 50,
   },
 })

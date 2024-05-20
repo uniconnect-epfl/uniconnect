@@ -19,7 +19,7 @@ export const AboutScreen = () => {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <Text style={globalStyles.boldText}>About us</Text>
+      <Text style={[globalStyles.boldText, styles.title]}>About us</Text>
       <BackArrow />
       <Image
         source={require("../../../assets/icon.png")}
