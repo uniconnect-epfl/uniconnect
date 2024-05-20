@@ -11,7 +11,7 @@ export const AboutScreen = () => {
     "Aidas Venckunas",
     "Alberto Centonze",
     "Gäel Conde",
-    "Alexandre Mouront",
+    "Alexandre Mourot",
     "Gustave Charles",
     "Gaspard Thoral",
     "Pedro Laginhas",
@@ -28,8 +28,7 @@ export const AboutScreen = () => {
       <Text style={[globalStyles.text, styles.textContainer]}>
         Uniconnect is a social app that facilitates peer-to-peer connections
         between students and helps to easily find people who have same
-        interests. This repository is a codebase for both iOS and Android
-        versions of the Uniconnect application.
+        interests.
       </Text>
       <Text style={globalStyles.boldText}>Developers</Text>
       {developers.map((developer, index) => (
