@@ -57,7 +57,7 @@ describe("AboutScreen", () => {
       "Aidas Venckunas",
       "Alberto Centonze",
       "Gäel Conde",
-      "Alexandre Mouront",
+      "Alexandre Mourot",
       "Gustave Charles",
       "Gaspard Thoral",
       "Pedro Laginhas",
