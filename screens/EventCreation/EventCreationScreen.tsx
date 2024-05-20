@@ -69,7 +69,14 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
       showErrorToast("You must be logged in to create an event")
       return
     }
-    const eventId = await createEvent(title, description, date.toISOString(),{ x: 47.238458, y: 5.984155 }, location, "imageUrl", userId)
+    const eventId = await createEvent(
+      title, description, 
+      date.toISOString(), 
+      point ? point : { x: 47.238458, y: 5.984155 }, 
+      location, 
+      "imageUrl", 
+      userId
+    )
     if (eventId && user) {
       await updateUserEvents(user.uid, eventId)
       showSuccessToast("Event created successfully")
@@ -78,7 +85,14 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
 
   const newAnnouncement = async () => {
     try {
-      await createAnnouncement( title,location,{ x: 47.238458, y: 5.984155 }, description, interests, date.toISOString())
+      await createAnnouncement(
+        title,
+        location,
+        point ? point : { x: 47.238458, y: 5.984155 }, 
+        description, 
+        interests, 
+        date.toISOString()
+      )
       showSuccessToast("Announcement created succesfully")
     } catch (error) {
       showErrorToast("Could not create announcement")
