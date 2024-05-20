@@ -1,11 +1,6 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 
-import {
-  View,
-  TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native"
+import { View, TouchableWithoutFeedback, Keyboard, Image } from "react-native"
 
 import { styles } from "./styles"
 
@@ -24,12 +19,14 @@ import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
 
 import { Contact } from "../../../types/Contact"
 import { getUserData } from "../../../firebase/User"
+import InputField from "../../../components/InputField/InputField"
 
 interface ContactGraphProps {
   onContactPress: (uid: string) => void
   graph: Graph
   userId: string
   userContact: Contact
+  loaded: boolean
 }
 
 const ContactGraph = ({
@@ -37,12 +34,14 @@ const ContactGraph = ({
   graph,
   userId,
   userContact,
+  loaded,
 }: ContactGraphProps) => {
   const [searchText, setSearchText] = useState("")
   const [modalVisible, setModalVisible] = useState(false)
   const [clickedNode, setClickedNode] = useState<Node>(
     getNodeById(graph, userId)
   )
+
   const [counter, setCounter] = useState(1)
 
   const updateCounter = () => {
@@ -52,6 +51,25 @@ const ContactGraph = ({
   const [magicNeighbors, setMagicNeighbors] = useState<string[]>([])
 
   const [magicPressedID, setMagicPressedID] = useState<string>("")
+
+  const [display, setDisplay] = useState(false)
+
+  useEffect(() => {
+    if (loaded) {
+      setTimeout(() => {
+        setDisplay(true)
+      }, 2000)
+    } else {
+      setDisplay(loaded)
+      setInitialized(graph, false)
+      magicNeighbors.forEach((neighbor) => {
+        deleteNode(graph, neighbor)
+      })
+      setMagicNeighbors([])
+      setMagicPressedID("")
+      setCounter(1)
+    }
+  }, [loaded])
 
   const onModalPress = (uid: string) => {
     const node = getNodeById(graph, uid)
@@ -69,6 +87,10 @@ const ContactGraph = ({
     if (!graph) {
       return
     }
+    setDisplay(false)
+    setTimeout(() => {
+      setDisplay(true)
+    }, 1000)
     if (uid === userId) {
       setInitialized(graph, false)
       if (magicPressedID !== "") {
@@ -132,8 +154,7 @@ const ContactGraph = ({
       testID="touchable"
     >
       <View style={styles.container}>
-        <TextInput
-          style={styles.searchBar}
+        <InputField
           placeholder="Search..."
           value={searchText}
           onChangeText={(text) => {
@@ -142,6 +163,7 @@ const ContactGraph = ({
           }}
           onSubmitEditing={() => handleQuery(onContactPress, graph)}
         />
+
         <NodeModal
           node={clickedNode}
           visible={modalVisible}
@@ -149,6 +171,7 @@ const ContactGraph = ({
           onContactPress={onContactPress}
         />
         <View style={styles.graphContainer}>
+          {!display && <Image source={require("../../../assets/splash.gif")} />}
           {graph && counter && (
             <ForceDirectedGraph
               graph={graph}
@@ -219,8 +242,7 @@ export async function createContactListFromUsers(
         uid: friendID,
         firstName: friend?.firstName ?? "",
         lastName: friend?.lastName ?? "",
-        profilePictureUrl: "",
-        // "https://t3.ftcdn.net/jpg/04/65/28/08/360_F_465280897_8nL6xlvBwUcLYIQBmyX0GO9fQjDwNYtV.jpg",
+        profilePictureUrl: friend?.profilePicture ?? "",
         description: friend?.description ?? "",
         location: friend?.location ?? "",
         interests: friend?.selectedInterests ?? [""],

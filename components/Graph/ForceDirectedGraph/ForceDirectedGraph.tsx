@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 
 import {
-  ActivityIndicator,
   Dimensions,
   TouchableWithoutFeedback,
   Vibration,
@@ -14,9 +13,6 @@ import Svg, {
   ClipPath,
   Text as SVGText,
   Image,
-  Defs,
-  RadialGradient,
-  Stop,
 } from "react-native-svg"
 
 import styles from "./styles"
@@ -61,7 +57,6 @@ const WIDTH = Dimensions.get("window").width // Width of the screen
 const HEIGHT = Dimensions.get("window").height // Height of the screen
 const CENTER_WIDTH = WIDTH / 2 // Center X-coordinates of the screen
 const CENTER_HEIGHT = HEIGHT / 2 // Center Y-coordinates of the screen
-const INITIAL_SCALE = 20 // Initial scale of the graph
 const DEFAULT_SCALE = 1 // Default scale of the graph
 const MODAL_SCALE = 8 // Scale of the graph when a node is clicked
 
@@ -92,18 +87,15 @@ const ForceDirectedGraph: React.FC<{
   onMagicPress,
   reload,
 }) => {
-  const [transitionScale] = useState(new Animated.Value(20))
+  const [transitionScale] = useState(new Animated.Value(DEFAULT_SCALE))
   const [transitionTranslateX] = useState(new Animated.Value(0))
   const [transitionTranslateY] = useState(new Animated.Value(0))
-
-  const [animationStarted, setAnimationStarted] = useState(false)
 
   const zoomAndTranslate = (
     animationScale: number,
     animationX: number,
     animationY: number
   ) => {
-    setAnimationStarted(true)
     Animated.parallel([
       Animated.timing(transitionTranslateX, {
         toValue: animationX,
@@ -126,7 +118,6 @@ const ForceDirectedGraph: React.FC<{
   // States to store the nodes, links and loading status
   const [nodes, setNodes] = useState<Node[]>([])
   const [links, setLinks] = useState<Link[]>([])
-  const [load, setLoad] = useState<boolean>(false)
 
   // State to store the total offset when dragging the graph
   const [totalOffset, setTotalOffset] = useState({ x: 0, y: 0 })
@@ -158,34 +149,10 @@ const ForceDirectedGraph: React.FC<{
     </ClipPath>
   )
 
-  const animationMask = (
-    id: string,
-    cx: number,
-    cy: number,
-    radius: number
-  ) => (
-    <Defs>
-      <RadialGradient
-        id={id}
-        cx={cx}
-        cy={cy}
-        rx={radius}
-        ry={radius}
-        fx={cx}
-        fy={cy}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset="0" stopColor="#000" stopOpacity="0.5" />
-        <Stop offset="1" stopColor="#fff" stopOpacity="0.75" />
-      </RadialGradient>
-    </Defs>
-  )
-
   useEffect(() => {
     if (modalPressedOut) {
       setTimeout(() => {
         zoomAndTranslate(DEFAULT_SCALE, 0, 0)
-        setAnimationStarted(false)
         setTotalOffset({ x: 0, y: 0 })
       }, 100)
     }
@@ -218,21 +185,11 @@ const ForceDirectedGraph: React.FC<{
       // If the graph is already initialized, we don't need to run the algorithm again as the nodes are already positioned
       setNodes(getNodes(graph))
     }
-    setLoad(true)
     transitionTranslateX.setValue(0)
     transitionTranslateY.setValue(0)
     setTotalOffset({ x: 0, y: 0 })
-    zoomAndTranslate(DEFAULT_SCALE, 0, 0)
-    setTimeout(() => {
-      setAnimationStarted(false)
-    }, ANIMATION_DURATION)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [graph, constrainedNodeId, magicNodeId])
-
-  // If the graph is not loaded, display an activity indicator
-  if (!load) {
-    return <ActivityIndicator size="large" color={peach} />
-  }
 
   // Handle Dragging
   const handlePanGestureEvent = (event: {
@@ -342,6 +299,7 @@ const ForceDirectedGraph: React.FC<{
       x2={coordX(nodes.find((node) => node.id === link.target) as Node)}
       y2={coordY(nodes.find((node) => node.id === link.target) as Node)}
       stroke={DEFAULT_LINK_COLOR}
+      strokeWidth={2}
     />
   ))
 
@@ -352,12 +310,6 @@ const ForceDirectedGraph: React.FC<{
       <G key={`${node.id}-group-${coordX(node)}-${coordY(node)}`}>
         {profilePictureMask(
           `clipPath-${node.id}`,
-          coordX(node),
-          coordY(node),
-          DEFAULT_NODE_SIZE / node.level
-        )}
-        {animationMask(
-          `mask-${node.id}`,
           coordX(node),
           coordY(node),
           DEFAULT_NODE_SIZE / node.level
@@ -408,7 +360,6 @@ const ForceDirectedGraph: React.FC<{
                   (CENTER_WIDTH - coordX(node)) * scale,
                   (CENTER_HEIGHT - coordY(node)) * scale
                 )
-                setAnimationStarted(false)
               }
             }
           )
@@ -417,76 +368,42 @@ const ForceDirectedGraph: React.FC<{
           Vibration.vibrate()
           if (node.outsideScreen) {
             showErrorToast("You cannot select a node outside the screen.")
-            setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
           } else if (node.level > 2) {
             showErrorToast("You can only view friends of friends")
-            setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
           } else {
             if (magicNodeId === "" && node.id === constrainedNodeId) {
               showErrorToast(
                 "You cannot unselect without selecting a node first"
               )
-              setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-            } else if (getNodeById(graph, node.id).magicSelected) {
-              zoomAndTranslate(
-                INITIAL_SCALE,
-                (CENTER_WIDTH - coordX(getNodeById(graph, constrainedNodeId))) *
-                  scale,
-                (CENTER_HEIGHT -
-                  coordY(getNodeById(graph, constrainedNodeId))) *
-                  scale
-              )
             } else {
-              zoomAndTranslate(
-                INITIAL_SCALE,
-                (CENTER_WIDTH - coordX(node)) * scale,
-                (CENTER_HEIGHT - coordY(node)) * scale
-              )
-            }
-            setTimeout(() => {
               onMagicPress(node.id)
-              setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-            }, ANIMATION_DURATION)
+            }
           }
+          setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
         }}
         hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
       >
-        <G>
-          {/* Profile picture of the node */}
-          {node.contact.profilePictureUrl === "" ? (
-            <Image
-              key={node.id + "image"}
-              x={coordX(node) - DEFAULT_NODE_SIZE / node.level}
-              y={coordY(node) - DEFAULT_NODE_SIZE / node.level}
-              width={(2 * DEFAULT_NODE_SIZE) / node.level}
-              height={(2 * DEFAULT_NODE_SIZE) / node.level}
-              href={require("../../../assets/default_profile_picture.png")}
-              clipPath={`url(#clipPath-${node.id})`}
-              preserveAspectRatio="xMidYMid slice"
-              testID={"node-" + node.id}
-            />
-          ) : (
-            <Image
-              key={node.id + "image"}
-              x={coordX(node) - DEFAULT_NODE_SIZE / node.level}
-              y={coordY(node) - DEFAULT_NODE_SIZE / node.level}
-              width={(2 * DEFAULT_NODE_SIZE) / node.level}
-              height={(2 * DEFAULT_NODE_SIZE) / node.level}
-              xlinkHref={node.contact.profilePictureUrl}
-              clipPath={`url(#clipPath-${node.id})`}
-              preserveAspectRatio="xMidYMid slice"
-              testID={"node-" + node.id}
-            />
-          )}
-
-          <Circle
-            key={node.id + "mask"}
-            cx={coordX(node)}
-            cy={coordY(node)}
-            r={DEFAULT_NODE_SIZE / node.level}
-            fill={animationStarted ? `url(#mask-${node.id})` : transparent}
-          />
-        </G>
+        {/* Profile picture of the node */}
+        <Image
+          key={node.id + "image"}
+          x={coordX(node) - DEFAULT_NODE_SIZE / node.level}
+          y={coordY(node) - DEFAULT_NODE_SIZE / node.level}
+          width={(2 * DEFAULT_NODE_SIZE) / node.level}
+          height={(2 * DEFAULT_NODE_SIZE) / node.level}
+          href={
+            node.contact.profilePictureUrl === ""
+              ? require("../../../assets/default_profile_picture.png")
+              : undefined
+          }
+          xlinkHref={
+            node.contact.profilePictureUrl === ""
+              ? undefined
+              : { uri: node.contact.profilePictureUrl }
+          }
+          clipPath={`url(#clipPath-${node.id})`}
+          preserveAspectRatio="xMidYMid slice"
+          testID={"node-" + node.id}
+        />
       </TouchableWithoutFeedback>
 
       {/* Text to display the name of the node if it is not your own */}

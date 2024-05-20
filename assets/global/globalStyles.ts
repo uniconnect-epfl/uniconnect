@@ -13,9 +13,9 @@ export const globalStyles = StyleSheet.create({
   },
   smallText: {
     fontFamily: "JetBrainsMono_400Regular",
-    fontSize: 10
+    fontSize: 10,
   },
   text: {
     fontFamily: "JetBrainsMono_400Regular",
-  }
+  },
 })

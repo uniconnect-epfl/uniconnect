@@ -18,6 +18,7 @@ import { User } from "../../../types/User"
 type RootStackParamList = {
   ExternalProfile: {
     externalUserUid: string
+    callback?: () => void
   }
 }
 
@@ -27,7 +28,8 @@ type ExternalProfileScreenRouteProp = RouteProp<
 >
 
 const ExternalProfileScreen = () => {
-  const { externalUserUid } = useRoute<ExternalProfileScreenRouteProp>().params
+  const { externalUserUid, callback } =
+    useRoute<ExternalProfileScreenRouteProp>().params
   const [externalUser, setExternalUser] = useState<User | null>(null)
   const [externalUserLoading, setExternalUserLoading] = useState(true)
   const userId = getAuth().currentUser?.uid
@@ -102,6 +104,9 @@ const ExternalProfileScreen = () => {
                   const removeFriendInternal = async () => {
                     await removeFriend(user, externalUser)
                     setIsFriend(false)
+                    if (callback) {
+                      callback()
+                    }
                   }
                   removeFriendInternal()
                 }}
@@ -123,6 +128,9 @@ const ExternalProfileScreen = () => {
                   const addFriendInternal = async () => {
                     await addFriend(user, externalUser)
                     setIsFriend(true)
+                    if (callback) {
+                      callback()
+                    }
                   }
                   addFriendInternal()
                 }}
