@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, SectionList, SectionListRenderItemInfo, TouchableOpacity } from 'react-native'
-import { styles } from './styles'// Ensure the paths are correct
+import { View, Text, SectionList, SectionListRenderItemInfo, TouchableOpacity, TextInput } from 'react-native'
+import { styles } from './styles' // Ensure the paths are correct
 import AnnouncementCard from '../../../components/AnnoucementCard/AnnouncementCard'
 import { Announcement } from '../../../types/Annoucement'
 import { getAllAnnouncements } from '../../../firebase/ManageAnnouncements'
@@ -8,49 +8,60 @@ import { showErrorToast } from '../../../components/ToastMessage/toast'
 import LoadingScreen from '../../Loading/LoadingScreen'
 
 interface AnnouncementsScreenProps {
-  onAnnoucmentPress: (announcement: Announcement) => void
+  onAnnouncementPress: (announcement: Announcement) => void
 }
 
-const AnnouncementScreen = ({ onAnnoucmentPress }: AnnouncementsScreenProps) => {
+const AnnouncementScreen = ({ onAnnouncementPress }: AnnouncementsScreenProps) => {
 
-  //const [searchQuery, setSearchQuery] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
   const [isLoading, setIsLoading] = useState(true)
-  const [announcements, setAnnouncements] = useState<Announcement[] | null>(null)
-
+  const [announcements, setAnnouncements] = useState<Announcement[]>([])
+  const [filteredAnnouncements, setFilteredAnnouncements] = useState<Announcement[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const announcements = await getAllAnnouncements() || [] // Fallback to an empty array if null
-        setAnnouncements(announcements)
+        const fetchedAnnouncements = await getAllAnnouncements() || [] // Fallback to an empty array if null
+        setAnnouncements(fetchedAnnouncements)
+        setFilteredAnnouncements(fetchedAnnouncements)
         setIsLoading(false)
       } catch (error) {
-        showErrorToast("Error fetching announcements. Please check your connection and try again.")}
-      setIsLoading(false) // Set loading to false regardless of result
+        showErrorToast("Error fetching announcements. Please check your connection and try again.")
+        setIsLoading(false) // Set loading to false regardless of result
+      }
     }
 
     fetchData()
   }, [])
 
-  const sections = [{title: "Future Announcements", data: announcements}]
+  useEffect(() => {
+    if (searchQuery) {
+      setFilteredAnnouncements(announcements.filter((announcement: { title: string }) =>
+        announcement.title.toLowerCase().includes(searchQuery.toLowerCase())
+      ))
+    } else {
+      setFilteredAnnouncements(announcements)
+    }
+  }, [searchQuery, announcements])
 
-  // const handleSearch = (search: string) => {
-  //   setSearchQuery(search)
-  // }
+  const sections = [{ title: "Future Announcements", data: filteredAnnouncements }]
+
+  const handleSearch = (search: string) => {
+    setSearchQuery(search)
+  }
 
   const renderItem = ({ item }: SectionListRenderItemInfo<Announcement>) => (
-    <TouchableOpacity
-      onPress={() => {onAnnoucmentPress(item)}}>
+    <TouchableOpacity onPress={() => { onAnnouncementPress(item) }}>
       <AnnouncementCard {...item} />
     </TouchableOpacity>
   )
 
   if (isLoading) {
     // Display a loading indicator while data is fetching
-    return <LoadingScreen/>
+    return <LoadingScreen />
   }
 
-  if (announcements === null) {
+  if (announcements.length === 0) {
     // Display a message if there are no announcements
     return <Text>No future announcements available.</Text>
   }
@@ -58,11 +69,13 @@ const AnnouncementScreen = ({ onAnnoucmentPress }: AnnouncementsScreenProps) => 
   return (
     <View style={styles.view}>
       <View style={styles.searchAndMap}>
-        {/* <TextInput
+        <TextInput
           style={styles.input}
           placeholder="Search..."
+          value={searchQuery}
           onChangeText={handleSearch}
-        /> */}
+        />
+        
       </View>
       <View style={styles.container}>
         <SectionList
