@@ -1,10 +1,26 @@
 import { StyleSheet } from "react-native"
+import { black, lightPeach, peach, white } from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
+    activityIndicator: {
+      marginVertical: 5
+    },
+    buttonText: {
+      fontSize: 16,
+    },
+    changePictureButton: {
+      left: 90,
+      position: "absolute",
+      top: -10
+    },
     container: {
         alignItems: "center",
         flex: 1,
-        justifyContent: "center",
+    },
+    header: {
+      flexDirection: "row",
+      marginBottom: 5,
+      marginHorizontal: "2.5%"
     },
     image: {
         borderRadius: 50,
@@ -13,19 +29,28 @@ export const styles = StyleSheet.create({
         marginVertical: 10,
         width: 100,
     },
-    text1: {
-      fontSize: 20,
-      fontWeight: "bold",
-      marginVertical: 10
+    inputs: {
+      height: '70%',
+      width: '80%'
     },
-    text2: {
-      fontSize: 16,
-      fontStyle: "italic",
-      marginVertical: 10
+    main: {
+      backgroundColor: white,
+      flex: 1
     },
-    text3: {
-      fontSize: 10,
-      marginVertical: 10,
-      textAlign: "center"
+    submitButton: {
+      alignItems: "center",
+      alignSelf: "center",
+      backgroundColor: lightPeach,
+      borderColor: peach,
+      borderRadius: 20,
+      borderWidth: 2,
+      elevation: 8,
+      justifyContent: "center",
+      padding: 10,
+      shadowColor: black,
+      shadowOffset: { width: 0, height: 2.5 },
+      shadowOpacity: 0.3,
+      shadowRadius: 5,
+      width: "60%",
     }
 })

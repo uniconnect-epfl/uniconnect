@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native"
-import { black } from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
   container: {
@@ -7,10 +6,9 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start"
   },
-  separatorLine: {
-    backgroundColor: black,
-    height: 1,
-    marginTop: 5,
-    width: "auto",
-},
+  header: {
+    alignItems: "center",
+    flexDirection: "row",
+    marginBottom: 15,
+  },
 })

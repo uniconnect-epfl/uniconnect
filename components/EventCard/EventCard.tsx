@@ -8,11 +8,11 @@ import { Ionicons } from "@expo/vector-icons"
 
 const EventCard = (event : Event) => {
 
-  const displayDate = event.date instanceof Date ? event.date.toLocaleDateString("en-US", {
+  const displayDate =  new Date(event.date as string).toLocaleDateString("en-US", {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
-  }) : 'Date not available'
+  })
 
   return (
     <View style={styles.cardContainer}>

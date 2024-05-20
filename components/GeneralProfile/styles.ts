@@ -11,6 +11,9 @@ export const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row"
     },
+    nameText: {
+        paddingTop: 5
+    },
     profilePicture: {
         alignItems: "center",
         backgroundColor: peach,
@@ -18,6 +21,6 @@ export const styles = StyleSheet.create({
         height: 80,
         justifyContent: "center",
         width: 80,
-    },
+    }
 
 })

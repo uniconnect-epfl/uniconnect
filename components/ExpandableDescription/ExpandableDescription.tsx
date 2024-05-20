@@ -16,15 +16,20 @@ const ExpandableDescription: React.FC<ExpandableDescriptionProps> = ({ descripti
   return (
     <View style={styles.container}>
       <Text 
-          style={[globalStyles.smallText, styles.text]}
-          numberOfLines={limitNbLines ? initialNbLines : undefined}>
-          {description}
-        </Text>
-      <TouchableOpacity 
-        style={styles.button}
-        onPress={() => setLimitNbLines(!limitNbLines) }>
-          <Ionicons name={limitNbLines ? "chevron-down-outline" : "chevron-up-outline"} size={24} color={black} />
-      </TouchableOpacity>
+        style={[globalStyles.smallText, styles.text]}
+        numberOfLines={limitNbLines ? initialNbLines : undefined}
+      >
+        {description}
+      </Text>
+
+      {description.length > 70 &&
+        <TouchableOpacity 
+          style={styles.button}
+          onPress={() => setLimitNbLines(!limitNbLines) }
+        >
+            <Ionicons name={limitNbLines ? "chevron-down-outline" : "chevron-up-outline"} size={24} color={black} />
+        </TouchableOpacity>
+      }
     </View>
   )
 }

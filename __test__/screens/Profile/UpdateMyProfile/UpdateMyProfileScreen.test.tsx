@@ -7,6 +7,8 @@ import { NavigationContainer, NavigationProp, ParamListBase } from '@react-navig
 import { launchImageLibraryAsync } from 'expo-image-picker'
   import { updateUserData, updateUserImage, uploadUserImageToStorage } from "../../../../firebase/User"
 import { showSuccessToast } from '../../../../components/ToastMessage/toast'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { EditDescriptionModal } from '../../../../components/EditDescriptionModal/EditDescriptionModal'
 
 jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(() => ({} as Auth)),
@@ -53,6 +55,8 @@ jest.mock("../../../../firebase/User", () => ({
   updateUserData: jest.fn()
 }))
 
+const mockGoBack = jest.fn()
+
 const mockNavigation = {
   navigate: jest.fn(),
   goBack: jest.fn(),
@@ -72,7 +76,7 @@ jest.mock('@react-navigation/native', () => {
     ...jest.requireActual('@react-navigation/native'),
     useNavigation: () => ({
       navigate: mockNavigation,
-      goBack: jest.fn(),
+      goBack: mockGoBack,
     }),
     useRoute: () => ({
       params: {
@@ -85,9 +89,20 @@ jest.mock('@react-navigation/native', () => {
           description: "",
           selectedInterests: [],
           profilePicture: ""
-        }
+        },
+        fetchData: jest.fn()
       }
     }),
+  }
+})
+
+jest.mock('react-native-safe-area-context', () => {
+  const inset = { top: 0, right: 0, bottom: 0, left: 0 }
+  return {
+    SafeAreaProvider: jest.fn(({ children }) => children),
+    SafeAreaConsumer: jest.fn(({ children }) => children(inset)),
+    useSafeAreaInsets: jest.fn(() => inset),
+    useSafeAreaFrame: jest.fn(() => ({ x: 0, y: 0, width: 390, height: 844 })),
   }
 })
 
@@ -98,18 +113,22 @@ describe('UpdateMyProfileScreen', () => {
   
   it('renders correctly', () => {
     const component = render(
-    <NavigationContainer>
-      <UpdateMyProfileScreen />
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <UpdateMyProfileScreen />
+      </NavigationContainer>
+    </SafeAreaProvider>
     )
     expect(component).toBeTruthy()
   })
 
   it('should call uploadUserImageToStorage and updateUserImage when image is picked', async () => {
-    const { getByText } = render(
+    const { getByTestId } = render(
+      <SafeAreaProvider>
       <NavigationContainer>
         <UpdateMyProfileScreen />
       </NavigationContainer>
+    </SafeAreaProvider>
     )
     const mockResult = {
       canceled: false,
@@ -121,15 +140,17 @@ describe('UpdateMyProfileScreen', () => {
     const mockUploadUserImageToStorage = uploadUserImageToStorage as jest.Mock
     mockUploadUserImageToStorage.mockResolvedValue('image-url')
 
-    const updateButton = getByText("Update my profile picture")
+    const updateButton = getByTestId("update-profile-picture")
     fireEvent.press(updateButton)
   })
 
   it('should not call uploadUserImageToStorage and updateUserImage when image picking is canceled', async () => {
-    const { getByText } = render(
-      <NavigationContainer>
-        <UpdateMyProfileScreen />
-      </NavigationContainer>
+    const { getByTestId } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <UpdateMyProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
     )
 
     const mockResult = {
@@ -141,7 +162,7 @@ describe('UpdateMyProfileScreen', () => {
     mockUploadUserImageToStorage.mockResolvedValue('image-url')
 
     await waitFor(() => {
-      const updateButton = getByText("Update my profile picture")
+      const updateButton = getByTestId("update-profile-picture")
       fireEvent.press(updateButton)
       expect(uploadUserImageToStorage).not.toHaveBeenCalled()
       expect(updateUserImage).not.toHaveBeenCalled()
@@ -150,9 +171,11 @@ describe('UpdateMyProfileScreen', () => {
 
   it("should show success toast and navigate back when user data is updated", async () => {
     const { getByText } = render(
-      <NavigationContainer>
-        <UpdateMyProfileScreen />
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <UpdateMyProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
     )
 
     const mockUpdateUserData = updateUserData as jest.Mock
@@ -168,9 +191,11 @@ describe('UpdateMyProfileScreen', () => {
 
   it("should show error toast when user data is not updated", async () => {
     const { getByText } = render(
-      <NavigationContainer>
-        <UpdateMyProfileScreen />
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <UpdateMyProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
     )
 
     const mockUpdateUserData = updateUserData as jest.Mock
@@ -182,5 +207,87 @@ describe('UpdateMyProfileScreen', () => {
     await waitFor(() => {
       expect(showSuccessToast).not.toHaveBeenCalled()
     })
+  })
+
+  it("should navigate back when back button is pressed", async () => {
+    const { getByTestId } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <UpdateMyProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+
+    const backButton = getByTestId("back-button")
+    fireEvent.press(backButton)
+
+    await waitFor(() => {
+      expect(mockGoBack).toHaveBeenCalledTimes(1)
+    })
+  })
+
+  it("Should open a modal when description is pressed", async () => {
+    const { getByPlaceholderText } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <UpdateMyProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+
+    const descriptionButton = getByPlaceholderText("Enter your description here")
+    expect(descriptionButton).toBeTruthy()
+  })
+
+  it("Should update the description when the modal is open", async () => {
+    const { getByPlaceholderText } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <EditDescriptionModal editDescription={true}  setEditDescription={() => {}} description={""} setDescription={() => {}}/>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+
+    const description = getByPlaceholderText("Enter your description here")
+    fireEvent.changeText(description, "New description")
+    expect(description).toBeTruthy()
+  })
+
+  it("Should close the modal when the done button is pressed", async () => {
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <EditDescriptionModal editDescription={true}  setEditDescription={() => {}} description={""} setDescription={() => {}}/>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+
+    const doneButton = getByText("Done")
+    fireEvent.press(doneButton)
+  })
+
+  it("Should close the modal when the background is pressed", async () => {
+    const { getByTestId } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <EditDescriptionModal editDescription={true}  setEditDescription={() => {}} description={""} setDescription={() => {}}/>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+
+    const background = getByTestId("background")
+    fireEvent.press(background)
+  })
+
+  it("Should close the keyboard when the quit button is pressed", async () => {	
+    const { getByTestId } = render(	
+      <SafeAreaProvider>	
+        <NavigationContainer>	
+          <EditDescriptionModal editDescription={true}  setEditDescription={() => {}} description={""} setDescription={() => {}}/>	
+        </NavigationContainer>	
+      </SafeAreaProvider>	
+    )	
+    const quitButton = getByTestId("close-keyboard")	
+    fireEvent.press(quitButton)	
   })
 })

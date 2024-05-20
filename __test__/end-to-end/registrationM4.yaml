@@ -1,0 +1,43 @@
+
+# flow.yaml
+
+#replace by the right appId
+appId: com.alexandremrt.uniconnect
+---
+- launchApp
+- startRecording: recording
+- tapOn: "Dont have an account?"
+- tapOn: "First name"
+- inputText: "Alexandre"
+- tapOn: "Last name"
+- inputText: "Mourot"
+- tapOn: "JJ.MM.YYYY"
+- tapOn: "02 May 2024"
+- tapOn: "OK"
+- tapOn: ", Use my location, "
+- "hideKeyboard"
+- tapOn: "Add a description now"
+- tapOn: "Enter your description here..."
+- inputText: "magnifiqueDemo"
+- tapOn: "Validate"
+- tapOn: "Next"
+- tapOn: "Photography"
+- tapOn: "Cybersecurity"
+- tapOn: "Search"
+- inputText: "Wri"
+- tapOn: "Writing"
+- tapOn: "Writing"
+- tapOn: "Next"
+- tapOn: "****************"
+- inputText: "VeryHard6_"
+- tapOn: "****************"
+- inputText: "VeryHard6_"
+- tapOn: "E-mail"
+- inputText: "email@oui.com"
+- tapOn: "Confirm your e-mail"
+- inputText: "email@oui.com"
+- "hideKeyboard"
+- tapOn: "Confirm"
+- tapOn: "Not now"
+
+- stopRecording
