@@ -72,7 +72,7 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
     const eventId = await createEvent(
       title, description, 
       date.toISOString(), 
-      point ? point : { x: 47.238458, y: 5.984155 }, 
+      point || { x: 47.238458, y: 5.984155 }, 
       location, 
       "imageUrl", 
       userId
@@ -88,7 +88,7 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
       await createAnnouncement(
         title,
         location,
-        point ? point : { x: 47.238458, y: 5.984155 }, 
+        point || { x: 47.238458, y: 5.984155 }, 
         description, 
         interests, 
         date.toISOString()
