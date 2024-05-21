@@ -27,7 +27,7 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
   const [date, setDate] = useState<Date>(new Date())
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
   const [title, setTitle] = useState("")
-  const [location, setLocation] = useState("")
+  const [location /*, setLocation */] = useState("")
   const [point, setPoint] = useState<Point | undefined>(undefined)
   const insets = useSafeAreaInsets()
   const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
@@ -129,13 +129,6 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
                 setDateModal={setDateModal}
               />
             )}
-            
-            <InputField
-              label="Location*"
-              placeholder="Turing Avenue 69"
-              value={location}
-              onChangeText={setLocation}
-            />
 
             <Pressable
               style={styles.section}

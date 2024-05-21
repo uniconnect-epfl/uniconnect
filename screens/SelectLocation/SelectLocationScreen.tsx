@@ -3,6 +3,7 @@ import { styles } from "./styles"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import MapView, { Marker, PROVIDER_GOOGLE, Point, Region } from "react-native-maps"
 import { useEffect, useState } from "react"
+import InputField from "../../components/InputField/InputField"
 import { globalStyles } from "../../assets/global/globalStyles"
 
 type RootStackParamList = {
@@ -18,6 +19,7 @@ export const SelectLocationScreen = () => {
     const { onLocationChange, initialPoint } = useRoute<SelectLocationScreenRouteProps>().params
     const navigation = useNavigation()
     const [location, setLocation] = useState<Point | undefined>(initialPoint)
+    const [locationName, setLocationName] = useState("")
 
     const initialRegion: Region = {
         latitude: 46.51858962578904,
@@ -40,28 +42,39 @@ export const SelectLocationScreen = () => {
             </Text>
         </View>   
 
-        <MapView 
-            style={styles.map} 
-            initialRegion={initialRegion} 
-            showsUserLocation
-            showsMyLocationButton
-            provider={PROVIDER_GOOGLE}
-            onPress={(e) => {
-                const newLocation: Point = {x: e.nativeEvent.coordinate.latitude, y: e.nativeEvent.coordinate.longitude }
-                setLocation(newLocation)
-            }}
-            >
-            { location !== undefined && 
-                <Marker
-                    key={"location"} 
-                    coordinate={{
-                            latitude: location.x,
-                            longitude: location.y
-                        }}>
+        <View style={styles.inputFieldContainer}>
+            <InputField
+                placeholder="Turing Avenue 69"
+                value={locationName}
+                onChangeText={setLocationName}
+            />
+        </View>
 
-                </Marker>
-            }
-        </MapView>
+        <View style={styles.mapContainer}>
+            <MapView 
+                style={styles.map} 
+                initialRegion={initialRegion} 
+                showsUserLocation
+                showsMyLocationButton
+                provider={PROVIDER_GOOGLE}
+                onPress={(e) => {
+                    const newLocation: Point = {x: e.nativeEvent.coordinate.latitude, y: e.nativeEvent.coordinate.longitude }
+                    setLocation(newLocation)
+                }}
+                >
+                { location !== undefined && 
+                    <Marker
+                        key={"location"} 
+                        coordinate={{
+                                latitude: location.x,
+                                longitude: location.y
+                            }}>
+
+                    </Marker>
+                }
+            </MapView>
+        </View>
+
         <TouchableOpacity
             style={styles.confirmButton}
             onPress={() => {
@@ -71,6 +84,7 @@ export const SelectLocationScreen = () => {
                 Confirm 
             </Text>
         </TouchableOpacity>
+
       </View>
     )
 }
