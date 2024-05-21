@@ -61,7 +61,8 @@ const ViewEventScreen = () => {
                         setHost(fetchedHost)
                     }
                     if (fetchedEvent?.participants) {
-                        setParticipants(fetchedEvent.participants)
+                        //TODO after the layout of participants is decided
+                        //setParticipants(fetchedEvent.participants)
                     }
                     const displayDate = new Date(fetchedEvent?.date as string).toLocaleDateString("en-US", {
                         year: 'numeric',
@@ -93,6 +94,10 @@ const ViewEventScreen = () => {
     }
 
     if (loading || !event || !dateInISO || !host) {
+        console.log("loading")
+        console.log(event)
+        console.log(dateInISO)
+        console.log(host)
         return <LoadingScreen />
     }
 
@@ -154,24 +159,6 @@ const ViewEventScreen = () => {
                     <Text style={[globalStyles.smallText, viewDetailsStyles.descriptionContainer]}>
                         {event.description}
                     </Text>
-
-                    {/* <View >
-                        <Text style={globalStyles.boldText}>
-                            Participants
-                        </Text>
-                        <ScrollView
-                            horizontal
-                            showsHorizontalScrollIndicator={false}>
-                            {participants.map((participant) => (
-                                <ProfilePicture
-                                    key={participant}
-                                    size={40}
-                                    pictureUrl=""
-                                />
-                            ))}
-                        </ScrollView>
-                    </View> */}
-
                     <TouchableOpacity
                         style={styles.participateButton}
                         onPress={() => registerToEvent()}>
