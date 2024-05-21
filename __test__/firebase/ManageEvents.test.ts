@@ -1,11 +1,14 @@
 import { Firestore, doc, getDocs, getDoc, setDoc } from "firebase/firestore"
-import { createEvent, getAllFutureEvents, getAllPastEvents, getEventData } from "../../firebase/ManageEvents"
+import { createEvent, getAllFutureEvents, getAllPastEvents, getEventData, updateEventData } from "../../firebase/ManageEvents"
 import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
 import { Point } from "react-native-maps"
 
 jest.mock("../../firebase/firebaseConfig", () => ({
   db: jest.fn(() => ({} as Firestore)),
 }))
+
+const mockGetDoc = jest.fn()
+const mockSetDoc = jest.fn()
 
 jest.mock("firebase/firestore", () => {
   const originalModule = jest.requireActual("firebase/firestore")
@@ -17,10 +20,10 @@ jest.mock("firebase/firestore", () => {
         toDate: () => date,
       }),
     },
-    doc: jest.fn(),
-    setDoc: jest.fn(),
+    doc: jest.fn(() => ({})),
+    setDoc: jest.fn((...args) => mockSetDoc(...args)),
+    getDoc: jest.fn((...args) => mockGetDoc(...args)),
     getDocs: jest.fn(),
-    getDoc: jest.fn(),
     query: jest.fn(),
     where: jest.fn(),
     orderBy: jest.fn(),
@@ -45,6 +48,8 @@ describe("manageEvents", () => {
   afterEach(() => {
     jest.clearAllMocks()
   })
+
+
 
   describe("createEvent", () => {
     it("should create an event and display success message", async () => {
@@ -253,4 +258,32 @@ describe("manageEvents", () => {
       expect(showErrorToast).toHaveBeenCalledWith("Error fetching event data. Please check your connection and try again.")
     })
   })
+
+  describe("Update Event data", () => {
+    const mockEvent = {
+      uid: "eventUid",
+      title: "Event",
+      location: "location",
+      point: { x: 47.238458, y: 5.984155 },
+      description: "description",
+      date: new Date().toISOString(),
+      imageUrl: "imageUrl",
+      participants: ["oldUserId"],
+      host: "hostId",
+    }
+
+    it("should update event data successfully", async () => {
+        mockGetDoc.mockResolvedValueOnce({
+          data: () => mockEvent,
+        })
+        mockSetDoc.mockResolvedValueOnce(undefined)
+
+      const result = await updateEventData('eventUid', 'newUserId')
+
+      expect(result).toBe(true)
+
+    })
+  }
+  )
+
 })
