@@ -283,6 +283,15 @@ describe("manageEvents", () => {
       expect(result).toBe(true)
 
     })
+
+    it("should handle error and return false", async () => {
+      mockGetDoc.mockRejectedValueOnce(new Error("Failed to fetch event data"))
+
+      const result = await updateEventData('eventUid', 'newUserId')
+
+      expect(result).toBe(false)
+      expect(showErrorToast).toHaveBeenCalledWith("Error fetching event data. Please check your connection and try again.")
+    })
   }
   )
 
