@@ -24,10 +24,22 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         width: "100%",
     },
+    inputFieldContainer: {
+        height: "10%",
+        width: "95%",
+    },
     map: {
         flex: 1,
         height: "100%",
         width: "100%",
+    },
+    mapContainer: {
+        borderColor: peach,
+        borderRadius: 20,
+        borderWidth: 2,
+        flex: 1,
+        overflow: "hidden",
+        width: "90%"
     },
     screenTitle: {
         fontSize: 20,
