@@ -27,7 +27,7 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
   const [date, setDate] = useState<Date>(new Date())
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
   const [title, setTitle] = useState("")
-  const [location /*, setLocation */] = useState("")
+  const [location, setLocation] = useState("")
   const [point, setPoint] = useState<Point | undefined>(undefined)
   const insets = useSafeAreaInsets()
   const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
@@ -158,7 +158,11 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
           <Pressable style={styles.buttonBase}>
             <Text
               onPress={() => {
-                navigation.navigate("SelectLocation", {onLocationChange: setPoint, initialPoint: point})
+                const onLocationChange = (locationName: string, point: Point | undefined) => {
+                  setLocation(locationName)
+                  setPoint(point)
+                }
+                navigation.navigate("SelectLocation", {onLocationChange: onLocationChange, initialPoint: point})
               }}
               style={globalStyles.boldText}
               >
