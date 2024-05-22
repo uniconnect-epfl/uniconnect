@@ -123,6 +123,52 @@ describe("EventCreationScreen", () => {
     fireEvent.press(validateButton)
   })
 
+  it("alert with user id not defined", () => {
+    const mockSetDescription = jest.fn()
+
+    // Set up the provider props
+    const providerProps = {
+      description: "",
+      setDescription: mockSetDescription,
+      point: {x: 0, y: 0},
+      location: "test",
+      userId: undefined
+    }
+    const { getByText } = render(
+      <SafeAreaProvider>
+        {/* @ts-expect-error this is a test mock */}
+        <RegistrationContext.Provider value={providerProps}>
+          <EventCreationScreen navigation={mockNavigation} />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+    const validateButton = getByText("Validate")
+    fireEvent.press(validateButton)
+  })
+
+  it("alert with user not defined", () => {
+    const mockSetDescription = jest.fn()
+
+    // Set up the provider props
+    const providerProps = {
+      description: "",
+      setDescription: mockSetDescription,
+      point: {x: 0, y: 0},
+      location: "test",
+      user: null
+    }
+    const { getByText } = render(
+      <SafeAreaProvider>
+        {/* @ts-expect-error this is a test mock */}
+        <RegistrationContext.Provider value={providerProps}>
+          <EventCreationScreen navigation={mockNavigation} />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+    const validateButton = getByText("Validate")
+    fireEvent.press(validateButton)
+  })
+
   it("updates title input correctly", () => {
     const { getByPlaceholderText } = render(<EventCreationScreen navigation={mockNavigation} />)
     const titleInput = getByPlaceholderText("Chemistry x Python")
