@@ -80,11 +80,18 @@ describe("EventCreationScreen", () => {
   })
 
   it("updates title input correctly", () => {
+    const { getByText } = render(<EventCreationScreen navigation={mockNavigation} />)
+    const validateButton = getByText("Validate")
+    fireEvent.press(validateButton)
+  })
+
+  it("asks for a location when there is none", () => {
     const { getByPlaceholderText } = render(<EventCreationScreen navigation={mockNavigation} />)
     const titleInput = getByPlaceholderText("Chemistry x Python")
     fireEvent.changeText(titleInput, "New Event Title")
     expect(titleInput.props.value).toBe("New Event Title")
   })
+
   it("shows date input fiel when creating event", () => {
     {
       // restricting scope to avoid naming conflicts
