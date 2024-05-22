@@ -115,3 +115,21 @@ export const getEventData = async (eventUid: string) => {
     showErrorToast("Error fetching event data. Please check your connection and try again.")
   }
 }
+
+export const updateEventData = async (eventUid: string, userId: string): Promise<boolean> => {
+  try {
+    const docRef = doc(db, "events", eventUid)
+    const docSnapshot = await getDoc(docRef)
+    const event = docSnapshot.data() as Event
+    if (event.participants.includes(userId)) {
+      return false
+    }
+    event.participants.push(userId)
+    await setDoc(docRef, event, { merge: true })
+    return true
+
+  } catch (error) {
+    showErrorToast("Error fetching event data. Please check your connection and try again.")
+    return false
+  }
+}
