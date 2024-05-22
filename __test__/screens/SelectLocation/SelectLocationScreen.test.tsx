@@ -32,15 +32,24 @@ jest.mock("@react-navigation/native", () => {
 global.alert = jest.fn()
 
 jest.mock('react-native-maps', () => {
-    return {
-      __esModule: true,
-      default: jest.fn().mockImplementation(({ children, ...rest }) => <div {...rest}>{children}</div>), // Mocking MapView
-      Marker: jest.fn().mockImplementation(({ children, ...rest }) => <div {...rest}>{children}</div>), // Mocking Marker
-      Callout: jest.fn().mockImplementation(({ children, ...rest }) => <div {...rest}>{children}</div>), // Mocking Callout
-      PROVIDER_GOOGLE: 'google',
-    }
-  })
+  const ReactNative = jest.requireActual("react-native")
 
+  return {
+    __esModule: true,
+    default: ({ onPress, children, ...rest }) => (
+      <ReactNative.View
+        {...rest}
+        testID="map"
+        onPress={onPress}
+      >
+        {children}
+      </ReactNative.View>
+  ), // Mocking MapView
+    Marker: jest.fn().mockImplementation(({ children, ...rest }) => <div {...rest}>{children}</div>), // Mocking Marker
+    Callout: jest.fn().mockImplementation(({ children, ...rest }) => <div {...rest}>{children}</div>), // Mocking Callout
+    PROVIDER_GOOGLE: 'google',
+  }
+})
 
 describe('SelectLocationScreen', () => {
   beforeEach(() => {

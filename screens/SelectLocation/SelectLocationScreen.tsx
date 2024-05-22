@@ -104,10 +104,9 @@ export const SelectLocationScreen = () => {
             />
         </View>
 
-        <View 
-          style={styles.mapContainer}
-          testID="map">
+        <View style={styles.mapContainer}>
             <MapView 
+                testID="map"
                 style={styles.map} 
                 region={region}
                 onRegionChangeComplete={setRegion}
@@ -121,13 +120,13 @@ export const SelectLocationScreen = () => {
                 >
                 { location !== undefined && 
                     <Marker
-                        key={"location"} 
-                        coordinate={{
-                                latitude: location.x,
-                                longitude: location.y
-                            }}>
-
-                    </Marker>
+                      key={"location"} 
+                      testID="marker"
+                      coordinate={{
+                              latitude: location.x,
+                              longitude: location.y
+                          }}
+                    />
                 }
             </MapView>
         </View>
