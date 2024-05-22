@@ -79,13 +79,27 @@ describe("EventCreationScreen", () => {
     expect(getByText("Choose up to three tags")).toBeTruthy()
   })
 
-  it("updates title input correctly", () => {
-    const { getByText } = render(<EventCreationScreen navigation={mockNavigation} />)
+  it("asks for a location when there is none", () => {
+    const mockSetDescription = jest.fn()
+
+    // Set up the provider props
+    const providerProps = {
+      description: "",
+      setDescription: mockSetDescription,
+    }
+    const { getByText } = render(
+      <SafeAreaProvider>
+        {/* @ts-expect-error this is a test mock */}
+        <RegistrationContext.Provider value={providerProps}>
+          <EventCreationScreen navigation={mockNavigation} />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
     const validateButton = getByText("Validate")
     fireEvent.press(validateButton)
   })
 
-  it("asks for a location when there is none", () => {
+  it("updates title input correctly", () => {
     const { getByPlaceholderText } = render(<EventCreationScreen navigation={mockNavigation} />)
     const titleInput = getByPlaceholderText("Chemistry x Python")
     fireEvent.changeText(titleInput, "New Event Title")
