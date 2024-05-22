@@ -1,13 +1,14 @@
 # flow.yaml
 
+#replace by the right appId
 appId: com.alexandremrt.uniconnect
-
+# need to run registrationM4 before
 ---
-- "launchApp"
+- launchApp
 - tapOn: "Username or email"
-- inputText: "alex.mourot@icloud.com"
+- inputText: "email@oui.com"
 - tapOn: "Password"
-- inputText: "superSecure"
+- inputText: "VeryHard6_"
 - tapOn:
     id: "login-btn"
 

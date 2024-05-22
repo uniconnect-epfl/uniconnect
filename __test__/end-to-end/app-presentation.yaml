@@ -1,0 +1,63 @@
+# flow.yaml
+
+#replace by the right appId
+appId: com.alexandremrt.uniconnect
+# need to have a connected user
+---
+- launchApp
+- tapOn:
+    point: "25%,35%"
+- tapOn: "Participate"
+- tapOn:
+    id: "back-arrow"
+- tapOn:
+    point: "75%,35%"
+- tapOn: "Participate"
+- tapOn:
+    id: "back-arrow"
+- swipe:
+    start: "48%,84%"
+    end: "47%,26%"
+    duration: 879
+- swipe:
+    start: "49%,79%"
+    end: "49%,28%"
+    duration: 800
+- swipe:
+    start: "49%,82%"
+    end: "49%,21%"
+    duration: 733
+- tapOn:
+    point: "25%,43%"
+- tapOn: "Participate"
+- tapOn:
+    point: "9%,6%"
+- tapOn:
+    id: "profile-button"
+- tapOn: "Interests"
+- swipe:
+    start: "2%,13%"
+    end: "57%,15%"
+    duration: 666
+- tapOn: ", Connections"
+- tapOn: "Authorize"
+- tapOn:
+    id: "com.android.permissioncontroller:id/permission_allow_one_time_button"
+- tapOn: ", Explore"
+- tapOn:
+    point: "50%,31%"
+- tapOn: "Events"
+- tapOn: "Add"
+- swipe:
+    start: "3%,23%"
+    end: "55%,26%"
+    duration: 558
+- tapOn: "Graph View"
+- swipe:
+    start: "76%,47%"
+    end: "22%,53%"
+    duration: 554
+- doubleTapOn:
+    id: "node-1"
+- tapOn:
+    id: "modal-profile-picture"
