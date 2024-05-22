@@ -79,13 +79,15 @@ describe("EventCreationScreen", () => {
     expect(getByText("Choose up to three tags")).toBeTruthy()
   })
 
-  it("asks for a location when there is none", () => {
+  it("create with location", () => {
     const mockSetDescription = jest.fn()
 
     // Set up the provider props
     const providerProps = {
       description: "",
       setDescription: mockSetDescription,
+      point: {x: 0, y: 0},
+      location: "test"
     }
     const { getByText } = render(
       <SafeAreaProvider>
