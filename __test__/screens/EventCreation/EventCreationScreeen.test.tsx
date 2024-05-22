@@ -79,7 +79,7 @@ describe("EventCreationScreen", () => {
     expect(getByText("Choose up to three tags")).toBeTruthy()
   })
 
-  it("create with location", () => {
+  it("create event with location", () => {
     const mockSetDescription = jest.fn()
 
     // Set up the provider props
@@ -94,6 +94,28 @@ describe("EventCreationScreen", () => {
         {/* @ts-expect-error this is a test mock */}
         <RegistrationContext.Provider value={providerProps}>
           <EventCreationScreen navigation={mockNavigation} />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+    const validateButton = getByText("Validate")
+    fireEvent.press(validateButton)
+  })
+
+  it("create announcement with location", () => {
+    const mockSetDescription = jest.fn()
+
+    // Set up the provider props
+    const providerProps = {
+      description: "",
+      setDescription: mockSetDescription,
+      point: {x: 0, y: 0},
+      location: "test"
+    }
+    const { getByText } = render(
+      <SafeAreaProvider>
+        {/* @ts-expect-error this is a test mock */}
+        <RegistrationContext.Provider value={providerProps}>
+          <EventCreationScreen isAnnouncement={true} navigation={mockNavigation} />
         </RegistrationContext.Provider>
       </SafeAreaProvider>
     )
