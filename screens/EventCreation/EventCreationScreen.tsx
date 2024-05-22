@@ -66,7 +66,6 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
 
   const newEvent = async () => {
     if (!userId) {
-      console.log("Need a user id to create an event")
       showErrorToast("You must be logged in to create an event")
       return
     }

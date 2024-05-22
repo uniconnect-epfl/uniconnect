@@ -155,7 +155,7 @@ describe("EventCreationScreen", () => {
     const providerProps = {
       description: "",
       setDescription: mockSetDescription,
-      point: {x: 0, y: 0},
+      point: undefined,
       location: "test",
       user: null
     }
