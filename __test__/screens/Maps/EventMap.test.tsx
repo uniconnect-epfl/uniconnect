@@ -75,7 +75,7 @@ describe('Map', () => {
 
   it('should navigate back when the back button is pressed', () => {
     const { getByTestId } = render(<Map />)
-    const backButton = getByTestId('back-button') 
+    const backButton = getByTestId('back-arrow') 
     fireEvent.press(backButton)
   })
    
