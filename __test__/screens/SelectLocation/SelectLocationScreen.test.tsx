@@ -1,10 +1,16 @@
 import React from 'react'
-import { fireEvent, render } from '@testing-library/react-native'
+import { fireEvent, render, waitFor } from '@testing-library/react-native'
 import { SelectLocationScreen } from '../../../screens/SelectLocation/SelectLocationScreen'
 import { NavigationContainer } from '@react-navigation/native'
+import fetchMock from 'jest-fetch-mock'
+import { showErrorToast } from '../../../components/ToastMessage/toast'
 
 const mockGoBack = jest.fn()
 const mockNavigate = jest.fn()
+
+jest.mock('../../../components/ToastMessage/toast')
+
+fetchMock.enableMocks()
 
 jest.mock("@react-navigation/native", () => {
     return {
@@ -37,6 +43,10 @@ jest.mock('react-native-maps', () => {
 
 
 describe('SelectLocationScreen', () => {
+  beforeEach(() => {
+    fetchMock.resetMocks()
+  })
+
   it('renders correctly', () => {
     const component = render(
         <NavigationContainer>
@@ -83,6 +93,69 @@ describe('SelectLocationScreen', () => {
     const confirmButton = getByText("Confirm")
     fireEvent.press(confirmButton)
     expect(mockGoBack).toHaveBeenCalled
+  })
+
+  it('handles point selection and fetches location name', async () => {
+    fetchMock.mockResponseOnce(JSON.stringify({
+      address: {
+        road: 'Rue Centrale',
+        house_number: '1',
+        town: 'Chavannes-près-Renens',
+        postcode: '1022',
+        country_code: 'ch',
+      },
+    }))
+
+    const { getByTestId } = render(
+      <NavigationContainer>
+        <SelectLocationScreen />
+      </NavigationContainer>
+    )
+
+    fireEvent.press(getByTestId('map'), {
+      nativeEvent: {
+        coordinate: { latitude: 46.5317455, longitude: 6.5706826 },
+      },
+    })
+
+  })
+
+  it('handles search query and updates map region', async () => {
+    fetchMock.mockResponseOnce(JSON.stringify([{
+      boundingbox: ['46.5300332', '46.5317455', '6.5706826', '6.5716539'],
+      lat: '46.5300332',
+      lon: '6.5706826',
+    }]))
+
+    const { getByPlaceholderText } = render(
+      <NavigationContainer>
+        <SelectLocationScreen />
+      </NavigationContainer>
+    )
+
+    fireEvent.changeText(getByPlaceholderText('Search...'), 'EPFL')
+    fireEvent(getByPlaceholderText('Search...'), 'submitEditing')
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith('https://nominatim.openstreetmap.org/search?q=EPFL&format=json')
+    })
+  })
+
+  it('shows error toast on failed location search', async () => {
+    fetchMock.mockReject(new Error('Failed to fetch'))
+
+    const { getByPlaceholderText } = render(
+      <NavigationContainer>
+        <SelectLocationScreen />
+      </NavigationContainer>
+    )
+
+    fireEvent.changeText(getByPlaceholderText('Search...'), 'Invalid Location')
+    fireEvent(getByPlaceholderText('Search...'), 'submitEditing')
+
+    await waitFor(() => {
+      expect(showErrorToast).toHaveBeenCalledWith('Failed to search for a location, check your connection.')
+    })
   })
 
 })

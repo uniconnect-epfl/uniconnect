@@ -104,7 +104,9 @@ export const SelectLocationScreen = () => {
             />
         </View>
 
-        <View style={styles.mapContainer}>
+        <View 
+          style={styles.mapContainer}
+          testID="map">
             <MapView 
                 style={styles.map} 
                 region={region}
