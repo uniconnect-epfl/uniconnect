@@ -50,7 +50,11 @@ export const SelectLocationScreen = () => {
             postcode,
             country_code
           } = data.address
-          const address = `${road}` + (house_number !== undefined ? ` ${house_number}` : "") + `, ${postcode} ${town}, ${country_code}`
+          const address = `${road}` + 
+            (house_number !== undefined ? ` ${house_number}` : "") + 
+            `, ${postcode}` +
+            (town !== undefined ? ` ${town}` : "") + 
+            `, ${country_code}`
           setLocationSearch(address)
           setLocationName(address)
           setLocation(newLocation)
