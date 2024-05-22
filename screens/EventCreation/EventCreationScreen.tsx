@@ -16,6 +16,7 @@ import { getUserData, updateUserEvents } from "../../firebase/User"
 import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
 import { getAuth } from "firebase/auth"
 import { User } from "../../types/User"
+import { BackArrow } from "../../components/BackArrow/BackArrow"
 
 interface EventCreationScreenProps {
   navigation: NavigationProp<ParamListBase>,
@@ -109,9 +110,7 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
   return (
     <ScrollView style={styles.container}>
       <View style={[styles.header, { paddingTop: insets.top + 5 }]}>
-        <Pressable onPress={() => navigation.goBack()} testID="back-button">
-          <Ionicons name="arrow-back-outline" size={24} color={peach} />
-        </Pressable>
+        <BackArrow/>
         <View style={styles.headerIcon}>
           <Ionicons name="add" size={24} color={peach} />
         </View>
