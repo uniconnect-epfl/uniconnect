@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import { lightPeach, peach } from "../../assets/colors/colors"
+import { lightGray, lightPeach, peach, transparent } from "../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
     confirmButton: {
@@ -24,9 +24,19 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         width: "100%",
     },
+    inputField: {
+        backgroundColor: transparent,
+        borderColor: lightGray,
+        borderRadius: 25,
+        borderWidth: 1,
+        height: 40,
+        marginTop: 5,
+        paddingHorizontal: 30,
+        width: "100%",
+    },
     inputFieldContainer: {
         height: "10%",
-        width: "95%",
+        width: "90%",
     },
     map: {
         flex: 1,

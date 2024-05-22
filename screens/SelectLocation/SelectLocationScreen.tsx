@@ -23,61 +23,66 @@ export const SelectLocationScreen = () => {
     const [locationName, setLocationName] = useState("")
     const [locationSearch, setLocationSearch] = useState("")
     const [region, setRegion] = useState({
+        // default region is EPFL
         latitude: 46.51858962578904,
         longitude: 6.566048509782951,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
     })
 
-    const GOOGLE_MAPS_KEY = "CACA DE MERDE"
-
     useEffect(() => {
         onLocationChange(locationName, location)
     }, [onLocationChange, locationName, location])
 
     const handlePointSelection = async (newLocation: Point) => {
-        setLocation(newLocation)
-        const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${newLocation.x},${newLocation.y}&key=${GOOGLE_MAPS_KEY}`
-
-        try {
-          const response = await fetch(url)
-          const data = await response.json()
-
-          if (data.status === 'OK') {
-            const address = data.results[0].formatted_address
-            setLocationName(address)
-          } else {
-            console.log("point selection data status: " + data.status)
-          }
-        } catch (error) {
-          showErrorToast("Failed to find a location, check your connection.")
+      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${newLocation.x}&lon=${newLocation.y}&addressdetails=1`
+      console.log(url)
+      try {
+        const response = await fetch(url)
+        const data = await response.json()
+        if (data.error) {
+          showErrorToast("Can't find a location here.")
+        } else {
+          const {
+            road,
+            house_number,
+            town,
+            postcode,
+            country_code
+          } = data.address
+          const address = `${road} ${house_number}, ${postcode} ${town}, ${country_code}`
+          setLocationSearch(address)
+          setLocationName(address)
+          setLocation(newLocation)
         }
+      } catch (error) {
+        showErrorToast("Failed to search for a location, check your connection.")
+      }
     }
 
-    const handleSearch = async (text: string) => {
-        setLocationSearch(text)
-        const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(text)}&key=${GOOGLE_MAPS_KEY}`
-    
+    const handleSearchQuery = async () => {
+        const url = `https://nominatim.openstreetmap.org/search?q=${locationSearch}&format=json`
         try {
+          // request to open street map
           const response = await fetch(url)
           const data = await response.json()
-    
-          if (data.status === 'OK') {
-            const { lat, lng } = data.results[0].geometry.location
-            const newRegion = {
-              ...region,
-              latitude: lat,
-              longitude: lng,
-            }
-    
-            setRegion(newRegion)
-            setLocation({x: lat, y: lng,})
-            setLocationName(text)
+          // check if we recived data or didn't find anything
+          if (Object.keys(data).length > 0) {
+            const { boundingbox, lat, lon } = data[0]
+            // set new map parameters
+            setRegion({
+              latitude: parseFloat(lat),
+              longitude: parseFloat(lon),
+              latitudeDelta: boundingbox[3] - boundingbox[2],
+              longitudeDelta: boundingbox[1] - boundingbox[0]
+            })
+            setLocation({x: parseFloat(lat), y: parseFloat(lon)})
+            setLocationName(locationSearch)
           } else {
-              console.log("address search data status: " + data.status)
+              showErrorToast("Location not found.")
           }
         } catch (error) {
-          showErrorToast("Failed to find a location, check your connection.")
+          showErrorToast("Failed to search for a location, check your connection.")
         }
     }
 
@@ -92,9 +97,10 @@ export const SelectLocationScreen = () => {
 
         <View style={styles.inputFieldContainer}>
             <InputField
-                placeholder="Turing Avenue 69"
+                placeholder="Search..."
                 value={locationSearch}
-                onChangeText={handleSearch}
+                onChangeText={setLocationSearch}
+                onSubmitEditing={handleSearchQuery}
             />
         </View>
 
