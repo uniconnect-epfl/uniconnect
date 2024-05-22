@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react"
-
 import { View, TouchableWithoutFeedback, Keyboard, Image } from "react-native"
-
 import { styles } from "./styles"
-
 import Graph, {
   addContactNode,
   deleteNode,
@@ -12,11 +9,8 @@ import Graph, {
   Node,
   setInitialized,
 } from "../../../components/Graph/Graph"
-
 import ForceDirectedGraph from "../../../components/Graph/ForceDirectedGraph/ForceDirectedGraph"
-
 import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
-
 import { Contact } from "../../../types/Contact"
 import { getUserData } from "../../../firebase/User"
 import InputField from "../../../components/InputField/InputField"
@@ -42,16 +36,10 @@ const ContactGraph = ({
     getNodeById(graph, userId)
   )
 
-  const [counter, setCounter] = useState(1)
-
-  const updateCounter = () => {
-    setCounter((prevCounter) => prevCounter + 1)
-  }
+  const [forceReload, setForceReload] = useState(false) // State variable for force reloading the graph
 
   const [magicNeighbors, setMagicNeighbors] = useState<string[]>([])
-
   const [magicPressedID, setMagicPressedID] = useState<string>("")
-
   const [display, setDisplay] = useState(false)
 
   useEffect(() => {
@@ -67,7 +55,6 @@ const ContactGraph = ({
       })
       setMagicNeighbors([])
       setMagicPressedID("")
-      setCounter(1)
     }
   }, [loaded])
 
@@ -87,10 +74,6 @@ const ContactGraph = ({
     if (!graph) {
       return
     }
-    setDisplay(false)
-    setTimeout(() => {
-      setDisplay(true)
-    }, 1000)
     if (uid === userId) {
       setInitialized(graph, false)
       if (magicPressedID !== "") {
@@ -108,7 +91,6 @@ const ContactGraph = ({
       magicNeighbors.forEach((neighbor) => {
         deleteNode(graph, neighbor)
       })
-      setMagicNeighbors([])
     } else {
       if (magicPressedID !== "" && magicPressedID !== uid) {
         getNodeById(graph, magicPressedID).magicSelected = false
@@ -117,38 +99,32 @@ const ContactGraph = ({
         })
       }
       const newFriends = await friendsFromUID(uid)
-
       const newContacts = await createContactListFromUsers(newFriends)
-
       const filteredNewContacts = newContacts.filter(
         (contact) =>
           !getNodes(graph).find((node) => node.contact.uid === contact.uid) &&
           contact.uid !== userId &&
           getNodeById(graph, uid).contact.friends?.includes(contact.uid)
       )
-
       const relevantNewContact = filteredNewContacts.filter((contact) =>
         relevantContact(userContact, contact)
       )
-
       if (relevantNewContact.length === 0) {
         setInitialized(graph, false)
       }
-
       relevantNewContact.forEach((contact) => {
         addContactNode(graph, contact, 3)
       })
-
       setMagicNeighbors(relevantNewContact.map((contact) => contact.uid))
       getNodeById(graph, uid).magicSelected = true
       setMagicPressedID(uid)
       setInitialized(graph, false)
     }
     handleSearch(searchText, graph)
+    setForceReload((prev) => !prev) // Trigger a force reload of the graph
   }
 
   return (
-    // Dismiss the keyboard when the user taps outside of the search bar
     <TouchableWithoutFeedback
       onPress={() => Keyboard.dismiss()}
       testID="touchable"
@@ -163,7 +139,6 @@ const ContactGraph = ({
           }}
           onSubmitEditing={() => handleQuery(onContactPress, graph)}
         />
-
         <NodeModal
           node={clickedNode}
           visible={modalVisible}
@@ -172,15 +147,14 @@ const ContactGraph = ({
         />
         <View style={styles.graphContainer}>
           {!display && <Image source={require("../../../assets/splash.gif")} />}
-          {graph && counter && (
+          {graph && (
             <ForceDirectedGraph
+              key={forceReload ? "forceReload-3" : "forceReload-2"} // Key changes on forceReload state change
               graph={graph}
               constrainedNodeId={userId}
               magicNodeId={magicPressedID}
-              modalPressedOut={!modalVisible}
               onModalPress={onModalPress}
               onMagicPress={onMagicPress}
-              reload={updateCounter}
             />
           )}
         </View>
@@ -269,7 +243,6 @@ export async function createContactListFromUsers(
 }
 
 export async function friendsFromUID(uid: string): Promise<string[]> {
-  // TODO: Implement Asynchronous storage of friends data
   const user = await getUserData(uid)
   if (!user) {
     return []

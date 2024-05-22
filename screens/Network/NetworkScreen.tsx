@@ -49,6 +49,8 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
   const [friends, setFriends] = useState<string[] | null>(null)
   const [contacts, setContacts] = useState<Contact[] | null>(null)
 
+  const [reload, setReload] = useState(false)
+
   const fetchData = async (userId: string) => {
     setUser(await getUserData(userId))
   }
@@ -58,6 +60,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
       if (!userId) {
         setUserId(getAuth().currentUser?.uid)
       }
+      setReload(true)
     }, [])
   )
 
@@ -130,6 +133,12 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
     }
   }
 
+  useEffect(() => {
+    if (reload) {
+      setReload(false)
+    }
+  }, [reload])
+
   return (
     <View style={styles.container}>
       <SectionTabs
@@ -139,7 +148,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
           setSelectedTab(tab)
         }}
       />
-      {selectedTab === "Graph" && graph && userId && (
+      {!reload && selectedTab === "Graph" && graph && userId && (
         <ContactGraph
           onContactPress={(uid) =>
             navigation.navigate("ExternalProfile", {
@@ -153,7 +162,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
           loaded={loaded}
         />
       )}
-      {selectedTab === "List" && contacts && (
+      {!reload && selectedTab === "List" && contacts && (
         <ContactList
           onContactPress={(uid) =>
             navigation.navigate("ExternalProfile", {
