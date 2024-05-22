@@ -1,4 +1,4 @@
-import React, { View, Text, TouchableOpacity } from "react-native"
+import React, { View, Text, TouchableOpacity, Dimensions } from "react-native"
 import { styles } from "./styles"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import MapView, { Marker, PROVIDER_GOOGLE, Point } from "react-native-maps"
@@ -87,7 +87,7 @@ export const SelectLocationScreen = () => {
     }
 
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, {height: Dimensions.get('window').height}]}>
 
         <View style={styles.header}>
             <Text style={[globalStyles.boldText, styles.screenTitle]}>
