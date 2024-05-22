@@ -69,10 +69,14 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
       showErrorToast("You must be logged in to create an event")
       return
     }
+    if(!point){
+      showErrorToast("You must enter a location for an event")
+      return
+    }
     const eventId = await createEvent(
       title, description, 
       date.toISOString(), 
-      point || { x: 47.238458, y: 5.984155 }, 
+      point, 
       location, 
       "imageUrl", 
       userId
@@ -88,7 +92,7 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
       await createAnnouncement(
         title,
         location,
-        point || { x: 47.238458, y: 5.984155 }, 
+        point, 
         description, 
         interests, 
         date.toISOString()
