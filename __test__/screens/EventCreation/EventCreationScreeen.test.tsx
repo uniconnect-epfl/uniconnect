@@ -87,7 +87,8 @@ describe("EventCreationScreen", () => {
       description: "",
       setDescription: mockSetDescription,
       point: {x: 0, y: 0},
-      location: "test"
+      location: "test",
+      userId: "yep"
     }
     const { getByText } = render(
       <SafeAreaProvider>
@@ -109,7 +110,8 @@ describe("EventCreationScreen", () => {
       description: "",
       setDescription: mockSetDescription,
       point: {x: 0, y: 0},
-      location: "test"
+      location: "test",
+      userId: "salue",
     }
     const { getByText } = render(
       <SafeAreaProvider>
