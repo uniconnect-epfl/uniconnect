@@ -189,15 +189,15 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
         <G>
           <Circle testID="graph-circle" />
           {graphState.links.map((link, index) => {
-            const source = link.source as Node
-            const target = link.target as Node
+            const source = link.source
+            const target = link.target
             return (
               <Line
-                key={index}
-                x1={(source.x || 0) + translation.x}
-                y1={(source.y || 0) + translation.y}
-                x2={(target.x || 0) + translation.x}
-                y2={(target.y || 0) + translation.y}
+                key={"lines" + index}
+                x1={(source.x ?? 0) + translation.x}
+                y1={(source.y ?? 0) + translation.y}
+                x2={(target.x ?? 0) + translation.x}
+                y2={(target.y ?? 0) + translation.y}
                 stroke="grey"
                 strokeWidth={1 / source.level}
               />
@@ -222,15 +222,15 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
             return (
               <G key={"group" + index} testID={"group-" + index}>
                 <Image
-                  key={index}
+                  key={"profile-pictures" + index}
                   style={[
                     styles.nodeImage,
                     {
                       borderColor: node.selected ? peach : transparent,
                       borderRadius: 20 * (80 / node.level),
                       height: 80 / node.level,
-                      left: (node.x || 0) + translation.x - 40 / node.level,
-                      top: (node.y || 0) + translation.y - 40 / node.level,
+                      left: (node.x ?? 0) + translation.x - 40 / node.level,
+                      top: (node.y ?? 0) + translation.y - 40 / node.level,
                       width: 80 / node.level,
                     },
                   ]}
@@ -244,8 +244,8 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
                 />
                 <Circle
                   key={"mask" + index}
-                  cx={(node.x || 0) + translation.x}
-                  cy={(node.y || 0) + translation.y}
+                  cx={(node.x ?? 0) + translation.x}
+                  cy={(node.y ?? 0) + translation.y}
                   r={80 / node.level}
                   fill={transparent}
                   testID={"node-" + node.id}
@@ -254,8 +254,8 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
                 {node.id !== constrainedNodeId && (
                   <SVGText
                     key={node.id + "text"}
-                    x={(node.x || 0) + translation.x}
-                    y={(node.y || 0) + translation.y + 80 / node.level + 10}
+                    x={(node.x ?? 0) + translation.x}
+                    y={(node.y ?? 0) + translation.y + 80 / node.level + 10}
                     textAnchor="middle"
                     testID={"text-" + node.id}
                     fontSize={styles.profileName.fontSize / node.level}
