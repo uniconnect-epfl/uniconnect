@@ -34,6 +34,8 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
 
   const [loaded, setLoaded] = useState(false)
 
+  const [navChange, setNavChange] = useState(false)
+
   const [userContact, setUserContact] = useState<Contact>({
     uid: "-1",
     firstName: "",
@@ -137,21 +139,26 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
         tabs={["Graph", "List"]}
         startingTab="Graph"
         onTabChange={(tab: SetStateAction<string>) => {
-          setSelectedTab(tab)
+          setNavChange(!navChange)
+          if (tab === "Graph") {
+            setSelectedTab("Graph")
+          }
         }}
       />
       {selectedTab === "Graph" && graph && userId && (
         <ContactGraph
-          onContactPress={(uid) =>
+          onContactPress={(uid) => {
             navigation.navigate("ExternalProfile", {
               externalUserUid: uid,
               callback: friendListUpdated,
             })
-          }
+          }}
           graph={graph}
           userId={userId}
           userContact={userContact}
           loaded={loaded}
+          navChange={navChange}
+          changeTab={() => setSelectedTab("List")}
         />
       )}
       {selectedTab === "List" && contacts && (

@@ -81,11 +81,7 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
   }, [graph])
 
   const handleNodeDrag = useCallback(
-    (
-      node: Node,
-      event: GestureResponderEvent,
-      gestureState: PanResponderGestureState
-    ) => {
+    (node: Node, gestureState: PanResponderGestureState) => {
       node.fx = gestureState.moveX - translation.x
       node.fy = gestureState.moveY - translation.y
       simulationRef.current?.alpha(1).restart() // Restart simulation on drag
@@ -120,11 +116,11 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
   ).current
 
   const handleNodePanResponderGrant = (node: Node) => {
-    if (node.id === clickedNodeID) {
-      if (Date.now() - delay < 300) {
-        onModalPress(node.id)
-        clickedNodeID = ""
-      }
+    if (Date.now() - delay < 300 && clickedNodeID === node.id) {
+      clearTimeout(timer)
+      onModalPress(node.id)
+      clickedNodeID = ""
+      delay = Date.now()
     } else {
       timer = setTimeout(() => {
         Vibration.vibrate()
@@ -141,9 +137,9 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
         }
         clickedNodeID = ""
       }, 300)
+      delay = Date.now()
+      clickedNodeID = node.id
     }
-    clickedNodeID = node.id
-    delay = Date.now()
   }
 
   const handleNodePanResponderMove = (
@@ -154,7 +150,7 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
     if (Math.abs(gestureState.dx) > 5 || Math.abs(gestureState.dy) > 5) {
       clearTimeout(timer)
     }
-    handleNodeDrag(node, event, gestureState)
+    handleNodeDrag(node, gestureState)
   }
 
   const handleNodePanResponderRelease = (node: Node) => {

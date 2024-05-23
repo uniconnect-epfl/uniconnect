@@ -20,6 +20,8 @@ interface ContactGraphProps {
   userId: string
   userContact: Contact
   loaded: boolean
+  navChange?: boolean
+  changeTab?: () => void
 }
 
 const ContactGraph = ({
@@ -28,6 +30,8 @@ const ContactGraph = ({
   userId,
   userContact,
   loaded,
+  navChange,
+  changeTab,
 }: ContactGraphProps) => {
   const [searchText, setSearchText] = useState("")
   const [modalVisible, setModalVisible] = useState(false)
@@ -42,17 +46,23 @@ const ContactGraph = ({
   const [display, setDisplay] = useState(false)
 
   useEffect(() => {
+    if (navChange && changeTab !== undefined) {
+      magicNeighbors.forEach((neighbor) => {
+        deleteNode(graph, neighbor)
+      })
+      setMagicNeighbors([])
+      setMagicPressedID("")
+      changeTab()
+    }
+  }, [navChange])
+
+  useEffect(() => {
     if (loaded) {
       setTimeout(() => {
         setDisplay(true)
       }, 2000)
     } else {
       setDisplay(loaded)
-      magicNeighbors.forEach((neighbor) => {
-        deleteNode(graph, neighbor)
-      })
-      setMagicNeighbors([])
-      setMagicPressedID("")
     }
   }, [loaded])
 
