@@ -19,8 +19,10 @@ jest.mock("../../../../firebase/User", () => ({
   updateUserEvents: jest.fn().mockResolvedValue(true)
 }))
 
+const mockGetEventData = jest.fn()
+
 jest.mock("../../../../firebase/ManageEvents", () => ({
-  getEventData: jest.fn().mockResolvedValue({ uid: "123", title: "Event", location: "location", point: { x: 40.712776, y: -74.005974 }, date: new Date().toISOString(), host: "123", participants: ["123"], description: "description", imageUrl: "imageUrl" }),
+  getEventData: jest.fn((...args) => mockGetEventData(...args)),
   updateEventData: jest.fn().mockResolvedValue(true)
 }))
 
@@ -50,16 +52,35 @@ describe("ViewEventScreen", () => {
   })
 
   it("can click on participate", async () => {
-    const { getByText } = render(
-      <NavigationContainer>
-        <ViewEventScreen />
-      </NavigationContainer>
-    )
-    await waitFor(() => {
-      expect(getByText("Participate")).toBeTruthy()
-    })
-
-    fireEvent.press(getByText("Participate"))
+  const eventData = { uid: "123", title: "Event", location: "location", point: { x: 40.712776, y: -74.005974 }, date: new Date().toISOString(), host: "456", participants: ["123"], description: "description", imageUrl: "imageUrl" }
+  mockGetEventData.mockResolvedValueOnce(eventData)
+  const { getByText } = render(
+    <NavigationContainer>
+      <ViewEventScreen />
+    </NavigationContainer>
+  )
+  await waitFor(() => {
+    expect(getByText("Participate")).toBeTruthy()
   })
+
+  fireEvent.press(getByText("Participate"))
+})
+
+it("can click on Edit", async () => {
+  const eventData = { uid: "123", title: "Event", location: "location", point: { x: 40.712776, y: -74.005974 }, date: new Date().toISOString(), host: "123", participants: ["123"], description: "description", imageUrl: "imageUrl" }
+  mockGetEventData.mockResolvedValueOnce(eventData)
+  const { getByText } = render(
+    <NavigationContainer>
+      <ViewEventScreen />
+    </NavigationContainer>
+  )
+  await waitFor(() => {
+    expect(getByText("Edit")).toBeTruthy()
+  })
+
+  fireEvent.press(getByText("Edit"))
+})
+
+
 
 })
