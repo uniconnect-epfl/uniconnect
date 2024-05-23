@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react"
-import { View, Text, FlatList, Image, TouchableOpacity } from "react-native"
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from "react-native"
 import { styles } from "./styles"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../../assets/global/globalStyles"
@@ -71,28 +79,33 @@ const ContactList = ({
   )
 
   return (
-    <View style={styles.container}>
-      <InputField
-        placeholder="Search..."
-        value={searchText}
-        onChangeText={handleSearch}
-        onSubmitEditing={() => {}}
-      />
-
-      {!display && (
-        <View style={styles.loadingScreen}>
-          <Image source={require("../../../assets/splash.gif")} />
-        </View>
-      )}
-      {
-        <FlatList
-          style={styles.listContainer}
-          data={filteredContacts}
-          renderItem={RenderOneContact}
-          keyExtractor={(contact) => contact.uid}
+    <TouchableWithoutFeedback
+      onPress={() => Keyboard.dismiss()}
+      testID="touchable"
+    >
+      <View style={styles.container}>
+        <InputField
+          placeholder="Search..."
+          value={searchText}
+          onChangeText={handleSearch}
+          onSubmitEditing={() => {}}
         />
-      }
-    </View>
+
+        {!display && (
+          <View style={styles.loadingScreen}>
+            <Image source={require("../../../assets/splash.gif")} />
+          </View>
+        )}
+        {
+          <FlatList
+            style={styles.listContainer}
+            data={filteredContacts}
+            renderItem={RenderOneContact}
+            keyExtractor={(contact) => contact.uid}
+          />
+        }
+      </View>
+    </TouchableWithoutFeedback>
   )
 }
 

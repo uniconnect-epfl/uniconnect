@@ -7,7 +7,6 @@ import Graph, {
   getNodeById,
   getNodes,
   Node,
-  setInitialized,
 } from "../../../components/Graph/Graph"
 import ForceDirectedGraph from "../../../components/Graph/ForceDirectedGraph/ForceDirectedGraph"
 import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
@@ -49,7 +48,6 @@ const ContactGraph = ({
       }, 2000)
     } else {
       setDisplay(loaded)
-      setInitialized(graph, false)
       magicNeighbors.forEach((neighbor) => {
         deleteNode(graph, neighbor)
       })
@@ -75,7 +73,6 @@ const ContactGraph = ({
       return
     }
     if (uid === userId) {
-      setInitialized(graph, false)
       if (magicPressedID !== "") {
         getNodeById(graph, magicPressedID).magicSelected = false
       }
@@ -85,7 +82,6 @@ const ContactGraph = ({
       })
       setMagicNeighbors([])
     } else if (magicPressedID !== "" && magicPressedID === uid) {
-      setInitialized(graph, false)
       getNodeById(graph, uid).magicSelected = false
       setMagicPressedID("")
       magicNeighbors.forEach((neighbor) => {
@@ -109,16 +105,12 @@ const ContactGraph = ({
       const relevantNewContact = filteredNewContacts.filter((contact) =>
         relevantContact(userContact, contact)
       )
-      if (relevantNewContact.length === 0) {
-        setInitialized(graph, false)
-      }
       relevantNewContact.forEach((contact) => {
         addContactNode(graph, contact, 3)
       })
       setMagicNeighbors(relevantNewContact.map((contact) => contact.uid))
       getNodeById(graph, uid).magicSelected = true
       setMagicPressedID(uid)
-      setInitialized(graph, false)
     }
     handleSearch(searchText, graph)
     setForceReload((prev) => !prev) // Trigger a force reload of the graph
@@ -137,7 +129,7 @@ const ContactGraph = ({
             setSearchText(text)
             handleSearch(text, graph)
           }}
-          onSubmitEditing={() => handleQuery(onContactPress, graph)}
+          onSubmitEditing={() => handleQuery(onModalPress, graph)}
         />
         <NodeModal
           node={clickedNode}
