@@ -119,7 +119,6 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
       if (contacts.length === 0) {
         showErrorToast("You don't have any friends yet!")
       } else {
-        console.log("contacts", contacts)
         loadGraphData(userId, userContact, contacts).then((graph) => {
           setGraph(graph)
         })
