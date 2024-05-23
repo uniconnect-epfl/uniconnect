@@ -119,8 +119,6 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
     if (Date.now() - delay < 300 && clickedNodeID === node.id) {
       clearTimeout(timer)
       onModalPress(node.id)
-      clickedNodeID = ""
-      delay = Date.now()
     } else {
       timer = setTimeout(() => {
         Vibration.vibrate()
@@ -137,9 +135,9 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
         }
         clickedNodeID = ""
       }, 300)
-      delay = Date.now()
-      clickedNodeID = node.id
     }
+    delay = Date.now()
+    clickedNodeID = node.id
   }
 
   const handleNodePanResponderMove = (

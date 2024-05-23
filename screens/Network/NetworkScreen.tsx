@@ -36,6 +36,8 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
 
   const [navChange, setNavChange] = useState(false)
 
+  const [reload, setReload] = useState(false)
+
   const [userContact, setUserContact] = useState<Contact>({
     uid: "-1",
     firstName: "",
@@ -61,8 +63,15 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
       if (!userId) {
         setUserId(getAuth().currentUser?.uid)
       }
+      setReload(true)
     }, [])
   )
+
+  useEffect(() => {
+    if (reload) {
+      setReload(false)
+    }
+  }, [reload])
 
   useEffect(() => {
     if (userId) {
@@ -110,6 +119,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
       if (contacts.length === 0) {
         showErrorToast("You don't have any friends yet!")
       } else {
+        console.log("contacts", contacts)
         loadGraphData(userId, userContact, contacts).then((graph) => {
           setGraph(graph)
         })
@@ -145,7 +155,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
           }
         }}
       />
-      {selectedTab === "Graph" && graph && userId && (
+      {!reload && selectedTab === "Graph" && graph && userId && (
         <ContactGraph
           onContactPress={(uid) => {
             navigation.navigate("ExternalProfile", {
@@ -161,7 +171,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
           changeTab={() => setSelectedTab("List")}
         />
       )}
-      {selectedTab === "List" && contacts && (
+      {!reload && selectedTab === "List" && contacts && (
         <ContactList
           onContactPress={(uid) =>
             navigation.navigate("ExternalProfile", {

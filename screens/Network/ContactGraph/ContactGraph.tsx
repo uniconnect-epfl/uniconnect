@@ -48,7 +48,9 @@ const ContactGraph = ({
   useEffect(() => {
     if (navChange && changeTab !== undefined) {
       magicNeighbors.forEach((neighbor) => {
-        deleteNode(graph, neighbor)
+        if (!userContact.friends?.includes(neighbor)) {
+          deleteNode(graph, neighbor)
+        }
       })
       setMagicNeighbors([])
       setMagicPressedID("")
