@@ -91,7 +91,7 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
         />
 
         {selectedTab === "Events" && <ProfileEvents />}
-        {selectedTab === "Interests" && <ProfileInterests />}
+        {selectedTab === "Interests" && <ProfileInterests user={user} />}
       </View>
     </View>
   )
