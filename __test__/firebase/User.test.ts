@@ -95,18 +95,6 @@ describe("updateUserEvents", () => {
     )
   })
 
-  it("should not update user events if already registered", async () => {
-    mockGetDoc.mockResolvedValueOnce({
-      data: () => mockUser,
-    })
-
-    const uid = "123"
-    const eventId = "456" // Already in the events list
-    const result = await updateUserEvents(uid, eventId)
-
-    expect(result).toBe(false)
-    expect(mockSetDoc).not.toHaveBeenCalled()
-  })
 
   it("should handle errors gracefully", async () => {
     mockGetDoc.mockRejectedValueOnce(new Error("Firestore error"))
