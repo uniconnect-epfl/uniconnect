@@ -206,3 +206,5 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 }
 
 export default EventScreen
+
+
