@@ -8,6 +8,17 @@ import { getAllAnnouncements } from "../../../firebase/ManageAnnouncements"
 
 // Mock any external components not relevant for the test
 
+const mockNavigate = jest.fn()
+
+jest.mock("@react-navigation/native", () => {
+  return {
+    ...jest.requireActual("@react-navigation/native"),
+    useNavigation: () => ({
+      navigate: mockNavigate,
+    }),
+  }
+})
+
 jest.mock("../../../firebase/firebaseConfig", () => ({
   db: jest.fn(() => ({} as Firestore)),
 }))
