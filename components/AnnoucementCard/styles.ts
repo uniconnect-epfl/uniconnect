@@ -23,11 +23,18 @@ export const styles = StyleSheet.create({
         fontStyle: "italic",
         
     },
+    recommended: {
+        color: peach,
+        fontSize: 14,
+        fontStyle: "italic",
+        marginTop: 5,
+        textAlign: "right",
+    },
     title: {
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
-    },
+    }
     
     
 })

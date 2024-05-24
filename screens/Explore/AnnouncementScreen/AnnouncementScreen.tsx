@@ -21,6 +21,11 @@ interface AnnouncementsScreenProps {
   onAnnouncementPress: (announcement: Announcement) => void
 }
 
+interface RecommendedAnnouncement {
+  announcement: Announcement
+  recommended: boolean
+}
+
 const AnnouncementScreen = ({
   onAnnouncementPress,
 }: AnnouncementsScreenProps) => {
@@ -30,7 +35,7 @@ const AnnouncementScreen = ({
   const [isLoading, setIsLoading] = useState(true)
   const [announcements, setAnnouncements] = useState<Announcement[]>([])
   const [filteredAnnouncements, setFilteredAnnouncements] = useState<
-    Announcement[]
+    RecommendedAnnouncement[]
   >([])
 
   const [userData, setUserData] = useState<User | null>(null)
@@ -38,10 +43,10 @@ const AnnouncementScreen = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        //Fetch all announcements from the database
+        // Fetch all announcements from the database
         const fetchedAnnouncements = (await getAllAnnouncements()) || [] // Fallback to an empty array if null
         setAnnouncements(fetchedAnnouncements)
-        setFilteredAnnouncements(fetchedAnnouncements)
+        setFilteredAnnouncements(recommendAnnouncements(fetchedAnnouncements))
         setIsLoading(false)
       } catch (error) {
         showErrorToast(
@@ -57,9 +62,10 @@ const AnnouncementScreen = ({
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        //Fetch user data from the database
+        // Fetch user data from the database
         const user_data = await getUserData(user_id) // Fallback to an empty object if null
         setUserData(user_data)
+        setFilteredAnnouncements(recommendAnnouncements(announcements))
         setIsLoading(false)
       } catch (error) {
         showErrorToast(
@@ -79,31 +85,38 @@ const AnnouncementScreen = ({
         (announcement: { title: string }) =>
           announcement.title.toLowerCase().includes(searchQuery.toLowerCase())
       )
-      console.log(searchedAnnouncement)
-
-      const recommandedAnnouncement =
-        recommandAnnouncement(searchedAnnouncement)
-      setFilteredAnnouncements(recommandedAnnouncement)
-
-      console.log(announcements)
+      const recommendedAnnouncements = recommendAnnouncements(searchedAnnouncement)
+      setFilteredAnnouncements(recommendedAnnouncements)
     } else {
-      setFilteredAnnouncements(recommandAnnouncement(announcements))
+      console.log(userData?.selectedInterests)
+
+      setFilteredAnnouncements(recommendAnnouncements(announcements))
+      
     }
   }, [searchQuery, announcements, userData])
 
-  function recommandAnnouncement(
+  function recommendAnnouncements(
     announcements: Announcement[]
-  ): Announcement[] {
-    if (!userData || !userData.selectedInterests) return announcements
+  ): RecommendedAnnouncement[] {
+    if (!userData || !userData.selectedInterests) {
+      return announcements.map((announcement) => ({
+        announcement,
+        recommended: false
+      }))
+    }
 
     return announcements
       .map((announcement) => ({
-        ...announcement,
-        commonInterests: announcement.interests.filter((interest) =>
+        announcement,
+        recommended: announcement.interests.filter((interest) =>
           userData.selectedInterests.includes(interest)
-        ).length,
+        ).length === 3
       }))
-      .sort((a, b) => b.commonInterests - a.commonInterests)
+      .sort((a, b) => {
+        if (b.recommended && !a.recommended) return 1
+        if (a.recommended && !b.recommended) return -1
+        return 0
+      })
   }
 
   const sections = [
@@ -114,13 +127,13 @@ const AnnouncementScreen = ({
     setSearchQuery(search)
   }
 
-  const renderItem = ({ item }: SectionListRenderItemInfo<Announcement>) => (
+  const renderItem = ({ item }: SectionListRenderItemInfo<RecommendedAnnouncement>) => (
     <TouchableOpacity
       onPress={() => {
-        onAnnouncementPress(item)
+        onAnnouncementPress(item.announcement)
       }}
     >
-      <AnnouncementCard {...item} />
+      <AnnouncementCard announcement={item.announcement} recommended={item.recommended} />
     </TouchableOpacity>
   )
 
