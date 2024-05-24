@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { View, Text, ScrollView, Pressable } from "react-native"
 import { styles } from "./styles"
-import { NavigationProp, ParamListBase } from "@react-navigation/native"
+import { NavigationProp, ParamListBase, useRoute } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { peach, white } from "../../assets/colors/colors"
@@ -20,10 +20,12 @@ import { BackArrow } from "../../components/BackArrow/BackArrow"
 
 interface EventCreationScreenProps {
   navigation: NavigationProp<ParamListBase>,
-  isAnnouncement?: boolean
 }
 
-const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreenProps) => {
+const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
+  const route = useRoute()
+  const isAnnouncement = route.params?.isAnnouncement
+
   const [dateModal, setDateModal] = useState(false)
   const [date, setDate] = useState<Date>(new Date())
   const [hasBeenTouched, setHasBeenTouched] = useState(false)

@@ -62,7 +62,7 @@ const AnnouncementScreen = ({ onAnnoucmentPress }: AnnouncementsScreenProps) => 
   return (
     <View style={styles.view}>
       <View style={styles.searchAndMap}>
-        <Pressable onPress={() => navigation.navigate("EventCreation" as never)} style={styles.createEventWrapper} >
+        <Pressable onPress={() => navigation.navigate("EventCreation" as never, {isAnnouncement: true})} style={styles.createEventWrapper} >
           <Text style={[globalStyles.smallText, styles.createEvent]}>Create an announcement</Text>
           <Ionicons name="create-outline" size={16} />
         </Pressable>
