@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
     fontFamily: "JetBrainsMono_400Regular",
     height: 40,
     paddingHorizontal: 20,
-    width: "70%",
+    width: "100%",
   },
   searchAndMap: {
     alignItems: "center",
