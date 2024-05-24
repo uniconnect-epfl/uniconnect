@@ -20,6 +20,7 @@ import { fetchInterests, Interest } from "../../../firebase/Interests"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import useKeyboardVisibility from "../../../hooks/useKeyboardVisibility"
 import { RegistrationContext } from "../../../contexts/RegistrationContext"
+import { useNavigation, useRoute } from "@react-navigation/native"
 
 interface InterestButtonProps {
   interest: Interest
@@ -51,6 +52,10 @@ const InterestButton: React.FC<InterestButtonProps> = ({
 )
 
 const InterestsScreen = () => {
+  const route = useRoute()
+  const navigation = useNavigation()
+  const eventMode = route.params?.eventMode
+
   const insets = useSafeAreaInsets()
   const [searchTerm, setSearchTerm] = useState("")
   const [interests, setInterests] = useState<Interest[]>([])
@@ -90,7 +95,13 @@ const InterestsScreen = () => {
       } else {
         return [...prevSelectedInterests, interest.title]
       }
-    })
+    }
+
+  )
+
+    if (eventMode && selectedInterests.length === 2) {
+      navigation.goBack()
+    }
 
     setLabelArray((prev) => {
       if (prev.includes(interest.title)) {
@@ -142,7 +153,7 @@ const InterestsScreen = () => {
           style={styles.image}
         />
         <Text style={[styles.title, globalStyles.boldText]}>
-          Select your interests
+          {`Select ${eventMode ? "three" : "your"} interests`}
         </Text>
 
         <TextInput
@@ -178,7 +189,7 @@ const InterestsScreen = () => {
         />
 
         <View style={[styles.footer, { bottom: insets.bottom }]}>
-          {!keyboardVisible && <LowBar nextScreen="Authentication" />}
+          {!keyboardVisible && !eventMode && <LowBar nextScreen="Authentication" />}
         </View>
       </View>
     </TouchableWithoutFeedback>
