@@ -240,7 +240,7 @@ describe("EventCreationScreen", () => {
 
   it("navigates back when the back button is pressed", () => {
     const { getByTestId } = render(<EventCreationScreen navigation={mockNavigation} />)
-    fireEvent.press(getByTestId("back-button"))
+    fireEvent.press(getByTestId("back-arrow"))
     //expect(mockGoBack).toHaveBeenCalled()
   })
 

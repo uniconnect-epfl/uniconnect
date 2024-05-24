@@ -35,6 +35,17 @@ jest.mock("@expo/vector-icons/Ionicons", () => "Ionicons")
 //mock an alert with jest
 global.alert = jest.fn()
 
+const mockGoBack = jest.fn()
+
+jest.mock("@react-navigation/native", () => {
+  return {
+    ...jest.requireActual("@react-navigation/native"),
+    useNavigation: () => ({
+      goBack: mockGoBack,
+    }),
+  }
+})
+
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 )
