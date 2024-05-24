@@ -28,6 +28,10 @@ jest.mock("react", () => ({
   useContext: jest.fn(() => ({selectedInterests: ["one"], setSelectedInterests: jest.fn(), description: ""})),
 }))
 
+jest.mock("../../../../components/ToastMessage/toast", () => ({
+  showErrorToast: jest.fn(),
+}))
+
 describe("Information Screen", () => {
   it("renders all input fields and buttons", () => {
     const { getByPlaceholderText, getByText } = render(
@@ -59,4 +63,22 @@ describe("Information Screen", () => {
     fireEvent.press(DescButton)
     expect(mockNavigate).toHaveBeenCalledWith("Description")
   })
+
+  it("doesn't go forward of fields are not completed", () => {
+    const { getByPlaceholderText, getByText } = render(
+      <SafeAreaProvider>
+        <InformationScreen />
+      </SafeAreaProvider>
+    )
+
+    const NextButton = getByText("Next")
+    fireEvent.changeText(getByPlaceholderText("First name"), "")
+    fireEvent.changeText(getByPlaceholderText("Last name"), "")
+    fireEvent.press(NextButton)
+    fireEvent.changeText(getByPlaceholderText("First name"), "name")
+    fireEvent.press(NextButton)
+    fireEvent.changeText(getByPlaceholderText("Last name"), "Surname")
+    fireEvent.press(NextButton)
+  })
+
 })
