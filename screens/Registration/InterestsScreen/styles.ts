@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
 
   interestsGrid: {
     alignSelf: "center",
+    marginBottom: 10,
   },
 
   labelContainer: {

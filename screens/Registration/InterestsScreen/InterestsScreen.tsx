@@ -143,14 +143,14 @@ const InterestsScreen = () => {
     <TouchableWithoutFeedback
       style = {[
         styles.container,
-        {height: Dimensions.get('window').height}
+        {height: Dimensions.get('window').height + insets.bottom + insets.top}
       ]}
       onPress={() => Keyboard.dismiss()}>
       <View
         style={[
           styles.container,
           { paddingBottom: insets.bottom, paddingTop: insets.top },
-          {height: Dimensions.get('window').height}
+          {height: Dimensions.get('window').height + insets.bottom + insets.top}
         ]}
       >
         <Image

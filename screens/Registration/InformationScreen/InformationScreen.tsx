@@ -53,6 +53,7 @@ const InformationScreen: React.FC = () => {
     }
     if(!hasBeenTouched){
       showErrorToast("You need to input your birth day!")
+      return false
     } 
     return true
   }
@@ -61,13 +62,16 @@ const InformationScreen: React.FC = () => {
 
   return (
     <TouchableWithoutFeedback 
-      style={[styles.container, {height: Dimensions.get('window').height}]}
+      style={[
+        styles.container, 
+        {height: Dimensions.get('window').height + insets.bottom + insets.top}
+      ]}
       onPress={() => Keyboard.dismiss()}>
       <View
         style={[
           styles.container,
           { paddingTop: insets.top, paddingBottom: insets.bottom },
-          {height: Dimensions.get('window').height}
+          {height: Dimensions.get('window').height + insets.bottom + insets.top}
         ]}
       >
         <Image
