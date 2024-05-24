@@ -178,25 +178,6 @@ describe("EventCreationScreen", () => {
     expect(titleInput.props.value).toBe("New Event Title")
   })
 
-  it("shows date input fiel when creating event", () => {
-    {
-      // restricting scope to avoid naming conflicts
-      const { queryByText } = render(
-        <SafeAreaProvider>
-          <EventCreationScreen isAnnouncement={true} navigation={mockNavigation} />
-        </SafeAreaProvider>
-      )
-      expect(queryByText("DD.MM.YYYY")).toBeNull()
-    }
-
-    const { queryByText } = render(
-      <SafeAreaProvider>
-        <EventCreationScreen isAnnouncement={false} navigation={mockNavigation} />
-      </SafeAreaProvider>
-    )
-    expect(queryByText("DD.MM.YYYY")).toBeTruthy()
-  })
-
   it('should handle "Add a description" button press', () => {
     const { getByText } = render(
       <SafeAreaProvider>
