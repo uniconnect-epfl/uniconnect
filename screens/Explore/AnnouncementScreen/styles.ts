@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native"
 import {
+  black,
   lightGray,
   peach,
   white
@@ -17,6 +18,10 @@ export const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  createEvent: {color: black},
+  createEventWrapper: {
+    justifyContent: "center"
   },
   input: {
     borderColor: lightGray,

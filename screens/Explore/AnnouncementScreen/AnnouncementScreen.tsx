@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, SectionList, SectionListRenderItemInfo, TouchableOpacity } from 'react-native'
+import { View, Text, SectionList, SectionListRenderItemInfo, TouchableOpacity, Pressable } from 'react-native'
 import { styles } from './styles'// Ensure the paths are correct
 import AnnouncementCard from '../../../components/AnnoucementCard/AnnouncementCard'
 import { Announcement } from '../../../types/Annoucement'
 import { getAllAnnouncements } from '../../../firebase/ManageAnnouncements'
 import { showErrorToast } from '../../../components/ToastMessage/toast'
 import LoadingScreen from '../../Loading/LoadingScreen'
+import { globalStyles } from '../../../assets/global/globalStyles'
+import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
 
 interface AnnouncementsScreenProps {
   onAnnoucmentPress: (announcement: Announcement) => void
@@ -14,6 +17,7 @@ interface AnnouncementsScreenProps {
 const AnnouncementScreen = ({ onAnnoucmentPress }: AnnouncementsScreenProps) => {
 
   //const [searchQuery, setSearchQuery] = useState("")
+  const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(true)
   const [announcements, setAnnouncements] = useState<Announcement[] | null>(null)
 
@@ -58,6 +62,10 @@ const AnnouncementScreen = ({ onAnnoucmentPress }: AnnouncementsScreenProps) => 
   return (
     <View style={styles.view}>
       <View style={styles.searchAndMap}>
+        <Pressable onPress={() => navigation.navigate("EventCreation" as never)} style={styles.createEventWrapper} >
+          <Text style={[globalStyles.smallText, styles.createEvent]}>Create an announcement</Text>
+          <Ionicons name="create-outline" size={16} />
+        </Pressable>
         {/* <TextInput
           style={styles.input}
           placeholder="Search..."
