@@ -1,7 +1,7 @@
 import React, { View, Text, TouchableOpacity, Dimensions } from "react-native"
 import { styles } from "./styles"
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
-import MapView, { Marker, PROVIDER_GOOGLE, Point } from "react-native-maps"
+import MapView, { Marker, Point } from "react-native-maps"
 import { useEffect, useState } from "react"
 import InputField from "../../components/InputField/InputField"
 import { globalStyles } from "../../assets/global/globalStyles"
@@ -116,7 +116,6 @@ export const SelectLocationScreen = () => {
                 onRegionChangeComplete={setRegion}
                 showsUserLocation
                 showsMyLocationButton
-                provider={PROVIDER_GOOGLE}
                 onPress={(e) => {
                     const newLocation: Point = {x: e.nativeEvent.coordinate.latitude, y: e.nativeEvent.coordinate.longitude }
                     handlePointSelection(newLocation)
