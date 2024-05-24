@@ -97,18 +97,14 @@ export const updateUserEvents = async (
   eventId: string
 ): Promise<boolean> => {
   try {
-    //read events array and add new event
+    //read events array and add new event, or remove if already exists
     const docRef = doc(db, "users", uid)
     const user = await getDoc(docRef)
     const user2 = user.data() as User
     let userEvents = user2.events
     if (userEvents !== undefined) {
-      userEvents.forEach((event) => {
-        if (event === eventId) {
-          throw new Error("You are already registered to this event.")
-        }
-      })
-      userEvents.push(eventId)
+      const index = userEvents.indexOf(eventId)
+      index === -1 ? userEvents.push(eventId) : userEvents.splice(index, 1)
     } else {
       userEvents = [eventId]
     }
