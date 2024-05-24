@@ -1,9 +1,5 @@
 import { StyleSheet } from "react-native"
-import {
-  lightGray,
-  peach,
-  white
-} from "../../../assets/colors/colors"
+import { lightGray, peach, white } from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
   button: {
@@ -13,7 +9,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     height: 40,
     justifyContent: "center",
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   container: {
     flex: 1,
@@ -25,7 +21,7 @@ export const styles = StyleSheet.create({
     fontFamily: "JetBrainsMono_400Regular",
     height: 40,
     paddingHorizontal: 20,
-    width: "70%"
+    width: "70%",
   },
   searchAndMap: {
     alignItems: "center",
@@ -38,7 +34,7 @@ export const styles = StyleSheet.create({
     fontFamily: "JetBrainsMono_700Bold",
     fontSize: 14,
     letterSpacing: -0.5,
-    paddingRight: 3
+    paddingRight: 3,
   },
   view: {
     flex: 1,
