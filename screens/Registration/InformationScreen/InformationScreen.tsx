@@ -6,6 +6,7 @@ import {
   Image,
   TouchableWithoutFeedback,
   Keyboard,
+  Dimensions,
 } from "react-native"
 import styles from "./styles"
 import { globalStyles } from "../../../assets/global/globalStyles"
@@ -21,6 +22,7 @@ import MyDateInputComponent from "../../../components/DatePicker/DatePicker"
 import { useNavigation } from "@react-navigation/native"
 import { RegistrationContext } from "../../../contexts/RegistrationContext"
 import useKeyboardVisibility from "../../../hooks/useKeyboardVisibility"
+import { showErrorToast } from "../../../components/ToastMessage/toast"
 
 const InformationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
@@ -40,16 +42,32 @@ const InformationScreen: React.FC = () => {
     setHasBeenTouched(true)
   }
 
+  const checkFields = () => {
+    if(firstName === ""){
+      showErrorToast("You need to input your first name!")
+      return false
+    }
+    if(lastName === ""){
+      showErrorToast("You need to input your last name!")
+      return false
+    }
+    if(!hasBeenTouched){
+      showErrorToast("You need to input your birth day!")
+    } 
+    return true
+  }
+
   const opacity = !hasBeenTouched ? 0.2 : 1
 
   return (
     <TouchableWithoutFeedback 
-      style={styles.container}
+      style={[styles.container, {height: Dimensions.get('window').height}]}
       onPress={() => Keyboard.dismiss()}>
       <View
         style={[
           styles.container,
           { paddingTop: insets.top, paddingBottom: insets.bottom },
+          {height: Dimensions.get('window').height}
         ]}
       >
         <Image
@@ -57,7 +75,7 @@ const InformationScreen: React.FC = () => {
           style={styles.image}
         />
 
-        <View>
+        <View style={styles.fieldsContainer}>
           <InputField
             label="First name*"
             placeholder="First name"
@@ -136,7 +154,7 @@ const InformationScreen: React.FC = () => {
         </View>
 
         <View style={[styles.footer, { bottom: insets.bottom }]}>
-          {!keyboardVisible && <LowBar nextScreen="Interests" />}
+          {!keyboardVisible && <LowBar nextScreen="Interests" checkFields={checkFields}/>}
         </View>
 
         {dateModal && (
