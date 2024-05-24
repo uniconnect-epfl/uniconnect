@@ -6,6 +6,9 @@ import { Announcement } from '../../../types/Annoucement'
 import { getAllAnnouncements } from '../../../firebase/ManageAnnouncements'
 import { showErrorToast } from '../../../components/ToastMessage/toast'
 import LoadingScreen from '../../Loading/LoadingScreen'
+import { getAuth } from 'firebase/auth'
+import { User } from '../../../types/User'
+import { getUserData } from '../../../firebase/User'
 
 interface AnnouncementsScreenProps {
   onAnnouncementPress: (announcement: Announcement) => void
@@ -13,14 +16,19 @@ interface AnnouncementsScreenProps {
 
 const AnnouncementScreen = ({ onAnnouncementPress }: AnnouncementsScreenProps) => {
 
+  const user_id = getAuth().currentUser?.uid || ""
+
   const [searchQuery, setSearchQuery] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [announcements, setAnnouncements] = useState<Announcement[]>([])
   const [filteredAnnouncements, setFilteredAnnouncements] = useState<Announcement[]>([])
+  
+  const [userData, setUserData] = useState<User | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        //Fetch all announcements from the database
         const fetchedAnnouncements = await getAllAnnouncements() || [] // Fallback to an empty array if null
         setAnnouncements(fetchedAnnouncements)
         setFilteredAnnouncements(fetchedAnnouncements)
@@ -35,14 +43,49 @@ const AnnouncementScreen = ({ onAnnouncementPress }: AnnouncementsScreenProps) =
   }, [])
 
   useEffect(() => {
-    if (searchQuery) {
-      setFilteredAnnouncements(announcements.filter((announcement: { title: string }) =>
-        announcement.title.toLowerCase().includes(searchQuery.toLowerCase())
-      ))
-    } else {
-      setFilteredAnnouncements(announcements)
+    const fetchUserData = async () => {
+      try {
+        //Fetch user data from the database
+        const user_data = await getUserData(user_id)   // Fallback to an empty object if null
+        setUserData(user_data)
+        setIsLoading(false)
+      } catch (error) {
+        showErrorToast("Error fetching User Data. Please check your connection and try again.")
+        setIsLoading(false) // Set loading to false regardless of result
+      }
     }
-  }, [searchQuery, announcements])
+    if (user_id) {
+      fetchUserData()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (searchQuery) {
+      const searchedAnnouncement = announcements.filter((announcement: { title: string }) =>
+        announcement.title.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+      console.log(searchedAnnouncement)
+      
+      const recommandedAnnouncement = recommandAnnouncement(searchedAnnouncement)
+      setFilteredAnnouncements(recommandedAnnouncement)
+
+      console.log(announcements)
+    } else {
+      setFilteredAnnouncements(recommandAnnouncement(announcements))
+    }
+  }, [searchQuery, announcements, userData])
+
+  function recommandAnnouncement(announcements: Announcement[]): Announcement[] {
+    if (!userData || !userData.selectedInterests) return announcements
+    
+    return announcements
+      .map(announcement => ({
+        ...announcement,
+        commonInterests: announcement.interests.filter(interest => userData.selectedInterests.includes(interest)).length
+      }))
+      .sort((a, b) => b.commonInterests - a.commonInterests)
+      
+  }
 
   const sections = [{ title: "Future Announcements", data: filteredAnnouncements }]
 

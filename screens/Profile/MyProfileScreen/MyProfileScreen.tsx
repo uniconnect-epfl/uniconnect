@@ -85,7 +85,7 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
         <ExpandableDescription description={user.description} />
 
         <SectionTabs
-          tabs={["Events", "Interests"]}
+          tabs={["Events","Interests"]}
           startingTab="Events"
           onTabChange={setSelectedTab}
         />

@@ -33,7 +33,7 @@ const ExploreScreen = ({ navigation }: ExploreScreenProps) => {
 
       {selectedTab === "Announcements" && (
         <AnnouncementScreen
-          onAnnoucmentPress={(announcement) =>
+          onAnnouncementPress={(announcement) =>
             navigation.navigate("ViewAnnouncement", {
               announcement: announcement,
             })
