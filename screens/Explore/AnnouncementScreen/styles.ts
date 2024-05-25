@@ -1,5 +1,10 @@
 import { StyleSheet } from "react-native"
-import { lightGray, peach, white } from "../../../assets/colors/colors"
+import {
+  black,
+  lightGray,
+  peach,
+  white
+} from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
   button: {
@@ -13,6 +18,10 @@ export const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  createEvent: {color: black},
+  createEventWrapper: {
+    justifyContent: "center"
   },
   input: {
     borderColor: lightGray,

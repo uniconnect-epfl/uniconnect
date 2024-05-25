@@ -4,7 +4,7 @@ import {
   Text,
   SectionList,
   SectionListRenderItemInfo,
-  TouchableOpacity,
+  TouchableOpacity, Pressable,
   TextInput,
 } from "react-native"
 import { styles } from "./styles" // Ensure the paths are correct
@@ -16,6 +16,9 @@ import LoadingScreen from "../../Loading/LoadingScreen"
 import { getAuth } from "firebase/auth"
 import { User } from "../../../types/User"
 import { getUserData } from "../../../firebase/User"
+import { globalStyles } from '../../../assets/global/globalStyles'
+import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from "@react-navigation/native"
 
 interface AnnouncementsScreenProps {
   onAnnouncementPress: (announcement: Announcement) => void
@@ -32,6 +35,7 @@ const AnnouncementScreen = ({
   const user_id = getAuth().currentUser?.uid || ""
 
   const [searchQuery, setSearchQuery] = useState("")
+  const navigation = useNavigation()
   const [isLoading, setIsLoading] = useState(true)
   const [announcements, setAnnouncements] = useState<Announcement[]>([])
   const [filteredAnnouncements, setFilteredAnnouncements] = useState<
@@ -150,7 +154,11 @@ const AnnouncementScreen = ({
   return (
     <View style={styles.view}>
       <View style={styles.searchAndMap}>
-        <TextInput
+        <Pressable onPress={() => navigation.navigate("EventCreation" as never, {isAnnouncement: true})} style={styles.createEventWrapper} >
+          <Text style={[globalStyles.smallText, styles.createEvent]}>Create an announcement</Text>
+          <Ionicons name="create-outline" size={16} />
+        </Pressable>
+         <TextInput
           style={styles.input}
           placeholder="Search..."
           value={searchQuery}
