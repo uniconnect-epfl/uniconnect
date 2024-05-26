@@ -78,11 +78,12 @@ describe("EventCreationScreen", () => {
     )
     expect(getByText("Validate")).toBeTruthy()
     expect(getByText("Add a description")).toBeTruthy()
-    expect(getByText("Choose up to three tags")).toBeTruthy()
+    expect(getByText("Choose up to three interests")).toBeTruthy()
   })
 
   it("create event with location", () => {
     const mockSetDescription = jest.fn()
+    const mockSetSelectedInterests = jest.fn()
 
     // Set up the provider props
     const providerProps = {
@@ -91,6 +92,8 @@ describe("EventCreationScreen", () => {
       point: { x: 0, y: 0 },
       location: "test",
       userId: "yep",
+      selectedInterests: [],
+      setSelectedInterests: mockSetSelectedInterests
     }
     const { getByText } = render(
       <SafeAreaProvider>
@@ -106,6 +109,7 @@ describe("EventCreationScreen", () => {
 
   it("create announcement with location", () => {
     const mockSetDescription = jest.fn()
+    const mockSetSelectedInterests = jest.fn()
 
     // Set up the provider props
     const providerProps = {
@@ -114,13 +118,14 @@ describe("EventCreationScreen", () => {
       point: { x: 0, y: 0 },
       location: "test",
       userId: "salue",
+      selectedInterests: [],
+      setSelectedInterests: mockSetSelectedInterests
     }
     const { getByText } = render(
       <SafeAreaProvider>
         {/* @ts-expect-error this is a test mock */}
         <RegistrationContext.Provider value={providerProps}>
           <EventCreationScreen
-            isAnnouncement={true}
             navigation={mockNavigation}
           />
         </RegistrationContext.Provider>
@@ -132,6 +137,7 @@ describe("EventCreationScreen", () => {
 
   it("alert with user id not defined", () => {
     const mockSetDescription = jest.fn()
+    const mockSetSelectedInterests = jest.fn()
 
     // Set up the provider props
     const providerProps = {
@@ -140,6 +146,8 @@ describe("EventCreationScreen", () => {
       point: { x: 0, y: 0 },
       location: "test",
       userId: undefined,
+      selectedInterests: [],
+      setSelectedInterests: mockSetSelectedInterests
     }
     const { getByText } = render(
       <SafeAreaProvider>
@@ -155,6 +163,7 @@ describe("EventCreationScreen", () => {
 
   it("alert with user not defined", () => {
     const mockSetDescription = jest.fn()
+    const mockSetSelectedInterests = jest.fn()
 
     // Set up the provider props
     const providerProps = {
@@ -163,6 +172,8 @@ describe("EventCreationScreen", () => {
       point: undefined,
       location: "test",
       user: null,
+      selectedInterests: [],
+      setSelectedInterests: mockSetSelectedInterests
     }
     const { getByText } = render(
       <SafeAreaProvider>
@@ -198,11 +209,14 @@ describe("EventCreationScreen", () => {
 
   it('should handle "Validate" button press and call setDescription', () => {
     const mockSetDescription = jest.fn()
+    const mockSetSelectedInterests = jest.fn()
 
     // Set up the provider props
     const providerProps = {
       description: "",
       setDescription: mockSetDescription,
+      selectedInterests: [],
+      setSelectedInterests: mockSetSelectedInterests
     }
 
     // Render the component wrapped in the mock provider directly
@@ -249,17 +263,17 @@ describe("EventCreationScreen", () => {
     const { getByText } = render(
       <EventCreationScreen navigation={mockNavigation} />
     )
-    fireEvent.press(getByText("Choose up to three tags"))
+    fireEvent.press(getByText("Choose up to three interests"))
     // Assume modal or dropdown opens, simulate selecting a tag
     // Add mock function or state update check here
   })
 
   it("renders different UI elements based on the isAnnouncement prop", () => {
     const { queryByText, rerender } = render(
-      <EventCreationScreen isAnnouncement={true} navigation={mockNavigation} />
+      <EventCreationScreen navigation={mockNavigation} />
     )
     rerender(
-      <EventCreationScreen isAnnouncement={false} navigation={mockNavigation} />
+      <EventCreationScreen navigation={mockNavigation} />
     )
     expect(queryByText("Add a location")).toBeTruthy()
   })

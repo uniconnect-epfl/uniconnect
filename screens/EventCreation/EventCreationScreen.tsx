@@ -149,13 +149,13 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
           >
             <View style={styles.tags}>
               <View style={styles.addTag}>
-                {selectedInterests.length === 0 ? (
+                {selectedInterests?.length === 0 ? (
                   <Ionicons name="add" size={24} color={white} />
                 ) : (
                   <Ionicons name="refresh" size={24} color={white} />
                 )}
               </View>
-              {selectedInterests.length !== 0 && (
+              {selectedInterests?.length !== 0 && (
                 <Text style={[styles.tagsTitle, globalStyles.text]}>
                   Interests selected!
                 </Text>
