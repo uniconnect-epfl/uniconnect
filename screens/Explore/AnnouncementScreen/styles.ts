@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native"
 import {
+  black,
   lightGray,
   peach,
   white
@@ -13,10 +14,14 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     height: 40,
     justifyContent: "center",
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   container: {
     flex: 1,
+  },
+  createEvent: {color: black},
+  createEventWrapper: {
+    justifyContent: "center"
   },
   input: {
     borderColor: lightGray,
@@ -25,7 +30,7 @@ export const styles = StyleSheet.create({
     fontFamily: "JetBrainsMono_400Regular",
     height: 40,
     paddingHorizontal: 20,
-    width: "70%"
+    width: "100%",
   },
   searchAndMap: {
     alignItems: "center",
@@ -38,7 +43,7 @@ export const styles = StyleSheet.create({
     fontFamily: "JetBrainsMono_700Bold",
     fontSize: 14,
     letterSpacing: -0.5,
-    paddingRight: 3
+    paddingRight: 3,
   },
   view: {
     flex: 1,

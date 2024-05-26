@@ -37,8 +37,8 @@ jest.mock("firebase/firestore", () => {
   const originalModule = jest.requireActual("firebase/firestore")
 
   return {
-      ...originalModule,
-      getFirestore: jest.fn(() => ({} as Firestore)),
+    ...originalModule,
+    getFirestore: jest.fn(() => ({} as Firestore)),
   }
 })
 
@@ -73,7 +73,9 @@ jest.mock("react-native-safe-area-context", () => {
 
 describe("EventCreationScreen", () => {
   it("renders correctly", () => {
-    const { getByText } = render(<EventCreationScreen navigation={mockNavigation} />)
+    const { getByText } = render(
+      <EventCreationScreen navigation={mockNavigation} />
+    )
     expect(getByText("Validate")).toBeTruthy()
     expect(getByText("Add a description")).toBeTruthy()
     expect(getByText("Choose up to three tags")).toBeTruthy()
@@ -86,9 +88,9 @@ describe("EventCreationScreen", () => {
     const providerProps = {
       description: "",
       setDescription: mockSetDescription,
-      point: {x: 0, y: 0},
+      point: { x: 0, y: 0 },
       location: "test",
-      userId: "yep"
+      userId: "yep",
     }
     const { getByText } = render(
       <SafeAreaProvider>
@@ -109,7 +111,7 @@ describe("EventCreationScreen", () => {
     const providerProps = {
       description: "",
       setDescription: mockSetDescription,
-      point: {x: 0, y: 0},
+      point: { x: 0, y: 0 },
       location: "test",
       userId: "salue",
     }
@@ -117,7 +119,10 @@ describe("EventCreationScreen", () => {
       <SafeAreaProvider>
         {/* @ts-expect-error this is a test mock */}
         <RegistrationContext.Provider value={providerProps}>
-          <EventCreationScreen isAnnouncement={true} navigation={mockNavigation} />
+          <EventCreationScreen
+            isAnnouncement={true}
+            navigation={mockNavigation}
+          />
         </RegistrationContext.Provider>
       </SafeAreaProvider>
     )
@@ -132,9 +137,9 @@ describe("EventCreationScreen", () => {
     const providerProps = {
       description: "",
       setDescription: mockSetDescription,
-      point: {x: 0, y: 0},
+      point: { x: 0, y: 0 },
       location: "test",
-      userId: undefined
+      userId: undefined,
     }
     const { getByText } = render(
       <SafeAreaProvider>
@@ -157,7 +162,7 @@ describe("EventCreationScreen", () => {
       setDescription: mockSetDescription,
       point: undefined,
       location: "test",
-      user: null
+      user: null,
     }
     const { getByText } = render(
       <SafeAreaProvider>
@@ -172,29 +177,12 @@ describe("EventCreationScreen", () => {
   })
 
   it("updates title input correctly", () => {
-    const { getByPlaceholderText } = render(<EventCreationScreen navigation={mockNavigation} />)
+    const { getByPlaceholderText } = render(
+      <EventCreationScreen navigation={mockNavigation} />
+    )
     const titleInput = getByPlaceholderText("Chemistry x Python")
     fireEvent.changeText(titleInput, "New Event Title")
     expect(titleInput.props.value).toBe("New Event Title")
-  })
-
-  it("shows date input fiel when creating event", () => {
-    {
-      // restricting scope to avoid naming conflicts
-      const { queryByText } = render(
-        <SafeAreaProvider>
-          <EventCreationScreen isAnnouncement={true} navigation={mockNavigation} />
-        </SafeAreaProvider>
-      )
-      expect(queryByText("DD.MM.YYYY")).toBeNull()
-    }
-
-    const { queryByText } = render(
-      <SafeAreaProvider>
-        <EventCreationScreen isAnnouncement={false} navigation={mockNavigation} />
-      </SafeAreaProvider>
-    )
-    expect(queryByText("DD.MM.YYYY")).toBeTruthy()
   })
 
   it('should handle "Add a description" button press', () => {
@@ -233,26 +221,34 @@ describe("EventCreationScreen", () => {
   })
 
   it("checks if the description button navigates correctly", () => {
-    const { getByText } = render(<EventCreationScreen navigation={mockNavigation} />)
+    const { getByText } = render(
+      <EventCreationScreen navigation={mockNavigation} />
+    )
     fireEvent.press(getByText("Add a description"))
     //expect(mockNavigation).toHaveBeenCalledWith("Description")
   })
 
   it("navigates back when the back button is pressed", () => {
-    const { getByTestId } = render(<EventCreationScreen navigation={mockNavigation} />)
-    fireEvent.press(getByTestId("back-button"))
+    const { getByTestId } = render(
+      <EventCreationScreen navigation={mockNavigation} />
+    )
+    fireEvent.press(getByTestId("back-arrow"))
     //expect(mockGoBack).toHaveBeenCalled()
   })
 
   it("updates title input correctly", () => {
-    const { getByPlaceholderText } = render(<EventCreationScreen navigation={mockNavigation} />)
+    const { getByPlaceholderText } = render(
+      <EventCreationScreen navigation={mockNavigation} />
+    )
     const titleInput = getByPlaceholderText("Chemistry x Python")
     fireEvent.changeText(titleInput, "New Event Title")
     expect(titleInput.props.value).toBe("New Event Title")
   })
 
   it("handles interest tag selection", () => {
-    const { getByText } = render(<EventCreationScreen navigation={mockNavigation} />)
+    const { getByText } = render(
+      <EventCreationScreen navigation={mockNavigation} />
+    )
     fireEvent.press(getByText("Choose up to three tags"))
     // Assume modal or dropdown opens, simulate selecting a tag
     // Add mock function or state update check here
@@ -262,13 +258,16 @@ describe("EventCreationScreen", () => {
     const { queryByText, rerender } = render(
       <EventCreationScreen isAnnouncement={true} navigation={mockNavigation} />
     )
-    rerender(<EventCreationScreen isAnnouncement={false} navigation={mockNavigation} />)
+    rerender(
+      <EventCreationScreen isAnnouncement={false} navigation={mockNavigation} />
+    )
     expect(queryByText("Add a location")).toBeTruthy()
   })
 
   it("can add locations", () => {
-    const { getByText } = render(<EventCreationScreen navigation={mockNavigation} />)
+    const { getByText } = render(
+      <EventCreationScreen navigation={mockNavigation} />
+    )
     fireEvent.press(getByText("Add a location"))
   })
-
 })

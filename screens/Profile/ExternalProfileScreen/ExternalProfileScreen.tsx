@@ -14,6 +14,7 @@ import { getAuth } from "firebase/auth"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import { getUserData, addFriend, removeFriend } from "../../../firebase/User"
 import { User } from "../../../types/User"
+import { BackArrow } from "../../../components/BackArrow/BackArrow"
 
 type RootStackParamList = {
   ExternalProfile: {
@@ -77,6 +78,7 @@ const ExternalProfileScreen = () => {
 
   return (
     <View style={styles.container}>
+      <BackArrow/>
       <View style={profileStyles.profileContainer}>
         <View style={profileStyles.topProfileContainer}>
           <GeneralProfile
@@ -153,7 +155,9 @@ const ExternalProfileScreen = () => {
         <View style={styles.separatorLine} />
 
         {selectedTab === "Events" && <ProfileEvents />}
-        {selectedTab === "Interests" && <ProfileInterests />}
+        {selectedTab === "Interests" && (
+          <ProfileInterests user={externalUser} />
+        )}
         {selectedTab === "Network" && <ProfileNetwork />}
       </View>
     </View>

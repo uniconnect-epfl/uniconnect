@@ -121,10 +121,8 @@ export const updateEventData = async (eventUid: string, userId: string): Promise
     const docRef = doc(db, "events", eventUid)
     const docSnapshot = await getDoc(docRef)
     const event = docSnapshot.data() as Event
-    if (event.participants.includes(userId)) {
-      return false
-    }
-    event.participants.push(userId)
+    const index = event.participants.indexOf(userId)
+    index === -1 ?  event.participants.push(userId): event.participants.splice(index, 1)
     await setDoc(docRef, event, { merge: true })
     return true
 
