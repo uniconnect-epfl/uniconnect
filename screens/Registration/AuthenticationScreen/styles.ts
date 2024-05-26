@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native"
-import { peach, lightPeach, shadowColor } from "../../../assets/colors/colors"
+import { peach, lightPeach, shadowColor, white } from "../../../assets/colors/colors"
 
 import { BUTTON_RADIUS } from "../../../assets/global/constants"
 const styles = StyleSheet.create({
@@ -28,10 +28,10 @@ const styles = StyleSheet.create({
   },
   container: {
     alignContent: 'center',
-    display: 'flex',
+    backgroundColor: white,
     flexDirection: 'column',
     marginLeft: 40,
-    marginVertical: 10
+    marginVertical: 10,
   },
   footer: {
     position: "absolute",
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   view: {
-    flex: 1
+    backgroundColor: white
   }
 }) 
 
