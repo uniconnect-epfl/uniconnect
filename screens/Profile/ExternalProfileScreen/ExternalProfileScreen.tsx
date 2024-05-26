@@ -79,8 +79,8 @@ const ExternalProfileScreen = () => {
   return (
     <View style={styles.container}>
       
-      <BackArrow/>
       <View style={profileStyles.topBackground} />
+      <BackArrow/>
 
       <View style={profileStyles.profileContainer}>
         <View style={profileStyles.topProfileContainer}>
