@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { View, Text, ScrollView, Pressable } from "react-native"
 import { styles } from "./styles"
-import { NavigationProp, ParamListBase } from "@react-navigation/native"
+import { NavigationProp, ParamListBase, useRoute } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { peach, white } from "../../assets/colors/colors"
@@ -16,13 +16,16 @@ import { getUserData, updateUserEvents } from "../../firebase/User"
 import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
 import { getAuth } from "firebase/auth"
 import { User } from "../../types/User"
+import { BackArrow } from "../../components/BackArrow/BackArrow"
 
 interface EventCreationScreenProps {
   navigation: NavigationProp<ParamListBase>,
-  isAnnouncement?: boolean
 }
 
-const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreenProps) => {
+const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
+  const route = useRoute()
+  const isAnnouncement = route.params?.isAnnouncement
+
   const [dateModal, setDateModal] = useState(false)
   const [date, setDate] = useState<Date>(new Date())
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
@@ -69,7 +72,21 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
       showErrorToast("You must be logged in to create an event")
       return
     }
-    const eventId = await createEvent(title, description, date.toISOString(),{ x: 47.238458, y: 5.984155 }, location, "imageUrl", userId)
+    if(!point){
+      console.log("Need a point to create an event")
+      setPoint(undefined)
+      console.log("Event not created")
+      showErrorToast("You must enter a location for an event")
+      return
+    }
+    const eventId = await createEvent(
+      title, description, 
+      date.toISOString(), 
+      point, 
+      location, 
+      "imageUrl", 
+      userId
+    )
     if (eventId && user) {
       await updateUserEvents(user.uid, eventId)
       showSuccessToast("Event created successfully")
@@ -78,7 +95,14 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
 
   const newAnnouncement = async () => {
     try {
-      await createAnnouncement( title,location,{ x: 47.238458, y: 5.984155 }, description, interests, date.toISOString())
+      await createAnnouncement(
+        title,
+        location,
+        point, 
+        description, 
+        interests, 
+        date.toISOString()
+      )
       showSuccessToast("Announcement created succesfully")
     } catch (error) {
       showErrorToast("Could not create announcement")
@@ -88,9 +112,7 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
   return (
     <ScrollView style={styles.container}>
       <View style={[styles.header, { paddingTop: insets.top + 5 }]}>
-        <Pressable onPress={() => navigation.goBack()} testID="back-button">
-          <Ionicons name="arrow-back-outline" size={24} color={peach} />
-        </Pressable>
+        <BackArrow/>
         <View style={styles.headerIcon}>
           <Ionicons name="add" size={24} color={peach} />
         </View>
@@ -129,13 +151,6 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
                 setDateModal={setDateModal}
               />
             )}
-            
-            <InputField
-              label="Location*"
-              placeholder="Turing Avenue 69"
-              value={location}
-              onChangeText={setLocation}
-            />
 
             <Pressable
               style={styles.section}
@@ -165,7 +180,11 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
           <Pressable style={styles.buttonBase}>
             <Text
               onPress={() => {
-                navigation.navigate("SelectLocation", {onLocationChange: setPoint, initialPoint: point})
+                const onLocationChange = (locationName: string, point: Point | undefined) => {
+                  setLocation(locationName)
+                  setPoint(point)
+                }
+                navigation.navigate("SelectLocation", {onLocationChange: onLocationChange, initialPoint: point})
               }}
               style={globalStyles.boldText}
               >

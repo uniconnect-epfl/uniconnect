@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import ExpandableDescription from "../../../components/ExpandableDescription/ExpandableDescription"
 import GeneralProfile from "../../../components/GeneralProfile/GeneralProfile"
-import { black } from "../../../assets/colors/colors"
+import { black, peach } from "../../../assets/colors/colors"
 import { NavigationProp, ParamListBase } from "@react-navigation/native"
 import { profileStyles } from "../profileStyles"
 import { styles } from "./styles"
@@ -15,12 +15,15 @@ import { getAuth } from "firebase/auth"
 import { User } from "../../../types/User"
 import { getUserData } from "../../../firebase/User"
 import LoadingScreen from "../../Loading/LoadingScreen"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { BackArrow } from "../../../components/BackArrow/BackArrow"
 
 interface MyProfileScreenProps {
   navigation: NavigationProp<ParamListBase>
 }
 
 export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
+  const insets = useSafeAreaInsets()
   const [selectedTab, setSelectedTab] = useState("Events")
   const userId = getAuth().currentUser?.uid
   const [user, setUser] = useState<User | null>(null)
@@ -44,9 +47,15 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
   return (
     <View style={styles.container}>
 
+      <BackArrow/>
       <View style={profileStyles.topBackground} />
 
-      <View style={profileStyles.profileContainer}>
+      <View style={[profileStyles.profileContainer, {paddingTop: insets.top + 5}]}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()} testID="back-button">
+            <Ionicons name="arrow-back-outline" size={24} color={peach} />
+          </TouchableOpacity>
+        </View>
         <View style={profileStyles.topProfileContainer}>
           <GeneralProfile
             name={user.firstName}
@@ -81,13 +90,13 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
         <ExpandableDescription description={user.description} />
 
         <SectionTabs
-          tabs={["Events", "Interests"]}
+          tabs={["Events","Interests"]}
           startingTab="Events"
           onTabChange={setSelectedTab}
         />
 
         {selectedTab === "Events" && <ProfileEvents />}
-        {selectedTab === "Interests" && <ProfileInterests />}
+        {selectedTab === "Interests" && <ProfileInterests user={user} />}
       </View>
     </View>
   )

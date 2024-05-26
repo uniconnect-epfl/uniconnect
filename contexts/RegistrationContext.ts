@@ -1,6 +1,8 @@
+import { User } from 'firebase/auth'
 import { createContext } from 'react'
 
 export type RegistrationContextType = {
+  user: User | null,
   firstName: string,
   setFirstName: (firstName: string) => void,
   lastName: string,

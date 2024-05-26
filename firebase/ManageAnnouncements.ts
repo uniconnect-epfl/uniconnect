@@ -4,7 +4,7 @@ import { showErrorToast, showSuccessToast } from "../components/ToastMessage/toa
 import { Point } from "react-native-maps"
 import { Announcement } from "../types/Annoucement"
 
-export async function createAnnouncement(title: string, location: string, point: Point, description: string, interests: string[], date: string) {
+export async function createAnnouncement(title: string, location: string, point: Point | undefined, description: string, interests: string[], date: string) {
     try {
         const eventRef = doc(collection(db, "events"))
         await setDoc(eventRef,{
