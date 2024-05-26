@@ -54,12 +54,7 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
 
   const publish = async () => {
     // send the data to the backend
-
-    if (isAnnouncement) {
-      newAnnouncement()
-    } else {
-      newEvent()
-    }
+    isAnnouncement ? newAnnouncement() : newEvent()
 
     // after the user has filled out the form
     // we should make sure the global state is cleaned
