@@ -239,4 +239,15 @@ describe('AuthenticationScreen', () => {
     })
   })
 
+  it('dismisses the keyboard', async () => {
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <AuthenticationScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+    fireEvent.press(getByText("Last Step"))
+  })
+
 })

@@ -1,6 +1,7 @@
 import { fireEvent, render } from '@testing-library/react-native'
 import Map from '../../../screens/Maps/EventMap' 
 import React from 'react'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 jest.mock('@react-navigation/native', () => {
   const actualNav = jest.requireActual('@react-navigation/native')
@@ -37,6 +38,16 @@ jest.mock('@react-navigation/native', () => {
       PROVIDER_GOOGLE: 'google',
     }
   })
+
+  jest.mock('react-native-safe-area-context', () => {
+    const inset = {top: 0, right: 0, bottom: 0, left: 0}
+    return {
+      SafeAreaProvider: jest.fn(({children}) => children),
+      SafeAreaConsumer: jest.fn(({children}) => children(inset)),
+      useSafeAreaInsets: jest.fn(() => inset),
+      useSafeAreaFrame: jest.fn(() => ({x: 0, y: 0, width: 390, height: 844})),
+    }
+  })
   
 
 describe('Map', () => {
@@ -53,7 +64,11 @@ describe('Map', () => {
 
     it('displays correct event details in callout', () => {
 
-        const { getByText } = render(<Map />)
+        const { getByText } = render(
+          <SafeAreaProvider>
+            <Map />
+          </SafeAreaProvider>
+        )
         const title = getByText('Balelek 2023')
         const location = getByText('EPFL, Agora')
         const date = getByText('May 3, 2024')
@@ -66,7 +81,11 @@ describe('Map', () => {
     it('should handle callout press', () => {
 
         console.log = jest.fn()
-        const { getByText } = render(<Map />)
+        const { getByText } = render(
+          <SafeAreaProvider>
+            <Map />
+          </SafeAreaProvider>
+        )
         const calloutText = getByText('Balelek 2023')
         fireEvent.press(calloutText)
         expect(console.log).toHaveBeenCalledWith("Callout pressed:", "Balelek 2023")
@@ -74,7 +93,11 @@ describe('Map', () => {
 
 
   it('should navigate back when the back button is pressed', () => {
-    const { getByTestId } = render(<Map />)
+    const { getByTestId } = render(
+      <SafeAreaProvider>
+        <Map />
+      </SafeAreaProvider>
+    )
     const backButton = getByTestId('back-arrow') 
     fireEvent.press(backButton)
   })

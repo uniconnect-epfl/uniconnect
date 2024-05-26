@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
+import { collection, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore"
 import { db, storage } from "./firebaseConfig"
 import { showErrorToast } from "../components/ToastMessage/toast"
 import { User } from "../types/User"
@@ -196,5 +196,21 @@ export const removeFriend = async (user1: User, user2: User) => {
   } catch (error) {
     showErrorToast("Error removing contact from your contacts")
     return false
+  }
+}
+
+export const fetchAllUserImages = async () => {
+  try{
+    const usersRef = collection(db, "users")
+    const querySnapshot = await getDocs(usersRef)
+    const userImages: { [key: string]: string } = {}
+    querySnapshot.forEach((doc) => {
+      const user = doc.data() as User
+      userImages[user.uid] = user.profilePicture
+    })
+    return userImages
+  } catch (error) {
+    showErrorToast("Error fetching data. Please check your connection and try again.")
+    return null
   }
 }

@@ -4,6 +4,7 @@ import ViewAnnoucementScreen from "../../../../screens/ViewDetails/ViewAnnouncem
 import { Point } from "react-native-maps"
 import { Announcement } from "../../../../types/Annoucement"
 import { NavigationContainer } from "@react-navigation/native"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 
 // Create a dummy Point
 const dummyPoint: Point = {
@@ -32,13 +33,25 @@ jest.mock("@react-navigation/native", () => {
     }
 })
 
+jest.mock('react-native-safe-area-context', () => {
+  const inset = {top: 0, right: 0, bottom: 0, left: 0}
+  return {
+    SafeAreaProvider: jest.fn(({children}) => children),
+    SafeAreaConsumer: jest.fn(({children}) => children(inset)),
+    useSafeAreaInsets: jest.fn(() => inset),
+    useSafeAreaFrame: jest.fn(() => ({x: 0, y: 0, width: 390, height: 844})),
+  }
+})
+
 describe("ViewAnnouncementScreen", () => {
   
   it("renders correctly", () => {
     const component = render(
-      <NavigationContainer>
-        <ViewAnnoucementScreen />
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ViewAnnoucementScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
       )
     expect(component).toBeTruthy()
   })

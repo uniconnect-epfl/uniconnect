@@ -3,6 +3,7 @@ import { render, fireEvent, waitFor } from "@testing-library/react-native"
 import ExternalProfileScreen from "../../../../screens/Profile/ExternalProfileScreen/ExternalProfileScreen"
 import { getUserData, addFriend, removeFriend } from "../../../../firebase/User"
 import { NavigationContainer } from "@react-navigation/native"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 
 jest.mock("../../../../firebase/User", () => ({
   getUserData: jest.fn().mockResolvedValue({
@@ -55,6 +56,16 @@ jest.mock("../../../../firebase/User", () => ({
   removeFriend: jest.fn(),
 }))
 
+jest.mock('react-native-safe-area-context', () => {
+  const inset = {top: 0, right: 0, bottom: 0, left: 0}
+  return {
+    SafeAreaProvider: jest.fn(({children}) => children),
+    SafeAreaConsumer: jest.fn(({children}) => children(inset)),
+    useSafeAreaInsets: jest.fn(() => inset),
+    useSafeAreaFrame: jest.fn(() => ({x: 0, y: 0, width: 390, height: 844})),
+  }
+})
+
 describe("ExternalProfileScreen", () => {
   beforeAll(() => {
     global.alert = jest.fn()
@@ -98,9 +109,11 @@ describe("ExternalProfileScreen", () => {
     })
 
     const { getByText } = render(
-      <NavigationContainer>
-        <ExternalProfileScreen />
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ExternalProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
     )
 
     await waitFor(() => {
@@ -138,9 +151,11 @@ describe("ExternalProfileScreen", () => {
     })
 
     const { getByTestId } = render(
-      <NavigationContainer>
-        <ExternalProfileScreen />
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ExternalProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
     )
 
     await waitFor(() => {
@@ -149,9 +164,11 @@ describe("ExternalProfileScreen", () => {
   })
   it("changes tabs correctly", async () => {
     const { getByText } = render(
-      <NavigationContainer>
-        <ExternalProfileScreen />
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ExternalProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
     )
 
     await waitFor(() => {
@@ -188,9 +205,11 @@ describe("ExternalProfileScreen", () => {
     })
 
     const { getByTestId } = render(
-      <NavigationContainer>
-        <ExternalProfileScreen />
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ExternalProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
     )
 
     await waitFor(() => {
@@ -253,9 +272,11 @@ describe("ExternalProfileScreen", () => {
     })
 
     const { getByText } = render(
-      <NavigationContainer>
-        <ExternalProfileScreen />
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ExternalProfileScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
     )
 
     await waitFor(() => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect, useContext, useCallback } from "react"
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ScrollView,
+  Dimensions,
 } from "react-native"
 import styles from "./styles"
 import "../../../assets/global/globalStyles"
@@ -20,7 +21,7 @@ import { fetchInterests, Interest } from "../../../firebase/Interests"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import useKeyboardVisibility from "../../../hooks/useKeyboardVisibility"
 import { RegistrationContext } from "../../../contexts/RegistrationContext"
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native"
 
 interface InterestButtonProps {
   interest: Interest
@@ -66,6 +67,14 @@ const InterestsScreen = () => {
   const [isLoading, setIsLoading] = useState(true)
   const keyboardVisible = useKeyboardVisibility()
 
+  useFocusEffect(
+    useCallback(() => {
+      // Update labelArray with names of selected interests each time the screen is focused
+      const labels = selectedInterests.map(interest => interest)
+      setLabelArray(labels)
+    }, [selectedInterests])
+  )
+
   //fetching the interests
   useEffect(() => {
     fetchInterests()
@@ -91,7 +100,7 @@ const InterestsScreen = () => {
   const toggleInterest = (interest: Interest) => {
     setSelectedInterests((prevSelectedInterests) => {
       if (prevSelectedInterests.includes(interest.title)) {
-        return prevSelectedInterests.filter((label) => label !== interest.title)
+        return prevSelectedInterests.filter((label: string) => label !== interest.title)
       } else {
         return [...prevSelectedInterests, interest.title]
       }
@@ -141,11 +150,17 @@ const InterestsScreen = () => {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+    <TouchableWithoutFeedback
+      style = {[
+        styles.container,
+        {height: Dimensions.get('window').height + insets.bottom + insets.top}
+      ]}
+      onPress={() => Keyboard.dismiss()}>
       <View
         style={[
           styles.container,
           { paddingBottom: insets.bottom, paddingTop: insets.top },
+          {height: Dimensions.get('window').height + insets.bottom + insets.top}
         ]}
       >
         <Image

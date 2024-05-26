@@ -76,6 +76,7 @@ const MainStackNavigator: React.FC = () => {
   return (
     <RegistrationContext.Provider
       value={{
+        user,
         firstName,
         setFirstName,
         lastName,

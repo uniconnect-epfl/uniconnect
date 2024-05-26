@@ -24,11 +24,11 @@ import { globalStyles } from "../../../assets/global/globalStyles"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import { StackNavigationProp } from "@react-navigation/stack"
 import InputField from '../../../components/InputField/InputField'
-import { getUserData } from "../../../firebase/User"
+import { fetchAllUserImages, getUserData } from "../../../firebase/User"
 
 interface EventsScreenProps {
   onEventPress: (event: Event) => void
-  userID?: string 
+  userID?: string
 }
 
 type RootStackParamList = {
@@ -37,22 +37,25 @@ type RootStackParamList = {
   }
 }
 
-
 const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
-
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
   const [futureEvents, setFutureEvents] = React.useState<Event[]>([])
   const [pastEvents, setPastEvents] = React.useState<Event[]>([])
-  const [filteredFutureEvents, setFilteredFutureEvents] = React.useState<Event[]>([])
-  const [filteredPastEvents, setFilteredPastEvents] = React.useState<Event[]>([])
-  const [sections, setSections] = React.useState<SectionListData<Event[], DefaultSectionT>[]>([])
+  const [filteredFutureEvents, setFilteredFutureEvents] = React.useState<
+    Event[]
+  >([])
+  const [filteredPastEvents, setFilteredPastEvents] = React.useState<Event[]>(
+    []
+  )
+  const [sections, setSections] = React.useState<
+    SectionListData<Event[], DefaultSectionT>[]
+  >([])
   const [searchQuery, setSearchQuery] = React.useState("")
   const [loading, setLoading] = React.useState(true)
   const [refreshing, setRefreshing] = React.useState(false)
-
+  const [userImages, setUserImages] = React.useState({} as Record<string, string>)
 
   useEffect(() => {
-
     const loadEvents = async () => {
       try {
         setLoading(true)
@@ -63,14 +66,22 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
             const fetchedFutureEvents = await getAllFutureEvents()
             const fetchedPastEvents = await getAllPastEvents()
 
-            const userFutureEvents = fetchedFutureEvents.filter(event => userEvents.includes(event.uid))
-            const userPastEvents = fetchedPastEvents.filter(event => userEvents.includes(event.uid))
+            const userFutureEvents = fetchedFutureEvents.filter((event) =>
+              userEvents.includes(event.uid)
+            )
+            const userPastEvents = fetchedPastEvents.filter((event) =>
+              userEvents.includes(event.uid)
+            )
 
             setFutureEvents(userFutureEvents)
             setPastEvents(userPastEvents)
 
             setFilteredFutureEvents(userFutureEvents)
             setFilteredPastEvents(userPastEvents)
+          }
+          const userImages = await fetchAllUserImages()
+          if(userImages) {
+            setUserImages(userImages)
           }
         } else {
           const fetchedFutureEvents = await getAllFutureEvents()
@@ -81,9 +92,15 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 
           setFilteredFutureEvents(fetchedFutureEvents)
           setFilteredPastEvents(fetchedPastEvents)
+          const userImages = await fetchAllUserImages()
+          if(userImages) {
+            setUserImages(userImages)
+          }
         }
       } catch (error) {
-        showErrorToast("Error fetching events. Please check your connection and try again.")
+        showErrorToast(
+          "Error fetching events. Please check your connection and try again."
+        )
       } finally {
         setLoading(false)
       }
@@ -92,11 +109,20 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
     loadEvents()
   }, [userID])
 
-  const renderSectionHeader = (info: { section: SectionListData<Event[], DefaultSectionT> }) => (
+  const renderSectionHeader = (info: {
+    section: SectionListData<Event[], DefaultSectionT>
+  }) => (
     <View style={styles.sectionHeader}>
-      <Text style={[globalStyles.boldText, styles.header]}>{info.section.title}</Text>
-      <Pressable onPress={() => navigation.navigate("EventCreation" as never)} style={styles.iconText}>
-        <Text style={[globalStyles.smallText, styles.text]}>Create an event</Text>
+      <Text style={[globalStyles.boldText, styles.header]}>
+        {info.section.title}
+      </Text>
+      <Pressable
+        onPress={() => navigation.navigate("EventCreation" as never)}
+        style={styles.iconText}
+      >
+        <Text style={[globalStyles.smallText, styles.text]}>
+          Create an event
+        </Text>
         <Ionicons name="create-outline" size={16} />
       </Pressable>
     </View>
@@ -104,12 +130,16 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 
   useEffect(() => {
     if (searchQuery) {
-      setFilteredFutureEvents(futureEvents.filter((event: { title: string }) =>
-        event.title.toLowerCase().includes(searchQuery.toLowerCase())
-      ))
-      setFilteredPastEvents(pastEvents.filter((event: { title: string }) =>
-        event.title.toLowerCase().includes(searchQuery.toLowerCase())
-      ))
+      setFilteredFutureEvents(
+        futureEvents.filter((event: { title: string }) =>
+          event.title.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      )
+      setFilteredPastEvents(
+        pastEvents.filter((event: { title: string }) =>
+          event.title.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      )
     } else {
       setFilteredFutureEvents(futureEvents)
       setFilteredPastEvents(pastEvents)
@@ -118,14 +148,14 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 
   useEffect(() => {
     setSections([
-      { title: "Future Events", data: groupEventsByTwo(filteredFutureEvents) },
+      { title: "Upcoming Events", data: groupEventsByTwo(filteredFutureEvents) },
       { title: "Past Events", data: groupEventsByTwo(filteredPastEvents) },
     ])
   }, [filteredFutureEvents, filteredPastEvents])
 
   function groupEventsByTwo(events: Event[]) {
     const grouped = []
-    for (let i = 0; i < events.length ;i += 2) {
+    for (let i = 0; i < events.length; i += 2) {
       if (i + 1 < events.length) {
         grouped.push([events[i], events[i + 1]])
       } else {
@@ -144,17 +174,14 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
             styles.cardContainer,
             event.title === "dummy" ? styles.transparent : {},
           ]}
-          onPress={() => {
-            if (event.title != "dummy") onEventPress(event)
-          }}
+          onPress={() => {onEventPress(event)}}
           disabled={event.title === "dummy"}
         >
-          <EventCard {...event} />
+          <EventCard event={event} userImages={userImages} />
         </TouchableOpacity>
       ))}
     </View>
   )
-
 
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true)
@@ -163,11 +190,13 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
       setFutureEvents(await getAllFutureEvents())
       setPastEvents(await getAllPastEvents())
     } catch (error) {
-      showErrorToast("Error fetching events. Please check your connection and try again.")
+      showErrorToast(
+        "Error fetching events. Please check your connection and try again."
+      )
     } finally {
       setRefreshing(false)
     }
-  }, [])  
+  }, [])
 
   if (loading) return <LoadingScreen />
 
@@ -179,10 +208,12 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
           value={searchQuery}
           onChangeText={setSearchQuery}
           onSubmitEditing={() => {}}
-      />
+        />
         <TouchableOpacity
           style={styles.map}
-          onPress={() => navigation.navigate("EventMap", { events: filteredFutureEvents })}
+          onPress={() =>
+            navigation.navigate("EventMap", { events: filteredFutureEvents })
+          }
         >
           <Text style={globalStyles.boldText}>Map View</Text>
         </TouchableOpacity>
@@ -195,10 +226,8 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
           showsVerticalScrollIndicator={false}
           stickySectionHeadersEnabled={false}
           refreshControl={
-            <RefreshControl 
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-              />}
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       </View>
     </View>
@@ -206,5 +235,3 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 }
 
 export default EventScreen
-
-
