@@ -151,13 +151,6 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
                 setDateModal={setDateModal}
               />
             )}
-            
-            <InputField
-              label="Location*"
-              placeholder="Turing Avenue 69"
-              value={location}
-              onChangeText={setLocation}
-            />
 
             <Pressable
               style={styles.section}
@@ -187,7 +180,11 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
           <Pressable style={styles.buttonBase}>
             <Text
               onPress={() => {
-                navigation.navigate("SelectLocation", {onLocationChange: setPoint, initialPoint: point})
+                const onLocationChange = (locationName: string, point: Point | undefined) => {
+                  setLocation(locationName)
+                  setPoint(point)
+                }
+                navigation.navigate("SelectLocation", {onLocationChange: onLocationChange, initialPoint: point})
               }}
               style={globalStyles.boldText}
               >
