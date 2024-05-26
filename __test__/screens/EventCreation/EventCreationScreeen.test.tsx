@@ -93,7 +93,7 @@ describe("EventCreationScreen", () => {
       location: "test",
       userId: "yep",
       selectedInterests: [],
-      setSelectedInterests: mockSetSelectedInterests
+      setSelectedInterests: mockSetSelectedInterests,
     }
     const { getByText } = render(
       <SafeAreaProvider>
@@ -119,15 +119,13 @@ describe("EventCreationScreen", () => {
       location: "test",
       userId: "salue",
       selectedInterests: [],
-      setSelectedInterests: mockSetSelectedInterests
+      setSelectedInterests: mockSetSelectedInterests,
     }
     const { getByText } = render(
       <SafeAreaProvider>
         {/* @ts-expect-error this is a test mock */}
         <RegistrationContext.Provider value={providerProps}>
-          <EventCreationScreen
-            navigation={mockNavigation}
-          />
+          <EventCreationScreen navigation={mockNavigation} />
         </RegistrationContext.Provider>
       </SafeAreaProvider>
     )
@@ -147,7 +145,7 @@ describe("EventCreationScreen", () => {
       location: "test",
       userId: undefined,
       selectedInterests: [],
-      setSelectedInterests: mockSetSelectedInterests
+      setSelectedInterests: mockSetSelectedInterests,
     }
     const { getByText } = render(
       <SafeAreaProvider>
@@ -173,7 +171,7 @@ describe("EventCreationScreen", () => {
       location: "test",
       user: null,
       selectedInterests: [],
-      setSelectedInterests: mockSetSelectedInterests
+      setSelectedInterests: mockSetSelectedInterests,
     }
     const { getByText } = render(
       <SafeAreaProvider>
@@ -216,7 +214,7 @@ describe("EventCreationScreen", () => {
       description: "",
       setDescription: mockSetDescription,
       selectedInterests: [],
-      setSelectedInterests: mockSetSelectedInterests
+      setSelectedInterests: mockSetSelectedInterests,
     }
 
     // Render the component wrapped in the mock provider directly
@@ -272,9 +270,7 @@ describe("EventCreationScreen", () => {
     const { queryByText, rerender } = render(
       <EventCreationScreen navigation={mockNavigation} />
     )
-    rerender(
-      <EventCreationScreen navigation={mockNavigation} />
-    )
+    rerender(<EventCreationScreen navigation={mockNavigation} />)
     expect(queryByText("Add a location")).toBeTruthy()
   })
 
@@ -284,4 +280,59 @@ describe("EventCreationScreen", () => {
     )
     fireEvent.press(getByText("Add a location"))
   })
+
+  it("shows error when user ID is missing for event creation", async () => {
+    const mockSetDescription = jest.fn()
+    const mockSetSelectedInterests = jest.fn()
+
+    const providerProps = {
+      description: "",
+      setDescription: mockSetDescription,
+      point: { x: 0, y: 0 },
+      location: "test",
+      userId: undefined, // userId is missing
+      selectedInterests: [],
+      setSelectedInterests: mockSetSelectedInterests,
+    }
+
+    const { getByText } = render(
+      <SafeAreaProvider>
+        {/* @ts-expect-error this is a test mock */}
+        <RegistrationContext.Provider value={providerProps}>
+          <EventCreationScreen navigation={mockNavigation} />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+
+    const validateButton = getByText("Validate")
+    fireEvent.press(validateButton)
+  })
+
+  it("shows error when location point is missing for event creation", async () => {
+    const mockSetDescription = jest.fn()
+    const mockSetSelectedInterests = jest.fn()
+
+    const providerProps = {
+      description: "",
+      setDescription: mockSetDescription,
+      point: undefined, // Location point is missing
+      location: "test",
+      userId: "123",
+      selectedInterests: [],
+      setSelectedInterests: mockSetSelectedInterests,
+    }
+
+    const { getByText } = render(
+      <SafeAreaProvider>
+        {/* @ts-expect-error this is a test mock */}
+        <RegistrationContext.Provider value={providerProps}>
+          <EventCreationScreen navigation={mockNavigation} />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+
+    const validateButton = getByText("Validate")
+    fireEvent.press(validateButton)
+  })
+
 })

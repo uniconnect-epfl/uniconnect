@@ -84,9 +84,7 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
       return
     }
     if (!point) {
-      console.log("Need a point to create an event")
       setPoint(undefined)
-      console.log("Event not created")
       showErrorToast("You must enter a location for an event")
       return
     }
@@ -204,11 +202,17 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
           <Pressable style={styles.buttonBase}>
             <Text
               onPress={() => {
-                const onLocationChange = (locationName: string, point: Point | undefined) => {
+                const onLocationChange = (
+                  locationName: string,
+                  point: Point | undefined
+                ) => {
                   setLocation(locationName)
                   setPoint(point)
                 }
-                navigation.navigate("SelectLocation", {onLocationChange: onLocationChange, initialPoint: point})
+                navigation.navigate("SelectLocation", {
+                  onLocationChange: onLocationChange,
+                  initialPoint: point,
+                })
               }}
               style={globalStyles.boldText}
             >
