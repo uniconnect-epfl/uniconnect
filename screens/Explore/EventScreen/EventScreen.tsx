@@ -23,8 +23,8 @@ import { Event } from "../../../types/Event"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import { StackNavigationProp } from "@react-navigation/stack"
-import InputField from "../../../components/InputField/InputField"
-import { getUserData } from "../../../firebase/User"
+import InputField from '../../../components/InputField/InputField'
+import { fetchAllUserImages, getUserData } from "../../../firebase/User"
 
 interface EventsScreenProps {
   onEventPress: (event: Event) => void
@@ -53,6 +53,7 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
   const [searchQuery, setSearchQuery] = React.useState("")
   const [loading, setLoading] = React.useState(true)
   const [refreshing, setRefreshing] = React.useState(false)
+  const [userImages, setUserImages] = React.useState({} as Record<string, string>)
 
   useEffect(() => {
     const loadEvents = async () => {
@@ -78,6 +79,10 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
             setFilteredFutureEvents(userFutureEvents)
             setFilteredPastEvents(userPastEvents)
           }
+          const userImages = await fetchAllUserImages()
+          if(userImages) {
+            setUserImages(userImages)
+          }
         } else {
           const fetchedFutureEvents = await getAllFutureEvents()
           const fetchedPastEvents = await getAllPastEvents()
@@ -87,6 +92,10 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 
           setFilteredFutureEvents(fetchedFutureEvents)
           setFilteredPastEvents(fetchedPastEvents)
+          const userImages = await fetchAllUserImages()
+          if(userImages) {
+            setUserImages(userImages)
+          }
         }
       } catch (error) {
         showErrorToast(
@@ -139,7 +148,7 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 
   useEffect(() => {
     setSections([
-      { title: "Future Events", data: groupEventsByTwo(filteredFutureEvents) },
+      { title: "Upcoming Events", data: groupEventsByTwo(filteredFutureEvents) },
       { title: "Past Events", data: groupEventsByTwo(filteredPastEvents) },
     ])
   }, [filteredFutureEvents, filteredPastEvents])
@@ -165,12 +174,10 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
             styles.cardContainer,
             event.title === "dummy" ? styles.transparent : {},
           ]}
-          onPress={() => {
-            if (event.title != "dummy") onEventPress(event)
-          }}
+          onPress={() => {onEventPress(event)}}
           disabled={event.title === "dummy"}
         >
-          <EventCard {...event} />
+          <EventCard event={event} userImages={userImages} />
         </TouchableOpacity>
       ))}
     </View>
