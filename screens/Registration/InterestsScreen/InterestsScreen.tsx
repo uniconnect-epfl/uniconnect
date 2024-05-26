@@ -55,7 +55,6 @@ const InterestsScreen = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [interests, setInterests] = useState<Interest[]>([])
   const [filteredInterests, setFilteredInterests] = useState<Interest[]>([])
-  const [labelArray, setLabelArray] = useState<string[]>([])
   const { selectedInterests, setSelectedInterests } =
     useContext(RegistrationContext)
   const [isLoading, setIsLoading] = useState(true)
@@ -79,7 +78,6 @@ const InterestsScreen = () => {
     setSelectedInterests(
       selectedInterests.filter((label) => label !== interest)
     )
-    setLabelArray((prev) => prev.filter((label) => label !== interest))
   }
 
   //Handle the selection of an interest
@@ -89,14 +87,6 @@ const InterestsScreen = () => {
         return prevSelectedInterests.filter((label) => label !== interest.title)
       } else {
         return [...prevSelectedInterests, interest.title]
-      }
-    })
-
-    setLabelArray((prev) => {
-      if (prev.includes(interest.title)) {
-        return prev.filter((label) => label !== interest.title)
-      } else {
-        return [...prev, interest.title]
       }
     })
   }
@@ -158,7 +148,7 @@ const InterestsScreen = () => {
             showsHorizontalScrollIndicator={true}
             contentContainerStyle={styles.labelContainer}
           >
-            {labelArray.map((label) => (
+            {selectedInterests.map((label) => (
               <Label
                 key={label}
                 text={label}

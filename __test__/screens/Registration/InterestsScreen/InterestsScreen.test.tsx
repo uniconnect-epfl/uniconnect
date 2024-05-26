@@ -26,16 +26,22 @@ jest.mock("react-native-safe-area-context", () => {
 })
 
 const mockSetSelectedInterests = jest.fn()
+const mockSelectedInterests = ["one"]
 
 jest.mock("react", () => ({
   ...jest.requireActual("react"),
   useContext: () => ({
-    selectedInterests: ["one"],
+    selectedInterests: mockSelectedInterests,
     setSelectedInterests: mockSetSelectedInterests,
   }),
 }))
 
 describe("InterestsScreen", () => {
+  beforeEach(() => {
+    mockSetSelectedInterests.mockClear()
+    mockSelectedInterests.length = 0
+  })
+
   it("renders the screen with necessary components", async () => {
     try {
       const { getByPlaceholderText, getAllByText } = render(
@@ -90,8 +96,8 @@ describe("InterestsScreen", () => {
     )
 
     await waitFor(() => {
-      fireEvent.press(getByTestId("Artificial InteligenceID"))
-      expect(getByTestId("Artificial Inteligence" + "IDlabel")).toBeTruthy()
+      fireEvent.press(getByTestId("GardeningID"))
+      expect(getByTestId("GardeningIDlabel")).toBeTruthy()
     })
   })
 
@@ -103,9 +109,9 @@ describe("InterestsScreen", () => {
     )
 
     await waitFor(() => {
-      fireEvent.press(getByTestId("Artificial Inteligence" + "ID"))
-      fireEvent.press(getByTestId("Artificial Inteligence" + "IDlabel"))
-      expect(queryByTestId("Artificial Inteligence" + "IDlabel")).toBeNull()
+      fireEvent.press(getByTestId("GardeningID"))
+      fireEvent.press(getByTestId("GardeningIDlabel"))
+      expect(queryByTestId("GardeningIDlabel")).toBeNull()
     })
   })
 
@@ -126,6 +132,7 @@ describe("InterestsScreen", () => {
       expect(showErrorToast).toHaveBeenCalledWith("Unable to render")
     }
   })
+
   it("displays loading screen while interests are being fetched", async () => {
     const { getByTestId } = render(
       <SafeAreaProvider>
