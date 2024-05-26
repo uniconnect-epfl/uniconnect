@@ -12,4 +12,5 @@ export type Event = {
     imageUrl: string
     participants: string[]
     host: string
+    interests?: string[]
   }

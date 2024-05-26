@@ -2,6 +2,7 @@ import React from "react"
 import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import ViewEventScreen from "../../../../screens/ViewDetails/ViewEventScreen/ViewEventScreen"
 import { NavigationContainer } from "@react-navigation/native"
+import { SafeAreaProvider } from "react-native-safe-area-context"
 
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
@@ -37,6 +38,16 @@ jest.mock("@react-navigation/native", () => {
   }
 })
 
+jest.mock('react-native-safe-area-context', () => {
+  const inset = {top: 0, right: 0, bottom: 0, left: 0}
+  return {
+    SafeAreaProvider: jest.fn(({children}) => children),
+    SafeAreaConsumer: jest.fn(({children}) => children(inset)),
+    useSafeAreaInsets: jest.fn(() => inset),
+    useSafeAreaFrame: jest.fn(() => ({x: 0, y: 0, width: 390, height: 844})),
+  }
+})
+
 //mock an alert with jest
 global.alert = jest.fn()
 
@@ -44,9 +55,11 @@ describe("ViewEventScreen", () => {
 
   it("renders correctly", () => {
     const component = render(
-      <NavigationContainer>
-        <ViewEventScreen />
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ViewEventScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
     )
     expect(component).toBeTruthy()
   })
@@ -55,9 +68,11 @@ describe("ViewEventScreen", () => {
   const eventData = { uid: "123", title: "Event", location: "location", point: { x: 40.712776, y: -74.005974 }, date: new Date().toISOString(), host: "456", participants: ["123"], description: "description", imageUrl: "imageUrl" }
   mockGetEventData.mockResolvedValueOnce(eventData)
   const { getByText } = render(
+    <SafeAreaProvider>
     <NavigationContainer>
       <ViewEventScreen />
     </NavigationContainer>
+  </SafeAreaProvider>
   )
   await waitFor(() => {
     expect(getByText("Participate")).toBeTruthy()
@@ -70,9 +85,11 @@ it("can click on Edit", async () => {
   const eventData = { uid: "123", title: "Event", location: "location", point: { x: 40.712776, y: -74.005974 }, date: new Date().toISOString(), host: "123", participants: ["123"], description: "description", imageUrl: "imageUrl" }
   mockGetEventData.mockResolvedValueOnce(eventData)
   const { getByText } = render(
-    <NavigationContainer>
-      <ViewEventScreen />
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <ViewEventScreen />
+      </NavigationContainer>
+    </SafeAreaProvider>
   )
   await waitFor(() => {
     expect(getByText("Edit")).toBeTruthy()
