@@ -16,6 +16,7 @@ import { User } from "../../../types/User"
 import { getUserData } from "../../../firebase/User"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { BackArrow } from "../../../components/BackArrow/BackArrow"
 
 interface MyProfileScreenProps {
   navigation: NavigationProp<ParamListBase>
@@ -45,6 +46,7 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
   }
   return (
     <View style={styles.container}>
+      <BackArrow/>
       <View style={[profileStyles.profileContainer, {paddingTop: insets.top + 5}]}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} testID="back-button">
@@ -85,7 +87,7 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
         <ExpandableDescription description={user.description} />
 
         <SectionTabs
-          tabs={["Events", "Interests"]}
+          tabs={["Events","Interests"]}
           startingTab="Events"
           onTabChange={setSelectedTab}
         />

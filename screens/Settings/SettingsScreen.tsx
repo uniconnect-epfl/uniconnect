@@ -2,10 +2,9 @@ import React from "react"
 import { View, Text, TouchableOpacity, Alert } from "react-native"
 import { styles } from "./styles"
 import { useNavigation } from "@react-navigation/native"
-import { Ionicons } from "@expo/vector-icons"
-import { peach } from "../../assets/colors/colors"
 import { Logout } from "../../firebase/Logout"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { BackArrow } from "../../components/BackArrow/BackArrow"
 
 export const SettingsScreen = () => {
   const navigation = useNavigation()
@@ -27,14 +26,8 @@ export const SettingsScreen = () => {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          testID="back-button"
-        >
-          <Ionicons name="arrow-back-outline" size={24} color={peach} />
-        </TouchableOpacity>
-      </View>
+      <BackArrow />
+      <View style={styles.header}/>
       <View style={styles.itemsContainer}>
         {menuItems.map((menuItem, index) => (
           <TouchableOpacity

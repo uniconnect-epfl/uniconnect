@@ -72,7 +72,7 @@ describe("SettingsScreen", () => {
     )
 
     // Assert that the back button is rendered
-    const backButton = getByTestId("back-button")
+    const backButton = getByTestId("back-arrow")
     expect(backButton).toBeTruthy()
 
     // Assert that the menu items are rendered
@@ -98,7 +98,7 @@ describe("SettingsScreen", () => {
       </NavigationContainer>
     )
 
-    const backButton = getByTestId("back-button")
+    const backButton = getByTestId("back-arrow")
     fireEvent.press(backButton)
 
     expect(mockGoBack).toHaveBeenCalled()

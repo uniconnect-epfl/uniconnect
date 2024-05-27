@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
 
   container: {
     alignItems: "center",
+    backgroundColor: white,
     flex: 1,
     gap: 1,
     padding: 20,

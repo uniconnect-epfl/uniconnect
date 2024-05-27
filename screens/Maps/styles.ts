@@ -26,8 +26,10 @@ export default StyleSheet.create({
   navigationBar: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: "center",
     paddingTop: 10,
-    height: 100,
+    height: 80,
+    width: "100%",
     // Include other styling such as background color, height, etc.
   },
   backButton: {

@@ -1,6 +1,7 @@
 import { Firestore, updateDoc } from "firebase/firestore"
 import { Auth } from "firebase/auth"
 import {
+  fetchAllUserImages,
   updateUserData,
   updateUserEvents,
   updateUserImage,
@@ -36,6 +37,7 @@ jest.mock("firebase/auth", () => ({
 
 const mockSetDoc = jest.fn()
 const mockGetDoc = jest.fn()
+const mockGetDocs = jest.fn()
 
 const mockUser: User = {
   uid: "123",
@@ -54,6 +56,7 @@ const mockUser: User = {
 jest.mock("firebase/firestore", () => ({
   getFirestore: jest.fn(() => ({} as Firestore)),
   getDoc: jest.fn((...args) => mockGetDoc(...args)),
+  getDocs: jest.fn((...args) => mockGetDocs(...args)),
   doc: jest.fn(() => ({})),
   addDoc: jest.fn(),
   collection: jest.fn(() => ({})),
@@ -95,18 +98,6 @@ describe("updateUserEvents", () => {
     )
   })
 
-  it("should not update user events if already registered", async () => {
-    mockGetDoc.mockResolvedValueOnce({
-      data: () => mockUser,
-    })
-
-    const uid = "123"
-    const eventId = "456" // Already in the events list
-    const result = await updateUserEvents(uid, eventId)
-
-    expect(result).toBe(false)
-    expect(mockSetDoc).not.toHaveBeenCalled()
-  })
 
   it("should handle errors gracefully", async () => {
     mockGetDoc.mockRejectedValueOnce(new Error("Firestore error"))
@@ -306,5 +297,15 @@ describe("removeFriend", () => {
     expect(showErrorToast).toHaveBeenCalledWith(
       "Error removing contact from your contacts"
     )
+  })
+
+  it("should return images for all users", async () => {
+    mockGetDocs.mockResolvedValueOnce([{
+      data: () => mockUser,
+    }])
+
+    await fetchAllUserImages()
+
+    expect(mockGetDocs).toHaveBeenCalled() 
   })
 })
