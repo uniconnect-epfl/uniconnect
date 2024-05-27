@@ -270,6 +270,7 @@ describe("manageEvents", () => {
       imageUrl: "imageUrl",
       participants: ["oldUserId"],
       host: "hostId",
+      interests: ["interest"],
     }
 
     it("should update event data successfully", async () => {

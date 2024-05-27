@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useCallback, useEffect } from "react"
 import {
   View,
   Text,
@@ -8,11 +8,10 @@ import {
   DefaultSectionT,
   SectionListData,
   TouchableOpacity,
-  RefreshControl,
 } from "react-native"
 import EventCard from "../../../components/EventCard/EventCard"
 import { styles } from "./styles"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useFocusEffect } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
 import {
   getAllFutureEvents,
@@ -32,7 +31,7 @@ interface EventsScreenProps {
   onEventPress: (event: Event) => void
   userID?: string
 }
-
+   
 type RootStackParamList = {
   EventMap: {
     events: Event[] | null
@@ -54,13 +53,10 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
   >([])
   const [searchQuery, setSearchQuery] = React.useState("")
   const [loading, setLoading] = React.useState(true)
-  const [refreshing, setRefreshing] = React.useState(false)
-
   const [userImages, setUserImages] = React.useState({} as Record<string, string>)
 
 
-  useEffect(() => {
-    const loadEvents = async () => {
+    const loadEvents = useCallback( async () => {
       try {
         setLoading(true)
         if (userID) {
@@ -108,10 +104,14 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
       } finally {
         setLoading(false)
       }
-    }
+    }, [userID])
 
-    loadEvents()
-  }, [userID])
+
+  useFocusEffect(
+    useCallback(() => {
+      loadEvents()
+    }, [loadEvents])
+  )
 
   const renderSectionHeader = (info: {
     section: SectionListData<Event[], DefaultSectionT>
@@ -187,20 +187,6 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
     </View>
   )
 
-  const onRefresh = React.useCallback(async () => {
-    setRefreshing(true)
-    try {
-      // Call your event fetching function here
-      setFutureEvents(await getAllFutureEvents())
-      setPastEvents(await getAllPastEvents())
-    } catch (error) {
-      showErrorToast(
-        "Error fetching events. Please check your connection and try again."
-      )
-    } finally {
-      setRefreshing(false)
-    }
-  }, [])
 
   if (loading) return <LoadingScreen />
 
@@ -229,9 +215,6 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
           renderSectionHeader={renderSectionHeader}
           showsVerticalScrollIndicator={false}
           stickySectionHeadersEnabled={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
         />
       </View>
     </View>
@@ -239,3 +222,4 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 }
 
 export default EventScreen
+

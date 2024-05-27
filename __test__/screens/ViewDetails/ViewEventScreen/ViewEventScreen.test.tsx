@@ -65,7 +65,7 @@ describe("ViewEventScreen", () => {
   })
 
   it("can click on participate", async () => {
-  const eventData = { uid: "123", title: "Event", location: "location", point: { x: 40.712776, y: -74.005974 }, date: new Date().toISOString(), host: "456", participants: ["123"], description: "description", imageUrl: "imageUrl" }
+  const eventData = { uid: "123", title: "Event", location: "location", point: { x: 40.712776, y: -74.005974 }, date: new Date().toISOString(), host: "456", participants: ["123"], description: "description", imageUrl: "imageUrl", interests: ["interest1", "interest2"]}
   mockGetEventData.mockResolvedValueOnce(eventData)
   const { getByText } = render(
     <SafeAreaProvider>
@@ -82,7 +82,7 @@ describe("ViewEventScreen", () => {
 })
 
 it("can click on Edit", async () => {
-  const eventData = { uid: "123", title: "Event", location: "location", point: { x: 40.712776, y: -74.005974 }, date: new Date().toISOString(), host: "123", participants: ["123"], description: "description", imageUrl: "imageUrl" }
+  const eventData = { uid: "123", title: "Event", location: "location", point: { x: 40.712776, y: -74.005974 }, date: new Date().toISOString(), host: "123", participants: ["123"], description: "description", imageUrl: "imageUrl", interests: ["interest1", "interest2"]}
   mockGetEventData.mockResolvedValueOnce(eventData)
   const { getByText } = render(
     <SafeAreaProvider>
