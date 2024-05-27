@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react"
+import React from "react"
+import { useRef, useState, useEffect } from "react"
 import {
   Modal,
   TouchableWithoutFeedback,
@@ -12,37 +13,40 @@ import { Node } from "../Graph"
 
 import styles from "./styles"
 
+const SLIDE_OUT_DURATION = 1000
+const SLIDE_IN_DURATION = 2000
+
 const NodeModal: React.FC<{
   node: Node
   visible: boolean
   onPressOut: () => void
   onContactPress: (uid: string) => void
 }> = ({ node, visible, onPressOut, onContactPress }) => {
+  // Animation related elements
   const translateY = useRef(new Animated.Value(3)).current
-
-  const [modalVisible, setModalVisible] = useState(false)
 
   const slideOutModal = () => {
     Animated.timing(translateY, {
       toValue: 3,
-      duration: 1000,
+      duration: SLIDE_OUT_DURATION,
       useNativeDriver: true,
     }).start()
     onPressOut()
   }
 
   const slideInModal = () => {
-    // Fast animation to move to final position
-    const fastAnimation = Animated.timing(translateY, {
-      toValue: 0, // Move slightly above the final position
-      duration: 2000, // Fast duration
+    Animated.timing(translateY, {
+      toValue: 0,
+      duration: SLIDE_IN_DURATION,
       useNativeDriver: true,
-      easing: Easing.elastic(2), // Use the elastic easing
-    })
-
-    fastAnimation.start()
+      easing: Easing.elastic(2),
+    }).start()
   }
 
+  // Modal visibility
+  const [modalVisible, setModalVisible] = useState(false)
+
+  // Use effect to handle modal visibility while animating
   useEffect(() => {
     if (visible) {
       setModalVisible(true)
@@ -50,7 +54,7 @@ const NodeModal: React.FC<{
     } else {
       setTimeout(() => {
         setModalVisible(false)
-      }, 1000)
+      }, SLIDE_OUT_DURATION)
     }
   }, [visible])
 
@@ -87,6 +91,7 @@ const NodeModal: React.FC<{
               slideOutModal()
               onContactPress(node.id)
             }}
+            testID="modal-touchable-contact"
           >
             <View style={styles.modalView}>
               {/* Navigate to the contact's profile when the user taps on the contact's profile picture */}

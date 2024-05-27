@@ -5,24 +5,46 @@ import { TabBar } from "../../components/TabBar/TabBar"
 import { Header } from "../../components/Header/Header"
 import NetworkScreen from "../../screens/Network/NetworkScreen"
 import QrScanScreen from "../../screens/QrScan/QrScanScreen"
+import { createContext, useContext, useState } from "react"
+
+const FullScreenContext = createContext({
+  switchToFullScreen: () => {},
+  switchFromFullScreen: () => {},
+})
 
 const Tab = createBottomTabNavigator()
 
-// Create the TabNavigator used by the app after the user login. Allows the user to navigate from one screen to another
 const HomeTabNavigator = () => {
+  const [isFullScreen, setIsFullScreen] = useState(false)
+
+  const switchToFullScreen = () => {
+    setIsFullScreen(true)
+  }
+  const switchFromFullScreen = () => {
+    setIsFullScreen(false)
+  }
+
   return (
-    <Tab.Navigator
-      tabBar={(props) => <TabBar {...props} />}
-      initialRouteName="Network"
-      screenOptions={{
-        header: () => <Header />,
-      }}
+    <FullScreenContext.Provider
+      value={{ switchToFullScreen, switchFromFullScreen }}
     >
-      <Tab.Screen name="Network" component={NetworkScreen} />
-      <Tab.Screen name="Add" component={QrScanScreen} />
-      <Tab.Screen name="Explore" component={ExploreScreen} />
-    </Tab.Navigator>
+      <Tab.Navigator
+        tabBar={(props) => (isFullScreen ? null : <TabBar {...props} />)}
+        initialRouteName="Network"
+        screenOptions={{
+          header: () => (isFullScreen ? null : <Header />),
+        }}
+      >
+        <Tab.Screen name="Network" component={NetworkScreen} />
+        <Tab.Screen name="Add" component={QrScanScreen} />
+        <Tab.Screen name="Explore" component={ExploreScreen} />
+      </Tab.Navigator>
+    </FullScreenContext.Provider>
   )
 }
 
 export default HomeTabNavigator
+
+export const useFullScreen = () => useContext(FullScreenContext)
+
+export { FullScreenContext }
