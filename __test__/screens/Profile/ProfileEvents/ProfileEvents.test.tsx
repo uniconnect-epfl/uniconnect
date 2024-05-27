@@ -1,7 +1,8 @@
 import { render, fireEvent, waitFor } from '@testing-library/react-native'
-import { NavigationProp, ParamListBase } from '@react-navigation/native'
+import { NavigationContainer, NavigationProp, ParamListBase } from '@react-navigation/native'
 
 import { ProfileEvents } from '../../../../screens/Profile/ProfileEvents/ProfileEvents'
+import React from 'react'
 
 jest.mock('firebase/auth', () => ({
   getAuth: jest.fn(() => ({
@@ -17,7 +18,7 @@ const mockNavigation = {
 } as unknown as NavigationProp<ParamListBase>
 
 jest.mock('@react-navigation/native', () => {
-  return { 
+  return {
     ...jest.requireActual('@react-navigation/native'), // keep all the original implementations
     useNavigation: () => mockNavigation,
   }
@@ -47,15 +48,17 @@ jest.mock('../../../../components/ToastMessage/toast', () => ({
 
 
 
-describe('ProfileEvents', () => { 
+describe('ProfileEvents', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
   it('renders EventScreen with userID', async () => {
     const { getByText } = render(
+      <NavigationContainer>
+      <ProfileEvents />
+      </NavigationContainer>
 
-        <ProfileEvents />
 
     )
     await waitFor(() => {
@@ -66,14 +69,16 @@ describe('ProfileEvents', () => {
 
   it('navigates to ViewEvent when an event is pressed', async () => {
     const { getByText } = render(
-
+      <NavigationContainer>
         <ProfileEvents />
+      </NavigationContainer>
+
 
     )
 
     await waitFor(() => {
       fireEvent.press(getByText('Future Event 1'))
-    expect(mockNavigation.navigate).toHaveBeenCalledWith('ViewEvent', { eventUid: '1' })
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('ViewEvent', { eventUid: '1' })
 
     })
   })

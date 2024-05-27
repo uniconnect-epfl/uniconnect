@@ -3,6 +3,7 @@ import ExploreScreen from "../../../screens/Explore/ExploreScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import React from "react"
 import { Firestore } from "firebase/firestore"
+import { NavigationContainer } from "@react-navigation/native"
 
 jest.mock("../../../firebase/firebaseConfig", () => ({
   db: jest.fn(() => ({} as Firestore)),
@@ -50,18 +51,22 @@ jest.mock("../../../firebase/ManageEvents", () => ({
 describe("ExploreScreen", () => {
   it("renders the Event screen", () => {
     const component = render(
-      <SafeAreaProvider>
-        <ExploreScreen />
-      </SafeAreaProvider>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <ExploreScreen />
+        </SafeAreaProvider>
+      </NavigationContainer>
     )
     expect(component).toBeTruthy()
   })
 
   it("filters events based on search input", async () => {
     const { getByText, getAllByText, getByPlaceholderText } = render(
-      <SafeAreaProvider>
-        <ExploreScreen />
-      </SafeAreaProvider>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <ExploreScreen />
+        </SafeAreaProvider>
+      </NavigationContainer>
     )
 
     await waitFor(() => {
@@ -78,9 +83,11 @@ describe("ExploreScreen", () => {
 
   it("displays correct event details", async () => {
     const component = render(
-      <SafeAreaProvider>
-        <ExploreScreen />
-      </SafeAreaProvider>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <ExploreScreen />
+        </SafeAreaProvider>
+      </NavigationContainer>
     )
     await waitFor(() => {
       //expect(getByText('Balelek 2023')).toBeTruthy()
@@ -91,9 +98,11 @@ describe("ExploreScreen", () => {
 
   it("keyboard disapear if we click aside", async () => {
     const { getByPlaceholderText } = render(
-      <SafeAreaProvider>
-        <ExploreScreen />
-      </SafeAreaProvider>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <ExploreScreen />
+        </SafeAreaProvider>
+      </NavigationContainer>
     )
     await act(async () => {
       await waitFor(() => {

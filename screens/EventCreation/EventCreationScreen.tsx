@@ -90,7 +90,8 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
       point,
       location,
       "imageUrl",
-      userId
+      userId,
+      selectedInterests
     )
     if (eventId && user) {
       await updateUserEvents(user.uid, eventId)
