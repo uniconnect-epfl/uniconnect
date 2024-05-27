@@ -25,8 +25,7 @@ jest.mock("react-native-safe-area-context", () => {
 })
 
 jest.mock("../../../../components/ToastMessage/toast", () => ({
-  showErrorToast: jest.fn(),
-}))
+  showErrorToast: jest.fn(),}))
 
 describe("Information Screen", () => {
   it("renders all input fields and buttons", () => {
