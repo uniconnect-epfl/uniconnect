@@ -2,12 +2,32 @@ import React from "react"
 import { render, fireEvent } from "@testing-library/react-native"
 import { SettingsScreen } from "../../../screens/Settings/SettingsScreen"
 import { NavigationContainer } from "@react-navigation/native"
-import { Alert } from 'react-native'
-import { Auth } from 'firebase/auth'
+import { Alert } from "react-native"
+import { Auth } from "firebase/auth"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
-
 const mockGoBack = jest.fn()
+
+jest.mock("d3-force", () => ({
+  forceSimulation: jest.fn(() => ({
+    force: jest.fn().mockReturnThis(),
+    nodes: jest.fn().mockReturnThis(),
+    links: jest.fn().mockReturnThis(),
+    alpha: jest.fn().mockReturnThis(),
+    restart: jest.fn(),
+    stop: jest.fn(),
+    on: jest.fn().mockReturnThis(),
+  })),
+  forceLink: jest.fn(() => ({
+    id: jest.fn().mockReturnThis(),
+    distance: jest.fn().mockReturnThis(),
+  })),
+  forceManyBody: jest.fn(() => ({
+    strength: jest.fn().mockReturnThis(),
+  })),
+  forceCenter: jest.fn().mockReturnThis(),
+  forceCollide: jest.fn().mockReturnThis(),
+}))
 
 jest.mock("@react-navigation/native", () => {
   return {
@@ -28,8 +48,8 @@ jest.mock("react-native-safe-area-context", () => {
   }
 })
 
-jest.mock('@react-native-async-storage/async-storage', () =>
-  require('@react-native-async-storage/async-storage/jest/async-storage-mock')
+jest.mock("@react-native-async-storage/async-storage", () =>
+  require("@react-native-async-storage/async-storage/jest/async-storage-mock")
 )
 
 jest.mock("firebase/auth", () => ({
@@ -38,7 +58,7 @@ jest.mock("firebase/auth", () => ({
 }))
 
 jest.mock("../../../firebase/firebaseConfig", () => ({
-  auth: { signOut: jest.fn(() => Promise.resolve()) }
+  auth: { signOut: jest.fn(() => Promise.resolve()) },
 }))
 
 describe("SettingsScreen", () => {
