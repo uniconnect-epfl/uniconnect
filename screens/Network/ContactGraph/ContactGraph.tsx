@@ -1,35 +1,27 @@
-import React, { useState } from "react"
-
-import {
-  View,
-  TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native"
-
+import React, { useEffect, useState } from "react"
+import { View, TouchableWithoutFeedback, Keyboard, Image } from "react-native"
 import { styles } from "./styles"
-
 import Graph, {
   addContactNode,
   deleteNode,
   getNodeById,
   getNodes,
   Node,
-  setInitialized,
 } from "../../../components/Graph/Graph"
-
 import ForceDirectedGraph from "../../../components/Graph/ForceDirectedGraph/ForceDirectedGraph"
-
 import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
-
 import { Contact } from "../../../types/Contact"
 import { getUserData } from "../../../firebase/User"
+import InputField from "../../../components/InputField/InputField"
 
 interface ContactGraphProps {
   onContactPress: (uid: string) => void
   graph: Graph
   userId: string
   userContact: Contact
+  loaded: boolean
+  navChange?: boolean
+  changeTab?: () => void
 }
 
 const ContactGraph = ({
@@ -37,21 +29,44 @@ const ContactGraph = ({
   graph,
   userId,
   userContact,
+  loaded,
+  navChange,
+  changeTab,
 }: ContactGraphProps) => {
   const [searchText, setSearchText] = useState("")
   const [modalVisible, setModalVisible] = useState(false)
   const [clickedNode, setClickedNode] = useState<Node>(
     getNodeById(graph, userId)
   )
-  const [counter, setCounter] = useState(1)
 
-  const updateCounter = () => {
-    setCounter((prevCounter) => prevCounter + 1)
-  }
+  const [forceReload, setForceReload] = useState(false) // State variable for force reloading the graph
 
   const [magicNeighbors, setMagicNeighbors] = useState<string[]>([])
-
   const [magicPressedID, setMagicPressedID] = useState<string>("")
+  const [display, setDisplay] = useState(false)
+
+  useEffect(() => {
+    if (navChange && changeTab !== undefined) {
+      magicNeighbors.forEach((neighbor) => {
+        if (!userContact.friends?.includes(neighbor)) {
+          deleteNode(graph, neighbor)
+        }
+      })
+      setMagicNeighbors([])
+      setMagicPressedID("")
+      changeTab()
+    }
+  }, [navChange])
+
+  useEffect(() => {
+    if (loaded) {
+      setTimeout(() => {
+        setDisplay(true)
+      }, 2000)
+    } else {
+      setDisplay(loaded)
+    }
+  }, [loaded])
 
   const onModalPress = (uid: string) => {
     const node = getNodeById(graph, uid)
@@ -70,7 +85,6 @@ const ContactGraph = ({
       return
     }
     if (uid === userId) {
-      setInitialized(graph, false)
       if (magicPressedID !== "") {
         getNodeById(graph, magicPressedID).magicSelected = false
       }
@@ -80,13 +94,11 @@ const ContactGraph = ({
       })
       setMagicNeighbors([])
     } else if (magicPressedID !== "" && magicPressedID === uid) {
-      setInitialized(graph, false)
       getNodeById(graph, uid).magicSelected = false
       setMagicPressedID("")
       magicNeighbors.forEach((neighbor) => {
         deleteNode(graph, neighbor)
       })
-      setMagicNeighbors([])
     } else {
       if (magicPressedID !== "" && magicPressedID !== uid) {
         getNodeById(graph, magicPressedID).magicSelected = false
@@ -95,52 +107,41 @@ const ContactGraph = ({
         })
       }
       const newFriends = await friendsFromUID(uid)
-
       const newContacts = await createContactListFromUsers(newFriends)
-
       const filteredNewContacts = newContacts.filter(
         (contact) =>
           !getNodes(graph).find((node) => node.contact.uid === contact.uid) &&
           contact.uid !== userId &&
           getNodeById(graph, uid).contact.friends?.includes(contact.uid)
       )
-
       const relevantNewContact = filteredNewContacts.filter((contact) =>
         relevantContact(userContact, contact)
       )
-
-      if (relevantNewContact.length === 0) {
-        setInitialized(graph, false)
-      }
-
       relevantNewContact.forEach((contact) => {
         addContactNode(graph, contact, 3)
       })
-
       setMagicNeighbors(relevantNewContact.map((contact) => contact.uid))
       getNodeById(graph, uid).magicSelected = true
       setMagicPressedID(uid)
-      setInitialized(graph, false)
     }
     handleSearch(searchText, graph)
+    setForceReload((prev) => !prev) // Trigger a force reload of the graph
   }
 
   return (
-    // Dismiss the keyboard when the user taps outside of the search bar
     <TouchableWithoutFeedback
       onPress={() => Keyboard.dismiss()}
       testID="touchable"
     >
       <View style={styles.container}>
-        <TextInput
-          style={styles.searchBar}
+        <InputField
           placeholder="Search..."
           value={searchText}
           onChangeText={(text) => {
             setSearchText(text)
             handleSearch(text, graph)
           }}
-          onSubmitEditing={() => handleQuery(onContactPress, graph)}
+          onSubmitEditing={() => handleQuery(onModalPress, graph)}
         />
         <NodeModal
           node={clickedNode}
@@ -149,15 +150,15 @@ const ContactGraph = ({
           onContactPress={onContactPress}
         />
         <View style={styles.graphContainer}>
-          {graph && counter && (
+          {!display && <Image source={require("../../../assets/splash.gif")} />}
+          {graph && (
             <ForceDirectedGraph
+              key={forceReload ? "forceReload-3" : "forceReload-2"} // Key changes on forceReload state change
               graph={graph}
               constrainedNodeId={userId}
               magicNodeId={magicPressedID}
-              modalPressedOut={!modalVisible}
               onModalPress={onModalPress}
               onMagicPress={onMagicPress}
-              reload={updateCounter}
             />
           )}
         </View>
@@ -219,8 +220,7 @@ export async function createContactListFromUsers(
         uid: friendID,
         firstName: friend?.firstName ?? "",
         lastName: friend?.lastName ?? "",
-        profilePictureUrl: "",
-        // "https://t3.ftcdn.net/jpg/04/65/28/08/360_F_465280897_8nL6xlvBwUcLYIQBmyX0GO9fQjDwNYtV.jpg",
+        profilePictureUrl: friend?.profilePicture ?? "",
         description: friend?.description ?? "",
         location: friend?.location ?? "",
         interests: friend?.selectedInterests ?? [""],
@@ -247,7 +247,6 @@ export async function createContactListFromUsers(
 }
 
 export async function friendsFromUID(uid: string): Promise<string[]> {
-  // TODO: Implement Asynchronous storage of friends data
   const user = await getUserData(uid)
   if (!user) {
     return []

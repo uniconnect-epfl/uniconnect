@@ -13,10 +13,10 @@ import { Contact } from "../../types/Contact"
  */
 interface Node {
   id: string
-  x: number
-  y: number
-  dx: number
-  dy: number
+  x?: number
+  y?: number
+  fx?: number | null
+  fy?: number | null
   selected?: boolean
   magicSelected?: boolean
   contact: Contact
@@ -30,8 +30,8 @@ interface Node {
  * @param target - The unique identifier of the target node
  */
 interface Link {
-  source: string
-  target: string
+  source: Node
+  target: Node
 }
 
 /**
@@ -66,15 +66,13 @@ export default class Graph {
 
     this.userId = userId
 
-    this.nodes.push({
+    const userNode: Node = {
       id: userId,
-      x: 0,
-      y: 0,
-      dx: 0,
-      dy: 0,
       contact: user,
       level: 1,
-    })
+    }
+
+    this.nodes.push(userNode)
 
     // Add the friends of the user
     if (user.friends) {
@@ -88,20 +86,17 @@ export default class Graph {
         if (!friend) continue
 
         // Add the friend to the graph
-        this.nodes.push({
+        const friendNode: Node = {
           id: friendId,
-          x: 0,
-          y: 0,
-          dx: 0,
-          dy: 0,
           contact: friend,
           level: 2,
-        })
+        }
+        this.nodes.push(friendNode)
 
         // Add a link between the user and the friend
         this.links.push({
-          source: userId,
-          target: friendId,
+          source: userNode,
+          target: friendNode,
         })
       }
     }
@@ -123,10 +118,6 @@ function addContactNode(graph: Graph, contact: Contact, level: number): void {
 
   graph.nodes.push({
     id: contact.uid,
-    x: 0,
-    y: 0,
-    dx: 0,
-    dy: 0,
     contact,
     level,
   })
@@ -134,7 +125,9 @@ function addContactNode(graph: Graph, contact: Contact, level: number): void {
   if (contact.friends) {
     for (const friendId of contact.friends) {
       if (getNodeById(graph, friendId)) {
-        addLink(graph, contact.uid, friendId)
+        const contactNode = getNodeById(graph, contact.uid)
+        const friendNode = getNodeById(graph, friendId)
+        addLink(graph, contactNode, friendNode)
       }
     }
   }
@@ -147,7 +140,7 @@ function addContactNode(graph: Graph, contact: Contact, level: number): void {
  * @param target - The unique identifier of the target node
  * @returns void
  */
-function addLink(graph: Graph, source: string, target: string): void {
+function addLink(graph: Graph, source: Node, target: Node): void {
   graph.links.push({ source, target })
 }
 
@@ -179,7 +172,7 @@ function getNodes(graph: Graph): Node[] {
 function deleteNode(graph: Graph, id: string) {
   graph.nodes = graph.nodes.filter((node) => node.id !== id)
   graph.links = graph.links.filter((link) => {
-    return link.source !== id && link.target !== id
+    return link.source.id !== id && link.target.id !== id
   })
 }
 

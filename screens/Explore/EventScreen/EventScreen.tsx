@@ -23,8 +23,10 @@ import { Event } from "../../../types/Event"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import { StackNavigationProp } from "@react-navigation/stack"
+
 import InputField from '../../../components/InputField/InputField'
 import { fetchAllUserImages, getUserData } from "../../../firebase/User"
+
 
 interface EventsScreenProps {
   onEventPress: (event: Event) => void
@@ -53,7 +55,9 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
   const [searchQuery, setSearchQuery] = React.useState("")
   const [loading, setLoading] = React.useState(true)
   const [refreshing, setRefreshing] = React.useState(false)
+
   const [userImages, setUserImages] = React.useState({} as Record<string, string>)
+
 
   useEffect(() => {
     const loadEvents = async () => {

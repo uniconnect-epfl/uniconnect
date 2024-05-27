@@ -84,6 +84,7 @@ const NodeModal: React.FC<{
         >
           <TouchableWithoutFeedback
             onPress={() => {
+              slideOutModal()
               onContactPress(node.id)
             }}
           >
@@ -101,6 +102,12 @@ const NodeModal: React.FC<{
               />
               <Text style={styles.modalProfileName}>
                 {node.contact.firstName} {node.contact.lastName}
+              </Text>
+              <Text style={styles.modalProfileDescription}>
+                {node.contact.description}
+              </Text>
+              <Text style={styles.modalProfileInterests}>
+                {node.contact.interests.slice(0, 3).join("\n")}
               </Text>
             </View>
           </TouchableWithoutFeedback>
