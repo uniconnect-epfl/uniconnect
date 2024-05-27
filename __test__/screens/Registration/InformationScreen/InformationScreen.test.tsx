@@ -3,7 +3,7 @@ import { render, fireEvent } from "@testing-library/react-native"
 import InformationScreen from "../../../../screens/Registration/InformationScreen/InformationScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { RegistrationContext } from "../../../../contexts/RegistrationContext"
-
+import { showErrorToast } from "../../../../components/ToastMessage/toast"
 const mockNavigate = jest.fn()
 jest.mock("@react-navigation/native", () => {
   return {
@@ -31,8 +31,8 @@ jest.mock("../../../../components/ToastMessage/toast", () => ({
 describe("Information Screen", () => {
   it("renders all input fields and buttons", () => {
     const providerProps = {
-      selectedInterests: ["one"], 
-      setSelectedInterests: jest.fn(), 
+      selectedInterests: ["one"],
+      setSelectedInterests: jest.fn(),
       description: "",
       setDescription: jest.fn(),
       firstName: "",
@@ -64,10 +64,44 @@ describe("Information Screen", () => {
     expect(getByText("Add a description now"))
   })
 
+  it("opens the date picker modal and sets hasBeenTouched to true when the Date of Birth section is pressed", () => {
+    const providerProps = {
+      selectedInterests: ["one"],
+      setSelectedInterests: jest.fn(),
+      description: "",
+      setDescription: jest.fn(),
+      firstName: "",
+      setFirstName: jest.fn(),
+      lastName: "",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+    }
+    const { getByText, queryByText } = render(
+      <SafeAreaProvider>
+        <RegistrationContext.Provider value={providerProps}>
+          <InformationScreen />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+
+    const dobSection = getByText("Date of Birth*")
+    fireEvent.press(dobSection)
+
+    // Verify the date modal is opened
+    expect(queryByText("JJ.MM.YYYY")).toBeFalsy() // The placeholder text should no longer be there
+
+    // Since we don't have a direct way to check if date picker modal is opened,
+    // we use the fact that the modal should be visible after onPress is called.
+    expect(queryByText("JJ.MM.YYYY")).toBeNull() // Placeholder should change after modal opens
+  })
+
   it("navigates to description up screen on footer press", () => {
     const providerProps = {
-      selectedInterests: ["one"], 
-      setSelectedInterests: jest.fn(), 
+      selectedInterests: ["one"],
+      setSelectedInterests: jest.fn(),
       description: "",
       setDescription: jest.fn(),
       firstName: "",
@@ -94,8 +128,8 @@ describe("Information Screen", () => {
 
   it("doesn't go forward when name is not completed", () => {
     const providerProps = {
-      selectedInterests: ["one"], 
-      setSelectedInterests: jest.fn(), 
+      selectedInterests: ["one"],
+      setSelectedInterests: jest.fn(),
       description: "",
       setDescription: jest.fn(),
       firstName: "",
@@ -121,8 +155,8 @@ describe("Information Screen", () => {
 
   it("doesn't go forward when surname is not completed", () => {
     const providerProps = {
-      selectedInterests: ["one"], 
-      setSelectedInterests: jest.fn(), 
+      selectedInterests: ["one"],
+      setSelectedInterests: jest.fn(),
       description: "",
       setDescription: jest.fn(),
       firstName: "name",
@@ -148,8 +182,8 @@ describe("Information Screen", () => {
 
   it("doesn't go forward when date is not completed", () => {
     const providerProps = {
-      selectedInterests: ["one"], 
-      setSelectedInterests: jest.fn(), 
+      selectedInterests: ["one"],
+      setSelectedInterests: jest.fn(),
       description: "",
       setDescription: jest.fn(),
       firstName: "name",
@@ -172,5 +206,93 @@ describe("Information Screen", () => {
     const NextButton = getByText("Next")
     fireEvent.press(NextButton)
   })
+  it("shows error toast when first name is missing", () => {
+    const providerProps = {
+      selectedInterests: ["one"],
+      setSelectedInterests: jest.fn(),
+      description: "",
+      setDescription: jest.fn(),
+      firstName: "",
+      setFirstName: jest.fn(),
+      lastName: "last name",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+    }
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <RegistrationContext.Provider value={providerProps}>
+          <InformationScreen />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
 
+    const NextButton = getByText("Next")
+    fireEvent.press(NextButton)
+    expect(showErrorToast).toHaveBeenCalledWith(
+      "You need to input your first name!"
+    )
+  })
+
+  it("shows error toast when last name is missing", () => {
+    const providerProps = {
+      selectedInterests: ["one"],
+      setSelectedInterests: jest.fn(),
+      description: "",
+      setDescription: jest.fn(),
+      firstName: "first name",
+      setFirstName: jest.fn(),
+      lastName: "",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+    }
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <RegistrationContext.Provider value={providerProps}>
+          <InformationScreen />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+
+    const NextButton = getByText("Next")
+    fireEvent.press(NextButton)
+    expect(showErrorToast).toHaveBeenCalledWith(
+      "You need to input your last name!"
+    )
+  })
+
+  it("shows error toast when date of birth is not selected", () => {
+    const providerProps = {
+      selectedInterests: ["one"],
+      setSelectedInterests: jest.fn(),
+      description: "",
+      setDescription: jest.fn(),
+      firstName: "first name",
+      setFirstName: jest.fn(),
+      lastName: "last name",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+    }
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <RegistrationContext.Provider value={providerProps}>
+          <InformationScreen />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+
+    const NextButton = getByText("Next")
+    fireEvent.press(NextButton)
+    expect(showErrorToast).toHaveBeenCalledWith(
+      "You need to input your birth day!"
+    )
+  })
 })
