@@ -36,6 +36,28 @@ jest.mock("react", () => ({
   }),
 }))
 
+// Mock the navigation object
+const mockNavigation = {
+  navigate: jest.fn(),
+  goBack: jest.fn(),
+  isFocused: jest.fn().mockReturnValue(false),
+}
+
+jest.mock('@react-navigation/native', () => {
+  const actualNav = jest.requireActual('@react-navigation/native')
+  return {
+    ...actualNav,
+    useNavigation: () => mockNavigation,
+    useFocusEffect: jest.fn().mockImplementation(() => {
+      return jest.fn()
+    }),
+  }
+})
+
+jest.mock("../../../../components/ToastMessage/toast", () => ({
+  showErrorToast: jest.fn(),
+}))
+
 describe("InterestsScreen", () => {
   beforeEach(() => {
     mockSetSelectedInterests.mockClear()

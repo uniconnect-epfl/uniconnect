@@ -170,6 +170,12 @@ const MainStackNavigator: React.FC = () => {
               component={AboutScreen}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="Interests"
+              component={InterestsScreen}
+              options={{ headerShown: false }}
+              initialParams={{ eventMode: true }}
+            />
           </>
         ) : (
           <>

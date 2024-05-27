@@ -1,33 +1,52 @@
 import { StyleSheet } from "react-native"
-import { lightGray, lightPeach, peach } from "../../../assets/colors/colors"
+import { lightPeach, peach } from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
   cardContainer: {
-    alignItems: "center",
     alignSelf: "center",
     backgroundColor: lightPeach,
     borderColor: peach,
     borderRadius: 100,
     height: 80,
     justifyContent: "center",
-    marginVertical: 5,
-    width: "90%",
+    marginBottom: 10,
+    width: "100%",
   },
   container: {
     flex: 1,
-  },
-  descriptionContainer: {
-    height: "50%",
-    justifyContent: "center",
+    flexWrap: "nowrap",
   },
   informationsContainer: {
     borderColor: peach,
     borderRadius: 100,
-    borderWidth: 2,
+    borderWidth: 3,
+    flexDirection: "column-reverse",
     height: "100%",
-    paddingLeft: "24%",
-    paddingRight: "5%",
+    paddingBottom: 10,
+    paddingLeft: 90,
     width: "100%",
+  },
+  listContainer: {
+    alignSelf: "center",
+    flex: 1,
+    marginBottom: 10,
+    width: "90%",
+    zIndex: 1,
+  },
+  loadingScreen: {
+    alignItems: "center",
+    alignSelf: "center",
+    backgroundColor: lightPeach,
+    borderColor: peach,
+    borderRadius: 40,
+    borderWidth: 3,
+    height: "85.5%",
+    justifyContent: "center",
+    marginTop: 90,
+    overflow: "hidden",
+    position: "absolute",
+    width: "90%",
+    zIndex: 2,
   },
   profilePicture: {
     alignItems: "center",
@@ -36,18 +55,7 @@ export const styles = StyleSheet.create({
     borderWidth: 2,
     height: 80,
     justifyContent: "center",
-    left: 0,
     position: "absolute",
     width: 80,
-  },
-  searchBar: {
-    alignSelf: "center",
-    borderColor: lightGray,
-    borderRadius: 40,
-    borderWidth: 1,
-    height: 40,
-    marginVertical: 10,
-    padding: 20,
-    width: "90%",
   },
 })
