@@ -84,36 +84,11 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
 
     const simulation = d3
       .forceSimulation(nodes)
-      .force(
-        "link",
-        d3
-          .forceLink(links)
-          .id((d: d3.SimulationNodeDatum) => d.index ?? ("0" as string))
-          .distance(
-            simulationParameters?.distance ?? DEFAULT_SIMULATION_DISTANCE
-          )
-      )
-      .force(
-        "charge",
-        d3
-          .forceManyBody()
-          .strength(simulationParameters?.charge ?? DEFAULT_SIMULATION_CHARGE)
-      )
-      .force(
-        "center",
-        d3.forceCenter(
-          ...(simulationParameters?.center ?? [width / 2, height / 2])
-        )
-      )
-      .force(
-        "collide",
-        d3.forceCollide(
-          simulationParameters?.collide ?? DEFAULT_SIMULATION_COLLIDE
-        )
-      )
-      .on("tick", () => {
-        setGraphState({ nodes: [...nodes], links: [...links] })
-      })
+      .force("link", d3.forceLink(graphState.links).id((d: d3.SimulationNodeDatum) => d.index ?? ("0" as string)).distance(simulationParameters?.distance ?? DEFAULT_SIMULATION_DISTANCE))
+      .force("charge", d3.forceManyBody().strength(simulationParameters?.charge ?? DEFAULT_SIMULATION_CHARGE))
+      .force("center", d3.forceCenter(...(simulationParameters?.center ?? [width / 2, height / 2])))
+      .force("collide", d3.forceCollide(simulationParameters?.collide ?? DEFAULT_SIMULATION_COLLIDE))
+      .on("tick", () => { setGraphState({ nodes: [...graphState.nodes], links: [...graphState.links], })})
 
     simulationRef.current = simulation
 
@@ -127,39 +102,11 @@ const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
     if (simulationRef.current) {
       simulationRef.current.nodes(graphState.nodes)
       simulationRef.current
-        .force(
-          "link",
-          d3
-            .forceLink(graphState.links)
-            .id((d: d3.SimulationNodeDatum) => d.index ?? ("0" as string))
-            .distance(
-              simulationParameters?.distance ?? DEFAULT_SIMULATION_DISTANCE
-            )
-        )
-        .force(
-          "charge",
-          d3
-            .forceManyBody()
-            .strength(simulationParameters?.charge ?? DEFAULT_SIMULATION_CHARGE)
-        )
-        .force(
-          "center",
-          d3.forceCenter(
-            ...(simulationParameters?.center ?? [width / 2, height / 2])
-          )
-        )
-        .force(
-          "collide",
-          d3.forceCollide(
-            simulationParameters?.collide ?? DEFAULT_SIMULATION_COLLIDE
-          )
-        )
-        .on("tick", () => {
-          setGraphState({
-            nodes: [...graphState.nodes],
-            links: [...graphState.links],
-          })
-        })
+        .force("link", d3.forceLink(graphState.links).id((d: d3.SimulationNodeDatum) => d.index ?? ("0" as string)).distance(simulationParameters?.distance ?? DEFAULT_SIMULATION_DISTANCE))
+        .force("charge", d3.forceManyBody().strength(simulationParameters?.charge ?? DEFAULT_SIMULATION_CHARGE))
+        .force("center", d3.forceCenter(...(simulationParameters?.center ?? [width / 2, height / 2])))
+        .force("collide", d3.forceCollide(simulationParameters?.collide ?? DEFAULT_SIMULATION_COLLIDE))
+        .on("tick", () => { setGraphState({ nodes: [...graphState.nodes], links: [...graphState.links], })})
         .alpha(1)
         .restart()
     }
