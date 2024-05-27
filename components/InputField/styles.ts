@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     borderColor: lightGray,
     borderRadius: 25,
     borderWidth: 1,
-    height: 40,
+    height: 50,
     marginTop: 5,
     paddingHorizontal: 30,
     width: "100%",
@@ -19,14 +19,16 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   labelContainer: {
-    width: "100%"
+    width: "100%",
   },
   section: {
+
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
     margin: 10,
     maxHeight: 70,
+    paddingHorizontal: 10,
   },
 })
 

@@ -6,7 +6,7 @@ import {
   Image,
   TouchableWithoutFeedback,
   Keyboard,
-  Dimensions,
+
 } from "react-native"
 import styles from "./styles"
 import { globalStyles } from "../../../assets/global/globalStyles"
@@ -35,7 +35,17 @@ const InformationScreen: React.FC = () => {
   const useNav = useNavigation()
   const keyboardVisible = useKeyboardVisibility()
 
-  const { firstName, setFirstName, lastName, setLastName, date, setDate, location, setLocation, description } = useContext(RegistrationContext)
+  const {
+    firstName,
+    setFirstName,
+    lastName,
+    setLastName,
+    date,
+    setDate,
+    location,
+    setLocation,
+    description,
+  } = useContext(RegistrationContext)
 
   const onPress = () => {
     setDateModal(true)
@@ -43,35 +53,32 @@ const InformationScreen: React.FC = () => {
   }
 
   const checkFields = () => {
-    if(firstName === ""){
+    if (firstName === "") {
       showErrorToast("You need to input your first name!")
       return false
     }
-    if(lastName === ""){
+    if (lastName === "") {
       showErrorToast("You need to input your last name!")
       return false
     }
-    if(!hasBeenTouched){
+    if (!hasBeenTouched) {
       showErrorToast("You need to input your birth day!")
       return false
-    } 
+    }
     return true
   }
 
   const opacity = !hasBeenTouched ? 0.2 : 1
 
   return (
-    <TouchableWithoutFeedback 
-      style={[
-        styles.container, 
-        {height: Dimensions.get('window').height + insets.bottom + insets.top}
-      ]}
-      onPress={() => Keyboard.dismiss()}>
+    <TouchableWithoutFeedback
+      style={styles.container}
+      onPress={() => Keyboard.dismiss()}
+    >
       <View
         style={[
           styles.container,
           { paddingTop: insets.top, paddingBottom: insets.bottom },
-          {height: Dimensions.get('window').height + insets.bottom + insets.top}
         ]}
       >
         <Image
@@ -150,15 +157,21 @@ const InformationScreen: React.FC = () => {
           <Divider />
 
           <TouchableOpacity
-            style={[styles.button, styles.buttonContainer]}
+            style={[styles.button, styles.buttonContainer, styles.description]}
             onPress={() => useNav.navigate("Description" as never)}
           >
-            <Text style={[styles.buttonText, globalStyles.text]}>{description.length === 0 ? "Add a description now" : "Edit your description"}</Text>
+            <Text style={[styles.buttonText, globalStyles.text]}>
+              {description.length === 0
+                ? "Add a description now"
+                : "Edit your description"}
+            </Text>
           </TouchableOpacity>
         </View>
 
         <View style={[styles.footer, { bottom: insets.bottom }]}>
-          {!keyboardVisible && <LowBar nextScreen="Interests" checkFields={checkFields}/>}
+          {!keyboardVisible && (
+            <LowBar nextScreen="Interests" checkFields={checkFields} />
+          )}
         </View>
 
         {dateModal && (

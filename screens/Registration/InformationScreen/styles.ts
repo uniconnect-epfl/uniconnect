@@ -19,17 +19,18 @@ const styles = StyleSheet.create({
     borderRadius: BUTTON_RADIUS,
     borderWidth: 2,
     elevation: 8, //
+    height: 35,
+    justifyContent: "center",
     marginHorizontal: 30,
     shadowColor,
     shadowOffset: { width: 0, height: 2.5 },
     shadowOpacity: 0.3,
-    shadowRadius: 5
+    shadowRadius: 5,
   },
 
   buttonContainer: {
     marginHorizontal: 20,
     marginVertical: 10,
-    padding: 15
   },
 
   buttonSmall: {
@@ -75,17 +76,18 @@ const styles = StyleSheet.create({
   description: {
     alignSelf: "center",
     borderColor: peach,
-    borderRadius: 10,
+    borderRadius: 20,
     borderWidth: 2,
     display: "flex",
     flexDirection: "column",
-    height: "17%",
-    justifyContent: "space-between",
+    height: 40,
+    justifyContent: "center",
+    marginTop: 20,
     padding: 5,
-    width: "70%",
+    width: 250,
   },
   fieldsContainer: {
-    height: "100%",
+    height: "91%",
     width: "100%",
   },
 
@@ -104,7 +106,7 @@ const styles = StyleSheet.create({
     borderColor: lightGray,
     borderRadius: 25,
     borderWidth: 1,
-    height: 40,
+    height: 50,
     justifyContent: "center",
     marginBottom: 15,
     paddingHorizontal: 30,
@@ -120,11 +122,13 @@ const styles = StyleSheet.create({
   },
 
   locationButton: {
-    alignItems: "center",
+    display: "flex",
     flexDirection: "row",
+    height: 30,
     justifyContent: "center",
     marginBottom: 20,
-    padding: 5
+    marginLeft: 20,
+    width: 200,
   },
 
   locationText: {
@@ -147,7 +151,7 @@ const styles = StyleSheet.create({
   },
   section: {
     flexDirection: "column",
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     paddingTop: 10,
   },
 })
