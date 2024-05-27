@@ -61,9 +61,11 @@ describe("manageEvents", () => {
       const imageUrl = "imageUrl"
       const host = "123"
       const participants = [host]
+      const interests = ["interest1", "interest2"]
+
 
       doc.mockReturnValueOnce({ id: "123" })
-      await createEvent(title, description, date, point, location, imageUrl, host)
+      await createEvent(title, description, date, point, location, imageUrl, host,interests )
 
       expect(setDoc).toHaveBeenCalledWith(expect.any(Object), {
         uid: "123",
@@ -75,6 +77,7 @@ describe("manageEvents", () => {
         imageUrl,
         participants,
         host,
+        interests
       })
       expect(showSuccessToast).toHaveBeenCalledWith("Event created successfully!")
     })
@@ -87,10 +90,11 @@ describe("manageEvents", () => {
       const location = "location"
       const imageUrl = "imageUrl"
       const userId = "123"
+      const interests = ["interest1", "interest2"]
 
       setDoc.mockRejectedValueOnce(new Error("Failed to store event"))
 
-      await createEvent(title, description, date, point, location, imageUrl, userId)
+      await createEvent(title, description, date, point, location, imageUrl, userId, interests)
 
       expect(showErrorToast).toHaveBeenCalledWith("There was an error storing your event data, please try again.")
     })
@@ -113,6 +117,7 @@ describe("manageEvents", () => {
         imageUrl: "imageUrl",
         participants,
         host,
+        interests: ["interest1", "interest2"]
       }
 
       getDoc.mockResolvedValueOnce({
@@ -132,6 +137,7 @@ describe("manageEvents", () => {
         imageUrl: "imageUrl",
         participants,
         host,
+        interests: ["interest1", "interest2"]
       })
     })
 
@@ -164,6 +170,7 @@ describe("manageEvents", () => {
         imageUrl: "imageUrl",
         participants,
         host,
+        interests: ["interest1", "interest2"]
       }
 
       getDocs.mockResolvedValueOnce({
@@ -186,6 +193,7 @@ describe("manageEvents", () => {
         imageUrl: "imageUrl",
         participants,
         host,
+        interests: ["interest1", "interest2"]
       }])
     })
 
@@ -216,6 +224,7 @@ describe("manageEvents", () => {
         imageUrl: "imageUrl",
         participants,
         host,
+        interests: ["interest1", "interest2"]
       }
 
       getDocs.mockResolvedValueOnce({
@@ -238,6 +247,7 @@ describe("manageEvents", () => {
         imageUrl: "imageUrl",
         participants,
         host,
+        interests: ["interest1", "interest2"]
       }])
     })
 
@@ -270,6 +280,7 @@ describe("manageEvents", () => {
       imageUrl: "imageUrl",
       participants: ["oldUserId"],
       host: "hostId",
+      interests: ["interest1", "interest2"]
     }
 
     it("should update event data successfully", async () => {
