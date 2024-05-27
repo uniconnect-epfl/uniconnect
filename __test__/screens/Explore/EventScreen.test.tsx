@@ -4,7 +4,7 @@ import EventScreen from '../../../screens/Explore/EventScreen/EventScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import React from 'react'
 import { Firestore } from 'firebase/firestore'
-import { NavigationProp, ParamListBase } from '@react-navigation/native'
+import { NavigationContainer, NavigationProp, ParamListBase } from '@react-navigation/native'
 
 
 jest.mock("../../../firebase/firebaseConfig", () => ({
@@ -63,21 +63,13 @@ describe('EventScreen', () => {
   it('refresh', async () => {
 
     const { debug } = render(
-      <SafeAreaProvider>
-        <EventScreen onEventPress={() => { }} userID='123' />
-      </SafeAreaProvider>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <EventScreen onEventPress={() => { }} userID='123' />
+        </SafeAreaProvider>
+      </NavigationContainer>
     )
     debug()
-
-    // await waitFor(() => {
-    // const refreshControl = getByTestId('refresh-control');
-    // fireEvent(refreshControl, 'onRefresh');
-    // })
-
-    // await waitFor(() => {
-    //   expect(getAllFutureEvents).toHaveBeenCalled()
-    //   expect(getAllPastEvents).toHaveBeenCalled()
-    // })
   })
 
 })
