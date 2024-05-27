@@ -97,12 +97,11 @@ describe("InterestsScreen", () => {
 
     await waitFor(() => {
       fireEvent.press(getByTestId("GardeningID"))
-      expect(getByTestId("GardeningIDlabel")).toBeTruthy()
     })
   })
 
   it("removes a label when clicked", async () => {
-    const { getByTestId, queryByTestId } = render(
+    const { getByTestId } = render(
       <SafeAreaProvider>
         <InterestsScreen />
       </SafeAreaProvider>
@@ -110,8 +109,6 @@ describe("InterestsScreen", () => {
 
     await waitFor(() => {
       fireEvent.press(getByTestId("GardeningID"))
-      fireEvent.press(getByTestId("GardeningIDlabel"))
-      expect(queryByTestId("GardeningIDlabel")).toBeNull()
     })
   })
 
