@@ -76,6 +76,7 @@ const MainStackNavigator: React.FC = () => {
   return (
     <RegistrationContext.Provider
       value={{
+        user,
         firstName,
         setFirstName,
         lastName,
@@ -168,6 +169,12 @@ const MainStackNavigator: React.FC = () => {
               name="About"
               component={AboutScreen}
               options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Interests"
+              component={InterestsScreen}
+              options={{ headerShown: false }}
+              initialParams={{ eventMode: true }}
             />
           </>
         ) : (

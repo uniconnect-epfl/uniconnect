@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useState } from "react"
 import { View, Text, ScrollView, Pressable } from "react-native"
 import { styles } from "./styles"
-import { NavigationProp, ParamListBase } from "@react-navigation/native"
+import {
+  NavigationProp,
+  ParamListBase,
+  useRoute,
+} from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
 import { globalStyles } from "../../assets/global/globalStyles"
 import { peach, white } from "../../assets/colors/colors"
@@ -13,17 +17,22 @@ import { RegistrationContext } from "../../contexts/RegistrationContext"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { Point } from "react-native-maps"
 import { getUserData, updateUserEvents } from "../../firebase/User"
-import { showErrorToast, showSuccessToast } from "../../components/ToastMessage/toast"
+import {
+  showErrorToast,
+  showSuccessToast,
+} from "../../components/ToastMessage/toast"
 import { getAuth } from "firebase/auth"
 import { User } from "../../types/User"
 import { BackArrow } from "../../components/BackArrow/BackArrow"
 
 interface EventCreationScreenProps {
-  navigation: NavigationProp<ParamListBase>,
-  isAnnouncement?: boolean
+  navigation: NavigationProp<ParamListBase>
 }
 
-const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreenProps) => {
+const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
+  const route = useRoute()
+  const isAnnouncement = route.params?.isAnnouncement
+
   const [dateModal, setDateModal] = useState(false)
   const [date, setDate] = useState<Date>(new Date())
   const [hasBeenTouched, setHasBeenTouched] = useState(false)
@@ -31,8 +40,12 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
   const [location, setLocation] = useState("")
   const [point, setPoint] = useState<Point | undefined>(undefined)
   const insets = useSafeAreaInsets()
-  const [interests] = useState(["Machine Learning, Sports, Tractoupelle"])
-  const { description, setDescription } = useContext(RegistrationContext)
+  const {
+    description,
+    setDescription,
+    selectedInterests,
+    setSelectedInterests,
+  } = useContext(RegistrationContext)
   const userId = getAuth().currentUser?.uid
   const [user, setUser] = useState<User | null>(null)
   const [, setLoading] = useState(false)
@@ -41,18 +54,13 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
 
   const publish = async () => {
     // send the data to the backend
-
-    if (isAnnouncement) {
-      newAnnouncement()
-    } else {
-      newEvent()
-    }
+    isAnnouncement ? newAnnouncement() : newEvent()
 
     // after the user has filled out the form
     // we should make sure the global state is cleaned
     setDescription("")
+    setSelectedInterests([])
   }
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,19 +78,18 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
       showErrorToast("You must be logged in to create an event")
       return
     }
-    if(!point){
-      console.log("Need a point to create an event")
+    if (!point) {
       setPoint(undefined)
-      console.log("Event not created")
       showErrorToast("You must enter a location for an event")
       return
     }
     const eventId = await createEvent(
-      title, description, 
-      date.toISOString(), 
-      point, 
-      location, 
-      "imageUrl", 
+      title,
+      description,
+      date.toISOString(),
+      point,
+      location,
+      "imageUrl",
       userId
     )
     if (eventId && user) {
@@ -96,9 +103,9 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
       await createAnnouncement(
         title,
         location,
-        point, 
-        description, 
-        interests, 
+        point,
+        description,
+        selectedInterests,
         date.toISOString()
       )
       showSuccessToast("Announcement created succesfully")
@@ -110,7 +117,7 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
   return (
     <ScrollView style={styles.container}>
       <View style={[styles.header, { paddingTop: insets.top + 5 }]}>
-        <BackArrow/>
+        <BackArrow />
         <View style={styles.headerIcon}>
           <Ionicons name="add" size={24} color={peach} />
         </View>
@@ -124,16 +131,28 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
             onChangeText={setTitle}
           />
           <Text style={[styles.tagsTitle, globalStyles.text]}>
-            Choose up to three tags
+            Choose up to three interests
           </Text>
 
-          <Pressable onPress={() => alert("Coming in the next sprint")}>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Interests")
+              setSelectedInterests([])
+            }}
+          >
             <View style={styles.tags}>
-              {[...Array(3)].map((_, index) => (
-                <View style={styles.addTag} key={index}>
+              <View style={styles.addTag}>
+                {selectedInterests?.length === 0 ? (
                   <Ionicons name="add" size={24} color={white} />
-                </View>
-              ))}
+                ) : (
+                  <Ionicons name="refresh" size={24} color={white} />
+                )}
+              </View>
+              {selectedInterests?.length !== 0 && (
+                <Text style={[styles.tagsTitle, globalStyles.text]}>
+                  Interests selected!
+                </Text>
+              )}
             </View>
           </Pressable>
         </View>
@@ -149,13 +168,6 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
                 setDateModal={setDateModal}
               />
             )}
-            
-            <InputField
-              label="Location*"
-              placeholder="Turing Avenue 69"
-              value={location}
-              onChangeText={setLocation}
-            />
 
             <Pressable
               style={styles.section}
@@ -185,16 +197,28 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
           <Pressable style={styles.buttonBase}>
             <Text
               onPress={() => {
-                navigation.navigate("SelectLocation", {onLocationChange: setPoint, initialPoint: point})
+                const onLocationChange = (
+                  locationName: string,
+                  point: Point | undefined
+                ) => {
+                  setLocation(locationName)
+                  setPoint(point)
+                }
+                navigation.navigate("SelectLocation", {
+                  onLocationChange: onLocationChange,
+                  initialPoint: point,
+                })
               }}
               style={globalStyles.boldText}
-              >
+            >
               {point === undefined ? "Add a location" : "Modify location"}
             </Text>
           </Pressable>
           <Pressable style={styles.buttonBase}>
             <Text
-              onPress={() => navigation.navigate("Description" as never)}
+              onPress={() => {
+                navigation.navigate("Description" as never)
+              }}
               style={globalStyles.boldText}
             >
               Add a description
@@ -210,4 +234,3 @@ const EventCreationScreen = ({ navigation, isAnnouncement }: EventCreationScreen
 }
 
 export default EventCreationScreen
-

@@ -15,16 +15,17 @@ export const styles = StyleSheet.create({
     margin: "3%"
   },
   cardContainer: {
+    alignItems: "center",
     flex: 1,
-    padding: 10,
+    marginVertical: 5,
   },
   containerEvent: {
     flex: 1,
   },
   header: {
-    fontSize: 18,
+    fontSize: 20,
     textAlign: "left",
-    textDecorationLine: 'underline'
+    textDecorationLine: 'underline',
   },
   iconText: {
     alignItems: "center",
@@ -57,7 +58,8 @@ export const styles = StyleSheet.create({
     backgroundColor: white,
     flexDirection: "row",
     justifyContent: "space-between",
-    marginHorizontal: "2.5%"
+    marginBottom: 10,
+    marginHorizontal: "2.5%",
   },
   text: {
     fontFamily: "JetBrainsMono_400Regular",

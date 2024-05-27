@@ -77,4 +77,15 @@ describe("DescriptionScreen", () => {
 
     expect(mockGoBack).toHaveBeenCalledTimes(1)
   })
+
+  it("dismisses keyboard", () => {
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <TouchableWithoutFeedback>
+          <DescriptionScreen />
+        </TouchableWithoutFeedback>
+      </SafeAreaProvider>
+    )
+    fireEvent.press(getByText("Add your Description"))
+  })
 })

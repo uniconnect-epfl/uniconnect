@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
 
   container: {
     alignItems: "center",
-    flex: 1,
+    backgroundColor: white,
     justifyContent: "flex-start",
   },
 
@@ -84,6 +84,10 @@ const styles = StyleSheet.create({
     padding: 5,
     width: "70%",
   },
+  fieldsContainer: {
+    height: "100%",
+    width: "100%",
+  },
 
   footer: {
     position: "absolute",
@@ -102,6 +106,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: 40,
     justifyContent: "center",
+    marginBottom: 15,
     paddingHorizontal: 30,
     width: "100%",
   },
@@ -123,7 +128,7 @@ const styles = StyleSheet.create({
   },
 
   locationText: {
-    alignSelf: "baseline",
+    alignSelf: "center",
     paddingLeft: 5,
   },
 
