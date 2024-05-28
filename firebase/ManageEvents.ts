@@ -4,7 +4,7 @@ import { showErrorToast, showSuccessToast } from "../components/ToastMessage/toa
 import { Point } from "react-native-maps"
 import { Event } from "../types/Event"
 
-export async function createEvent(title: string, description: string, date: string, point: Point, location: string, imageUrl: string, userId: string): Promise<string | undefined> {
+export async function createEvent(title: string, description: string, date: string, point: Point, location: string, imageUrl: string, userId: string, interests: string[]): Promise<string | undefined> {
   try {
     const eventRef = doc(collection(db, "events"))
     await setDoc(eventRef, {
@@ -16,7 +16,8 @@ export async function createEvent(title: string, description: string, date: stri
       description: description,
       imageUrl: imageUrl,
       participants: [userId],
-      host: userId
+      host: userId,
+      interests: interests
     })
     showSuccessToast("Event created successfully!")
     return eventRef.id
@@ -37,7 +38,8 @@ const formatEvent = (doc: DocumentData) => {
     date: doc.data().date as string,
     imageUrl: doc.data().imageUrl as string,
     participants: doc.data().participants as string[],
-    host: doc.data().host as string
+    host: doc.data().host as string,
+    interests: doc.data().interests as string[]
   }
 }
 
@@ -104,7 +106,8 @@ export const getEventData = async (eventUid: string) => {
         date: data.date,  // Assuming 'date' is stored as a Firestore Timestamp
         imageUrl: data.imageUrl,
         participants: data.participants,
-        host: data.host
+        host: data.host,
+        interests: data.interests
       }
       return event
     } else {

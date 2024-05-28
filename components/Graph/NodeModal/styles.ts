@@ -13,8 +13,24 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
   },
-  modalProfileName: {
+  modalProfileDescription: {
     fontFamily: globalStyles.text.fontFamily,
+    fontSize: 16,
+    left: 20,
+    position: "absolute",
+    top: 160,
+  },
+  modalProfileInterests: {
+    fontSize: 14,
+    fontStyle: "italic",
+    height: 80,
+    left: 120,
+    lineHeight: 25,
+    position: "absolute",
+    top: 20,
+  },
+  modalProfileName: {
+    fontFamily: globalStyles.boldText.fontFamily,
     fontSize: 20,
     left: 20,
     position: "absolute",
