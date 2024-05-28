@@ -177,7 +177,7 @@ const MainStackNavigator: React.FC = () => {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="Interests"
+              name="EventInterests"
               component={InterestsScreen}
               options={{ headerShown: false }}
               initialParams={{ eventMode: true }}

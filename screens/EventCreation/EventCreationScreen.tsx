@@ -25,6 +25,9 @@ import { getAuth } from "firebase/auth"
 import { User } from "../../types/User"
 import { BackArrow } from "../../components/BackArrow/BackArrow"
 
+const DEFAULT_IMAGE =
+  "https://i.pinimg.com/originals/fa/c0/cf/fac0cf5ce8ae42697dc794d5f2409d6c.jpg"
+
 interface EventCreationScreenProps {
   navigation: NavigationProp<ParamListBase>
 }
@@ -60,6 +63,7 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
     // we should make sure the global state is cleaned
     setDescription("")
     setSelectedInterests([])
+    navigation.goBack()
   }
 
   useEffect(() => {
@@ -89,7 +93,7 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
       date.toISOString(),
       point,
       location,
-      "imageUrl",
+      DEFAULT_IMAGE,
       userId,
       selectedInterests
     )
@@ -137,7 +141,7 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
 
           <Pressable
             onPress={() => {
-              navigation.navigate("Interests")
+              navigation.navigate("EventInterests")
               setSelectedInterests([])
             }}
           >
