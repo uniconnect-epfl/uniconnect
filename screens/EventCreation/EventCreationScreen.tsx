@@ -139,7 +139,7 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
 
           <Pressable
             onPress={() => {
-              navigation.navigate("Interests")
+              navigation.navigate("EventInterests")
               setSelectedInterests([])
             }}
           >
