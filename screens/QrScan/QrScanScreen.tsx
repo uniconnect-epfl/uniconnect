@@ -53,7 +53,7 @@ const QrScanScreen = ({navigation} : ScanQrScreenProps) => {
   // logic for the qr code scanning wrapped in a debouncer
   const debouncedQr = useDebouncedCallback((linkScanned) => {
     if(linkScanned){
-      const path = linkScanned.replace(Linking.createURL("/"), "")
+      const path = linkScanned.replace(Linking.createURL(""), "")
       const [route, id] = path.split("/")
       if(route === "contact") handleUser(id)
       else if (route === "event") handleEvent(id)
