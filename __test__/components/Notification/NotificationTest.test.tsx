@@ -1,6 +1,7 @@
 import React from "react"
 import { render } from "@testing-library/react-native"
-import Notification, {
+import {
+  Notification,
   NotificationProps,
 } from "../../../components/Notification/Notification"
 

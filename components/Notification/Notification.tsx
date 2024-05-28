@@ -9,7 +9,10 @@ export interface NotificationProps {
   profileImage?: string // Use `require` to import images
 }
 
-const Notification: React.FC<NotificationProps> = ({ name, profileImage }) => {
+export const Notification: React.FC<NotificationProps> = ({
+  name,
+  profileImage,
+}) => {
   return (
     <View style={styles.notificationContainer}>
       <View style={styles.placeholderContainer}>
@@ -32,5 +35,3 @@ const Notification: React.FC<NotificationProps> = ({ name, profileImage }) => {
     </View>
   )
 }
-
-export default Notification
