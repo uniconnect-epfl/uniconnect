@@ -141,7 +141,7 @@ describe("EventCreationScreen", () => {
     const providerProps = {
       description: "",
       setDescription: mockSetDescription,
-      point: { x: 0, y: 0 },
+      point: undefined,
       location: "test",
       userId: undefined,
       selectedInterests: [],
@@ -334,5 +334,4 @@ describe("EventCreationScreen", () => {
     const validateButton = getByText("Validate")
     fireEvent.press(validateButton)
   })
-
 })
