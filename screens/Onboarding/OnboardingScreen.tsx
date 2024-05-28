@@ -17,6 +17,7 @@ import { loginEmailPassword } from "../../firebase/Login"
 import { GoogleSignInButton } from "../../components/GoogleSignInButton/GoogleSignInButton"
 import { peach } from "../../assets/colors/colors"
 import useKeyboardVisibility from "../../hooks/useKeyboardVisibility"
+import { black } from "../../assets/colors/colors"
 
 const OnboardingScreen: React.FC = () => {
   const navigation = useNavigation()
@@ -50,7 +51,7 @@ const OnboardingScreen: React.FC = () => {
           id="username_placeholder"
           style={[styles.inputField, globalStyles.text]}
           placeholder="Username or email"
-          placeholderTextColor={"black"}
+          placeholderTextColor={black}
           keyboardType="email-address"
           autoCapitalize="none"
           value={email}
@@ -62,7 +63,7 @@ const OnboardingScreen: React.FC = () => {
         <TextInput
           style={[styles.inputField, globalStyles.text]}
           placeholder="Password"
-          placeholderTextColor={"black"}
+          placeholderTextColor={black}
           secureTextEntry
           value={password}
           onChangeText={setPassword}
