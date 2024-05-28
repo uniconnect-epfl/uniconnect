@@ -24,9 +24,8 @@ import { globalStyles } from "../../../assets/global/globalStyles"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import { StackNavigationProp } from "@react-navigation/stack"
 
-import InputField from '../../../components/InputField/InputField'
+import InputField from "../../../components/InputField/InputField"
 import { fetchAllUserImages, getUserData } from "../../../firebase/User"
-
 
 interface EventsScreenProps {
   onEventPress: (event: Event) => void
@@ -35,6 +34,7 @@ interface EventsScreenProps {
 
 type RootStackParamList = {
   EventMap: {
+    onEventPress: (event: Event) => void
     events: Event[] | null
   }
 }
@@ -56,8 +56,9 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
   const [loading, setLoading] = React.useState(true)
   const [refreshing, setRefreshing] = React.useState(false)
 
-  const [userImages, setUserImages] = React.useState({} as Record<string, string>)
-
+  const [userImages, setUserImages] = React.useState(
+    {} as Record<string, string>
+  )
 
   useEffect(() => {
     const loadEvents = async () => {
@@ -84,7 +85,7 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
             setFilteredPastEvents(userPastEvents)
           }
           const userImages = await fetchAllUserImages()
-          if(userImages) {
+          if (userImages) {
             setUserImages(userImages)
           }
         } else {
@@ -97,7 +98,7 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
           setFilteredFutureEvents(fetchedFutureEvents)
           setFilteredPastEvents(fetchedPastEvents)
           const userImages = await fetchAllUserImages()
-          if(userImages) {
+          if (userImages) {
             setUserImages(userImages)
           }
         }
@@ -152,7 +153,10 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 
   useEffect(() => {
     setSections([
-      { title: "Upcoming Events", data: groupEventsByTwo(filteredFutureEvents) },
+      {
+        title: "Upcoming Events",
+        data: groupEventsByTwo(filteredFutureEvents),
+      },
       { title: "Past Events", data: groupEventsByTwo(filteredPastEvents) },
     ])
   }, [filteredFutureEvents, filteredPastEvents])
@@ -178,8 +182,11 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
             styles.cardContainer,
             event.title === "dummy" ? styles.transparent : {},
           ]}
-          onPress={() => {onEventPress(event)}}
+          onPress={() => {
+            onEventPress(event)
+          }}
           disabled={event.title === "dummy"}
+          testID={"event-card-" + event.title}
         >
           <EventCard event={event} userImages={userImages} />
         </TouchableOpacity>
@@ -216,7 +223,10 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
         <TouchableOpacity
           style={styles.map}
           onPress={() =>
-            navigation.navigate("EventMap", { events: filteredFutureEvents })
+            navigation.navigate("EventMap", {
+              onEventPress: onEventPress,
+              events: filteredFutureEvents,
+            })
           }
         >
           <Text style={globalStyles.boldText}>Map View</Text>
