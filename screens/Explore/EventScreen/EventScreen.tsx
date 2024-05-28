@@ -54,8 +54,6 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
   const [searchQuery, setSearchQuery] = React.useState("")
   const [loading, setLoading] = React.useState(true)
 
-  const [refreshing, setRefreshing] = React.useState(false)
-
   const [userImages, setUserImages] = React.useState(
     {} as Record<string, string>
   )
