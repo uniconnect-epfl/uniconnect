@@ -9,34 +9,29 @@ import styles from "./styles"
 import { peach } from "../../../assets/colors/colors"
 
 interface GraphOptionsModalProps {
-  visible: boolean | null
+  visible: boolean
+  onPressOut: () => void
   updateSimulationParameters: (param: SimulationParameters) => void
   initialParameters: SimulationParameters
 }
 
 const GraphOptionsModal: React.FC<GraphOptionsModalProps> = ({
   visible,
+  onPressOut,
   updateSimulationParameters,
   initialParameters,
 }: GraphOptionsModalProps) => {
-  const [modalVisible, setModalVisible] = useState(false)
   const [distance, setDistance] = useState(initialParameters.distance)
   const [charge, setCharge] = useState(initialParameters.charge)
   const [collide, setCollide] = useState(initialParameters.collide)
-
-  useEffect(() => {
-    if (visible != null) {
-      setModalVisible(true)
-    }
-  }, [visible])
 
   useEffect(() => {
     updateSimulationParameters({ distance, charge, collide })
   }, [distance, charge, collide])
 
   return (
-    <Modal visible={modalVisible} animationType="slide" transparent={true}>
-      <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+    <Modal visible={visible} animationType="slide" transparent={true}>
+      <TouchableWithoutFeedback onPress={() => onPressOut()}>
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
             <Text style={styles.modalTitle}>Adjust Simulation Parameters</Text>

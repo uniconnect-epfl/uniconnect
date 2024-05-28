@@ -89,10 +89,17 @@ const ContactGraph = ({
 
       unlockOrientation()
 
+      const handleOrientationChange = () => {
+        // Ensure these functions are called first
+        onModalPressOut()
+        onOptionModalPressOut()
+
+        // Then change the state to trigger the rotation
+        setRotation((prev) => !prev)
+      }
+
       const subscription = ScreenOrientation.addOrientationChangeListener(
-        () => {
-          setRotation((prev) => !prev)
-        }
+        handleOrientationChange
       )
 
       return () => {
@@ -121,14 +128,13 @@ const ContactGraph = ({
 
   // Logic behind changing the graph simulation's parameters on the fly
 
-  const [graphOptionsModalVisible, setGraphOptionsModalVisible] = useState<
-    boolean | null
-  >(null)
+  const [graphOptionsModalVisible, setGraphOptionsModalVisible] =
+    useState<boolean>(false)
 
   const onOptionModalPress = async () => {
     await ScreenOrientation.getOrientationAsync().then((orientation) => {
       if (orientation === ScreenOrientation.Orientation.PORTRAIT_UP) {
-        setGraphOptionsModalVisible((prev) => !prev)
+        setGraphOptionsModalVisible(true)
       } else {
         showErrorToast(
           "Please rotate your device to portrait mode to view graph options"
@@ -137,6 +143,9 @@ const ContactGraph = ({
     })
   }
 
+  const onOptionModalPressOut = () => {
+    setGraphOptionsModalVisible(false)
+  }
   const [simulationParameters, setSimulationParameters] =
     useState<SimulationParameters>({
       distance: DEFAULT_SIMULATION_DISTANCE,
@@ -267,6 +276,7 @@ const ContactGraph = ({
         />
         <GraphOptionsModal
           visible={graphOptionsModalVisible}
+          onPressOut={onOptionModalPressOut}
           updateSimulationParameters={updateSimulationParameters}
           initialParameters={simulationParameters}
         />
