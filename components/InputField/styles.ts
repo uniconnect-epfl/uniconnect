@@ -22,11 +22,11 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   section: {
-
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
     margin: 10,
+    marginVertical: 20,
     maxHeight: 70,
     paddingHorizontal: 10,
   },
