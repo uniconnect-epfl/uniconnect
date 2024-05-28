@@ -9,12 +9,14 @@ interface LowBarProps {
   nextScreen?: string
   buttonText?: string
   authenticate?: () => void
+  checkFields?: () => boolean
 }
 
 const LowBar: React.FC<LowBarProps> = ({
   nextScreen,
   buttonText,
   authenticate = () => {},
+  checkFields = () => true,
 }) => {
   const navigation = useNavigation()
   const textB = buttonText ? buttonText : "Next"
@@ -30,11 +32,13 @@ const LowBar: React.FC<LowBarProps> = ({
 
       <TouchableOpacity
         style={styles.buttonSmall}
-        onPress={() =>
-          nextScreen === "ExploreTabs"
-            ? authenticate()
-            : navigation.navigate(nextScreen as never)
-        }
+        onPress={() => {
+          if(nextScreen === "ExploreTabs"){
+            authenticate()
+          } else if(checkFields()){
+            navigation.navigate(nextScreen as never)
+          }
+        }}
       >
         <Text style={[styles.buttonText, globalStyles.text]}>{textB}</Text>
       </TouchableOpacity>

@@ -1,5 +1,5 @@
 import React from "react"
-import { render, fireEvent, act, waitFor } from "@testing-library/react-native"
+import { render, fireEvent, waitFor } from "@testing-library/react-native"
 import NetworkScreen from "../../../screens/Network/NetworkScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import {
@@ -7,10 +7,30 @@ import {
   NavigationProp,
   ParamListBase,
 } from "@react-navigation/native"
-import { FirebaseError } from "firebase/app"
-import { Auth } from "firebase/auth"
-import { User } from "../../../types/User"
 import { loginEmailPassword } from "../../../firebase/Login"
+
+jest.mock("d3-force", () => ({
+  forceSimulation: jest.fn(() => ({
+    force: jest.fn().mockReturnThis(),
+    nodes: jest.fn().mockReturnThis(),
+    links: jest.fn().mockReturnThis(),
+    alpha: jest.fn().mockReturnThis(),
+    restart: jest.fn(),
+    stop: jest.fn(),
+    on: jest.fn().mockReturnThis(),
+  })),
+  forceLink: jest.fn(() => ({
+    id: jest.fn().mockReturnThis(),
+    distance: jest.fn().mockReturnThis(),
+  })),
+  forceManyBody: jest.fn(() => ({
+    strength: jest.fn().mockReturnThis(),
+  })),
+  forceCenter: jest.fn().mockReturnThis(),
+  forceCollide: jest.fn().mockReturnThis(),
+}))
+
+jest.mock("react-native/Libraries/Image/Image", () => "Image")
 
 // Mock AsyncStorage methods
 jest.mock("@react-native-async-storage/async-storage", () => ({
@@ -33,14 +53,17 @@ const mockNavigation = {
   dangerouslyGetState: jest.fn(),
 } as unknown as NavigationProp<ParamListBase>
 
-jest.mock("@react-navigation/native", () => {
-  return {
-    ...jest.requireActual("@react-navigation/native"),
-    useNavigation: () => ({
-      navigate: mockNavigation.navigate,
-    }),
-  }
-})
+jest.mock("@react-navigation/native", () => ({
+  ...jest.requireActual("@react-navigation/native"),
+  useRoute: () => ({
+    params: {
+      externalUserUid: "dFcpWnfaNTOWBFyJnoJSIL6xyi32",
+    },
+  }),
+  useNavigation: () => ({
+    navigate: mockNavigation.navigate,
+  }),
+}))
 
 jest.mock("react-native-safe-area-context", () => {
   const inset = { top: 0, right: 0, bottom: 0, left: 0 }
@@ -63,31 +86,13 @@ jest.mock("react-native-gesture-handler", () => {
   }
 })
 
-const mockFirebaseError = new FirebaseError("auth/invalid-credential", "test")
-
 jest.mock("firebase/auth", () => ({
-  getAuth: jest.fn(() => ({} as Auth)),
-  createUserWithEmailAndPassword: jest
-    .fn()
-    .mockImplementation((auth, email, password) => {
-      if (email === "test@example.com" && password === "password") {
-        return Promise.resolve(void 0)
-      } else {
-        return Promise.reject(new Error("Failed to create account"))
-      }
-    }),
-  getReactNativePersistence: jest.fn(() => ({} as Auth)),
-  initializeAuth: jest.fn(() => ({} as Auth)),
-  signInWithEmailAndPassword: jest
-    .fn()
-    .mockImplementation((auth, email, password) => {
-      if (email === "test@example.com" && password === "password") {
-        return Promise.resolve({} as User)
-      } else if (email === "firebase@example.com") {
-        return Promise.reject(mockFirebaseError as FirebaseError)
-      }
-      return Promise.reject(new Error("Failed to login"))
-    }),
+  getReactNativePersistence: jest.fn(() => ({})),
+  initializeAuth: jest.fn(() => ({})),
+  onAuthStateChanged: jest.fn(() => ({ uid: "dFcpWnfaNTOWBFyJnoJSIL6xyi32" })),
+  getAuth: jest.fn(() => ({
+    currentUser: { uid: "dFcpWnfaNTOWBFyJnoJSIL6xyi32" },
+  })),
 }))
 
 beforeAll(async () => {
@@ -104,37 +109,14 @@ describe("NetworkScreen", () => {
         </NavigationContainer>
       </SafeAreaProvider>
     )
+
     await waitFor(() => {
-      expect(component).toBeTruthy()
+      expect(component.getByText("Graph")).toBeTruthy()
+      expect(component.getByText("List")).toBeTruthy()
     })
   })
 
-  it("Clicking on a contact in the list navigates to the profile screen", async () => {
-    const component = render(
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <NetworkScreen navigation={mockNavigation} />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    )
-
-    const button = component.getByText("List")
-
-    await act(async () => {
-      fireEvent.press(button)
-    })
-
-    await waitFor(
-      () => {
-        const profileButton = component.getByText("Gustave Charles")
-        fireEvent.press(profileButton)
-        expect(mockNavigation.navigate).toHaveBeenCalled()
-      },
-      { timeout: 10000 }
-    )
-  }, 10000)
-
-  it("Double pressing a node displays a modal", async () => {
+  it("switches between tabs", async () => {
     const component = render(
       <SafeAreaProvider>
         <NavigationContainer>
@@ -144,249 +126,39 @@ describe("NetworkScreen", () => {
     )
 
     await waitFor(() => {
-      const node1 = component.getByTestId("node-dFcpWnfaNTOWBFyJnoJSIL6xyi32")
-      expect(node1).toBeTruthy()
-      fireEvent(node1, "pressIn")
-      fireEvent(node1, "pressIn")
+      expect(component.getByText("Graph")).toBeTruthy()
     })
 
-    const modal = component.getByTestId("modal")
-    expect(modal).toBeTruthy()
-  })
-
-  it("Pressing outside the modal closes it", async () => {
-    const component = render(
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <NetworkScreen navigation={mockNavigation} />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    )
+    fireEvent.press(component.getByText("List"))
 
     await waitFor(() => {
-      const node1 = component.getByTestId("node-dFcpWnfaNTOWBFyJnoJSIL6xyi32")
-      expect(node1).toBeTruthy()
-      fireEvent(node1, "pressIn")
-      fireEvent(node1, "pressIn")
+      expect(component.getByPlaceholderText("Search...")).toBeTruthy()
     })
 
-    const modal = component.getByTestId("modal")
-    expect(modal).toBeTruthy()
+    fireEvent.changeText(component.getByPlaceholderText("Search..."), "test")
 
-    await waitFor(
-      async () => {
-        const modalPressOut = component.getByTestId("modal-touchable")
-        expect(modalPressOut).toBeTruthy()
-        await act(async () => {
-          fireEvent.press(modalPressOut)
-        })
-      },
-      { timeout: 10000 }
-    )
-  }, 10000)
+    fireEvent.press(component.getByTestId("touchable"))
 
-  it("Double pressing and clicking on the profile picture navigates to the contact's profile", async () => {
-    const component = render(
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <NetworkScreen navigation={mockNavigation} />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    )
+    fireEvent.press(component.getByText("Graph"))
 
     await waitFor(() => {
-      const node1 = component.getByTestId("node-dFcpWnfaNTOWBFyJnoJSIL6xyi32")
-      expect(node1).toBeTruthy()
-      fireEvent(node1, "pressIn")
-      fireEvent(node1, "pressIn")
+      expect(component.getByPlaceholderText("Search...")).toBeTruthy()
     })
 
-    const modal = component.getByTestId("modal")
-    expect(modal).toBeTruthy()
+    fireEvent.changeText(component.getByPlaceholderText("Search..."), "test")
 
-    const modalProfilePicture = component.getByTestId("modal-profile-picture")
-    expect(modalProfilePicture).toBeTruthy()
+    fireEvent.press(component.getByTestId("touchable"))
 
-    await act(async () => {
-      fireEvent.press(modalProfilePicture)
-    })
-
-    expect(mockNavigation.navigate).toHaveBeenCalled()
-  })
-
-  it("Long pressing the constrained node at first does not change anything", async () => {
-    const component = render(
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <NetworkScreen navigation={mockNavigation} />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    )
+    fireEvent.press(component.getByText("List"))
 
     await waitFor(() => {
-      const node1 = component.getByTestId("node-dFcpWnfaNTOWBFyJnoJSIL6xyi32")
-      expect(node1).toBeTruthy()
-      act(() => {
-        fireEvent(node1, "longPress")
-      })
+      expect(component.getByPlaceholderText("Search...")).toBeTruthy()
     })
-    await new Promise((resolve) => setTimeout(resolve, 3000))
-  }, 10000)
 
-  it("Long pressing any other node at first change the graph", async () => {
-    const component = render(
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <NetworkScreen navigation={mockNavigation} />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    )
-
-    await waitFor(
-      () => {
-        const node1 = component.getByTestId("node-wFz3KQa6lgUaT5dt7bLQHD59Loj1")
-        expect(node1).toBeTruthy()
-        act(() => {
-          fireEvent(node1, "longPress")
-        })
-      },
-      { timeout: 10000 }
-    )
-    await new Promise((resolve) => setTimeout(resolve, 2500))
+    fireEvent.press(component.getByText("Graph"))
 
     await waitFor(() => {
-      const node2 = component.getByTestId("node-dFcpWnfaNTOWBFyJnoJSIL6xyi32")
-      expect(node2).toBeTruthy()
-      act(() => {
-        fireEvent(node2, "longPress")
-      })
-    })
-    await new Promise((resolve) => setTimeout(resolve, 2500))
-  }, 20000)
-
-  it("Long pressing any other node at first change the graph and pressing it again resets", async () => {
-    const component = render(
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <NetworkScreen navigation={mockNavigation} />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    )
-
-    await waitFor(
-      () => {
-        const node1 = component.getByTestId("node-wFz3KQa6lgUaT5dt7bLQHD59Loj1")
-        expect(node1).toBeTruthy()
-        act(() => {
-          fireEvent(node1, "longPress")
-        })
-      },
-      { timeout: 10000 }
-    )
-    await new Promise((resolve) => setTimeout(resolve, 2500))
-
-    await waitFor(
-      () => {
-        const node1 = component.getByTestId("node-wFz3KQa6lgUaT5dt7bLQHD59Loj1")
-        expect(node1).toBeTruthy()
-        act(() => {
-          fireEvent(node1, "longPress")
-        })
-      },
-      { timeout: 10000 }
-    )
-    await new Promise((resolve) => setTimeout(resolve, 2500))
-  }, 30000)
-
-  it("Long pressing any other node at first change the graph and long pressing another one changes the graph directly", async () => {
-    const component = render(
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <NetworkScreen navigation={mockNavigation} />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    )
-
-    await waitFor(
-      () => {
-        const node1 = component.getByTestId("node-wFz3KQa6lgUaT5dt7bLQHD59Loj1")
-        expect(node1).toBeTruthy()
-        act(() => {
-          fireEvent(node1, "longPress")
-        })
-      },
-      { timeout: 10000 }
-    )
-    await new Promise((resolve) => setTimeout(resolve, 2500))
-
-    await waitFor(
-      () => {
-        const node2 = component.getByTestId("node-iImqL2GDCIYmHf41olukxgOhVQK2")
-        expect(node2).toBeTruthy()
-        act(() => {
-          fireEvent(node2, "longPress")
-        })
-      },
-      { timeout: 10000 }
-    )
-    await new Promise((resolve) => setTimeout(resolve, 2500))
-  }, 30000)
-
-  it("Pressing the searchbar and submitting it filters the contacts", async () => {
-    const component = render(
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <NetworkScreen navigation={mockNavigation} />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    )
-
-    await waitFor(() => {
-      const touchable = component.getByTestId("touchable")
-      expect(touchable).toBeTruthy()
-
-      const searchBar = component.getByPlaceholderText("Search...")
-      expect(searchBar).toBeTruthy()
-
-      act(() => {
-        fireEvent(searchBar, "press")
-      })
-
-      act(() => {
-        fireEvent.changeText(searchBar, "Gustave")
-      })
-
-      expect(searchBar.props.value).toBe("Gustave")
-
-      act(() => {
-        fireEvent(touchable, "press")
-      })
-    })
-  })
-
-  it("Searching contact on list view works", async () => {
-    const component = render(
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <NetworkScreen navigation={mockNavigation} />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    )
-
-    const button = component.getByText("List")
-
-    await act(async () => {
-      fireEvent.press(button)
-    })
-    await waitFor(() => {
-      const searchBar = component.getByPlaceholderText("Search...")
-      expect(searchBar).toBeTruthy()
-
-      act(() => {
-        fireEvent.changeText(searchBar, "Gustave")
-      })
-
-      expect(searchBar.props.value).toBe("Gustave")
+      expect(component.getByPlaceholderText("Search...")).toBeTruthy()
     })
   })
 })

@@ -1,553 +1,353 @@
-import React, { useEffect, useRef, useState } from "react"
-
+import React from "react"
+import { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import {
-  ActivityIndicator,
   Dimensions,
-  TouchableWithoutFeedback,
-  Vibration,
-  Animated,
-} from "react-native"
-import Svg, {
-  Circle,
-  G,
-  Line,
-  ClipPath,
-  Text as SVGText,
+  GestureResponderEvent,
   Image,
-  Defs,
-  RadialGradient,
-  Stop,
-} from "react-native-svg"
+  PanResponder,
+  PanResponderGestureState,
+  PanResponderInstance,
+  Vibration,
+  View,
+} from "react-native"
 
-import styles from "./styles"
-import Graph, {
-  getInitialized,
-  getLinks,
-  getNodeById,
-  getNodes,
-  Link,
-  Node,
-  setInitialized,
-} from "../Graph"
-import { fruchtermanReingold } from "../graphAlgorithms/FruchtermanReingold"
-
-import {
-  PanGestureHandler,
-  PinchGestureHandler,
-  State,
-  GestureHandlerRootView,
-} from "react-native-gesture-handler"
-
-import { black, peach, transparent } from "../../../assets/colors/colors"
+import Svg, { Circle, G, Line, Text as SVGText } from "react-native-svg"
+import * as d3 from "d3-force"
+import Graph, { Node, Link } from "../Graph" // Import your Graph class and types here
+import { peach, transparent } from "../../../assets/colors/colors"
 import { globalStyles } from "../../../assets/global/globalStyles"
+import styles from "./styles"
 import { showErrorToast } from "../../ToastMessage/toast"
 
-// Constants used for the gestures
-const DOUBLE_PRESS_DURATION = 300 // When the press is more longer than 100ms, we consider that it is intended for dragging a node
-const PAN_GESTURE_MIN_MAX_POINTERS = 1 // Minimum and maximum number of pointers for the pan gesture (i.e., one finger)
-const DEFAULT_CLICKED_NODE_ID = ""
+const DEFAULT_NODE_SIZE = 80
+const NODE_TEXT_VERTICAL_OFFSET = 10
 
-// Constants used for UI
-const NODE_HIGHLIGHT_RATIO = 1.3
-const NODE_TEXT_OFFSET = 20
-const DEFAULT_NODE_SIZE = 40
-const DEFAULT_LINK_COLOR = black
+const DOUBLE_PRESS_DELAY = 300
+const STATIC_PRESS_MAX_OFFSET = 5
 
-// Constants used for the Fruchterman-Reingold algorithm
-const MAX_ITERATIONS = 1000 // Maximum number of iterations for the used algorithn
+const DEFAULT_SIMULATION_DISTANCE = 100
+const DEFAULT_SIMULATION_CHARGE = -200
+const DEFAULT_SIMULATION_COLLIDE = 20
+interface SimulationParameters {
+  distance?: number
+  charge?: number
+  center?: [number, number]
+  collide?: number
+}
 
-// Constants used for rendering and positioning
-const WIDTH = Dimensions.get("window").width // Width of the screen
-const HEIGHT = Dimensions.get("window").height // Height of the screen
-const CENTER_WIDTH = WIDTH / 2 // Center X-coordinates of the screen
-const CENTER_HEIGHT = HEIGHT / 2 // Center Y-coordinates of the screen
-const INITIAL_SCALE = 20 // Initial scale of the graph
-const DEFAULT_SCALE = 1 // Default scale of the graph
-const MODAL_SCALE = 8 // Scale of the graph when a node is clicked
-
-// Constants used for the animation
-const ANIMATION_DURATION = 500 // Duration of the animation in milliseconds
-
-/**
- *
- * @description Force-directed graph component
- * @param graph - Graph object
- * @param constrainedNodeId - Identifier of the node to be constrained to the center
- * @returns - Force-directed graph component
- */
-const ForceDirectedGraph: React.FC<{
+interface ForceDirectedGraphProps {
   graph: Graph
   constrainedNodeId: string
   magicNodeId: string
-  modalPressedOut: boolean
   onModalPress: (uid: string) => void
   onMagicPress: (uid: string) => void
-  reload?: () => void
-}> = ({
+  rotation?: boolean
+  simulationParameters?: SimulationParameters
+}
+
+const ForceDirectedGraph: React.FC<ForceDirectedGraphProps> = ({
   graph,
   constrainedNodeId,
   magicNodeId,
-  modalPressedOut,
   onModalPress,
   onMagicPress,
-  reload,
+  rotation,
+  simulationParameters,
 }) => {
-  const [transitionScale] = useState(new Animated.Value(20))
-  const [transitionTranslateX] = useState(new Animated.Value(0))
-  const [transitionTranslateY] = useState(new Animated.Value(0))
-
-  const [animationStarted, setAnimationStarted] = useState(false)
-
-  const zoomAndTranslate = (
-    animationScale: number,
-    animationX: number,
-    animationY: number
-  ) => {
-    setAnimationStarted(true)
-    Animated.parallel([
-      Animated.timing(transitionTranslateX, {
-        toValue: animationX,
-        duration: ANIMATION_DURATION,
-        useNativeDriver: true,
-      }),
-      Animated.timing(transitionTranslateY, {
-        toValue: animationY,
-        duration: ANIMATION_DURATION,
-        useNativeDriver: true,
-      }),
-      Animated.timing(transitionScale, {
-        toValue: animationScale,
-        duration: ANIMATION_DURATION,
-        useNativeDriver: true,
-      }),
-    ]).start()
-  }
-
-  // States to store the nodes, links and loading status
-  const [nodes, setNodes] = useState<Node[]>([])
-  const [links, setLinks] = useState<Link[]>([])
-  const [load, setLoad] = useState<boolean>(false)
-
-  // State to store the total offset when dragging the graph
-  const [totalOffset, setTotalOffset] = useState({ x: 0, y: 0 })
-
-  const [clickedNodeID, setClickedNodeID] = useState<string>(
-    DEFAULT_CLICKED_NODE_ID
-  )
-
-  const [scale, setScale] = useState(DEFAULT_SCALE)
-  const [lastScale, setLastScale] = useState(DEFAULT_SCALE) // Add state to keep track of last scale
-
-  // Refs to store the press start time
-  const pressStartRef = useRef(0)
-  const lastPressRef = useRef(0)
-
-  // Refs to store the pan and pinch gesture handlers
-  const panRef = useRef(null)
-  const pinchRef = useRef(null)
-
-  // Function to create a clip path for the nodes (i.e., to create a circular mask for the profile pictures of the nodes)
-  const profilePictureMask = (
-    id: string,
-    cx: number,
-    cy: number,
-    radius: number
-  ) => (
-    <ClipPath id={id}>
-      <Circle cx={cx} cy={cy} r={radius} />
-    </ClipPath>
-  )
-
-  const animationMask = (
-    id: string,
-    cx: number,
-    cy: number,
-    radius: number
-  ) => (
-    <Defs>
-      <RadialGradient
-        id={id}
-        cx={cx}
-        cy={cy}
-        rx={radius}
-        ry={radius}
-        fx={cx}
-        fy={cy}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop offset="0" stopColor="#000" stopOpacity="0.5" />
-        <Stop offset="1" stopColor="#fff" stopOpacity="0.75" />
-      </RadialGradient>
-    </Defs>
-  )
+  // Logic behing the graph's display when the screen is rotated
+  const [width, setWidth] = useState(Dimensions.get("window").width)
+  const [height, setHeight] = useState(Dimensions.get("window").height)
 
   useEffect(() => {
-    if (modalPressedOut) {
-      setTimeout(() => {
-        zoomAndTranslate(DEFAULT_SCALE, 0, 0)
-        setAnimationStarted(false)
-        setTotalOffset({ x: 0, y: 0 })
-      }, 100)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalPressedOut])
+    setWidth(Dimensions.get("window").width)
+    setHeight(Dimensions.get("window").height)
+  }, [rotation])
 
-  // Use effect to get the initial links, nodes and sizes
+  // Graph state and simulation
+  const simulationRef = useRef<d3.Simulation<Node, Link>>()
+
+  const [graphState, setGraphState] = useState<{
+    nodes: Node[]
+    links: Link[]
+  }>({
+    nodes: [],
+    links: [],
+  })
+
+  // Simulation logic
   useEffect(() => {
-    const initialLinks = getLinks(graph)
-    setLinks(initialLinks)
-
-    // If the graph is not initialized, run the Fruchterman-Reingold algorithm
-    if (getInitialized(graph) === false) {
-      setNodes(
-        fruchtermanReingold(
-          getNodes(graph),
-          initialLinks,
-          magicNodeId == "" ? constrainedNodeId : magicNodeId,
-          WIDTH,
-          HEIGHT,
-          MAX_ITERATIONS
-        )
-      )
-      // Set the graph as initialized to avoid running the algorithm again
-      setInitialized(graph, true)
-      if (reload) {
-        reload()
-      }
-    } else {
-      // If the graph is already initialized, we don't need to run the algorithm again as the nodes are already positioned
-      setNodes(getNodes(graph))
+    const nodes = graph.nodes
+    const links = graph.links
+    if (graphState.nodes.length === 0 || graphState.links.length === 0) {
+      setGraphState({ nodes: nodes, links: links })
     }
-    setLoad(true)
-    transitionTranslateX.setValue(0)
-    transitionTranslateY.setValue(0)
-    setTotalOffset({ x: 0, y: 0 })
-    zoomAndTranslate(DEFAULT_SCALE, 0, 0)
-    setTimeout(() => {
-      setAnimationStarted(false)
-    }, ANIMATION_DURATION)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [graph, constrainedNodeId, magicNodeId])
 
-  // If the graph is not loaded, display an activity indicator
-  if (!load) {
-    return <ActivityIndicator size="large" color={peach} />
+    const simulation = d3
+      .forceSimulation(nodes)
+      .force("link", d3.forceLink(graphState.links).id((d: d3.SimulationNodeDatum) => d.index ?? ("0" as string)).distance(simulationParameters?.distance ?? DEFAULT_SIMULATION_DISTANCE))
+      .force("charge", d3.forceManyBody().strength(simulationParameters?.charge ?? DEFAULT_SIMULATION_CHARGE))
+      .force("center", d3.forceCenter(...(simulationParameters?.center ?? [width / 2, height / 2])))
+      .force("collide", d3.forceCollide(simulationParameters?.collide ?? DEFAULT_SIMULATION_COLLIDE))
+      .on("tick", () => { setGraphState({ nodes: [...graphState.nodes], links: [...graphState.links], })})
+
+    simulationRef.current = simulation
+
+    return () => {
+      simulation.stop()
+    }
+  }, [graph])
+
+  // Update simulation parameters
+  useEffect(() => {
+    if (simulationRef.current) {
+      simulationRef.current.nodes(graphState.nodes)
+      simulationRef.current
+        .force("link", d3.forceLink(graphState.links).id((d: d3.SimulationNodeDatum) => d.index ?? ("0" as string)).distance(simulationParameters?.distance ?? DEFAULT_SIMULATION_DISTANCE))
+        .force("charge", d3.forceManyBody().strength(simulationParameters?.charge ?? DEFAULT_SIMULATION_CHARGE))
+        .force("center", d3.forceCenter(...(simulationParameters?.center ?? [width / 2, height / 2])))
+        .force("collide", d3.forceCollide(simulationParameters?.collide ?? DEFAULT_SIMULATION_COLLIDE))
+        .on("tick", () => { setGraphState({ nodes: [...graphState.nodes], links: [...graphState.links], })})
+        .alpha(1)
+        .restart()
+    }
+  }, [graphState.nodes, graphState.links, simulationParameters])
+
+  // Logic behing moving the whole graph around
+  const lastPan = useRef({ x: 0, y: 0 })
+  const [translation, setTranslation] = useState({ x: 0, y: 0 })
+
+  const transformCoordinates = (x: number, y: number) => {
+    if (width >= height) {
+      return { x: height - y, y: x }
+    }
+    return { x, y }
   }
 
-  // Handle Dragging
-  const handlePanGestureEvent = (event: {
-    nativeEvent: { translationX: number; translationY: number }
-  }) => {
-    setTotalOffset({
-      x: event.nativeEvent.translationX / lastScale,
-      y: event.nativeEvent.translationY / lastScale,
+  const graphPanResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderMove: (evt, gestureState) => {
+        if (gestureState.numberActiveTouches !== 1) {
+          return
+        }
+        const { x, y } = transformCoordinates(gestureState.dx, gestureState.dy)
+        setTranslation({
+          x: lastPan.current.x + x,
+          y: lastPan.current.y + y,
+        })
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        const { x, y } = transformCoordinates(gestureState.dx, gestureState.dy)
+        lastPan.current = {
+          x: lastPan.current.x + x,
+          y: lastPan.current.y + y,
+        }
+      },
     })
-  }
+  ).current
 
-  // Handle Dragging State Change (i.e. when we are done dragging the graph or a node)
-  const handlePanHandlerStateChange = (event: {
-    nativeEvent: { state: number }
-  }) => {
-    // If the gesture is over, update the nodes with the new positions and reset the total offset and clicked node ID
-    if (event.nativeEvent.state === State.END) {
-      setNodes(
-        nodes.map((node) => ({
-          ...node,
-          x: coordX(node),
-          y: coordY(node),
-        }))
-      )
-      setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-      setTotalOffset({ x: 0, y: 0 })
-    }
-  }
+  // Logic behing interactions with nodes
 
-  // Handle Zooming
-  const handlePinchGestureEvent = (event: {
-    nativeEvent: {
-      scale: React.SetStateAction<number>
-    }
-  }) => {
-    setScale(Number(event.nativeEvent.scale) * Number(lastScale))
-  }
+  let clickedNodeID: string = ""
+  let delay: number
+  let timer: NodeJS.Timeout
 
-  // Handle Zooming State Change (i.e. when we are done zooming)
-  const handlePinchHandlerStateChange = (event: {
-    nativeEvent: { state: number }
-  }) => {
-    // If the gesture is over, update the last scale
-    if (event.nativeEvent.state === State.END) {
-      setLastScale(scale)
-    }
-  }
+  const panResponderRefs = useRef<Map<string, PanResponderInstance>>(new Map())
 
-  const handlePressIn = (
-    onPressCallback = () => {},
-    onDoublePressCallback = () => {}
-  ) => {
-    pressStartRef.current = Date.now()
-    const delta = pressStartRef.current - lastPressRef.current
-    if (delta < DOUBLE_PRESS_DURATION) {
-      onDoublePressCallback()
+  const handleNodePanResponderGrant = (node: Node) => {
+    if (Date.now() - delay < DOUBLE_PRESS_DELAY && clickedNodeID === node.id) {
+      clearTimeout(timer)
+      onModalPress(node.id)
     } else {
-      onPressCallback()
-    }
-    lastPressRef.current = Date.now()
-  }
-
-  const coordX = (node: Node): number => {
-    if (node === undefined) {
-      return 0
-    }
-
-    // If clickedNodeID is equal to the default value, it means that no node is clicked, therefore the whole graph is dragged
-    if (clickedNodeID == DEFAULT_CLICKED_NODE_ID) {
-      return node.x + totalOffset.x
-    }
-
-    // If clickedNodeID is equal to a specific node's ID, it means that the said node is clicked and being dragged
-    if (clickedNodeID === node.id) {
-      return node.x + totalOffset.x
-    }
-
-    // Otherwise no movement is occuring and the node is at its original position
-    return node.x
-  }
-
-  const coordY = (node: Node): number => {
-    if (node === undefined) {
-      return 0
-    }
-
-    // If clickedNodeID is equal to the default value, it means that no node is clicked, therefore the whole graph is dragged
-    if (clickedNodeID == DEFAULT_CLICKED_NODE_ID) {
-      return node.y + totalOffset.y
-    }
-
-    // If clickedNodeID is equal to a specific node's ID, it means that the said node is clicked and being dragged
-    if (clickedNodeID === node.id) {
-      return node.y + totalOffset.y
-    }
-
-    // Otherwise no movement is occuring and the node is at its original position
-    return node.y
-  }
-
-  // Render the LINKS and NODES
-  const LINKS = links.map((link) => (
-    <Line
-      key={link.source + link.target + "line"}
-      x1={coordX(nodes.find((node) => node.id === link.source) as Node)}
-      y1={coordY(nodes.find((node) => node.id === link.source) as Node)}
-      x2={coordX(nodes.find((node) => node.id === link.target) as Node)}
-      y2={coordY(nodes.find((node) => node.id === link.target) as Node)}
-      stroke={DEFAULT_LINK_COLOR}
-    />
-  ))
-
-  const NODES = nodes.map((node) => (
-    // Group the elements together for each node
-    <G key={node.id + "group"}>
-      {/* Apply the mask to the profile picture of the node */}
-      <G key={`${node.id}-group-${coordX(node)}-${coordY(node)}`}>
-        {profilePictureMask(
-          `clipPath-${node.id}`,
-          coordX(node),
-          coordY(node),
-          DEFAULT_NODE_SIZE / node.level
-        )}
-        {animationMask(
-          `mask-${node.id}`,
-          coordX(node),
-          coordY(node),
-          DEFAULT_NODE_SIZE / node.level
-        )}
-      </G>
-      {/* Circle to highlight the node when it is selected */}
-      <Circle
-        key={node.id + "circle"}
-        cx={coordX(node)}
-        cy={coordY(node)}
-        r={(DEFAULT_NODE_SIZE / node.level) * NODE_HIGHLIGHT_RATIO}
-        fill={getNodeById(graph, node.id)?.selected ? peach : transparent}
-      />
-
-      {/* Allow the node to be clicked and / or dragged */}
-      <TouchableWithoutFeedback
-        onLayout={(event) => {
-          const layout = event.nativeEvent.layout
-          if (
-            layout.x < 0 ||
-            layout.y < 0 ||
-            layout.x + layout.width > WIDTH ||
-            layout.y + layout.height > HEIGHT
-          ) {
-            node.outsideScreen = true
+      timer = setTimeout(() => {
+        Vibration.vibrate()
+        if (node.level > 2) {
+          showErrorToast("You can only view friends of friends")
+        } else {
+          if (magicNodeId === "" && node.id === constrainedNodeId) {
+            showErrorToast("You cannot unselect without selecting a node first")
           } else {
-            node.outsideScreen = false
+            onMagicPress(node.id)
           }
-        }}
-        onPress={() => {
-          setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-        }}
-        onPressIn={() => {
-          handlePressIn(
-            () => {
-              setClickedNodeID(node.id)
-            },
-            () => {
-              if (node.outsideScreen) {
-                showErrorToast("You cannot select a node outside the screen.")
-                setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-              } else {
-                onModalPress(node.id)
+        }
+        clickedNodeID = ""
+      }, DOUBLE_PRESS_DELAY)
+    }
+    delay = Date.now()
+    clickedNodeID = node.id
+  }
 
-                // Adjust the zoom and translate to account for the scale
-                zoomAndTranslate(
-                  MODAL_SCALE / scale,
-                  (CENTER_WIDTH - coordX(node)) * scale,
-                  (CENTER_HEIGHT - coordY(node)) * scale
-                )
-                setAnimationStarted(false)
-              }
-            }
-          )
-        }}
-        onLongPress={() => {
-          Vibration.vibrate()
-          if (node.outsideScreen) {
-            showErrorToast("You cannot select a node outside the screen.")
-            setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-          } else if (node.level > 2) {
-            showErrorToast("You can only view friends of friends")
-            setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-          } else {
-            if (magicNodeId === "" && node.id === constrainedNodeId) {
-              showErrorToast(
-                "You cannot unselect without selecting a node first"
-              )
-              setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-            } else if (getNodeById(graph, node.id).magicSelected) {
-              zoomAndTranslate(
-                INITIAL_SCALE,
-                (CENTER_WIDTH - coordX(getNodeById(graph, constrainedNodeId))) *
-                  scale,
-                (CENTER_HEIGHT -
-                  coordY(getNodeById(graph, constrainedNodeId))) *
-                  scale
-              )
-            } else {
-              zoomAndTranslate(
-                INITIAL_SCALE,
-                (CENTER_WIDTH - coordX(node)) * scale,
-                (CENTER_HEIGHT - coordY(node)) * scale
-              )
-            }
-            setTimeout(() => {
-              onMagicPress(node.id)
-              setClickedNodeID(DEFAULT_CLICKED_NODE_ID)
-            }, ANIMATION_DURATION)
-          }
-        }}
-        hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}
-      >
-        <G>
-          {/* Profile picture of the node */}
-          {node.contact.profilePictureUrl === "" ? (
-            <Image
-              key={node.id + "image"}
-              x={coordX(node) - DEFAULT_NODE_SIZE / node.level}
-              y={coordY(node) - DEFAULT_NODE_SIZE / node.level}
-              width={(2 * DEFAULT_NODE_SIZE) / node.level}
-              height={(2 * DEFAULT_NODE_SIZE) / node.level}
-              href={require("../../../assets/default_profile_picture.png")}
-              clipPath={`url(#clipPath-${node.id})`}
-              preserveAspectRatio="xMidYMid slice"
-              testID={"node-" + node.id}
-            />
-          ) : (
-            <Image
-              key={node.id + "image"}
-              x={coordX(node) - DEFAULT_NODE_SIZE / node.level}
-              y={coordY(node) - DEFAULT_NODE_SIZE / node.level}
-              width={(2 * DEFAULT_NODE_SIZE) / node.level}
-              height={(2 * DEFAULT_NODE_SIZE) / node.level}
-              xlinkHref={node.contact.profilePictureUrl}
-              clipPath={`url(#clipPath-${node.id})`}
-              preserveAspectRatio="xMidYMid slice"
-              testID={"node-" + node.id}
-            />
-          )}
+  const handleNodeDrag = useCallback(
+    (node: Node, gestureState: PanResponderGestureState) => {
+      const { x, y } = transformCoordinates(
+        gestureState.moveX,
+        gestureState.moveY
+      )
+      node.fx = x - translation.x
+      node.fy = y - translation.y
+      simulationRef.current?.alpha(1).restart()
+    },
+    [translation, rotation]
+  )
 
-          <Circle
-            key={node.id + "mask"}
-            cx={coordX(node)}
-            cy={coordY(node)}
-            r={DEFAULT_NODE_SIZE / node.level}
-            fill={animationStarted ? `url(#mask-${node.id})` : transparent}
-          />
-        </G>
-      </TouchableWithoutFeedback>
+  const handleNodePanResponderMove = (
+    node: Node,
+    event: GestureResponderEvent,
+    gestureState: PanResponderGestureState
+  ) => {
+    if (
+      Math.abs(gestureState.dx) > STATIC_PRESS_MAX_OFFSET ||
+      Math.abs(gestureState.dy) > STATIC_PRESS_MAX_OFFSET
+    ) {
+      clearTimeout(timer)
+    }
+    handleNodeDrag(node, gestureState)
+  }
 
-      {/* Text to display the name of the node if it is not your own */}
-      {node.id !== constrainedNodeId && (
-        <SVGText
-          key={node.id + "text"}
-          x={coordX(node)}
-          y={
-            coordY(node) +
-            DEFAULT_NODE_SIZE / node.level +
-            NODE_TEXT_OFFSET / scale
-          }
-          fontSize={styles.profileName.fontSize / node.level / scale}
-          fontFamily={globalStyles.text.fontFamily}
-          textAnchor="middle"
-          testID={"text-" + node.id}
-        >
-          {node.contact.firstName + " " + node.contact.lastName}
-        </SVGText>
-      )}
-    </G>
-  ))
+  const handleNodeRelease = useCallback((node: Node) => {
+    node.fx = null
+    node.fy = null
+    simulationRef.current?.alpha(1).restart()
+  }, [])
+
+  const handleNodePanResponderRelease = (node: Node) => {
+    clearTimeout(timer)
+    handleNodeRelease(node)
+  }
+
+  // Logic behind the profile pictures' display
+  const [imageLoaded, setImageLoaded] = useState<Record<string, boolean>>({})
+
+  const handleImageLoad = (nodeId: string) => {
+    setImageLoaded((prev) => ({ ...prev, [nodeId]: true }))
+  }
+
+  const handleImageError = (nodeId: string) => {
+    setImageLoaded((prev) => ({ ...prev, [nodeId]: false }))
+  }
+
+  const getImageSource = (url: string) => {
+    return url === ""
+      ? require("../../../assets/default_profile_picture.png")
+      : { uri: url }
+  }
+
+  const imageSources = useMemo(
+    () =>
+      graphState.nodes.reduce((acc, node) => {
+        acc[node.id] = getImageSource(node.contact.profilePictureUrl)
+        return acc
+      }, {} as Record<string, { uri: string } | number>),
+    [graphState.nodes]
+  )
 
   return (
-    <GestureHandlerRootView style={styles.container}>
-      <PinchGestureHandler
-        ref={pinchRef}
-        onGestureEvent={handlePinchGestureEvent}
-        onHandlerStateChange={handlePinchHandlerStateChange}
-        simultaneousHandlers={panRef}
-        testID="pinch-handler"
-      >
-        <PanGestureHandler
-          ref={panRef}
-          onGestureEvent={handlePanGestureEvent}
-          onHandlerStateChange={handlePanHandlerStateChange}
-          minPointers={PAN_GESTURE_MIN_MAX_POINTERS}
-          maxPointers={PAN_GESTURE_MIN_MAX_POINTERS}
-          simultaneousHandlers={pinchRef}
-          testID="pan-handler"
-        >
-          <Animated.View
-            style={{
-              transform: [
-                { scale: transitionScale },
-                { translateX: transitionTranslateX },
-                { translateY: transitionTranslateY },
-              ],
-            }}
-          >
-            <Svg width={WIDTH} height={HEIGHT}>
-              <G scale={scale} originX={CENTER_WIDTH} originY={CENTER_HEIGHT}>
-                {LINKS}
-                {NODES}
+    <View
+      style={styles.container}
+      {...graphPanResponder.panHandlers}
+      testID="force-directed-graph-view"
+    >
+      <Svg height={height} width={width} testID="svg-view">
+        <G>
+          <Circle testID="graph-circle" />
+          {graphState.links.map((link, index) => {
+            const source = link.source
+            const target = link.target
+            return (
+              <Line
+                key={"lines" + index}
+                x1={(source.x || 0) + translation.x}
+                y1={(source.y || 0) + translation.y}
+                x2={(target.x || 0) + translation.x}
+                y2={(target.y || 0) + translation.y}
+                stroke="grey"
+                strokeWidth={1 / source.level}
+              />
+            )
+          })}
+          {graphState.nodes.map((node, index) => {
+            if (!panResponderRefs.current.has(node.id)) {
+              panResponderRefs.current.set(
+                node.id,
+                PanResponder.create({
+                  onStartShouldSetPanResponder: () => true,
+                  onPanResponderGrant: () => handleNodePanResponderGrant(node),
+                  onPanResponderMove: (event, gestureState) =>
+                    handleNodePanResponderMove(node, event, gestureState),
+                  onPanResponderRelease: () =>
+                    handleNodePanResponderRelease(node),
+                })
+              )
+            }
+
+            const imageSource = imageSources[node.id]
+            return (
+              <G key={"group" + index} testID={"group-" + index}>
+                <Image
+                  key={"profile-pictures" + index}
+                  style={[
+                    styles.nodeImage,
+                    {
+                      borderColor: node.selected ? peach : transparent,
+                      borderRadius:
+                        (DEFAULT_NODE_SIZE / 4) *
+                        (DEFAULT_NODE_SIZE / node.level),
+                      height: DEFAULT_NODE_SIZE / node.level,
+                      left:
+                        (node.x || 0) +
+                        translation.x -
+                        DEFAULT_NODE_SIZE / 2 / node.level,
+                      top:
+                        (node.y || 0) +
+                        translation.y -
+                        DEFAULT_NODE_SIZE / 2 / node.level,
+                      width: DEFAULT_NODE_SIZE / node.level,
+                    },
+                  ]}
+                  source={
+                    imageLoaded[node.id]
+                      ? imageSource
+                      : require("../../../assets/default_profile_picture.png")
+                  }
+                  onLoad={() => handleImageLoad(node.id)}
+                  onError={() => handleImageError(node.id)}
+                />
+                <Circle
+                  key={"mask" + index}
+                  cx={(node.x || 0) + translation.x}
+                  cy={(node.y || 0) + translation.y}
+                  r={DEFAULT_NODE_SIZE / node.level}
+                  fill={transparent}
+                  testID={"node-" + node.id}
+                  {...panResponderRefs.current.get(node.id)?.panHandlers}
+                />
+                {node.id !== constrainedNodeId && (
+                  <SVGText
+                    key={node.id + "text"}
+                    x={(node.x || 0) + translation.x}
+                    y={
+                      (node.y || 0) +
+                      translation.y +
+                      DEFAULT_NODE_SIZE / node.level +
+                      NODE_TEXT_VERTICAL_OFFSET
+                    }
+                    textAnchor="middle"
+                    testID={"text-" + node.id}
+                    fontSize={styles.profileName.fontSize / node.level}
+                    fontFamily={globalStyles.text.fontFamily}
+                  >
+                    {node.contact.firstName + " " + node.contact.lastName}
+                  </SVGText>
+                )}
               </G>
-            </Svg>
-          </Animated.View>
-        </PanGestureHandler>
-      </PinchGestureHandler>
-    </GestureHandlerRootView>
+            )
+          })}
+        </G>
+      </Svg>
+    </View>
   )
 }
 
 export default ForceDirectedGraph
+
+export { SimulationParameters }

@@ -2,7 +2,7 @@
   "expo": {
     "name": "uni-connect",
     "slug": "uniconnect",
-    "scheme" : "uniconnect",
+    "scheme": "uniconnect",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,7 +25,12 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.epfl.uniconnect",
-      "googleServicesFile": "./google-services.json"
+      "googleServicesFile": "./google-services.json",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCOnOvIZrk6GmQcR_Rj_HaSNbBvRDWVyVw"
+        }
+      }
     },
     "owner": "uniconnect-epfl",
     "web": {

@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     backgroundColor: white,
-    flex: 1,
     justifyContent: "center",
   },
 
@@ -44,13 +43,13 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     display: "flex",
     elevation: 8,
-    height: 30,
+    height: "6%",
     justifyContent: "center",
     shadowColor,
     shadowOffset: { width: 0, height: 2.5 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
-    width: "30%",
+    width: "45%",
   },
 })
 

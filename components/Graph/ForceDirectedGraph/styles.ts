@@ -7,6 +7,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
   },
+  nodeImage: {
+    borderWidth: 3,
+    position: "absolute",
+    zIndex: 1,
+  },
   profileName: {
     fontFamily: globalStyles.text.fontFamily,
     fontSize: 20,

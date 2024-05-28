@@ -2,6 +2,7 @@ import React from "react"
 import { render, fireEvent } from "@testing-library/react-native"
 import InformationScreen from "../../../../screens/Registration/InformationScreen/InformationScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
+import { RegistrationContext } from "../../../../contexts/RegistrationContext"
 
 const mockNavigate = jest.fn()
 jest.mock("@react-navigation/native", () => {
@@ -23,16 +24,31 @@ jest.mock("react-native-safe-area-context", () => {
   }
 })
 
-jest.mock("react", () => ({
-  ...jest.requireActual("react"),
-  useContext: jest.fn(() => ({selectedInterests: ["one"], setSelectedInterests: jest.fn(), description: ""})),
+jest.mock("../../../../components/ToastMessage/toast", () => ({
+  showErrorToast: jest.fn(),
 }))
 
 describe("Information Screen", () => {
   it("renders all input fields and buttons", () => {
+    const providerProps = {
+      selectedInterests: ["one"], 
+      setSelectedInterests: jest.fn(), 
+      description: "",
+      setDescription: jest.fn(),
+      firstName: "",
+      setFirstName: jest.fn(),
+      lastName: "",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+    }
     const { getByPlaceholderText, getByText } = render(
       <SafeAreaProvider>
-        <InformationScreen />
+        <RegistrationContext.Provider value={providerProps}>
+          <InformationScreen />
+        </RegistrationContext.Provider>
       </SafeAreaProvider>
     )
 
@@ -49,9 +65,25 @@ describe("Information Screen", () => {
   })
 
   it("navigates to description up screen on footer press", () => {
+    const providerProps = {
+      selectedInterests: ["one"], 
+      setSelectedInterests: jest.fn(), 
+      description: "",
+      setDescription: jest.fn(),
+      firstName: "",
+      setFirstName: jest.fn(),
+      lastName: "",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+    }
     const { getByText } = render(
       <SafeAreaProvider>
-        <InformationScreen />
+        <RegistrationContext.Provider value={providerProps}>
+          <InformationScreen />
+        </RegistrationContext.Provider>
       </SafeAreaProvider>
     )
     const DescButton = getByText("Add a description now")
@@ -59,4 +91,86 @@ describe("Information Screen", () => {
     fireEvent.press(DescButton)
     expect(mockNavigate).toHaveBeenCalledWith("Description")
   })
+
+  it("doesn't go forward when name is not completed", () => {
+    const providerProps = {
+      selectedInterests: ["one"], 
+      setSelectedInterests: jest.fn(), 
+      description: "",
+      setDescription: jest.fn(),
+      firstName: "",
+      setFirstName: jest.fn(),
+      lastName: "",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+    }
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <RegistrationContext.Provider value={providerProps}>
+          <InformationScreen />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+
+    const NextButton = getByText("Next")
+    fireEvent.press(NextButton)
+  })
+
+  it("doesn't go forward when surname is not completed", () => {
+    const providerProps = {
+      selectedInterests: ["one"], 
+      setSelectedInterests: jest.fn(), 
+      description: "",
+      setDescription: jest.fn(),
+      firstName: "name",
+      setFirstName: jest.fn(),
+      lastName: "",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+    }
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <RegistrationContext.Provider value={providerProps}>
+          <InformationScreen />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+
+    const NextButton = getByText("Next")
+    fireEvent.press(NextButton)
+  })
+
+  it("doesn't go forward when date is not completed", () => {
+    const providerProps = {
+      selectedInterests: ["one"], 
+      setSelectedInterests: jest.fn(), 
+      description: "",
+      setDescription: jest.fn(),
+      firstName: "name",
+      setFirstName: jest.fn(),
+      lastName: "surname",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+    }
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <RegistrationContext.Provider value={providerProps}>
+          <InformationScreen />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+
+    const NextButton = getByText("Next")
+    fireEvent.press(NextButton)
+  })
+
 })
