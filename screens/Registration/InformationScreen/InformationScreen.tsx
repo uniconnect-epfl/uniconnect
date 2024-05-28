@@ -9,14 +9,11 @@ import {
 } from "react-native"
 import styles from "./styles"
 import { globalStyles } from "../../../assets/global/globalStyles"
-import { Ionicons } from "@expo/vector-icons"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import LowBar from "../../../components/LowBar/LowBar"
 import InputField from "../../../components/InputField/InputField"
 import Divider from "../../../components/Divider/Divider"
 import { TextInput } from "react-native-gesture-handler"
-import { Entypo } from "@expo/vector-icons"
-import { AntDesign } from "@expo/vector-icons"
 import MyDateInputComponent from "../../../components/DatePicker/DatePicker"
 import { useNavigation } from "@react-navigation/native"
 import { RegistrationContext } from "../../../contexts/RegistrationContext"
@@ -25,7 +22,6 @@ import { showErrorToast } from "../../../components/ToastMessage/toast"
 
 const InformationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
-  const [loc, setLoc] = useState(false)
   const firstRef = useRef<TextInput>(null)
   const thirdRef = useRef<TextInput>(null)
   const lastRef = useRef<TextInput>(null)
@@ -133,26 +129,6 @@ const InformationScreen: React.FC = () => {
             ref={thirdRef}
             onSubmitEditing={() => lastRef.current?.focus()}
           />
-
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[styles.button, styles.locationButton]}
-              onPress={() => setLoc(!loc)}
-            >
-              <Ionicons name="location-outline" size={20} color="black" />
-              <Text
-                style={[
-                  styles.buttonText,
-                  styles.locationText,
-                  globalStyles.text,
-                ]}
-              >
-                Use my location
-              </Text>
-              {!loc && <Entypo name="cross" color="red" />}
-              {loc && <AntDesign name="check" color="green" />}
-            </TouchableOpacity>
-          </View>
 
           <Divider />
 

@@ -67,7 +67,6 @@ describe("Information Screen", () => {
     expect(getByText("JJ.MM.YYYY"))
     expect(getByText("Location"))
     expect(getByPlaceholderText("Location"))
-    expect(getByText("Use my location"))
     expect(getByText("Add a description now"))
   })
 

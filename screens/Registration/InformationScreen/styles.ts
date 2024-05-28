@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     width: 250,
   },
   fieldsContainer: {
-    height: "91%",
+    height: "90%",
     width: "100%",
   },
 
