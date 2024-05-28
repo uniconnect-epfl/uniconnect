@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useCallback, useEffect } from "react"
 import {
   View,
   Text,
@@ -8,11 +8,10 @@ import {
   DefaultSectionT,
   SectionListData,
   TouchableOpacity,
-  RefreshControl,
 } from "react-native"
 import EventCard from "../../../components/EventCard/EventCard"
 import { styles } from "./styles"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useFocusEffect } from "@react-navigation/native"
 import { Ionicons } from "@expo/vector-icons"
 import {
   getAllFutureEvents,
@@ -54,65 +53,67 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
   >([])
   const [searchQuery, setSearchQuery] = React.useState("")
   const [loading, setLoading] = React.useState(true)
+
   const [refreshing, setRefreshing] = React.useState(false)
 
   const [userImages, setUserImages] = React.useState(
     {} as Record<string, string>
   )
-
-  useEffect(() => {
-    const loadEvents = async () => {
-      try {
-        setLoading(true)
-        if (userID) {
-          const userData = await getUserData(userID)
-          if (userData) {
-            const userEvents = userData.events
-            const fetchedFutureEvents = await getAllFutureEvents()
-            const fetchedPastEvents = await getAllPastEvents()
-
-            const userFutureEvents = fetchedFutureEvents.filter((event) =>
-              userEvents.includes(event.uid)
-            )
-            const userPastEvents = fetchedPastEvents.filter((event) =>
-              userEvents.includes(event.uid)
-            )
-
-            setFutureEvents(userFutureEvents)
-            setPastEvents(userPastEvents)
-
-            setFilteredFutureEvents(userFutureEvents)
-            setFilteredPastEvents(userPastEvents)
-          }
-          const userImages = await fetchAllUserImages()
-          if (userImages) {
-            setUserImages(userImages)
-          }
-        } else {
+  const loadEvents = useCallback(async () => {
+    try {
+      setLoading(true)
+      if (userID) {
+        const userData = await getUserData(userID)
+        if (userData) {
+          const userEvents = userData.events
           const fetchedFutureEvents = await getAllFutureEvents()
           const fetchedPastEvents = await getAllPastEvents()
 
-          setFutureEvents(fetchedFutureEvents)
-          setPastEvents(fetchedPastEvents)
+          const userFutureEvents = fetchedFutureEvents.filter((event) =>
+            userEvents.includes(event.uid)
+          )
+          const userPastEvents = fetchedPastEvents.filter((event) =>
+            userEvents.includes(event.uid)
+          )
 
-          setFilteredFutureEvents(fetchedFutureEvents)
-          setFilteredPastEvents(fetchedPastEvents)
-          const userImages = await fetchAllUserImages()
-          if (userImages) {
-            setUserImages(userImages)
-          }
+          setFutureEvents(userFutureEvents)
+          setPastEvents(userPastEvents)
+
+          setFilteredFutureEvents(userFutureEvents)
+          setFilteredPastEvents(userPastEvents)
         }
-      } catch (error) {
-        showErrorToast(
-          "Error fetching events. Please check your connection and try again."
-        )
-      } finally {
-        setLoading(false)
-      }
-    }
+        const userImages = await fetchAllUserImages()
+        if (userImages) {
+          setUserImages(userImages)
+        }
+      } else {
+        const fetchedFutureEvents = await getAllFutureEvents()
+        const fetchedPastEvents = await getAllPastEvents()
 
-    loadEvents()
+        setFutureEvents(fetchedFutureEvents)
+        setPastEvents(fetchedPastEvents)
+
+        setFilteredFutureEvents(fetchedFutureEvents)
+        setFilteredPastEvents(fetchedPastEvents)
+        const userImages = await fetchAllUserImages()
+        if (userImages) {
+          setUserImages(userImages)
+        }
+      }
+    } catch (error) {
+      showErrorToast(
+        "Error fetching events. Please check your connection and try again."
+      )
+    } finally {
+      setLoading(false)
+    }
   }, [userID])
+
+  useFocusEffect(
+    useCallback(() => {
+      loadEvents()
+    }, [loadEvents])
+  )
 
   const renderSectionHeader = (info: {
     section: SectionListData<Event[], DefaultSectionT>
@@ -194,21 +195,6 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
     </View>
   )
 
-  const onRefresh = React.useCallback(async () => {
-    setRefreshing(true)
-    try {
-      // Call your event fetching function here
-      setFutureEvents(await getAllFutureEvents())
-      setPastEvents(await getAllPastEvents())
-    } catch (error) {
-      showErrorToast(
-        "Error fetching events. Please check your connection and try again."
-      )
-    } finally {
-      setRefreshing(false)
-    }
-  }, [])
-
   if (loading) return <LoadingScreen />
 
   return (
@@ -239,9 +225,6 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
           renderSectionHeader={renderSectionHeader}
           showsVerticalScrollIndicator={false}
           stickySectionHeadersEnabled={false}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
         />
       </View>
     </View>

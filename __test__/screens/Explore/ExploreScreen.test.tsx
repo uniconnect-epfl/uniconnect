@@ -3,7 +3,11 @@ import ExploreScreen from "../../../screens/Explore/ExploreScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import React from "react"
 import { Firestore } from "firebase/firestore"
-import { NavigationProp, ParamListBase } from "@react-navigation/native"
+import {
+  NavigationContainer,
+  NavigationProp,
+  ParamListBase,
+} from "@react-navigation/native"
 import { loginEmailPassword } from "../../../firebase/Login"
 
 jest.mock("../../../firebase/firebaseConfig", () => ({
@@ -113,9 +117,11 @@ beforeAll(async () => {
 describe("ExploreScreen", () => {
   it("renders the Event screen", () => {
     const component = render(
-      <SafeAreaProvider>
-        <ExploreScreen navigation={mockNavigation} />
-      </SafeAreaProvider>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <ExploreScreen navigation={mockNavigation} />
+        </SafeAreaProvider>
+      </NavigationContainer>
     )
     expect(component).toBeTruthy()
 
@@ -128,9 +134,11 @@ describe("ExploreScreen", () => {
 
   it("filters events based on search input", async () => {
     const component = render(
-      <SafeAreaProvider>
-        <ExploreScreen navigation={mockNavigation} />
-      </SafeAreaProvider>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <ExploreScreen navigation={mockNavigation} />
+        </SafeAreaProvider>
+      </NavigationContainer>
     )
 
     await waitFor(() => {
@@ -152,24 +160,13 @@ describe("ExploreScreen", () => {
     })
   })
 
-  // it("displays correct event details", async () => {
-  //   const component = render(
-  //     <SafeAreaProvider>
-  //       <ExploreScreen navigation={mockNavigation} />
-  //     </SafeAreaProvider>
-  //   )
-  //   await waitFor(() => {
-  //     expect(component.getByText("Future Event 1")).toBeTruthy()
-  //     expect(component.getByText("2024-01-01")).toBeTruthy()
-  //   })
-  //   expect(component).toBeTruthy()
-  // })
-
   it("keyboard disapear if we click aside", async () => {
     const { getByPlaceholderText } = render(
-      <SafeAreaProvider>
-        <ExploreScreen navigation={mockNavigation} />
-      </SafeAreaProvider>
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <ExploreScreen navigation={mockNavigation} />
+        </SafeAreaProvider>
+      </NavigationContainer>
     )
     await act(async () => {
       await waitFor(() => {

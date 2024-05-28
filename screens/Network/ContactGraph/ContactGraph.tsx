@@ -146,6 +146,7 @@ const ContactGraph = ({
   const onOptionModalPressOut = () => {
     setGraphOptionsModalVisible(false)
   }
+
   const [simulationParameters, setSimulationParameters] =
     useState<SimulationParameters>({
       distance: DEFAULT_SIMULATION_DISTANCE,
