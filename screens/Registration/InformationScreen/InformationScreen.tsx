@@ -6,7 +6,6 @@ import {
   Image,
   TouchableWithoutFeedback,
   Keyboard,
-
 } from "react-native"
 import styles from "./styles"
 import { globalStyles } from "../../../assets/global/globalStyles"
@@ -72,6 +71,7 @@ const InformationScreen: React.FC = () => {
 
   return (
     <TouchableWithoutFeedback
+      testID="information-screen"
       style={styles.container}
       onPress={() => Keyboard.dismiss()}
     >

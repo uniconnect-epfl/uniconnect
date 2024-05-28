@@ -4,6 +4,8 @@ import InformationScreen from "../../../../screens/Registration/InformationScree
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { RegistrationContext } from "../../../../contexts/RegistrationContext"
 import { showErrorToast } from "../../../../components/ToastMessage/toast"
+import { Keyboard } from "react-native"
+
 const mockNavigate = jest.fn()
 jest.mock("@react-navigation/native", () => {
   return {
@@ -25,9 +27,14 @@ jest.mock("react-native-safe-area-context", () => {
 })
 
 jest.mock("../../../../components/ToastMessage/toast", () => ({
-  showErrorToast: jest.fn(),}))
+  showErrorToast: jest.fn(),
+}))
 
 describe("Information Screen", () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
+
   it("renders all input fields and buttons", () => {
     const providerProps = {
       selectedInterests: ["one"],
@@ -43,6 +50,7 @@ describe("Information Screen", () => {
       location: "",
       setLocation: jest.fn(),
     }
+
     const { getByPlaceholderText, getByText } = render(
       <SafeAreaProvider>
         <RegistrationContext.Provider value={providerProps}>
@@ -95,6 +103,65 @@ describe("Information Screen", () => {
     // Since we don't have a direct way to check if date picker modal is opened,
     // we use the fact that the modal should be visible after onPress is called.
     expect(queryByText("JJ.MM.YYYY")).toBeNull() // Placeholder should change after modal opens
+  })
+
+  it("renders the TouchableWithoutFeedback component", () => {
+    const providerProps = {
+      selectedInterests: ["one"],
+      setSelectedInterests: jest.fn(),
+      description: "",
+      setDescription: jest.fn(),
+      firstName: "",
+      setFirstName: jest.fn(),
+      lastName: "",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+    }
+    const { getByTestId } = render(
+      <SafeAreaProvider>
+        <RegistrationContext.Provider value={providerProps}>
+          <InformationScreen />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+
+    expect(getByTestId("information-screen")).toBeTruthy()
+  })
+
+  it("dismisses the keyboard when TouchableWithoutFeedback is pressed", () => {
+    const providerProps = {
+      selectedInterests: ["one"],
+      setSelectedInterests: jest.fn(),
+      description: "",
+      setDescription: jest.fn(),
+      firstName: "",
+      setFirstName: jest.fn(),
+      lastName: "",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+    }
+
+    // Mock Keyboard.dismiss
+    const dismissSpy = jest.spyOn(Keyboard, "dismiss")
+
+    const { getByTestId } = render(
+      <SafeAreaProvider>
+        <RegistrationContext.Provider value={providerProps}>
+          <InformationScreen />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+
+    const touchableWithoutFeedback = getByTestId("information-screen")
+    fireEvent.press(touchableWithoutFeedback)
+
+    expect(dismissSpy).toHaveBeenCalled()
   })
 
   it("navigates to description up screen on footer press", () => {
