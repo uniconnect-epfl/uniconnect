@@ -89,17 +89,12 @@ const ContactGraph = ({
 
       unlockOrientation()
 
-      const handleOrientationChange = () => {
-        // Ensure these functions are called first
-        onModalPressOut()
-        onOptionModalPressOut()
-
-        // Then change the state to trigger the rotation
-        setRotation((prev) => !prev)
-      }
-
       const subscription = ScreenOrientation.addOrientationChangeListener(
-        handleOrientationChange
+        () => {
+          onOptionModalPressOut()
+          onModalPressOut()
+          setRotation((prev) => !prev)
+        }
       )
 
       return () => {

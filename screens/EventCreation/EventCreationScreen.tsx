@@ -100,20 +100,15 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
   }
 
   const newAnnouncement = async () => {
-    if (!userId) {
-      showErrorToast("You must be logged in to create an announcement")
-      return
-    }
-
     try {
       await createAnnouncement(
-        title ?? "",
+        title,
         location ?? "",
-        point ?? { x: 0, y: 0 },
+        point,
         description ?? "",
-        selectedInterests ?? [],
-        date.toISOString() ?? "",
-        userId
+        selectedInterests,
+        date.toISOString(),
+        userId ?? "-1"
       )
     } catch (error) {
       showErrorToast("Could not create announcement")

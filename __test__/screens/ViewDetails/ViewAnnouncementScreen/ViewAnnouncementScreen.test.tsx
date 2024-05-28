@@ -1,5 +1,5 @@
 import React from "react"
-import { render } from "@testing-library/react-native"
+import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import ViewAnnoucementScreen from "../../../../screens/ViewDetails/ViewAnnouncementScreen/ViewAnnouncementScreen"
 import { Point } from "react-native-maps"
 import { Announcement } from "../../../../types/Annoucement"
@@ -28,6 +28,7 @@ const dummyAnnouncement: Announcement = {
     "Join us for an evening of art and conversation at our annual community art exhibition. Featuring works from local artists in a variety of mediums.",
   interests: ["art", "community", "local culture"],
   date: "2024-10-03T18:00:00Z",
+  host: "2",
 }
 
 jest.mock("@react-navigation/native", () => {
@@ -35,7 +36,7 @@ jest.mock("@react-navigation/native", () => {
   return {
     ...actualNav,
     useRoute: () => ({
-      params: { announcement: dummyAnnouncement },
+      params: { onHostPress: jest.fn(), announcement: dummyAnnouncement },
     }),
   }
 })
@@ -57,6 +58,13 @@ jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(() => ({ currentUser: { uid: "123" } })),
 }))
 
+jest.mock("../../../../firebase/User", () => ({
+  getUserData: jest
+    .fn()
+    .mockResolvedValue({ uid: "2", firstName: "John", lastName: "Doe" }),
+  updateUserEvents: jest.fn().mockResolvedValue(true),
+}))
+
 describe("ViewAnnouncementScreen", () => {
   it("renders correctly", () => {
     const component = render(
@@ -68,4 +76,24 @@ describe("ViewAnnouncementScreen", () => {
     )
     expect(component).toBeTruthy()
   })
+
+  it("can navigate to host profile", async () => {
+    const component = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ViewAnnoucementScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+    expect(component).toBeTruthy()
+
+    await waitFor(
+      () => {
+        const hostProfile = component.getByText("By")
+        expect(hostProfile).toBeTruthy()
+        fireEvent.press(hostProfile)
+      },
+      { timeout: 5000 }
+    )
+  }, 10000)
 })

@@ -232,6 +232,7 @@ describe("<ContactGraph /> tests", () => {
       <View>
         <GraphOptionsModal
           visible={true}
+          onPressOut={() => {}}
           updateSimulationParameters={updateSimulationParameters}
           initialParameters={simulationParameters}
         />
@@ -244,6 +245,36 @@ describe("<ContactGraph /> tests", () => {
       fireEvent.press(resetButton)
     })
   })
+
+  it("Clicking on the option modal works", async () => {
+    const component = render(
+      <ContactGraph
+        onContactPress={() => {}}
+        graph={graph}
+        userId={"dFcpWnfaNTOWBFyJnoJSIL6xyi32"}
+        userContact={userContact}
+        loaded={true}
+      />
+    )
+
+    await waitFor(
+      async () => {
+        const optionsButton = await component.findByTestId("options-button")
+        expect(optionsButton).toBeTruthy()
+        fireEvent(optionsButton, "press")
+      },
+      { timeout: 5000 }
+    )
+
+    await waitFor(
+      async () => {
+        const optionModal = await component.findByTestId("optionModal")
+        expect(optionModal).toBeTruthy()
+        fireEvent(optionModal, "press")
+      },
+      { timeout: 5000 }
+    )
+  }, 15000)
 
   it("Double clicking a node displays a modal", async () => {
     const component = render(

@@ -36,7 +36,7 @@ jest.mock("@react-navigation/native", () => {
   return {
     ...actualNav,
     useRoute: () => ({
-      params: { eventUid: "123" },
+      params: { onHostPress: jest.fn(), eventUid: "123" },
     }),
   }
 })
@@ -66,6 +66,34 @@ describe("ViewEventScreen", () => {
     expect(component).toBeTruthy()
   })
 
+  it("can navigate to host profile", async () => {
+    const eventData = {
+      uid: "123",
+      title: "Event",
+      location: "location",
+      point: { x: 40.712776, y: -74.005974 },
+      date: new Date().toISOString(),
+      host: "456",
+      participants: ["123"],
+      description: "description",
+      imageUrl: "imageUrl",
+      interests: ["interest1", "interest2"],
+    }
+    mockGetEventData.mockResolvedValueOnce(eventData)
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <ViewEventScreen />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    )
+    await waitFor(() => {
+      expect(getByText("Hosted By")).toBeTruthy()
+    })
+
+    fireEvent.press(getByText("Hosted By"))
+  })
+
   it("can click on participate", async () => {
     const eventData = {
       uid: "123",
@@ -80,6 +108,7 @@ describe("ViewEventScreen", () => {
       interests: ["interest1", "interest2"],
     }
     mockGetEventData.mockResolvedValueOnce(eventData)
+
     const { getByText } = render(
       <SafeAreaProvider>
         <NavigationContainer>

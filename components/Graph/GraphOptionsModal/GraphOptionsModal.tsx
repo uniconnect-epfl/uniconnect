@@ -31,7 +31,10 @@ const GraphOptionsModal: React.FC<GraphOptionsModalProps> = ({
 
   return (
     <Modal visible={visible} animationType="slide" transparent={true}>
-      <TouchableWithoutFeedback onPress={() => onPressOut()}>
+      <TouchableWithoutFeedback
+        onPress={() => onPressOut()}
+        testID="optionModal"
+      >
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
             <Text style={styles.modalTitle}>Adjust Simulation Parameters</Text>
