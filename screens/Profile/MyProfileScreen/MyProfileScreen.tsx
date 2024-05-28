@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import ExpandableDescription from "../../../components/ExpandableDescription/ExpandableDescription"
 import GeneralProfile from "../../../components/GeneralProfile/GeneralProfile"
-import { black, peach } from "../../../assets/colors/colors"
+import { black } from "../../../assets/colors/colors"
 import { NavigationProp, ParamListBase } from "@react-navigation/native"
 import { profileStyles } from "../profileStyles"
 import { styles } from "./styles"
@@ -15,7 +15,6 @@ import { getAuth } from "firebase/auth"
 import { User } from "../../../types/User"
 import { getUserData } from "../../../firebase/User"
 import LoadingScreen from "../../Loading/LoadingScreen"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BackArrow } from "../../../components/BackArrow/BackArrow"
 
 interface MyProfileScreenProps {
@@ -27,7 +26,6 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
   const userId = getAuth().currentUser?.uid
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
-  const insets = useSafeAreaInsets()
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -46,13 +44,11 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
   }
   return (
     <View style={styles.container}>
+
+      <View style={profileStyles.topBackground} />
       <BackArrow/>
-      <View style={[profileStyles.profileContainer, {paddingTop: insets.top + 5}]}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()} testID="back-button">
-            <Ionicons name="arrow-back-outline" size={24} color={peach} />
-          </TouchableOpacity>
-        </View>
+
+      <View style={profileStyles.profileContainer}>
         <View style={profileStyles.topProfileContainer}>
           <GeneralProfile
             name={user.firstName}

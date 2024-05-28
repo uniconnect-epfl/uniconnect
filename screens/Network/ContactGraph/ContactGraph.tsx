@@ -1,18 +1,37 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
+import { useEffect, useState } from "react"
 import { View, TouchableWithoutFeedback, Keyboard, Image } from "react-native"
 import { styles } from "./styles"
 import Graph, {
   addContactNode,
   deleteNode,
   getNodeById,
-  getNodes,
   Node,
 } from "../../../components/Graph/Graph"
-import ForceDirectedGraph from "../../../components/Graph/ForceDirectedGraph/ForceDirectedGraph"
+import ForceDirectedGraph, {
+  SimulationParameters,
+} from "../../../components/Graph/ForceDirectedGraph/ForceDirectedGraph"
 import NodeModal from "../../../components/Graph/NodeModal/NodeModal"
 import { Contact } from "../../../types/Contact"
 import { getUserData } from "../../../firebase/User"
 import InputField from "../../../components/InputField/InputField"
+import { Ionicons } from "@expo/vector-icons"
+import { peach } from "../../../assets/colors/colors"
+import GraphOptionsModal from "../../../components/Graph/GraphOptionsModal/GraphOptionsModal"
+import { showErrorToast } from "../../../components/ToastMessage/toast"
+
+import * as ScreenOrientation from "expo-screen-orientation"
+
+const DEFAULT_SIMULATION_DISTANCE = 100
+const DEFAULT_SIMULATION_CHARGE = -200
+const DEFAULT_SIMULATION_COLLIDE = 20
+
+const ICON_SIZE = 24
+
+const LOADING_ANIMATION_DURATION = 2000
+
+// To introduce randomness in the selection of relevant friends of friends, we introduce a selectivity factor
+const FRIENDS_SELECTIVITY_FACTOR = 0.25
 
 interface ContactGraphProps {
   onContactPress: (uid: string) => void
@@ -22,6 +41,7 @@ interface ContactGraphProps {
   loaded: boolean
   navChange?: boolean
   changeTab?: () => void
+  fullScreenCallback?: () => void
 }
 
 const ContactGraph = ({
@@ -32,18 +52,182 @@ const ContactGraph = ({
   loaded,
   navChange,
   changeTab,
+  fullScreenCallback,
 }: ContactGraphProps) => {
+  // Logic behing the loading screen
+
+  const [display, setDisplay] = useState(false)
+
+  useEffect(() => {
+    if (loaded) {
+      setCounter((prev) => prev + 1)
+      setTimeout(() => {
+        setDisplay(true)
+      }, LOADING_ANIMATION_DURATION)
+    } else {
+      setDisplay(loaded)
+    }
+  }, [loaded])
+
+  // Logic behind the full screen
+  const [fullScreen, setFullScreen] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    if (fullScreen != null && fullScreenCallback) {
+      fullScreenCallback()
+    }
+  }, [fullScreen])
+
+  // Logic behind the landscape mode
+  const [rotation, setRotation] = useState(false)
+
+  useEffect(() => {
+    if (fullScreen) {
+      const unlockOrientation = async () => {
+        await ScreenOrientation.unlockAsync()
+      }
+
+      unlockOrientation()
+
+      const subscription = ScreenOrientation.addOrientationChangeListener(
+        () => {
+          setRotation((prev) => !prev)
+        }
+      )
+
+      return () => {
+        const lockOrientation = async () => {
+          await ScreenOrientation.lockAsync(
+            ScreenOrientation.OrientationLock.PORTRAIT_UP
+          )
+        }
+
+        lockOrientation()
+        ScreenOrientation.removeOrientationChangeListener(subscription)
+      }
+    }
+  }, [fullScreen])
+
+  // Logic behind the search bar
   const [searchText, setSearchText] = useState("")
-  const [modalVisible, setModalVisible] = useState(false)
+
+  // Force the graph component to re-render
+  const [counter, setCounter] = useState(0)
+
+  // Basic logic behind any interaction with the graph
   const [clickedNode, setClickedNode] = useState<Node>(
     getNodeById(graph, userId)
   )
 
-  const [forceReload, setForceReload] = useState(false) // State variable for force reloading the graph
+  // Logic behind changing the graph simulation's parameters on the fly
 
-  const [magicNeighbors, setMagicNeighbors] = useState<string[]>([])
+  const [graphOptionsModalVisible, setGraphOptionsModalVisible] = useState<
+    boolean | null
+  >(null)
+
+  const onOptionModalPress = async () => {
+    await ScreenOrientation.getOrientationAsync().then((orientation) => {
+      if (orientation === ScreenOrientation.Orientation.PORTRAIT_UP) {
+        setGraphOptionsModalVisible((prev) => !prev)
+      } else {
+        showErrorToast(
+          "Please rotate your device to portrait mode to view graph options"
+        )
+      }
+    })
+  }
+
+  const [simulationParameters, setSimulationParameters] =
+    useState<SimulationParameters>({
+      distance: DEFAULT_SIMULATION_DISTANCE,
+      charge: DEFAULT_SIMULATION_CHARGE,
+      collide: DEFAULT_SIMULATION_COLLIDE,
+    })
+
+  const updateSimulationParameters = (param: SimulationParameters) => {
+    setSimulationParameters(param)
+  }
+
+  // Logic behing the modal displaying the user's details
+  const [modalVisible, setModalVisible] = useState(false)
+
+  const onModalPress = async (uid: string) => {
+    await ScreenOrientation.getOrientationAsync().then((orientation) => {
+      if (orientation === ScreenOrientation.Orientation.PORTRAIT_UP) {
+        const node = getNodeById(graph, uid)
+        if (node) {
+          setClickedNode(node)
+          setModalVisible(true)
+        }
+      } else {
+        showErrorToast(
+          "Please rotate your device to portrait mode to view user details"
+        )
+      }
+    })
+  }
+
+  const onModalPressOut = () => {
+    setModalVisible(false)
+  }
+
+  // Logic behing the display of friends of friends
   const [magicPressedID, setMagicPressedID] = useState<string>("")
-  const [display, setDisplay] = useState(false)
+  const [magicNeighbors, setMagicNeighbors] = useState<string[]>([])
+
+  const onMagicPress = async (uid: string) => {
+    await ScreenOrientation.getOrientationAsync().then(async (orientation) => {
+      if (orientation === ScreenOrientation.Orientation.PORTRAIT_UP) {
+        if (uid === userId) {
+          if (magicPressedID !== "") {
+            getNodeById(graph, magicPressedID).magicSelected = false
+          }
+          setMagicPressedID("")
+          magicNeighbors.forEach((neighbor) => {
+            deleteNode(graph, neighbor)
+          })
+          setMagicNeighbors([])
+        } else if (magicPressedID !== "" && magicPressedID === uid) {
+          getNodeById(graph, uid).magicSelected = false
+          setMagicPressedID("")
+          magicNeighbors.forEach((neighbor) => {
+            deleteNode(graph, neighbor)
+          })
+        } else {
+          if (magicPressedID !== "" && magicPressedID !== uid) {
+            getNodeById(graph, magicPressedID).magicSelected = false
+            magicNeighbors.forEach((neighbor) => {
+              deleteNode(graph, neighbor)
+            })
+          }
+          const newFriends = await friendsFromUID(uid)
+          const newContacts = await createContactListFromUsers(newFriends)
+          const filteredNewContacts = newContacts.filter(
+            (contact) =>
+              !graph.nodes.find((node) => node.contact.uid === contact.uid) &&
+              contact.uid !== userId &&
+              getNodeById(graph, uid).contact.friends?.includes(contact.uid)
+          )
+          const relevantNewContact = filteredNewContacts.filter((contact) =>
+            relevantContact(userContact, contact)
+          )
+          relevantNewContact.forEach((contact) => {
+            addContactNode(graph, contact, 3)
+          })
+          setMagicNeighbors(relevantNewContact.map((contact) => contact.uid))
+          getNodeById(graph, uid).magicSelected = true
+          setMagicPressedID(uid)
+        }
+
+        setCounter((prev) => prev + 1)
+        handleSearch(searchText, graph)
+      } else {
+        showErrorToast(
+          "Please rotate your device to portrait mode to view friends of friends"
+        )
+      }
+    })
+  }
 
   useEffect(() => {
     if (navChange && changeTab !== undefined) {
@@ -58,107 +242,99 @@ const ContactGraph = ({
     }
   }, [navChange])
 
-  useEffect(() => {
-    if (loaded) {
-      setTimeout(() => {
-        setDisplay(true)
-      }, 2000)
-    } else {
-      setDisplay(loaded)
-    }
-  }, [loaded])
-
-  const onModalPress = (uid: string) => {
-    const node = getNodeById(graph, uid)
-    if (node) {
-      setClickedNode(node)
-      setModalVisible(true)
-    }
-  }
-
-  const onModalPressOut = () => {
-    setModalVisible(false)
-  }
-
-  const onMagicPress = async (uid: string) => {
-    if (!graph) {
-      return
-    }
-    if (uid === userId) {
-      if (magicPressedID !== "") {
-        getNodeById(graph, magicPressedID).magicSelected = false
-      }
-      setMagicPressedID("")
-      magicNeighbors.forEach((neighbor) => {
-        deleteNode(graph, neighbor)
-      })
-      setMagicNeighbors([])
-    } else if (magicPressedID !== "" && magicPressedID === uid) {
-      getNodeById(graph, uid).magicSelected = false
-      setMagicPressedID("")
-      magicNeighbors.forEach((neighbor) => {
-        deleteNode(graph, neighbor)
-      })
-    } else {
-      if (magicPressedID !== "" && magicPressedID !== uid) {
-        getNodeById(graph, magicPressedID).magicSelected = false
-        magicNeighbors.forEach((neighbor) => {
-          deleteNode(graph, neighbor)
-        })
-      }
-      const newFriends = await friendsFromUID(uid)
-      const newContacts = await createContactListFromUsers(newFriends)
-      const filteredNewContacts = newContacts.filter(
-        (contact) =>
-          !getNodes(graph).find((node) => node.contact.uid === contact.uid) &&
-          contact.uid !== userId &&
-          getNodeById(graph, uid).contact.friends?.includes(contact.uid)
-      )
-      const relevantNewContact = filteredNewContacts.filter((contact) =>
-        relevantContact(userContact, contact)
-      )
-      relevantNewContact.forEach((contact) => {
-        addContactNode(graph, contact, 3)
-      })
-      setMagicNeighbors(relevantNewContact.map((contact) => contact.uid))
-      getNodeById(graph, uid).magicSelected = true
-      setMagicPressedID(uid)
-    }
-    handleSearch(searchText, graph)
-    setForceReload((prev) => !prev) // Trigger a force reload of the graph
-  }
-
   return (
     <TouchableWithoutFeedback
       onPress={() => Keyboard.dismiss()}
       testID="touchable"
     >
       <View style={styles.container}>
-        <InputField
-          placeholder="Search..."
-          value={searchText}
-          onChangeText={(text) => {
-            setSearchText(text)
-            handleSearch(text, graph)
-          }}
-          onSubmitEditing={() => handleQuery(onModalPress, graph)}
-        />
+        {!fullScreen && (
+          <InputField
+            placeholder="Search..."
+            value={searchText}
+            onChangeText={(text) => {
+              setSearchText(text)
+              handleSearch(text, graph)
+            }}
+            onSubmitEditing={() => handleQuery(onContactPress, graph)}
+          />
+        )}
         <NodeModal
           node={clickedNode}
           visible={modalVisible}
           onPressOut={onModalPressOut}
           onContactPress={onContactPress}
         />
-        <View style={styles.graphContainer}>
+        <GraphOptionsModal
+          visible={graphOptionsModalVisible}
+          updateSimulationParameters={updateSimulationParameters}
+          initialParameters={simulationParameters}
+        />
+        <View
+          style={
+            fullScreen ? styles.graphContainerFullScreen : styles.graphContainer
+          }
+        >
           {!display && <Image source={require("../../../assets/splash.gif")} />}
-          {graph && (
+          {userContact.friends?.length === 0 && display && (
+            <Image
+              source={require("../../../assets/nofriendsscreen.png")}
+              style={styles.nofriends}
+            />
+          )}
+
+          {userContact.friends?.length !== 0 && fullScreen && display && (
+            <Ionicons
+              name="contract-outline"
+              size={ICON_SIZE}
+              color={peach}
+              style={styles.contractIcon}
+              onPress={() => {
+                setFullScreen(false)
+              }}
+              testID="contract-button"
+            />
+          )}
+          {userContact.friends?.length !== 0 && !fullScreen && display && (
+            <Ionicons
+              name="expand-outline"
+              size={ICON_SIZE}
+              color={peach}
+              style={styles.expandIcon}
+              onPress={() => {
+                setFullScreen(true)
+              }}
+              testID="expand-button"
+            />
+          )}
+
+          {userContact.friends?.length !== 0 && display && (
+            <Ionicons
+              name="options-outline"
+              size={ICON_SIZE}
+              color={peach}
+              style={[
+                styles.simulationOptionIcon,
+                // eslint-disable-next-line react-native/no-inline-styles
+                {
+                  bottom: fullScreen ? 50 : 15,
+                  right: fullScreen ? 20 : 15,
+                },
+              ]}
+              onPress={onOptionModalPress}
+              testID="options-button"
+            />
+          )}
+          {userContact.friends?.length !== 0 && graph && (
             <ForceDirectedGraph
-              key={forceReload ? "forceReload-3" : "forceReload-2"} // Key changes on forceReload state change
+              key={counter}
               graph={graph}
               constrainedNodeId={userId}
               magicNodeId={magicPressedID}
               onModalPress={onModalPress}
               onMagicPress={onMagicPress}
+              rotation={rotation}
+              simulationParameters={simulationParameters}
             />
           )}
         </View>
@@ -177,12 +353,12 @@ export default ContactGraph
 function handleSearch(text: string, graph: Graph): void {
   if (text === "") {
     // If the search bar is empty, deselect all nodes
-    for (const node of getNodes(graph)) {
+    for (const node of graph.nodes) {
       node.selected = false
     }
   } else {
     // If the search bar is not empty, select the nodes that match the search text
-    for (const node of getNodes(graph)) {
+    for (const node of graph.nodes) {
       const fullname = `${node.contact.firstName} ${node.contact.lastName}`
       if (
         fullname.toLowerCase().includes(text.toLowerCase()) ||
@@ -202,7 +378,7 @@ function handleSearch(text: string, graph: Graph): void {
  * @param graph - The graph to query
  */
 function handleQuery(callback: (uid: string) => void, graph: Graph): void {
-  for (const node of getNodes(graph)) {
+  for (const node of graph.nodes) {
     if (node.selected) {
       callback(node.id)
       return
@@ -266,7 +442,11 @@ function relevantContact(a: Contact, b: Contact): boolean {
   const interests = a.interests.filter((value) => b.interests.includes(value))
   const events = a.events.filter((value) => b.events.includes(value))
 
-  if (!(interests.length + events.length) || Math.random() < 0.25) return false
+  if (
+    !(interests.length + events.length) ||
+    Math.random() < FRIENDS_SELECTIVITY_FACTOR
+  )
+    return false
 
   return true
 }

@@ -21,7 +21,6 @@ interface Node {
   magicSelected?: boolean
   contact: Contact
   level: number
-  outsideScreen?: boolean
 }
 
 /**
@@ -43,7 +42,6 @@ interface Link {
 export default class Graph {
   nodes: Node[]
   links: Link[]
-  initialized: boolean
   userId: string
 
   /**
@@ -54,68 +52,57 @@ export default class Graph {
   constructor(contacts: Contact[], userId: string) {
     this.nodes = []
     this.links = []
-    this.initialized = false
+    this.userId = ""
 
     // Add the user to the graph as the root node
     const user = contacts.find((contact) => contact.uid === userId) as Contact
 
     // If the user is not found in the contacts, throw an error
-    if (!user) {
-      throw new Error("User not found in contacts")
-    }
+    if (user !== undefined) {
+      this.userId = userId
 
-    this.userId = userId
+      const userNode: Node = {
+        id: userId,
+        contact: user,
+        level: 1,
+      }
 
-    const userNode: Node = {
-      id: userId,
-      contact: user,
-      level: 1,
-    }
+      this.nodes.push(userNode)
 
-    this.nodes.push(userNode)
+      // Add the friends of the user
+      if (user.friends) {
+        for (const friendId of user.friends) {
+          // Find the friend in the provided contacts
+          const friend = contacts.find(
+            (contact) => contact.uid === friendId
+          ) as Contact
 
-    // Add the friends of the user
-    if (user.friends) {
-      for (const friendId of user.friends) {
-        // Find the friend in the provided contacts
-        const friend = contacts.find(
-          (contact) => contact.uid === friendId
-        ) as Contact
+          // If the friend is not found, skip to the next friend
+          if (!friend) continue
 
-        // If the friend is not found, skip to the next friend
-        if (!friend) continue
+          // Add the friend to the graph
+          const friendNode: Node = {
+            id: friendId,
+            contact: friend,
+            x: userNode.x,
+            y: userNode.y,
+            level: 2,
+          }
+          this.nodes.push(friendNode)
 
-        // Add the friend to the graph
-        const friendNode: Node = {
-          id: friendId,
-          contact: friend,
-          level: 2,
+          // Add a link between the user and the friend
+          this.links.push({
+            source: userNode,
+            target: friendNode,
+          })
         }
-        this.nodes.push(friendNode)
-
-        // Add a link between the user and the friend
-        this.links.push({
-          source: userNode,
-          target: friendNode,
-        })
       }
     }
   }
 }
 
-/**
- * Function to add a node to the graph
- * @param graph - The graph
- * @param node - The node to add
- * @returns void
- */
-function addNode(graph: Graph, node: Node): void {
-  graph.nodes.push(node)
-}
-
 function addContactNode(graph: Graph, contact: Contact, level: number): void {
   // Add all relevant links
-
   graph.nodes.push({
     id: contact.uid,
     contact,
@@ -127,21 +114,13 @@ function addContactNode(graph: Graph, contact: Contact, level: number): void {
       if (getNodeById(graph, friendId)) {
         const contactNode = getNodeById(graph, contact.uid)
         const friendNode = getNodeById(graph, friendId)
-        addLink(graph, contactNode, friendNode)
+        graph.links.push({
+          source: contactNode,
+          target: friendNode,
+        })
       }
     }
   }
-}
-
-/**
- * Function to add a link to the graph
- * @param graph - The graph
- * @param source - The unique identifier of the source node
- * @param target - The unique identifier of the target node
- * @returns void
- */
-function addLink(graph: Graph, source: Node, target: Node): void {
-  graph.links.push({ source, target })
 }
 
 /**
@@ -152,15 +131,6 @@ function addLink(graph: Graph, source: Node, target: Node): void {
  */
 function getNodeById(graph: Graph, id: string): Node {
   return graph.nodes.find((node) => node.id === id) as Node
-}
-
-/**
- * Function to get the nodes in the graph
- * @param graph - The graph
- * @returns The nodes in the graph
- */
-function getNodes(graph: Graph): Node[] {
-  return graph.nodes
 }
 
 /**
@@ -176,44 +146,4 @@ function deleteNode(graph: Graph, id: string) {
   })
 }
 
-/**
- * Function to get the links in the graph
- * @param graph - The graph
- * @returns The links in the graph
- */
-function getLinks(graph: Graph): Link[] {
-  return graph.links
-}
-
-/**
- * Function to get whether the graph has been initialized
- * @param graph - The graph
- * @returns Whether the graph has been initialized
- */
-function getInitialized(graph: Graph): boolean {
-  return graph.initialized
-}
-
-/**
- * Function to set whether the graph has been initialized
- * @param graph - The graph
- * @param initialized - Whether the graph has been initialized
- * @returns void
- */
-function setInitialized(graph: Graph, initialized: boolean) {
-  graph.initialized = initialized
-}
-
-export {
-  Node,
-  Link,
-  addNode,
-  addContactNode,
-  addLink,
-  getNodeById,
-  getNodes,
-  deleteNode,
-  getLinks,
-  getInitialized,
-  setInitialized,
-}
+export { Node, Link, addContactNode, getNodeById, deleteNode }
