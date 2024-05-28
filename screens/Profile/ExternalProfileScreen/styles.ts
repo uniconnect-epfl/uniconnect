@@ -1,10 +1,12 @@
 import { StyleSheet } from "react-native"
-import { black, lightPeach, peach } from "../../../assets/colors/colors"
+import { black, lightPeach, peach, white } from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
     container: {
         alignItems: "center",
+        backgroundColor: white,
         flex: 1,
+        justifyContent: "flex-start",
     },
     invertedButtonColors: {
         backgroundColor: peach,
