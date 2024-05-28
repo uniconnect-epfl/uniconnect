@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { View, Text, TextInput, FlatList, TouchableOpacity } from "react-native"
+import { View, Text, TextInput, FlatList } from "react-native"
 import styles from "./styles"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import { Notification } from "../../../components/Notification/Notification"
@@ -35,9 +35,7 @@ const NotificationsScreen: React.FC = () => {
       ]}
     >
       <BackArrow />
-      <TouchableOpacity style={styles.backButton}>
-        <Text style={styles.backButtonText}>←</Text>
-      </TouchableOpacity>
+
       <Text style={[globalStyles.boldText, styles.headerText]}>
         Notifications
       </Text>
