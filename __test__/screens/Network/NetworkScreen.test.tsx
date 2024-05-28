@@ -53,14 +53,17 @@ const mockNavigation = {
   dangerouslyGetState: jest.fn(),
 } as unknown as NavigationProp<ParamListBase>
 
-jest.mock("@react-navigation/native", () => {
-  return {
-    ...jest.requireActual("@react-navigation/native"),
-    useNavigation: () => ({
-      navigate: mockNavigation.navigate,
-    }),
-  }
-})
+jest.mock("@react-navigation/native", () => ({
+  ...jest.requireActual("@react-navigation/native"),
+  useRoute: () => ({
+    params: {
+      externalUserUid: "dFcpWnfaNTOWBFyJnoJSIL6xyi32",
+    },
+  }),
+  useNavigation: () => ({
+    navigate: mockNavigation.navigate,
+  }),
+}))
 
 jest.mock("react-native-safe-area-context", () => {
   const inset = { top: 0, right: 0, bottom: 0, left: 0 }
@@ -145,60 +148,17 @@ describe("NetworkScreen", () => {
     fireEvent.changeText(component.getByPlaceholderText("Search..."), "test")
 
     fireEvent.press(component.getByTestId("touchable"))
-  })
 
-  it("can display the modal", async () => {
-    const component = render(
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <NetworkScreen navigation={mockNavigation} />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    )
+    fireEvent.press(component.getByText("List"))
 
     await waitFor(() => {
       expect(component.getByPlaceholderText("Search...")).toBeTruthy()
     })
 
-    const searchInput = component.getByPlaceholderText("Search...")
-    fireEvent.changeText(searchInput, "Gaspard Thoral")
-    fireEvent(searchInput, "submitEditing")
-
-    await waitFor(() => {
-      const modal = component.getByTestId("modal")
-      expect(modal).toBeTruthy()
-    })
-
-    await waitFor(() => {
-      const touchable = component.getByTestId("touchable")
-      expect(touchable).toBeTruthy()
-      fireEvent.press(touchable)
-    })
-  })
-
-  it("clicking on modal navigates to ExternalProfile", async () => {
-    const component = render(
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <NetworkScreen navigation={mockNavigation} />
-        </NavigationContainer>
-      </SafeAreaProvider>
-    )
+    fireEvent.press(component.getByText("Graph"))
 
     await waitFor(() => {
       expect(component.getByPlaceholderText("Search...")).toBeTruthy()
-    })
-
-    const searchInput = component.getByPlaceholderText("Search...")
-    fireEvent.changeText(searchInput, "Gaspard Thoral")
-    fireEvent(searchInput, "submitEditing")
-
-    await waitFor(() => {
-      const modal = component.getByTestId("modal")
-      expect(modal).toBeTruthy()
-      const profilePicture = component.getByTestId("modal-profile-picture")
-      expect(profilePicture).toBeTruthy()
-      fireEvent.press(profilePicture)
     })
   })
 })

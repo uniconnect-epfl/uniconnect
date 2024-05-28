@@ -23,6 +23,8 @@ import {
 } from "../../components/Graph/GraphFileFunctions"
 import { showErrorToast } from "../../components/ToastMessage/toast"
 
+import { useFullScreen } from "../../navigation/Home/HomeTabNavigator"
+
 interface NetworkScreenProps {
   navigation: NavigationProp<ParamListBase>
 }
@@ -34,9 +36,20 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
 
   const [loaded, setLoaded] = useState(false)
 
-  const [navChange, setNavChange] = useState(false)
+  const [fullScreen, setFullScreen] = useState(false)
 
-  const [reload, setReload] = useState(false)
+  const { switchToFullScreen, switchFromFullScreen } = useFullScreen()
+
+  const fullScreenCallback = () => {
+    setFullScreen(!fullScreen)
+    if (fullScreen) {
+      switchFromFullScreen()
+    } else {
+      switchToFullScreen()
+    }
+  }
+
+  const [navChange, setNavChange] = useState(false)
 
   const [userContact, setUserContact] = useState<Contact>({
     uid: "-1",
@@ -63,15 +76,8 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
       if (!userId) {
         setUserId(getAuth().currentUser?.uid)
       }
-      setReload(true)
     }, [])
   )
-
-  useEffect(() => {
-    if (reload) {
-      setReload(false)
-    }
-  }, [reload])
 
   useEffect(() => {
     if (userId) {
@@ -97,7 +103,6 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
     if (user?.friends) {
       setFriends(user?.friends)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   useEffect(() => {
@@ -144,17 +149,19 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
 
   return (
     <View style={styles.container}>
-      <SectionTabs
-        tabs={["Graph", "List"]}
-        startingTab="Graph"
-        onTabChange={(tab: SetStateAction<string>) => {
-          setNavChange(!navChange)
-          if (tab === "Graph") {
-            setSelectedTab("Graph")
-          }
-        }}
-      />
-      {!reload && selectedTab === "Graph" && graph && userId && (
+      {!fullScreen && (
+        <SectionTabs
+          tabs={["Graph", "List"]}
+          startingTab="Graph"
+          onTabChange={(tab: SetStateAction<string>) => {
+            setNavChange(!navChange)
+            if (tab === "Graph") {
+              setSelectedTab("Graph")
+            }
+          }}
+        />
+      )}
+      {selectedTab === "Graph" && graph && userId && (
         <ContactGraph
           onContactPress={(uid) => {
             navigation.navigate("ExternalProfile", {
@@ -168,9 +175,10 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
           loaded={loaded}
           navChange={navChange}
           changeTab={() => setSelectedTab("List")}
+          fullScreenCallback={fullScreenCallback}
         />
       )}
-      {!reload && selectedTab === "List" && contacts && (
+      {selectedTab === "List" && contacts && (
         <ContactList
           onContactPress={(uid) =>
             navigation.navigate("ExternalProfile", {
