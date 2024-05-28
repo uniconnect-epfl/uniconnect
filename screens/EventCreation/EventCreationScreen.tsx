@@ -103,9 +103,9 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
     try {
       await createAnnouncement(
         title,
-        location ?? "",
-        point,
-        description ?? "",
+        location,
+        point ?? { x: 0, y: 0 },
+        description,
         selectedInterests,
         date.toISOString(),
         userId ?? "-1"

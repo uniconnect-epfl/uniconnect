@@ -11,7 +11,7 @@ import React from "react"
 jest.mock("firebase/auth", () => ({
   getAuth: jest.fn(() => ({
     currentUser: {
-      uid: "test-user-id",
+      uid: "1",
     },
   })),
 }))
@@ -32,7 +32,7 @@ jest.mock("@react-navigation/native", () => {
 jest.mock("../../../../firebase/ManageEvents", () => ({
   getAllFutureEvents: jest.fn(() =>
     Promise.resolve([
-      { uid: "1", title: "Future Event 1" },
+      { uid: "1", title: "Future Event 1", host: "2" },
       { uid: "2", title: "Future Event 2" },
     ])
   ),
