@@ -28,6 +28,7 @@ jest.mock("expo-screen-orientation", () => ({
   },
   OrientationLock: {
     PORTRAIT_UP: "PORTRAIT_UP",
+    LANDSCAPE_LEFT: "LANDSCAPE_LEFT",
   },
   unlockAsync: jest.fn(),
   lockAsync: jest.fn(),

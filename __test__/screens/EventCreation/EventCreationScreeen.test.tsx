@@ -1,5 +1,5 @@
 import React from "react"
-import { fireEvent, render } from "@testing-library/react-native"
+import { fireEvent, render, waitFor } from "@testing-library/react-native"
 import EventCreationScreen from "../../../screens/EventCreation/EventCreationScreen"
 import { RegistrationContext } from "../../../contexts/RegistrationContext"
 import { SafeAreaProvider } from "react-native-safe-area-context"
@@ -334,4 +334,54 @@ describe("EventCreationScreen", () => {
     const validateButton = getByText("Validate")
     fireEvent.press(validateButton)
   })
+
+  it("Creates an announcement", async () => {
+    jest.unmock("@react-navigation/native")
+
+    // Mock the module for this specific test
+    jest.mock("@react-navigation/native", () => {
+      return {
+        ...jest.requireActual("@react-navigation/native"),
+        useRoute: () => ({
+          params: {
+            isAnnouncement: true,
+            externalUserUid: "1",
+          },
+        }),
+        useNavigation: () => ({
+          navigate: mockNavigation.navigate,
+          goBack: mockGoBack,
+        }),
+      }
+    })
+
+    const mockSetDescription = jest.fn()
+    const mockSetSelectedInterests = jest.fn()
+
+    const providerProps = {
+      description: "",
+      setDescription: mockSetDescription,
+      point: undefined,
+      location: "test",
+      userId: "123",
+      selectedInterests: [],
+      setSelectedInterests: mockSetSelectedInterests,
+    }
+
+    console.log("BONJOUR")
+    const { getByText } = render(
+      <SafeAreaProvider>
+        {/* @ts-expect-error this is a test mock */}
+        <RegistrationContext.Provider value={providerProps}>
+          <EventCreationScreen navigation={mockNavigation} />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+
+    await waitFor(() => {
+      const validateButton = getByText("Validate")
+      expect(validateButton).toBeTruthy()
+      fireEvent.press(validateButton), { timeout: 5000 }
+    })
+  }, 10000)
 })
