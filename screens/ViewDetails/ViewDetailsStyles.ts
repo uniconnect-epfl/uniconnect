@@ -32,7 +32,7 @@ export const viewDetailsStyles = StyleSheet.create({
     },
     topBackground: {
         backgroundColor: lightPeach,
-        height: "20%",
+        height: "9%",
         top: 0,
         width: "100%"
     },

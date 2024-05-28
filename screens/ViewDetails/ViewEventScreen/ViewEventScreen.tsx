@@ -127,12 +127,12 @@ const ViewEventScreen = () => {
                 <TouchableOpacity
                     style={viewDetailsStyles.profileContainer}
                     onPress={() => { Alert.alert("Coming soon") }}>
-                    <Text style={globalStyles.smallText}> Hosted By </Text>
+                    <Text style={globalStyles.smallText}>Hosted By </Text>
                     <ProfilePicture
                         size={25}
                         pictureUrl=""
                     />
-                    <Text style={globalStyles.smallText} >{host.firstName} {host.lastName}</Text>
+                    <Text style={globalStyles.smallText}> {host.firstName} {host.lastName}</Text>
                 </TouchableOpacity>
 
                 <View style={viewDetailsStyles.separationBar} />
