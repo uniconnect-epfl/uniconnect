@@ -120,15 +120,17 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
       <Text style={[globalStyles.boldText, styles.header]}>
         {info.section.title}
       </Text>
-      <Pressable
-        onPress={() => navigation.navigate("EventCreation" as never)}
-        style={styles.iconText}
-      >
-        <Text style={[globalStyles.smallText, styles.text]}>
-          Create an event
-        </Text>
-        <Ionicons name="create-outline" size={16} />
-      </Pressable>
+      {info.section.title === "Upcoming Events" && (
+        <Pressable
+          onPress={() => navigation.navigate("EventCreation" as never)}
+          style={styles.iconText}
+        >
+          <Text style={[globalStyles.smallText, styles.text]}>
+            Create an event
+          </Text>
+          <Ionicons name="create-outline" size={16} />
+        </Pressable>
+      )}
     </View>
   )
 

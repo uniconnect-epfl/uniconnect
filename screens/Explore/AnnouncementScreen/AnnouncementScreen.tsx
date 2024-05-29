@@ -116,7 +116,7 @@ const AnnouncementScreen = ({
         recommended:
           announcement.interests.filter((interest) =>
             userData.selectedInterests.includes(interest)
-          ).length === 3,
+          ).length == Math.min(3, userData.selectedInterests.length),
       }))
       .sort((a, b) => {
         if (b.recommended && !a.recommended) return 1
