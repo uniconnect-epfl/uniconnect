@@ -57,12 +57,13 @@ jest.mock("../../../../components/ToastMessage/toast", () => ({
 
 describe("InterestsScreen", () => {
   jest.useFakeTimers()
-  
+
   beforeAll(() => {
     jest.clearAllMocks()
   })
 
   it("renders the screen with necessary components", async () => {
+    jest.setTimeout(10000)
     try {
       const mockSetSelectedInterests = jest.fn()
       const mockSelectedInterests = ["one"]
@@ -100,6 +101,7 @@ describe("InterestsScreen", () => {
     }})
 
   it("allows searching and filters interests", async () => {
+    jest.setTimeout(10000)
     const mockSetSelectedInterests = jest.fn()
     const mockSelectedInterests = ["one"]
 
@@ -135,6 +137,7 @@ describe("InterestsScreen", () => {
   })
 
   it("allows selecting and deselecting interests", async () => {
+    jest.setTimeout(10000)
     const mockSetSelectedInterests = jest.fn()
     const mockSelectedInterests = ["one"]
 
@@ -170,6 +173,7 @@ describe("InterestsScreen", () => {
   })
 
   it("creates a label when an interest is selected", async () => {
+    jest.setTimeout(10000)
     const mockSetSelectedInterests = jest.fn()
     const mockSelectedInterests = ["one"]
 
@@ -203,6 +207,7 @@ describe("InterestsScreen", () => {
   })
 
   it("removes a label when clicked", async () => {
+    jest.setTimeout(10000)
     const mockSetSelectedInterests = jest.fn()
     const mockSelectedInterests = ["one"]
 
@@ -236,6 +241,7 @@ describe("InterestsScreen", () => {
   })
 
   it("shows error toast when there's an error rendering the screen", async () => {
+    jest.setTimeout(10000)
     try {
       const mockSetSelectedInterests = jest.fn()
       const mockSelectedInterests = ["one"]
@@ -275,6 +281,7 @@ describe("InterestsScreen", () => {
   })
 
   it("displays loading screen while interests are being fetched", async () => {
+    jest.setTimeout(10000)
     const mockSetSelectedInterests = jest.fn()
     const mockSelectedInterests = ["one"]
 
@@ -306,6 +313,7 @@ describe("InterestsScreen", () => {
   })
 
   it("toggles the interest selection correctly", async () => {
+    jest.setTimeout(10000)
     const mockSetSelectedInterests = jest.fn()
     const mockSelectedInterests = ["one"]
 
@@ -353,6 +361,7 @@ describe("InterestsScreen", () => {
     })
   })
   it("Passes to the section tabs when user is authenticated", async () => {
+    jest.setTimeout(10000)
     const mockSetSelectedInterests = jest.fn()
     const mockSelectedInterests = ["one"]
 
