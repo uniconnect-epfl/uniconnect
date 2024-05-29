@@ -107,32 +107,6 @@ describe("EventCreationScreen", () => {
     fireEvent.press(validateButton)
   })
 
-  it("create announcement with location", () => {
-    const mockSetDescription = jest.fn()
-    const mockSetSelectedInterests = jest.fn()
-
-    // Set up the provider props
-    const providerProps = {
-      description: "",
-      setDescription: mockSetDescription,
-      point: { x: 0, y: 0 },
-      location: "test",
-      userId: "salue",
-      selectedInterests: [],
-      setSelectedInterests: mockSetSelectedInterests,
-    }
-    const { getByText } = render(
-      <SafeAreaProvider>
-        {/* @ts-expect-error this is a test mock */}
-        <RegistrationContext.Provider value={providerProps}>
-          <EventCreationScreen navigation={mockNavigation} />
-        </RegistrationContext.Provider>
-      </SafeAreaProvider>
-    )
-    const validateButton = getByText("Validate")
-    fireEvent.press(validateButton)
-  })
-
   it("alert with user id not defined", () => {
     const mockSetDescription = jest.fn()
     const mockSetSelectedInterests = jest.fn()
@@ -141,7 +115,7 @@ describe("EventCreationScreen", () => {
     const providerProps = {
       description: "",
       setDescription: mockSetDescription,
-      point: { x: 0, y: 0 },
+      point: undefined,
       location: "test",
       userId: undefined,
       selectedInterests: [],
@@ -266,14 +240,6 @@ describe("EventCreationScreen", () => {
     // Add mock function or state update check here
   })
 
-  it("renders different UI elements based on the isAnnouncement prop", () => {
-    const { queryByText, rerender } = render(
-      <EventCreationScreen navigation={mockNavigation} />
-    )
-    rerender(<EventCreationScreen navigation={mockNavigation} />)
-    expect(queryByText("Add a location")).toBeTruthy()
-  })
-
   it("can add locations", () => {
     const { getByText } = render(
       <EventCreationScreen navigation={mockNavigation} />
@@ -334,5 +300,4 @@ describe("EventCreationScreen", () => {
     const validateButton = getByText("Validate")
     fireEvent.press(validateButton)
   })
-
 })

@@ -108,12 +108,12 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
       await createAnnouncement(
         title,
         location,
-        point,
+        point ?? { x: 0, y: 0 },
         description,
         selectedInterests,
-        date.toISOString()
+        date.toISOString(),
+        userId ?? "-1"
       )
-      showSuccessToast("Announcement created succesfully")
     } catch (error) {
       showErrorToast("Could not create announcement")
     }

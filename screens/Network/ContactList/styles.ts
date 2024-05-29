@@ -40,13 +40,19 @@ export const styles = StyleSheet.create({
     borderColor: peach,
     borderRadius: 40,
     borderWidth: 3,
-    height: "85.5%",
+    height: "82.15%",
     justifyContent: "center",
-    marginTop: 90,
+    marginTop: 110,
     overflow: "hidden",
     position: "absolute",
     width: "90%",
     zIndex: 2,
+  },
+
+  nofriends: {
+    height: "100%",
+    resizeMode: "contain",
+    width: "100%",
   },
   profilePicture: {
     alignItems: "center",
