@@ -21,7 +21,6 @@ import {
   destroyGraphFileIfExists,
   loadGraphData,
 } from "../../components/Graph/GraphFileFunctions"
-import { showErrorToast } from "../../components/ToastMessage/toast"
 
 import { useFullScreen } from "../../navigation/Home/HomeTabNavigator"
 
@@ -65,6 +64,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
 
   const [friends, setFriends] = useState<string[] | null>(null)
   const [contacts, setContacts] = useState<Contact[] | null>(null)
+  const [noFriends, setNoFriends] = useState<boolean | null>(null)
 
   const fetchData = async (userId: string) => {
     const user = await getUserData(userId)
@@ -100,9 +100,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
       }
       setUserContact(contact)
     }
-    if (user?.friends) {
-      setFriends(user?.friends)
-    }
+    setFriends(user?.friends ?? [])
   }, [user])
 
   useEffect(() => {
@@ -122,8 +120,14 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
   useEffect(() => {
     if (contacts) {
       if (contacts.length === 0) {
-        showErrorToast("You don't have any friends yet!")
+        setNoFriends(true)
+        setGraph({
+          nodes: [],
+          links: [],
+          userId: "",
+        })
       } else {
+        setNoFriends(false)
         loadGraphData(userId, userContact, contacts).then((graph) => {
           setGraph(graph)
         })
@@ -173,6 +177,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
           userId={userId}
           userContact={userContact}
           loaded={loaded}
+          noFriends={noFriends}
           navChange={navChange}
           changeTab={() => setSelectedTab("List")}
           fullScreenCallback={fullScreenCallback}
@@ -187,6 +192,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
           }
           contacts={contacts}
           loaded={loaded}
+          noFriends={noFriends}
         />
       )}
     </View>
