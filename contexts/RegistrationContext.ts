@@ -15,6 +15,8 @@ export type RegistrationContextType = {
   setDescription: (description: string) => void,
   selectedInterests: Array<string>,
   setSelectedInterests: (interests: Array<string>) => void
+  fromGoogle: boolean,
+  setFromGoogle: (value: boolean) => void
 }
 
 export const RegistrationContext = createContext<RegistrationContextType>({} as RegistrationContextType)
