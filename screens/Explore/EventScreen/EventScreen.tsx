@@ -23,17 +23,17 @@ import { globalStyles } from "../../../assets/global/globalStyles"
 import LoadingScreen from "../../Loading/LoadingScreen"
 import { StackNavigationProp } from "@react-navigation/stack"
 
-import InputField from '../../../components/InputField/InputField'
+import InputField from "../../../components/InputField/InputField"
 import { fetchAllUserImages, getUserData } from "../../../firebase/User"
-
 
 interface EventsScreenProps {
   onEventPress: (event: Event) => void
   userID?: string
 }
-   
+
 type RootStackParamList = {
   EventMap: {
+    onEventPress: (event: Event) => void
     events: Event[] | null
   }
 }
@@ -53,28 +53,29 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
   >([])
   const [searchQuery, setSearchQuery] = React.useState("")
   const [loading, setLoading] = React.useState(true)
-  const [userImages, setUserImages] = React.useState({} as Record<string, string>)
 
+  const [userImages, setUserImages] = React.useState(
+    {} as Record<string, string>
+  )
+  const loadEvents = useCallback(async () => {
+    try {
+      setLoading(true)
+      if (userID) {
+        const userData = await getUserData(userID)
+        if (userData) {
+          const userEvents = userData.events
+          const fetchedFutureEvents = await getAllFutureEvents()
+          const fetchedPastEvents = await getAllPastEvents()
 
-    const loadEvents = useCallback( async () => {
-      try {
-        setLoading(true)
-        if (userID) {
-          const userData = await getUserData(userID)
-          if (userData) {
-            const userEvents = userData.events
-            const fetchedFutureEvents = await getAllFutureEvents()
-            const fetchedPastEvents = await getAllPastEvents()
+          const userFutureEvents = fetchedFutureEvents.filter((event) =>
+            userEvents.includes(event.uid)
+          )
+          const userPastEvents = fetchedPastEvents.filter((event) =>
+            userEvents.includes(event.uid)
+          )
 
-            const userFutureEvents = fetchedFutureEvents.filter((event) =>
-              userEvents.includes(event.uid)
-            )
-            const userPastEvents = fetchedPastEvents.filter((event) =>
-              userEvents.includes(event.uid)
-            )
-
-            setFutureEvents(userFutureEvents)
-            setPastEvents(userPastEvents)
+          setFutureEvents(userFutureEvents)
+          setPastEvents(userPastEvents)
 
             setFilteredFutureEvents(userFutureEvents)
             setFilteredPastEvents(userPastEvents)
@@ -90,8 +91,8 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
           const fetchedFutureEvents = await getAllFutureEvents()
           const fetchedPastEvents = await getAllPastEvents()
 
-          setFutureEvents(fetchedFutureEvents)
-          setPastEvents(fetchedPastEvents)
+        setFutureEvents(fetchedFutureEvents)
+        setPastEvents(fetchedPastEvents)
 
           setFilteredFutureEvents(fetchedFutureEvents)
           setFilteredPastEvents(fetchedPastEvents)
@@ -112,7 +113,6 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
       }
     }, [userID])
 
-
   useFocusEffect(
     useCallback(() => {
       loadEvents()
@@ -126,15 +126,17 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
       <Text style={[globalStyles.boldText, styles.header]}>
         {info.section.title}
       </Text>
-      <Pressable
-        onPress={() => navigation.navigate("EventCreation" as never)}
-        style={styles.iconText}
-      >
-        <Text style={[globalStyles.smallText, styles.text]}>
-          Create an event
-        </Text>
-        <Ionicons name="create-outline" size={16} />
-      </Pressable>
+      {info.section.title === "Upcoming Events" && (
+        <Pressable
+          onPress={() => navigation.navigate("EventCreation" as never)}
+          style={styles.iconText}
+        >
+          <Text style={[globalStyles.smallText, styles.text]}>
+            Create an event
+          </Text>
+          <Ionicons name="create-outline" size={16} />
+        </Pressable>
+      )}
     </View>
   )
 
@@ -158,7 +160,10 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 
   useEffect(() => {
     setSections([
-      { title: "Upcoming Events", data: groupEventsByTwo(filteredFutureEvents) },
+      {
+        title: "Upcoming Events",
+        data: groupEventsByTwo(filteredFutureEvents),
+      },
       { title: "Past Events", data: groupEventsByTwo(filteredPastEvents) },
     ])
   }, [filteredFutureEvents, filteredPastEvents])
@@ -184,15 +189,17 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
             styles.cardContainer,
             event.title === "dummy" ? styles.transparent : {},
           ]}
-          onPress={() => {onEventPress(event)}}
+          onPress={() => {
+            onEventPress(event)
+          }}
           disabled={event.title === "dummy"}
+          testID={"event-card-" + event.title}
         >
           <EventCard event={event} userImages={userImages} />
         </TouchableOpacity>
       ))}
     </View>
   )
-
 
   if (loading) return <LoadingScreen />
 
@@ -208,7 +215,10 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
         <TouchableOpacity
           style={styles.map}
           onPress={() =>
-            navigation.navigate("EventMap", { events: filteredFutureEvents })
+            navigation.navigate("EventMap", {
+              onEventPress: onEventPress,
+              events: filteredFutureEvents,
+            })
           }
         >
           <Text style={globalStyles.boldText}>Map View</Text>
@@ -228,4 +238,3 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 }
 
 export default EventScreen
-

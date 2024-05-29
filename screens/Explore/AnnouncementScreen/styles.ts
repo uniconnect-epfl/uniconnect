@@ -1,10 +1,5 @@
 import { StyleSheet } from "react-native"
-import {
-  black,
-  lightGray,
-  peach,
-  white
-} from "../../../assets/colors/colors"
+import { black, lightGray, peach, white } from "../../../assets/colors/colors"
 
 export const styles = StyleSheet.create({
   button: {

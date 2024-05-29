@@ -39,6 +39,7 @@ interface ContactGraphProps {
   userId: string
   userContact: Contact
   loaded: boolean
+  noFriends?: boolean | null
   navChange?: boolean
   changeTab?: () => void
   fullScreenCallback?: () => void
@@ -50,11 +51,12 @@ const ContactGraph = ({
   userId,
   userContact,
   loaded,
+  noFriends,
   navChange,
   changeTab,
   fullScreenCallback,
 }: ContactGraphProps) => {
-  // Logic behing the loading screen
+  // Logic behing the loading screen)
 
   const [display, setDisplay] = useState(false)
 
@@ -91,6 +93,8 @@ const ContactGraph = ({
 
       const subscription = ScreenOrientation.addOrientationChangeListener(
         () => {
+          onOptionModalPressOut()
+          onModalPressOut()
           setRotation((prev) => !prev)
         }
       )
@@ -115,26 +119,41 @@ const ContactGraph = ({
   const [counter, setCounter] = useState(0)
 
   // Basic logic behind any interaction with the graph
-  const [clickedNode, setClickedNode] = useState<Node>(
-    getNodeById(graph, userId)
-  )
+  const [clickedNode, setClickedNode] = useState<Node>({
+    id: "-1",
+    contact: {
+      uid: "-1",
+      firstName: "",
+      lastName: "",
+      profilePictureUrl: "",
+      description: "",
+      location: "",
+      interests: [""],
+      events: [""],
+      friends: [""],
+    },
+    level: 0,
+  })
 
   // Logic behind changing the graph simulation's parameters on the fly
 
-  const [graphOptionsModalVisible, setGraphOptionsModalVisible] = useState<
-    boolean | null
-  >(null)
+  const [graphOptionsModalVisible, setGraphOptionsModalVisible] =
+    useState<boolean>(false)
 
   const onOptionModalPress = async () => {
     await ScreenOrientation.getOrientationAsync().then((orientation) => {
       if (orientation === ScreenOrientation.Orientation.PORTRAIT_UP) {
-        setGraphOptionsModalVisible((prev) => !prev)
+        setGraphOptionsModalVisible(true)
       } else {
         showErrorToast(
           "Please rotate your device to portrait mode to view graph options"
         )
       }
     })
+  }
+
+  const onOptionModalPressOut = () => {
+    setGraphOptionsModalVisible(false)
   }
 
   const [simulationParameters, setSimulationParameters] =
@@ -267,6 +286,7 @@ const ContactGraph = ({
         />
         <GraphOptionsModal
           visible={graphOptionsModalVisible}
+          onPressOut={onOptionModalPressOut}
           updateSimulationParameters={updateSimulationParameters}
           initialParameters={simulationParameters}
         />
@@ -276,7 +296,7 @@ const ContactGraph = ({
           }
         >
           {!display && <Image source={require("../../../assets/splash.gif")} />}
-          {userContact.friends?.length === 0 && display && (
+          {display && noFriends && (
             <Image
               source={require("../../../assets/nofriendsscreen.png")}
               style={styles.nofriends}

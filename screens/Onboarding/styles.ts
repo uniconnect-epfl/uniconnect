@@ -60,10 +60,8 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-    flex: 1,
     flexDirection: "row",
     position: "absolute",
-    zIndex: -1,
   },
 
   image: {
