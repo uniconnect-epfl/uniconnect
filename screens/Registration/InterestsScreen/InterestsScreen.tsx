@@ -60,8 +60,7 @@ const InterestsScreen = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [interests, setInterests] = useState<Interest[]>([])
   const [filteredInterests, setFilteredInterests] = useState<Interest[]>([])
-  const { selectedInterests, setSelectedInterests, fromGoogle } =
-    useContext(RegistrationContext)
+  const { selectedInterests, setSelectedInterests, fromGoogle } = useContext(RegistrationContext)
   const [isLoading, setIsLoading] = useState(true)
   const keyboardVisible = useKeyboardVisibility()
 

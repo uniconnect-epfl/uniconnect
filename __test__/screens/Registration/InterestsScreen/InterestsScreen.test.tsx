@@ -56,6 +56,8 @@ jest.mock("../../../../components/ToastMessage/toast", () => ({
 }))
 
 describe("InterestsScreen", () => {
+  jest.useFakeTimers()
+  
   beforeAll(() => {
     jest.clearAllMocks()
   })
