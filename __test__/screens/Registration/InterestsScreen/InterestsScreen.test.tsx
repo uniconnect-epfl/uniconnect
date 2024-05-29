@@ -4,6 +4,7 @@ import InterestsScreen from "../../../../screens/Registration/InterestsScreen/In
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { Auth } from "firebase/auth"
 import { showErrorToast } from "../../../../components/ToastMessage/toast"
+import { RegistrationContext } from "../../../../contexts/RegistrationContext"
 
 jest.mock("@react-native-async-storage/async-storage", () =>
   require("@react-native-async-storage/async-storage/jest/async-storage-mock")
@@ -25,18 +26,6 @@ jest.mock("react-native-safe-area-context", () => {
   }
 })
 
-const mockSetSelectedInterests = jest.fn()
-const mockSelectedInterests = ["one"]
-
-jest.mock("react", () => ({
-  ...jest.requireActual("react"),
-  useContext: () => ({
-    selectedInterests: mockSelectedInterests,
-    setSelectedInterests: mockSetSelectedInterests,
-    fromGoogle: false
-  }),
-}))
-
 // Mock the navigation object
 const mockNavigation = {
   navigate: jest.fn(),
@@ -52,6 +41,7 @@ jest.mock('@react-navigation/native', () => {
     useFocusEffect: jest.fn().mockImplementation(() => {
       return jest.fn()
     }),
+    useRoute: () => ({ params: {} }),
   }
 })
 
@@ -68,16 +58,33 @@ jest.mock("../../../../firebase/Interests", () => ({
 }))
 
 describe("InterestsScreen", () => {
-  beforeEach(() => {
-    mockSetSelectedInterests.mockClear()
-    mockSelectedInterests.length = 0
-  })
 
   it("renders the screen with necessary components", async () => {
     try {
+      const mockSetSelectedInterests = jest.fn()
+      const mockSelectedInterests = ["one"]
+  
+      const providerProps = {
+        user: { email: "email", uid: "uid" },
+        selectedInterests: ["one"],
+        setSelectedInterests: mockSetSelectedInterests,
+        description: mockSelectedInterests,
+        setDescription: jest.fn(),
+        firstName: "first name",
+        setFirstName: jest.fn(),
+        lastName: "last name",
+        setLastName: jest.fn(),
+        date: new Date(),
+        setDate: jest.fn(),
+        location: "",
+        setLocation: jest.fn(),
+        fromGoogle: true
+      }
       const { getByPlaceholderText, getAllByText } = render(
         <SafeAreaProvider>
-          <InterestsScreen />
+          <RegistrationContext.Provider value={providerProps}>
+            <InterestsScreen />
+          </RegistrationContext.Provider>
         </SafeAreaProvider>
       )
 
@@ -92,9 +99,30 @@ describe("InterestsScreen", () => {
   })
 
   it("allows searching and filters interests", async () => {
+    const mockSetSelectedInterests = jest.fn()
+    const mockSelectedInterests = ["one"]
+
+    const providerProps = {
+      user: { email: "email", uid: "uid" },
+      selectedInterests: ["one"],
+      setSelectedInterests: mockSetSelectedInterests,
+      description: mockSelectedInterests,
+      setDescription: jest.fn(),
+      firstName: "first name",
+      setFirstName: jest.fn(),
+      lastName: "last name",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+      fromGoogle: true
+    }
     const { getByPlaceholderText, getByText } = render(
       <SafeAreaProvider>
-        <InterestsScreen />
+        <RegistrationContext.Provider value={providerProps}>
+          <InterestsScreen />
+        </RegistrationContext.Provider>
       </SafeAreaProvider>
     )
 
@@ -106,9 +134,30 @@ describe("InterestsScreen", () => {
   })
 
   it("allows selecting and deselecting interests", async () => {
+    const mockSetSelectedInterests = jest.fn()
+    const mockSelectedInterests = ["one"]
+
+    const providerProps = {
+      user: { email: "email", uid: "uid" },
+      selectedInterests: ["one"],
+      setSelectedInterests: mockSetSelectedInterests,
+      description: mockSelectedInterests,
+      setDescription: jest.fn(),
+      firstName: "first name",
+      setFirstName: jest.fn(),
+      lastName: "last name",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+      fromGoogle: true
+    }
     const { getByTestId } = render(
       <SafeAreaProvider>
-        <InterestsScreen />
+        <RegistrationContext.Provider value={providerProps}>
+          <InterestsScreen />
+        </RegistrationContext.Provider>
       </SafeAreaProvider>
     )
 
@@ -120,9 +169,30 @@ describe("InterestsScreen", () => {
   })
 
   it("creates a label when an interest is selected", async () => {
+    const mockSetSelectedInterests = jest.fn()
+    const mockSelectedInterests = ["one"]
+
+    const providerProps = {
+      user: { email: "email", uid: "uid" },
+      selectedInterests: ["one"],
+      setSelectedInterests: mockSetSelectedInterests,
+      description: mockSelectedInterests,
+      setDescription: jest.fn(),
+      firstName: "first name",
+      setFirstName: jest.fn(),
+      lastName: "last name",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+      fromGoogle: true
+    }
     const { getByTestId } = render(
       <SafeAreaProvider>
-        <InterestsScreen />
+        <RegistrationContext.Provider value={providerProps}>
+          <InterestsScreen />
+        </RegistrationContext.Provider>
       </SafeAreaProvider>
     )
 
@@ -132,9 +202,30 @@ describe("InterestsScreen", () => {
   })
 
   it("removes a label when clicked", async () => {
+    const mockSetSelectedInterests = jest.fn()
+    const mockSelectedInterests = ["one"]
+
+    const providerProps = {
+      user: { email: "email", uid: "uid" },
+      selectedInterests: ["one"],
+      setSelectedInterests: mockSetSelectedInterests,
+      description: mockSelectedInterests,
+      setDescription: jest.fn(),
+      firstName: "first name",
+      setFirstName: jest.fn(),
+      lastName: "last name",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+      fromGoogle: true
+    }
     const { getByTestId } = render(
       <SafeAreaProvider>
-        <InterestsScreen />
+        <RegistrationContext.Provider value={providerProps}>
+          <InterestsScreen />
+        </RegistrationContext.Provider>
       </SafeAreaProvider>
     )
 
@@ -145,9 +236,30 @@ describe("InterestsScreen", () => {
 
   it("shows error toast when there's an error rendering the screen", async () => {
     try {
+      const mockSetSelectedInterests = jest.fn()
+      const mockSelectedInterests = ["one"]
+  
+      const providerProps = {
+        user: { email: "email", uid: "uid" },
+        selectedInterests: ["one"],
+        setSelectedInterests: mockSetSelectedInterests,
+        description: mockSelectedInterests,
+        setDescription: jest.fn(),
+        firstName: "first name",
+        setFirstName: jest.fn(),
+        lastName: "last name",
+        setLastName: jest.fn(),
+        date: new Date(),
+        setDate: jest.fn(),
+        location: "",
+        setLocation: jest.fn(),
+        fromGoogle: true
+      }
       const { getByPlaceholderText, getAllByText } = render(
         <SafeAreaProvider>
-          <InterestsScreen />
+          <RegistrationContext.Provider value={providerProps}>
+            <InterestsScreen />
+          </RegistrationContext.Provider>
         </SafeAreaProvider>
       )
 
@@ -162,9 +274,30 @@ describe("InterestsScreen", () => {
   })
 
   it("displays loading screen while interests are being fetched", async () => {
+    const mockSetSelectedInterests = jest.fn()
+    const mockSelectedInterests = ["one"]
+
+    const providerProps = {
+      user: { email: "email", uid: "uid" },
+      selectedInterests: ["one"],
+      setSelectedInterests: mockSetSelectedInterests,
+      description: mockSelectedInterests,
+      setDescription: jest.fn(),
+      firstName: "first name",
+      setFirstName: jest.fn(),
+      lastName: "last name",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+      fromGoogle: true
+    }
     const { getByTestId } = render(
       <SafeAreaProvider>
-        <InterestsScreen />
+        <RegistrationContext.Provider value={providerProps}>
+          <InterestsScreen />
+        </RegistrationContext.Provider>
       </SafeAreaProvider>
     )
 
@@ -172,9 +305,30 @@ describe("InterestsScreen", () => {
   })
 
   it("toggles the interest selection correctly", async () => {
+    const mockSetSelectedInterests = jest.fn()
+    const mockSelectedInterests = ["one"]
+
+    const providerProps = {
+      user: { email: "email", uid: "uid" },
+      selectedInterests: ["one"],
+      setSelectedInterests: mockSetSelectedInterests,
+      description: mockSelectedInterests,
+      setDescription: jest.fn(),
+      firstName: "first name",
+      setFirstName: jest.fn(),
+      lastName: "last name",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+      fromGoogle: true
+    }
     const { getByTestId } = render(
       <SafeAreaProvider>
-        <InterestsScreen />
+        <RegistrationContext.Provider value={providerProps}>
+          <InterestsScreen />
+        </RegistrationContext.Provider>
       </SafeAreaProvider>
     )
 
@@ -195,6 +349,40 @@ describe("InterestsScreen", () => {
       // Deselect the interest
       fireEvent.press(interestButton)
       expect(mockSelectedInterests).not.toContain("Cryptocurrency")
+    })
+  })
+  it("Passes to the section tabs when user is authenticated", async () => {
+    const mockSetSelectedInterests = jest.fn()
+    const mockSelectedInterests = ["one"]
+
+    const providerProps = {
+      user: { email: "email", uid: "uid" },
+      selectedInterests: ["one"],
+      setSelectedInterests: mockSetSelectedInterests,
+      description: mockSelectedInterests,
+      setDescription: jest.fn(),
+      firstName: "first name",
+      setFirstName: jest.fn(),
+      lastName: "last name",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+      setFromGoogle: jest.fn(),
+      fromGoogle: true
+    }
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <RegistrationContext.Provider value={providerProps}>
+          <InterestsScreen />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+
+    await waitFor(() => {
+      const NextButton = getByText("Next")
+      fireEvent.press(NextButton)
     })
   })
 })
