@@ -58,6 +58,9 @@ jest.mock("../../../../firebase/Interests", () => ({
 }))
 
 describe("InterestsScreen", () => {
+  beforeAll(() => {
+    jest.clearAllMocks()
+  })
 
   it("renders the screen with necessary components", async () => {
     try {
