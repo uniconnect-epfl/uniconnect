@@ -33,6 +33,7 @@ jest.mock("react", () => ({
   useContext: () => ({
     selectedInterests: mockSelectedInterests,
     setSelectedInterests: mockSetSelectedInterests,
+    fromGoogle: false
   }),
 }))
 
@@ -56,6 +57,14 @@ jest.mock('@react-navigation/native', () => {
 
 jest.mock("../../../../components/ToastMessage/toast", () => ({
   showErrorToast: jest.fn(),
+}))
+
+jest.mock("../../../../firebase/Interests", () => ({
+  fetchInterests: jest.fn(() => Promise.resolve([
+    { id: "1", title: "Cryptocurrency" },
+    { id: "2", title: "Gardening" },
+    { id: "3", title: "Artificial Inteligence"}
+  ])),
 }))
 
 describe("InterestsScreen", () => {

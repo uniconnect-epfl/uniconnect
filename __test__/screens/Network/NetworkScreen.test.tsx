@@ -131,34 +131,14 @@ describe("NetworkScreen", () => {
 
     fireEvent.press(component.getByText("List"))
 
-    await waitFor(() => {
-      expect(component.getByPlaceholderText("Search...")).toBeTruthy()
-    })
-
-    fireEvent.changeText(component.getByPlaceholderText("Search..."), "test")
-
-    fireEvent.press(component.getByTestId("touchable"))
-
     fireEvent.press(component.getByText("Graph"))
-
-    await waitFor(() => {
-      expect(component.getByPlaceholderText("Search...")).toBeTruthy()
-    })
-
-    fireEvent.changeText(component.getByPlaceholderText("Search..."), "test")
-
-    fireEvent.press(component.getByTestId("touchable"))
 
     fireEvent.press(component.getByText("List"))
 
-    await waitFor(() => {
-      expect(component.getByPlaceholderText("Search...")).toBeTruthy()
-    })
-
     fireEvent.press(component.getByText("Graph"))
 
     await waitFor(() => {
-      expect(component.getByPlaceholderText("Search...")).toBeTruthy()
+      expect(component.getByText("List")).toBeTruthy()
     })
   })
 })

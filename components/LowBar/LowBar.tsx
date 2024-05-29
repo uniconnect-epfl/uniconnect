@@ -25,10 +25,11 @@ const LowBar: React.FC<LowBarProps> = ({
   const navigation = useNavigation()
   const textB = buttonText ? buttonText : "Next"
   const { user, firstName, lastName, location, date, description, selectedInterests, setFromGoogle } = useContext(RegistrationContext)
+  const justifyCondition = goBack? "space-between" : "flex-end"
 
   return (
-    <View style={styles.nextBar}>
-      {!goBack &&
+    <View style={[styles.nextBar, { justifyContent: justifyCondition }]}>
+      {goBack &&
         <TouchableOpacity
           style={[styles.buttonSmall, styles.buttonSmallLeft]}
           onPress={() => navigation.goBack()}
@@ -43,7 +44,7 @@ const LowBar: React.FC<LowBarProps> = ({
           if(nextScreen === "ExploreTabs"){
             if (user){
               const email = user.email || ""
-              storeInitialUserData(user.uid, email, firstName, lastName, date, location, description,selectedInterests)
+              storeInitialUserData(user.uid, email, firstName, lastName, date, location, description, selectedInterests)
               setFromGoogle(false)
             }
             else{
