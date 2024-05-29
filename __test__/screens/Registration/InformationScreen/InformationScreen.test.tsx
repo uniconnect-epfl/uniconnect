@@ -30,6 +30,22 @@ jest.mock("../../../../components/ToastMessage/toast", () => ({
   showErrorToast: jest.fn(),
 }))
 
+// Mock AsyncStorage methods
+jest.mock("@react-native-async-storage/async-storage", () => ({
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  removeItem: jest.fn(),
+}))
+
+jest.mock("firebase/auth", () => ({
+  getReactNativePersistence: jest.fn(() => ({})),
+  initializeAuth: jest.fn(() => ({})),
+  onAuthStateChanged: jest.fn(() => ({ uid: "dFcpWnfaNTOWBFyJnoJSIL6xyi32" })),
+  getAuth: jest.fn(() => ({
+    currentUser: { uid: "dFcpWnfaNTOWBFyJnoJSIL6xyi32" },
+  })),
+}))
+
 describe("Information Screen", () => {
   beforeEach(() => {
     jest.clearAllMocks()
