@@ -18,10 +18,7 @@ export const styles = StyleSheet.create({
    
   },
   createEventWrapper: {
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "center",
-
+    justifyContent: "center"
   },
   input: {
     borderColor: lightGray,
@@ -32,6 +29,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 20,
     width: "57%",
   },
+  
   searchAndMap: {
     alignItems: "center",
     flexDirection: "row",
@@ -47,5 +45,5 @@ export const styles = StyleSheet.create({
   },
   view: {
     flex: 1,
-  },
+  }
 })

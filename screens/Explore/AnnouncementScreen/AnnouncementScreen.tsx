@@ -95,7 +95,6 @@ const AnnouncementScreen = ({
         recommendAnnouncements(searchedAnnouncement)
       setFilteredAnnouncements(recommendedAnnouncements)
     } else {
-      console.log(userData?.selectedInterests)
 
       setFilteredAnnouncements(recommendAnnouncements(announcements))
     }

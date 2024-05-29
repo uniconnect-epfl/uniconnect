@@ -80,6 +80,17 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 30,
     width: "100%",
   },
+  interests: {
+    color: black,
+    fontSize: 12,
+    fontStyle: "italic",
+    marginLeft: 13,
+    paddingBottom: 5,
+  },
+
+  interestsContainer: {
+    flexDirection: "column",
+  },
   label: {
     color: black,
     display: "flex",
@@ -91,7 +102,6 @@ export const styles = StyleSheet.create({
   mandatoryInput: {
     flexDirection: "row",
   },
-
   section: {
     display: "flex",
     flexDirection: "column",
@@ -101,11 +111,13 @@ export const styles = StyleSheet.create({
     paddingTop: 10,
     width: "100%",
   },
+
   tags: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 10,
   },
+
   tagsSeparator: {
     borderBottomColor: black,
     borderBottomWidth: 1,
@@ -114,6 +126,6 @@ export const styles = StyleSheet.create({
   tagsTitle: {
     color: black,
     marginBottom: 10,
-    padding: 10,
+    paddingTop: 7,
   },
 })
