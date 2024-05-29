@@ -26,6 +26,12 @@ jest.mock("react-native-safe-area-context", () => {
   }
 })
 
+const mockInterests = [{id: "Artificial Inteligence", title: "Artificial Inteligence", category: "one"}, {id: "Cryptocurrency", title: "Cryptocurrency", category: "one"}, {id: "Gardening", title: "Gardening", category: "one"}]
+
+jest.mock("../../../../firebase/Interests", () => ({
+  fetchInterests: jest.fn(() => Promise.resolve(mockInterests)),
+}))
+
 // Mock the navigation object
 const mockNavigation = {
   navigate: jest.fn(),
