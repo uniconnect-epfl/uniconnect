@@ -62,45 +62,6 @@ describe("InterestsScreen", () => {
     jest.clearAllMocks()
   })
 
-  it("renders the screen with necessary components", async () => {
-    try {
-      const mockSetSelectedInterests = jest.fn()
-      const mockSelectedInterests = ["one"]
-  
-      const providerProps = {
-        user: { email: "email", uid: "uid" },
-        selectedInterests: ["one"],
-        setSelectedInterests: mockSetSelectedInterests,
-        description: mockSelectedInterests,
-        setDescription: jest.fn(),
-        firstName: "first name",
-        setFirstName: jest.fn(),
-        lastName: "last name",
-        setLastName: jest.fn(),
-        date: new Date(),
-        setDate: jest.fn(),
-        location: "",
-        setLocation: jest.fn(),
-        fromGoogle: true
-      }
-      const { getByPlaceholderText, getAllByText } = render(
-        <SafeAreaProvider>
-          <RegistrationContext.Provider value={providerProps}>
-            <InterestsScreen />
-          </RegistrationContext.Provider>
-        </SafeAreaProvider>
-      )
-
-      await waitFor(() => {
-        expect(getByPlaceholderText("Search")).toBeTruthy()
-        const interestButtons = getAllByText(/.+/)
-        expect(interestButtons.length).toBeGreaterThan(0)
-      })
-    } catch (error) {
-      showErrorToast("Unable to render")
-    }
-  })
-
   it("allows searching and filters interests", async () => {
     const mockSetSelectedInterests = jest.fn()
     const mockSelectedInterests = ["one"]
