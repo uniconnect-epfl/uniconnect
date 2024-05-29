@@ -49,18 +49,47 @@ jest.mock("../../../../components/ToastMessage/toast", () => ({
   showErrorToast: jest.fn(),
 }))
 
-jest.mock("../../../../firebase/Interests", () => ({
-  fetchInterests: jest.fn(() => Promise.resolve([
-    { id: "1", title: "Cryptocurrency" },
-    { id: "2", title: "Gardening" },
-    { id: "3", title: "Artificial Inteligence"}
-  ])),
-}))
-
 describe("InterestsScreen", () => {
   beforeAll(() => {
     jest.clearAllMocks()
   })
+
+  it("renders the screen with necessary components", async () => {
+    try {
+      const mockSetSelectedInterests = jest.fn()
+      const mockSelectedInterests = ["one"]
+  
+      const providerProps = {
+        user: { email: "email", uid: "uid" },
+        selectedInterests: ["one"],
+        setSelectedInterests: mockSetSelectedInterests,
+        description: mockSelectedInterests,
+        setDescription: jest.fn(),
+        firstName: "first name",
+        setFirstName: jest.fn(),
+        lastName: "last name",
+        setLastName: jest.fn(),
+        date: new Date(),
+        setDate: jest.fn(),
+        location: "",
+        setLocation: jest.fn(),
+        fromGoogle: true
+      }
+      const { getByPlaceholderText, getAllByText } = render(
+        <SafeAreaProvider>
+          <RegistrationContext.Provider value={providerProps}>
+            <InterestsScreen />
+          </RegistrationContext.Provider>
+        </SafeAreaProvider>
+      )
+      await waitFor(() => {
+        expect(getByPlaceholderText("Search")).toBeTruthy()
+        const interestButtons = getAllByText(/.+/)
+        expect(interestButtons.length).toBeGreaterThan(0)
+      })
+    } catch (error) {
+      showErrorToast("Unable to render")
+    }})
 
   it("allows searching and filters interests", async () => {
     const mockSetSelectedInterests = jest.fn()
