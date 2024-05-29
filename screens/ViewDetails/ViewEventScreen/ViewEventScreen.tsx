@@ -129,7 +129,7 @@ const ViewEventScreen = () => {
           {event.title}
         </Text>
         <Text style={[globalStyles.text, viewDetailsStyles.detailsText]}>
-          {event.interests.join(" - ")}
+          {event.interests?.join(" - ")}
         </Text>
         <Text style={[globalStyles.smallText, viewDetailsStyles.detailsText]}>
           {dateInISO}

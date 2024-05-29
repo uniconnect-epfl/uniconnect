@@ -11,7 +11,9 @@ export const ProfileEvents = () => {
   const navigation = useNavigation()
 
   const onHostPress = (host: User) => {
-    navigation.navigate("ExternalProfile", { externalUserUid: host.uid })
+    navigation.navigate("ExternalProfile", {
+      externalUserUid: host.uid,
+    })
   }
 
   return (

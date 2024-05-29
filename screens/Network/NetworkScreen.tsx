@@ -24,11 +24,20 @@ import {
 
 import { useFullScreen } from "../../navigation/Home/HomeTabNavigator"
 
+let changeFriends: ((arg0: boolean) => void) | undefined
+
 interface NetworkScreenProps {
   navigation: NavigationProp<ParamListBase>
 }
 
 const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
+  const [change, setChange] = useState(false)
+
+  useEffect(() => {
+    changeFriends = setChange
+    return () => (changeFriends = undefined)
+  }, [])
+
   const [graph, setGraph] = useState<Graph>()
   const [user, setUser] = useState<User | null>(null)
   const [userId, setUserId] = useState<string | undefined>(undefined)
@@ -143,6 +152,13 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
 
   const [selectedTab, setSelectedTab] = useState("Graph")
 
+  useEffect(() => {
+    if (change) {
+      friendListUpdated()
+      setChange(false)
+    }
+  }, [change])
+
   const friendListUpdated = async () => {
     setLoaded(false)
     destroyGraphFileIfExists()
@@ -170,7 +186,6 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
           onContactPress={(uid) => {
             navigation.navigate("ExternalProfile", {
               externalUserUid: uid,
-              callback: friendListUpdated,
             })
           }}
           graph={graph}
@@ -200,3 +215,9 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
 }
 
 export default NetworkScreen
+
+export const newFriend = () => {
+  if (changeFriends) {
+    changeFriends(true)
+  }
+}

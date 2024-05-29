@@ -15,11 +15,11 @@ import LoadingScreen from "../../Loading/LoadingScreen"
 import { getUserData, addFriend, removeFriend } from "../../../firebase/User"
 import { User } from "../../../types/User"
 import { BackArrow } from "../../../components/BackArrow/BackArrow"
+import { newFriend } from "../../Network/NetworkScreen"
 
 type RootStackParamList = {
   ExternalProfile: {
     externalUserUid: string
-    callback?: () => void
   }
 }
 
@@ -29,8 +29,7 @@ type ExternalProfileScreenRouteProp = RouteProp<
 >
 
 const ExternalProfileScreen = () => {
-  const { externalUserUid, callback } =
-    useRoute<ExternalProfileScreenRouteProp>().params
+  const { externalUserUid } = useRoute<ExternalProfileScreenRouteProp>().params
   const [externalUser, setExternalUser] = useState<User | null>(null)
   const [externalUserLoading, setExternalUserLoading] = useState(true)
   const userId = getAuth().currentUser?.uid
@@ -80,10 +79,7 @@ const ExternalProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      
-      <View style={profileStyles.topBackground} />
-      <BackArrow/>
-
+      <BackArrow />
       <View style={profileStyles.profileContainer}>
         <View style={profileStyles.topProfileContainer}>
           <GeneralProfile
@@ -109,9 +105,7 @@ const ExternalProfileScreen = () => {
                   const removeFriendInternal = async () => {
                     await removeFriend(user, externalUser)
                     setIsFriend(false)
-                    if (callback) {
-                      callback()
-                    }
+                    newFriend()
                   }
                   removeFriendInternal()
                 }}
@@ -133,9 +127,7 @@ const ExternalProfileScreen = () => {
                   const addFriendInternal = async () => {
                     await addFriend(user, externalUser)
                     setIsFriend(true)
-                    if (callback) {
-                      callback()
-                    }
+                    newFriend()
                   }
                   addFriendInternal()
                 }}
