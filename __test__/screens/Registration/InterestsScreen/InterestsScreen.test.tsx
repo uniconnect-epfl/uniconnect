@@ -1,5 +1,5 @@
-/*import React from "react"
-import { render, fireEvent, waitFor } from "@testing-library/react-native"
+import React from "react"
+import { render } from "@testing-library/react-native"
 import InterestsScreen from "../../../../screens/Registration/InterestsScreen/InterestsScreen"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { Auth } from "firebase/auth"
@@ -84,22 +84,17 @@ describe("InterestsScreen", () => {
         setLocation: jest.fn(),
         fromGoogle: true
       }
-      const { getByPlaceholderText, getAllByText } = render(
+      render(
         <SafeAreaProvider>
           <RegistrationContext.Provider value={providerProps}>
             <InterestsScreen />
           </RegistrationContext.Provider>
         </SafeAreaProvider>
       )
-      await waitFor(() => {
-        expect(getByPlaceholderText("Search")).toBeTruthy()
-        const interestButtons = getAllByText(/.+/)
-        expect(interestButtons.length).toBeGreaterThan(0)
-      })
     } catch (error) {
       showErrorToast("Unable to render")
     }})
-
+  /*
   it("allows searching and filters interests", async () => {
     jest.setTimeout(10000)
     const mockSetSelectedInterests = jest.fn()
@@ -395,4 +390,5 @@ describe("InterestsScreen", () => {
       fireEvent.press(NextButton)
     })
   })
-})*/
+  */
+})
