@@ -19,9 +19,14 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  createEvent: {color: black},
+  createEvent: {color: black,
+   
+  },
   createEventWrapper: {
-    justifyContent: "center"
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "center",
+
   },
   input: {
     borderColor: lightGray,
@@ -30,7 +35,7 @@ export const styles = StyleSheet.create({
     fontFamily: "JetBrainsMono_400Regular",
     height: 40,
     paddingHorizontal: 20,
-    width: "100%",
+    width: "57%",
   },
   searchAndMap: {
     alignItems: "center",

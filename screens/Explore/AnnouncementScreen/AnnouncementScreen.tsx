@@ -156,17 +156,18 @@ const AnnouncementScreen = ({
   return (
     <View style={styles.view}>
       <View style={styles.searchAndMap}>
-        <Pressable onPress={() => navigation.navigate("EventCreation" as never, {isAnnouncement: true})} style={styles.createEventWrapper} >
-          <Text style={[globalStyles.smallText, styles.createEvent]}>Create an announcement</Text>
-          <Ionicons name="create-outline" size={16} />
-        </Pressable>
          <TextInput
           style={styles.input}
           placeholder="Search..."
           value={searchQuery}
           onChangeText={handleSearch}
         />
+        <Pressable onPress={() => navigation.navigate("EventCreation" as never, {isAnnouncement: true})} style={styles.createEventWrapper} >
+          <Text style={[globalStyles.smallText, styles.createEvent]}>Create an announcement</Text>
+          <Ionicons name="create-outline" size={16} />
+        </Pressable>
       </View>
+      
       <View style={styles.container}>
         <SectionList
           sections={sections}
