@@ -124,7 +124,6 @@ const AnnouncementScreen = ({
         if (a.recommended && !b.recommended) return -1
         return 0
       })
-    console.log(recomm)
     return recomm
   }
 
