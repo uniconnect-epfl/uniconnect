@@ -19,12 +19,14 @@ interface ContactListProps {
   onContactPress: (uid: string) => void
   contacts: Contact[]
   loaded: boolean
+  noFriends?: boolean | null
 }
 
 const ContactList = ({
   onContactPress,
   contacts,
   loaded,
+  noFriends,
 }: ContactListProps) => {
   const [filteredContacts, setFilteredContacts] = useState(contacts)
   const [searchText, setSearchText] = useState("")
@@ -96,14 +98,23 @@ const ContactList = ({
             <Image source={require("../../../assets/splash.gif")} />
           </View>
         )}
-        {
+
+        {noFriends && (
+          <View style={styles.loadingScreen}>
+            <Image
+              source={require("../../../assets/nofriendsscreen.png")}
+              style={styles.nofriends}
+            />
+          </View>
+        )}
+        {!noFriends && (
           <FlatList
             style={styles.listContainer}
             data={filteredContacts}
             renderItem={RenderOneContact}
             keyExtractor={(contact) => contact.uid}
           />
-        }
+        )}
       </View>
     </TouchableWithoutFeedback>
   )

@@ -4,8 +4,8 @@ import {
   Text,
   SectionList,
   SectionListRenderItemInfo,
-  TouchableOpacity, Pressable,
-  TextInput,
+  TouchableOpacity,
+  Pressable,
 } from "react-native"
 import { styles } from "./styles" // Ensure the paths are correct
 import AnnouncementCard from "../../../components/AnnoucementCard/AnnouncementCard"
@@ -16,9 +16,10 @@ import LoadingScreen from "../../Loading/LoadingScreen"
 import { getAuth } from "firebase/auth"
 import { User } from "../../../types/User"
 import { getUserData } from "../../../firebase/User"
-import { globalStyles } from '../../../assets/global/globalStyles'
-import { Ionicons } from '@expo/vector-icons'
+import { globalStyles } from "../../../assets/global/globalStyles"
+import { Ionicons } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
+import InputField from "../../../components/InputField/InputField"
 
 interface AnnouncementsScreenProps {
   onAnnouncementPress: (announcement: Announcement) => void
@@ -89,13 +90,13 @@ const AnnouncementScreen = ({
         (announcement: { title: string }) =>
           announcement.title.toLowerCase().includes(searchQuery.toLowerCase())
       )
-      const recommendedAnnouncements = recommendAnnouncements(searchedAnnouncement)
+      const recommendedAnnouncements =
+        recommendAnnouncements(searchedAnnouncement)
       setFilteredAnnouncements(recommendedAnnouncements)
     } else {
       console.log(userData?.selectedInterests)
 
       setFilteredAnnouncements(recommendAnnouncements(announcements))
-      
     }
   }, [searchQuery, announcements, userData])
 
@@ -105,16 +106,17 @@ const AnnouncementScreen = ({
     if (!userData || !userData.selectedInterests) {
       return announcements.map((announcement) => ({
         announcement,
-        recommended: false
+        recommended: false,
       }))
     }
 
     return announcements
       .map((announcement) => ({
         announcement,
-        recommended: announcement.interests.filter((interest) =>
-          userData.selectedInterests.includes(interest)
-        ).length === 3
+        recommended:
+          announcement.interests.filter((interest) =>
+            userData.selectedInterests.includes(interest)
+          ).length == Math.min(3, userData.selectedInterests.length),
       }))
       .sort((a, b) => {
         if (b.recommended && !a.recommended) return 1
@@ -131,13 +133,18 @@ const AnnouncementScreen = ({
     setSearchQuery(search)
   }
 
-  const renderItem = ({ item }: SectionListRenderItemInfo<RecommendedAnnouncement>) => (
+  const renderItem = ({
+    item,
+  }: SectionListRenderItemInfo<RecommendedAnnouncement>) => (
     <TouchableOpacity
       onPress={() => {
         onAnnouncementPress(item.announcement)
       }}
     >
-      <AnnouncementCard announcement={item.announcement} recommended={item.recommended} />
+      <AnnouncementCard
+        announcement={item.announcement}
+        recommended={item.recommended}
+      />
     </TouchableOpacity>
   )
 
@@ -154,17 +161,25 @@ const AnnouncementScreen = ({
   return (
     <View style={styles.view}>
       <View style={styles.searchAndMap}>
-        <Pressable onPress={() => navigation.navigate("EventCreation" as never, {isAnnouncement: true})} style={styles.createEventWrapper} >
-          <Text style={[globalStyles.smallText, styles.createEvent]}>Create an announcement</Text>
-          <Ionicons name="create-outline" size={16} />
-        </Pressable>
-         <TextInput
-          style={styles.input}
+        <InputField
           placeholder="Search..."
           value={searchQuery}
           onChangeText={handleSearch}
         />
       </View>
+      <Pressable
+        onPress={() =>
+          navigation.navigate("EventCreation" as never, {
+            isAnnouncement: true,
+          })
+        }
+        style={styles.createEventWrapper}
+      >
+        <Text style={[globalStyles.smallText, styles.createEvent]}>
+          Create an announcement
+        </Text>
+        <Ionicons name="create-outline" size={16} />
+      </Pressable>
       <View style={styles.container}>
         <SectionList
           sections={sections}
