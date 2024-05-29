@@ -17,8 +17,11 @@ export const SettingsScreen = () => {
   const pressPlaceholder = () => Alert.alert("Coming soon")
 
   const menuItems: MenuItem[] = [
-    { title: "LANGUAGE", action: pressPlaceholder  },
-    { title: "NOTIFICATIONS", action: pressPlaceholder },
+    { title: "LANGUAGE", action: pressPlaceholder },
+    {
+      title: "NOTIFICATIONS",
+      action: () => navigation.navigate("Notifications" as never),
+    },
     { title: "HELP", action: pressPlaceholder },
     { title: "ABOUT", action: () => navigation.navigate("About" as never) },
     { title: "LOG OUT", action: Logout },
@@ -27,7 +30,7 @@ export const SettingsScreen = () => {
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <BackArrow />
-      <View style={styles.header}/>
+      <View style={styles.header} />
       <View style={styles.itemsContainer}>
         {menuItems.map((menuItem, index) => (
           <TouchableOpacity

@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
 
   container: {
     backgroundColor: white,
+    height: "100%",
   },
 
   footer: {

@@ -1,12 +1,17 @@
 import { StyleSheet } from "react-native"
-import { peach, lightPeach, shadowColor, white } from "../../../assets/colors/colors"
+import {
+  peach,
+  lightPeach,
+  shadowColor,
+  white,
+} from "../../../assets/colors/colors"
 
 import { BUTTON_RADIUS } from "../../../assets/global/constants"
 const styles = StyleSheet.create({
   absolute: {
     bottom: 0,
-    position: 'absolute',
-    width: '100%'
+    position: "absolute",
+    width: "100%",
   },
   button: {
     alignItems: "center",
@@ -27,9 +32,9 @@ const styles = StyleSheet.create({
     width: "60%",
   },
   container: {
-    alignContent: 'center',
+    alignContent: "center",
     backgroundColor: white,
-    flexDirection: 'column',
+    flexDirection: "column",
     marginLeft: 40,
     marginVertical: 10,
   },
@@ -59,8 +64,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   view: {
-    backgroundColor: white
-  }
-}) 
+    backgroundColor: white,
+    height: "100%",
+  },
+})
 
 export default styles
