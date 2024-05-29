@@ -6,18 +6,14 @@ import {
   Image,
   TouchableWithoutFeedback,
   Keyboard,
-  Dimensions,
 } from "react-native"
 import styles from "./styles"
 import { globalStyles } from "../../../assets/global/globalStyles"
-import { Ionicons } from "@expo/vector-icons"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import LowBar from "../../../components/LowBar/LowBar"
 import InputField from "../../../components/InputField/InputField"
 import Divider from "../../../components/Divider/Divider"
 import { TextInput } from "react-native-gesture-handler"
-import { Entypo } from "@expo/vector-icons"
-import { AntDesign } from "@expo/vector-icons"
 import MyDateInputComponent from "../../../components/DatePicker/DatePicker"
 import { useNavigation } from "@react-navigation/native"
 import { RegistrationContext } from "../../../contexts/RegistrationContext"
@@ -26,7 +22,6 @@ import { showErrorToast } from "../../../components/ToastMessage/toast"
 
 const InformationScreen: React.FC = () => {
   const insets = useSafeAreaInsets()
-  const [loc, setLoc] = useState(false)
   const firstRef = useRef<TextInput>(null)
   const thirdRef = useRef<TextInput>(null)
   const lastRef = useRef<TextInput>(null)
@@ -35,7 +30,17 @@ const InformationScreen: React.FC = () => {
   const useNav = useNavigation()
   const keyboardVisible = useKeyboardVisibility()
 
-  const { firstName, setFirstName, lastName, setLastName, date, setDate, location, setLocation, description } = useContext(RegistrationContext)
+  const {
+    firstName,
+    setFirstName,
+    lastName,
+    setLastName,
+    date,
+    setDate,
+    location,
+    setLocation,
+    description,
+  } = useContext(RegistrationContext)
 
   const onPress = () => {
     setDateModal(true)
@@ -43,35 +48,33 @@ const InformationScreen: React.FC = () => {
   }
 
   const checkFields = () => {
-    if(firstName === ""){
+    if (firstName === "") {
       showErrorToast("You need to input your first name!")
       return false
     }
-    if(lastName === ""){
+    if (lastName === "") {
       showErrorToast("You need to input your last name!")
       return false
     }
-    if(!hasBeenTouched){
+    if (!hasBeenTouched) {
       showErrorToast("You need to input your birth day!")
       return false
-    } 
+    }
     return true
   }
 
   const opacity = !hasBeenTouched ? 0.2 : 1
 
   return (
-    <TouchableWithoutFeedback 
-      style={[
-        styles.container, 
-        {height: Dimensions.get('window').height + insets.bottom + insets.top}
-      ]}
-      onPress={() => Keyboard.dismiss()}>
+    <TouchableWithoutFeedback
+      testID="information-screen"
+      style={styles.container}
+      onPress={() => Keyboard.dismiss()}
+    >
       <View
         style={[
           styles.container,
           { paddingTop: insets.top, paddingBottom: insets.bottom },
-          {height: Dimensions.get('window').height + insets.bottom + insets.top}
         ]}
       >
         <Image
@@ -127,38 +130,24 @@ const InformationScreen: React.FC = () => {
             onSubmitEditing={() => lastRef.current?.focus()}
           />
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[styles.button, styles.locationButton]}
-              onPress={() => setLoc(!loc)}
-            >
-              <Ionicons name="location-outline" size={20} color="black" />
-              <Text
-                style={[
-                  styles.buttonText,
-                  styles.locationText,
-                  globalStyles.text,
-                ]}
-              >
-                Use my location
-              </Text>
-              {!loc && <Entypo name="cross" color="red" />}
-              {loc && <AntDesign name="check" color="green" />}
-            </TouchableOpacity>
-          </View>
-
           <Divider />
 
           <TouchableOpacity
-            style={[styles.button, styles.buttonContainer]}
+            style={[styles.button, styles.buttonContainer, styles.description]}
             onPress={() => useNav.navigate("Description" as never)}
           >
-            <Text style={[styles.buttonText, globalStyles.text]}>{description.length === 0 ? "Add a description now" : "Edit your description"}</Text>
+            <Text style={[styles.buttonText, globalStyles.text]}>
+              {description.length === 0
+                ? "Add a description now"
+                : "Edit your description"}
+            </Text>
           </TouchableOpacity>
         </View>
 
         <View style={[styles.footer, { bottom: insets.bottom }]}>
-          {!keyboardVisible && <LowBar nextScreen="Interests" checkFields={checkFields}/>}
+          {!keyboardVisible && (
+            <LowBar nextScreen="Interests" checkFields={checkFields} />
+          )}
         </View>
 
         {dateModal && (

@@ -6,7 +6,7 @@ import {
   View,
   Keyboard,
   TextInput,
-  Dimensions,
+
 } from "react-native"
 import InputField from "../../../components/InputField/InputField"
 import styles from "./styles"
@@ -70,17 +70,14 @@ const AuthenticationScreen: React.FC = () => {
   }
 
   return (
-    <TouchableWithoutFeedback 
-    style={[
-      styles.container, 
-      {height: Dimensions.get('window').height + insets.bottom + insets.top}
-    ]}
-      onPress={() => Keyboard.dismiss()}>
+    <TouchableWithoutFeedback
+      style={styles.container}
+      onPress={() => Keyboard.dismiss()}
+    >
       <View
         style={[
           styles.view,
           { paddingBottom: insets.bottom, paddingTop: insets.top },
-          {height: Dimensions.get('window').height + insets.bottom + insets.top}
         ]}
       >
         <Image
