@@ -4,7 +4,7 @@ import { globalStyles } from "../../../assets/global/globalStyles"
 import GeneralProfile from "../../../components/GeneralProfile/GeneralProfile"
 import ExpandableDescription from "../../../components/ExpandableDescription/ExpandableDescription"
 import SectionTabs from "../../../components/SectionTabs/SectionTabs"
-import { useEffect, useState } from "react"
+import { SetStateAction, useEffect, useState } from "react"
 import { profileStyles } from "../profileStyles"
 import { ProfileEvents } from "../ProfileEvents/ProfileEvents"
 import { ProfileInterests } from "../ProfileInterests/ProfileInterests"
@@ -15,11 +15,11 @@ import LoadingScreen from "../../Loading/LoadingScreen"
 import { getUserData, addFriend, removeFriend } from "../../../firebase/User"
 import { User } from "../../../types/User"
 import { BackArrow } from "../../../components/BackArrow/BackArrow"
+import { newFriend } from "../../Network/NetworkScreen"
 
 type RootStackParamList = {
   ExternalProfile: {
     externalUserUid: string
-    callback?: () => void
   }
 }
 
@@ -29,8 +29,7 @@ type ExternalProfileScreenRouteProp = RouteProp<
 >
 
 const ExternalProfileScreen = () => {
-  const { externalUserUid, callback } =
-    useRoute<ExternalProfileScreenRouteProp>().params
+  const { externalUserUid } = useRoute<ExternalProfileScreenRouteProp>().params
   const [externalUser, setExternalUser] = useState<User | null>(null)
   const [externalUserLoading, setExternalUserLoading] = useState(true)
   const userId = getAuth().currentUser?.uid
@@ -80,10 +79,7 @@ const ExternalProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      
-      <View style={profileStyles.topBackground} />
-      <BackArrow/>
-
+      <BackArrow />
       <View style={profileStyles.profileContainer}>
         <View style={profileStyles.topProfileContainer}>
           <GeneralProfile
@@ -93,7 +89,7 @@ const ExternalProfileScreen = () => {
             profilePicture={externalUser.profilePicture}
           />
 
-          {isFriend ? (
+          {isFriend && (
             <View style={profileStyles.buttonsContainer}>
               <TouchableOpacity
                 style={profileStyles.button}
@@ -109,9 +105,7 @@ const ExternalProfileScreen = () => {
                   const removeFriendInternal = async () => {
                     await removeFriend(user, externalUser)
                     setIsFriend(false)
-                    if (callback) {
-                      callback()
-                    }
+                    newFriend()
                   }
                   removeFriendInternal()
                 }}
@@ -125,7 +119,8 @@ const ExternalProfileScreen = () => {
                 </View>
               </TouchableOpacity>
             </View>
-          ) : (
+          )}
+          {!isFriend && userId !== externalUserUid && (
             <View style={profileStyles.buttonsContainer}>
               <TouchableOpacity
                 style={[profileStyles.button, styles.uniqueButton]}
@@ -133,9 +128,7 @@ const ExternalProfileScreen = () => {
                   const addFriendInternal = async () => {
                     await addFriend(user, externalUser)
                     setIsFriend(true)
-                    if (callback) {
-                      callback()
-                    }
+                    newFriend()
                   }
                   addFriendInternal()
                 }}
@@ -158,7 +151,7 @@ const ExternalProfileScreen = () => {
         <SectionTabs
           tabs={["Events", "Interests", "Network"]}
           startingTab={selectedTab}
-          onTabChange={(tab) => {
+          onTabChange={(tab: SetStateAction<string>) => {
             setSelectedTab(tab)
           }}
         />
@@ -169,7 +162,9 @@ const ExternalProfileScreen = () => {
         {selectedTab === "Interests" && (
           <ProfileInterests user={externalUser} />
         )}
-        {selectedTab === "Network" && <ProfileNetwork />}
+        {externalUser && selectedTab === "Network" && (
+          <ProfileNetwork user={externalUser} />
+        )}
       </View>
     </View>
   )

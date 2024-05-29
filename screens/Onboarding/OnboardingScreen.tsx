@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState } from "react"
 import {
   Text,
   View,
@@ -8,22 +8,22 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ActivityIndicator,
-} from 'react-native'
-import styles from './styles'
-import { globalStyles } from '../../assets/global/globalStyles'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useNavigation } from '@react-navigation/native'
+} from "react-native"
+import styles from "./styles"
+import { globalStyles } from "../../assets/global/globalStyles"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { useNavigation } from "@react-navigation/native"
 import { loginEmailPassword } from "../../firebase/Login"
-import { GoogleSignInButton } from '../../components/GoogleSignInButton/GoogleSignInButton'
-import { peach } from '../../assets/colors/colors'
-
-
-
+import { GoogleSignInButton } from "../../components/GoogleSignInButton/GoogleSignInButton"
+import { peach } from "../../assets/colors/colors"
+import useKeyboardVisibility from "../../hooks/useKeyboardVisibility"
+import { black } from "../../assets/colors/colors"
 
 const OnboardingScreen: React.FC = () => {
   const navigation = useNavigation()
   const insets = useSafeAreaInsets()
   const nextRef = useRef<TextInput>(null)
+  const keyboardVisible = useKeyboardVisibility()
 
   //States for Firebase auth
   const [loading, setLoading] = useState(false)
@@ -44,14 +44,14 @@ const OnboardingScreen: React.FC = () => {
           { paddingBottom: insets.bottom, paddingTop: insets.top },
         ]}
       >
-        <Image source={require('../../assets/icon.png')} style={styles.image} />
+        <Image source={require("../../assets/icon.png")} style={styles.image} />
 
         {/* Username/Email Field */}
         <TextInput
           id="username_placeholder"
           style={[styles.inputField, globalStyles.text]}
           placeholder="Username or email"
-          placeholderTextColor={'black'}
+          placeholderTextColor={black}
           keyboardType="email-address"
           autoCapitalize="none"
           value={email}
@@ -63,7 +63,7 @@ const OnboardingScreen: React.FC = () => {
         <TextInput
           style={[styles.inputField, globalStyles.text]}
           placeholder="Password"
-          placeholderTextColor={'black'}
+          placeholderTextColor={black}
           secureTextEntry
           value={password}
           onChangeText={setPassword}
@@ -80,7 +80,9 @@ const OnboardingScreen: React.FC = () => {
           {loading ? (
             <ActivityIndicator size="small" color={peach} />
           ) : (
-            <Text style={[styles.buttonText, globalStyles.boldText]}>Log In</Text>
+            <Text style={[styles.buttonText, globalStyles.boldText]}>
+              Log In
+            </Text>
           )}
         </TouchableOpacity>
 
@@ -92,17 +94,22 @@ const OnboardingScreen: React.FC = () => {
           </TouchableOpacity>
         </View>
 
-        <GoogleSignInButton/>
+        <GoogleSignInButton />
 
-        <TouchableOpacity
-          style={[styles.footer, { bottom: insets.bottom }]}
-          onPress={() => navigation.navigate('Information' as never)}
-        >
-          <Text style={[styles.smallText, globalStyles.text]}>
-            Dont have an account?
-          </Text>
-          <Text style={[styles.specialText, globalStyles.text]}> Sign Up</Text>
-        </TouchableOpacity>
+        {!keyboardVisible && (
+          <TouchableOpacity
+            style={[styles.footer, { bottom: insets.bottom }]}
+            onPress={() => navigation.navigate("Information" as never)}
+          >
+            <Text style={[styles.smallText, globalStyles.text]}>
+              Dont have an account?
+            </Text>
+            <Text style={[styles.specialText, globalStyles.text]}>
+              {" "}
+              Sign Up
+            </Text>
+          </TouchableOpacity>
+        )}
       </View>
     </TouchableWithoutFeedback>
   )

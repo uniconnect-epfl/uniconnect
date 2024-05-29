@@ -1,11 +1,11 @@
-import MapView, { Callout, Marker, PROVIDER_GOOGLE } from "react-native-maps"
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"
 import React from "react"
 import { RouteProp, useRoute } from "@react-navigation/native"
 import { View, Text } from "react-native"
 import styles from "./styles" // Import styles
 import { Event } from "../../types/Event"
 import { BackArrow } from "../../components/BackArrow/BackArrow"
-
+import EventMapModal from "./EventMapModal/EventMapModal"
 
 const INITIAL_REGION = {
   latitude: 46.51858962578904,
@@ -15,25 +15,29 @@ const INITIAL_REGION = {
 }
 type RootStackParamList = {
   EventMap: {
+    onEventPress: (event: Event) => void
       events: Event[]
   }
 }
 
-type MapScreenRouteProp = RouteProp<RootStackParamList, 'EventMap'>;
+type MapScreenRouteProp = RouteProp<RootStackParamList, 'EventMap'>
 
 const EventMap = () => {
-  const route = useRoute<MapScreenRouteProp>() 
-  const events = route.params.events
 
-  const computeEventDate = (date: string) => {
-    const eventDate = new Date(date).toLocaleDateString("en-US", {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
-    return eventDate
+  const [clickedEvent, setClickedEvent] = React.useState<Event | null>(null)
+  const [modalVisible, setModalVisible] = React.useState(false)
+
+  const onModalEventPress = () => {
+    setModalVisible(false)
+    route.params.onEventPress(clickedEvent)
   }
 
+  const onModalPressOut = () => {
+    setModalVisible(false)
+  }
+
+  const route = useRoute<MapScreenRouteProp>()
+  const events = route.params.events
 
   return (
     <View style={styles.container}>
@@ -42,31 +46,29 @@ const EventMap = () => {
       <View style={styles.navigationBar}>
         <Text style={styles.screenTitle}>Event Map</Text>
       </View>
+      <EventMapModal
+        event={clickedEvent}
+        visible={modalVisible}
+        onPressOut={onModalPressOut}
+        onEventPress={onModalEventPress}
+      />
       <MapView
         style={styles.map}
         initialRegion={INITIAL_REGION}
         showsUserLocation
         showsMyLocationButton
         provider={PROVIDER_GOOGLE}
-		
       >
         {events.map((event, index) => (
           <Marker
             key={index}
-            title={event.title}
-            coordinate={{ latitude: event.point.x, longitude: event.point.y}}
-          >
-            <Callout
-              onPress={() => console.log("Callout pressed:", event.title)}
-            >
-              <View style={styles.calloutView}>
-                {/* Next feature to add it allow to move to the Event page clicking on the event */}
-                <Text style={styles.calloutTextTitle}>{event.title}</Text>
-                <Text style={styles.calloutTextLocation}>{event.location}</Text>
-                <Text>{computeEventDate(event.date)}</Text>
-              </View>
-            </Callout>
-          </Marker>
+            coordinate={{ latitude: event.point.x, longitude: event.point.y }}
+            onPress={() => {
+              setClickedEvent(event)
+              setModalVisible(true)
+            }}
+            testID={"marker-" + event.title}
+          ></Marker>
         ))}
       </MapView>
     </View>

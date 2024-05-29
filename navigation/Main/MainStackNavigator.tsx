@@ -95,21 +95,25 @@ const MainStackNavigator: React.FC = () => {
       }}
     >
       <Stack.Navigator initialRouteName={user ? "ExploreTabs" : "Onboarding"}>
-        {fromGoogle?
-        <>
-          <Stack.Screen
-            name="Information"
-            component={InformationScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Interests"
-            component={InterestsScreen}
-            options={{ headerShown: false }}
-          />
-        </>
-        : 
-        user ? (
+        {fromGoogle ? (
+          <>
+            <Stack.Screen
+              name="Information"
+              component={InformationScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Interests"
+              component={InterestsScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Description"
+              component={DescriptionScreen}
+              options={{ headerShown: false }}
+            />
+          </>
+        ) : user ? (
           <>
             <Stack.Screen
               name="ExploreTabs"

@@ -11,7 +11,7 @@ jest.mock("react", () => ({
   location: 'location',
   date: 'date',
   description: 'description',
-  selectedInterests: ["1", "1"],
+  selectedInterests: ["1", "2"],
   fromGoogle: false})),
 }))
 

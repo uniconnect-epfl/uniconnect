@@ -21,15 +21,23 @@ import {
   destroyGraphFileIfExists,
   loadGraphData,
 } from "../../components/Graph/GraphFileFunctions"
-import { showErrorToast } from "../../components/ToastMessage/toast"
 
 import { useFullScreen } from "../../navigation/Home/HomeTabNavigator"
+
+let changeFriends: ((arg0: boolean) => void) | undefined
 
 interface NetworkScreenProps {
   navigation: NavigationProp<ParamListBase>
 }
 
 const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
+  const [change, setChange] = useState(false)
+
+  useEffect(() => {
+    changeFriends = setChange
+    return () => (changeFriends = undefined)
+  }, [])
+
   const [graph, setGraph] = useState<Graph>()
   const [user, setUser] = useState<User | null>(null)
   const [userId, setUserId] = useState<string | undefined>(undefined)
@@ -65,6 +73,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
 
   const [friends, setFriends] = useState<string[] | null>(null)
   const [contacts, setContacts] = useState<Contact[] | null>(null)
+  const [noFriends, setNoFriends] = useState<boolean | null>(null)
 
   const fetchData = async (userId: string) => {
     const user = await getUserData(userId)
@@ -100,9 +109,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
       }
       setUserContact(contact)
     }
-    if (user?.friends) {
-      setFriends(user?.friends)
-    }
+    setFriends(user?.friends ?? [])
   }, [user])
 
   useEffect(() => {
@@ -122,8 +129,14 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
   useEffect(() => {
     if (contacts) {
       if (contacts.length === 0) {
-        showErrorToast("You don't have any friends yet!")
+        setNoFriends(true)
+        setGraph({
+          nodes: [],
+          links: [],
+          userId: "",
+        })
       } else {
+        setNoFriends(false)
         loadGraphData(userId, userContact, contacts).then((graph) => {
           setGraph(graph)
         })
@@ -138,6 +151,13 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
   }, [graph])
 
   const [selectedTab, setSelectedTab] = useState("Graph")
+
+  useEffect(() => {
+    if (change) {
+      friendListUpdated()
+      setChange(false)
+    }
+  }, [change])
 
   const friendListUpdated = async () => {
     setLoaded(false)
@@ -166,13 +186,13 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
           onContactPress={(uid) => {
             navigation.navigate("ExternalProfile", {
               externalUserUid: uid,
-              callback: friendListUpdated,
             })
           }}
           graph={graph}
           userId={userId}
           userContact={userContact}
           loaded={loaded}
+          noFriends={noFriends}
           navChange={navChange}
           changeTab={() => setSelectedTab("List")}
           fullScreenCallback={fullScreenCallback}
@@ -187,6 +207,7 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
           }
           contacts={contacts}
           loaded={loaded}
+          noFriends={noFriends}
         />
       )}
     </View>
@@ -194,3 +215,9 @@ const NetworkScreen = ({ navigation }: NetworkScreenProps) => {
 }
 
 export default NetworkScreen
+
+export const newFriend = () => {
+  if (changeFriends) {
+    changeFriends(true)
+  }
+}
