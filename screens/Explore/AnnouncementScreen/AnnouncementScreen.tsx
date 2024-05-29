@@ -6,7 +6,7 @@ import {
   SectionListRenderItemInfo,
   TouchableOpacity,
   Pressable,
-  TextInput,
+  
 } from "react-native"
 import { styles } from "./styles" // Ensure the paths are correct
 import AnnouncementCard from "../../../components/AnnoucementCard/AnnouncementCard"
@@ -20,6 +20,7 @@ import { getUserData } from "../../../firebase/User"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import { Ionicons } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
+import InputField from "../../../components/InputField/InputField"
 
 interface AnnouncementsScreenProps {
   onAnnouncementPress: (announcement: Announcement) => void
@@ -110,7 +111,7 @@ const AnnouncementScreen = ({
       }))
     }
 
-    const recomm =  announcements
+    const recomm = announcements
       .map((announcement) => ({
         announcement,
         recommended:
@@ -123,8 +124,8 @@ const AnnouncementScreen = ({
         if (a.recommended && !b.recommended) return -1
         return 0
       })
-      console.log(recomm)
-      return recomm
+    console.log(recomm)
+    return recomm
   }
 
   const sections = [
@@ -163,18 +164,26 @@ const AnnouncementScreen = ({
   return (
     <View style={styles.view}>
       <View style={styles.searchAndMap}>
-         <TextInput
-          style={styles.input}
+        <InputField
           placeholder="Search..."
           value={searchQuery}
           onChangeText={handleSearch}
         />
-        <Pressable onPress={() => navigation.navigate("EventCreation" as never, {isAnnouncement: true})} style={styles.createEventWrapper} >
-          <Text style={[globalStyles.smallText, styles.createEvent]}>Create an announcement</Text>
+        <Pressable
+          onPress={() =>
+            navigation.navigate("EventCreation" as never, {
+              isAnnouncement: true,
+            })
+          }
+          style={styles.createEventWrapper}
+        >
+          <Text style={[globalStyles.smallText, styles.createEvent]}>
+            Create an announcement
+          </Text>
           <Ionicons name="create-outline" size={16} />
         </Pressable>
       </View>
-      
+
       <View style={styles.container}>
         <SectionList
           sections={sections}
