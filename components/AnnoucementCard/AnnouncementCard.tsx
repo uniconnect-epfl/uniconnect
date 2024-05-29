@@ -18,7 +18,7 @@ const AnnouncementCard = ({announcement, recommended} : AnnouncementCardProps) =
         {announcement.interests.join("- ")}
       </Text>
 
-      {!recommended && (
+      {recommended && (
         <Text style={styles.recommended}>Matches all your interests ★</Text>
       )}
     </View>

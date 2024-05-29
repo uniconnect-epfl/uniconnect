@@ -49,7 +49,7 @@ const InterestButton: React.FC<InterestButtonProps> = ({
     </Text>
   </TouchableOpacity>
 )
-
+//add announcement
 const InterestsScreen = () => {
   const insets = useSafeAreaInsets()
   const [searchTerm, setSearchTerm] = useState("")

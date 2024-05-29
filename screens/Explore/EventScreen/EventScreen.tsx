@@ -78,6 +78,9 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 
             setFilteredFutureEvents(userFutureEvents)
             setFilteredPastEvents(userPastEvents)
+            if (userFutureEvents.length === 0 && userPastEvents.length === 0) {
+              showErrorToast("You have no events yet.")
+            }
           }
           const userImages = await fetchAllUserImages()
           if(userImages) {
@@ -92,6 +95,9 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
 
           setFilteredFutureEvents(fetchedFutureEvents)
           setFilteredPastEvents(fetchedPastEvents)
+          if (fetchedFutureEvents.length === 0 && fetchedPastEvents.length === 0) {
+            showErrorToast("You have no events yet.")
+          }
           const userImages = await fetchAllUserImages()
           if(userImages) {
             setUserImages(userImages)
