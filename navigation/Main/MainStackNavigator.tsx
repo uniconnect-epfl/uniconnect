@@ -35,7 +35,7 @@ const MainStackNavigator: React.FC = () => {
   const [location, setLocation] = useState("")
   const [description, setDescription] = useState("")
   const [selectedInterests, setSelectedInterests] = useState<string[]>([])
-  const [fillOutProfile, setFillOutProfile] = useState(false)
+  const [fromGoogle, setFromGoogle] = useState(false)
 
   // Check the current auth status
   useEffect(() => {
@@ -46,7 +46,7 @@ const MainStackNavigator: React.FC = () => {
         if (await isNewUser(user.uid)) {
           // If they haven't (it means that they were using Google to sign in), should prompt them to fill it out
           if (firstName === "" || lastName === "") {
-            setFillOutProfile(true)
+            setFromGoogle(true)
           }
           // Otherwise, fill out the profile with the data that was already provided
           else {
@@ -90,10 +90,26 @@ const MainStackNavigator: React.FC = () => {
         setDescription,
         selectedInterests,
         setSelectedInterests,
+        fromGoogle,
+        setFromGoogle,
       }}
     >
       <Stack.Navigator initialRouteName={user ? "ExploreTabs" : "Onboarding"}>
-        {user ? (
+        {fromGoogle?
+        <>
+          <Stack.Screen
+            name="Information"
+            component={InformationScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Interests"
+            component={InterestsScreen}
+            options={{ headerShown: false }}
+          />
+        </>
+        : 
+        user ? (
           <>
             <Stack.Screen
               name="ExploreTabs"
@@ -114,7 +130,7 @@ const MainStackNavigator: React.FC = () => {
               name="UpdateProfile"
               component={UpdateMyProfileScreen}
               options={{ headerShown: false }}
-              initialParams={{ fillOutProfile }}
+              initialParams={{ fromGoogle }}
             />
             <Stack.Screen
               name="ExternalProfile"
