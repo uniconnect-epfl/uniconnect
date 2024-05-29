@@ -4,7 +4,7 @@ import { globalStyles } from "../../../assets/global/globalStyles"
 import GeneralProfile from "../../../components/GeneralProfile/GeneralProfile"
 import ExpandableDescription from "../../../components/ExpandableDescription/ExpandableDescription"
 import SectionTabs from "../../../components/SectionTabs/SectionTabs"
-import { useEffect, useState } from "react"
+import { SetStateAction, useEffect, useState } from "react"
 import { profileStyles } from "../profileStyles"
 import { ProfileEvents } from "../ProfileEvents/ProfileEvents"
 import { ProfileInterests } from "../ProfileInterests/ProfileInterests"
@@ -150,7 +150,7 @@ const ExternalProfileScreen = () => {
         <SectionTabs
           tabs={["Events", "Interests", "Network"]}
           startingTab={selectedTab}
-          onTabChange={(tab) => {
+          onTabChange={(tab: SetStateAction<string>) => {
             setSelectedTab(tab)
           }}
         />
@@ -161,7 +161,9 @@ const ExternalProfileScreen = () => {
         {selectedTab === "Interests" && (
           <ProfileInterests user={externalUser} />
         )}
-        {selectedTab === "Network" && <ProfileNetwork />}
+        {externalUser && selectedTab === "Network" && (
+          <ProfileNetwork user={externalUser} />
+        )}
       </View>
     </View>
   )

@@ -43,7 +43,11 @@ const EventMapModal: React.FC<{
                 >
                   {event.title}
                 </Text>
-                <Text style={styles.modalEventLocation}>
+                <Text
+                  style={styles.modalEventLocation}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
                   <Ionicons name="location" size={14} color={peach} />{" "}
                   {event.location
                     .toString()
@@ -54,7 +58,11 @@ const EventMapModal: React.FC<{
                     })
                     .join(" ")}
                 </Text>
-                <Text style={styles.modalEventDate}>
+                <Text
+                  style={styles.modalEventDate}
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                >
                   <Ionicons name="calendar" size={14} color={peach} />{" "}
                   {new Date(event.date as string).toLocaleDateString("en-US", {
                     year: "numeric",
