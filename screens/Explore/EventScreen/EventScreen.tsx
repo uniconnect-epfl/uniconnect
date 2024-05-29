@@ -220,7 +220,7 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
           renderItem={renderItem}
           renderSectionHeader={renderSectionHeader}
           showsVerticalScrollIndicator={false}
-          stickySectionHeadersEnabled={false}
+          stickySectionHeadersEnabled={true}
         />
       </View>
     </View>
