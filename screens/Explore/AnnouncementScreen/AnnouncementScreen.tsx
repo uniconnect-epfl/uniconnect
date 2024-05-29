@@ -20,7 +20,6 @@ import { getUserData } from "../../../firebase/User"
 import { globalStyles } from "../../../assets/global/globalStyles"
 import { Ionicons } from "@expo/vector-icons"
 import { useNavigation } from "@react-navigation/native"
-import InputField from "../../../components/InputField/InputField"
 
 interface AnnouncementsScreenProps {
   onAnnouncementPress: (announcement: Announcement) => void
