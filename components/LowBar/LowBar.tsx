@@ -43,9 +43,11 @@ const LowBar: React.FC<LowBarProps> = ({
         onPress={() => {
           if (nextScreen === "ExploreTabs") {
             if (user) {
+              console.log(user)
               const email = user.email || ""
               storeInitialUserData(user.uid, email, firstName, lastName, date, location, description, selectedInterests)
               setFromGoogle(false)
+              console.log(email)
             } else {
               authenticate()
             }
