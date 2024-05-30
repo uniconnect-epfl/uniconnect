@@ -47,6 +47,14 @@ const LowBar: React.FC<LowBarProps> = ({
               const email = user.email || ""
               storeInitialUserData(user.uid, email, firstName, lastName, date, location, description, selectedInterests)
               setFromGoogle(false)
+              console.log("gib")
+              console.log("me")
+              console.log("data")
+              console.log(firstName)
+              console.log(lastName)
+              console.log(date)
+              console.log(location)
+              console.log(description)
               console.log(email)
             } else {
               authenticate()
