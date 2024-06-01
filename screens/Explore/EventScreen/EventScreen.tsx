@@ -77,35 +77,41 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
           setFutureEvents(userFutureEvents)
           setPastEvents(userPastEvents)
 
-          setFilteredFutureEvents(userFutureEvents)
-          setFilteredPastEvents(userPastEvents)
-        }
-        const userImages = await fetchAllUserImages()
-        if (userImages) {
-          setUserImages(userImages)
-        }
-      } else {
-        const fetchedFutureEvents = await getAllFutureEvents()
-        const fetchedPastEvents = await getAllPastEvents()
+            setFilteredFutureEvents(userFutureEvents)
+            setFilteredPastEvents(userPastEvents)
+            if (userFutureEvents.length === 0 && userPastEvents.length === 0) {
+              showErrorToast("You have no events yet.")
+            }
+          }
+          const userImages = await fetchAllUserImages()
+          if(userImages) {
+            setUserImages(userImages)
+          }
+        } else {
+          const fetchedFutureEvents = await getAllFutureEvents()
+          const fetchedPastEvents = await getAllPastEvents()
 
         setFutureEvents(fetchedFutureEvents)
         setPastEvents(fetchedPastEvents)
 
-        setFilteredFutureEvents(fetchedFutureEvents)
-        setFilteredPastEvents(fetchedPastEvents)
-        const userImages = await fetchAllUserImages()
-        if (userImages) {
-          setUserImages(userImages)
+          setFilteredFutureEvents(fetchedFutureEvents)
+          setFilteredPastEvents(fetchedPastEvents)
+          if (fetchedFutureEvents.length === 0 && fetchedPastEvents.length === 0) {
+            showErrorToast("You have no events yet.")
+          }
+          const userImages = await fetchAllUserImages()
+          if(userImages) {
+            setUserImages(userImages)
+          }
         }
+      } catch (error) {
+        showErrorToast(
+          "Error fetching events. Please check your connection and try again."
+        )
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      showErrorToast(
-        "Error fetching events. Please check your connection and try again."
-      )
-    } finally {
-      setLoading(false)
-    }
-  }, [userID])
+    }, [userID])
 
   useFocusEffect(
     useCallback(() => {
@@ -224,7 +230,7 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
           renderItem={renderItem}
           renderSectionHeader={renderSectionHeader}
           showsVerticalScrollIndicator={false}
-          stickySectionHeadersEnabled={false}
+          stickySectionHeadersEnabled={true}
         />
       </View>
     </View>
