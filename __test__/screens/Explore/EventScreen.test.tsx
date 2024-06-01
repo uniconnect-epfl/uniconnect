@@ -1,10 +1,11 @@
 
-import { render } from '@testing-library/react-native'
+import { render, waitFor } from '@testing-library/react-native'
 import EventScreen from '../../../screens/Explore/EventScreen/EventScreen'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import React from 'react'
 import { Firestore } from 'firebase/firestore'
 import { NavigationContainer, NavigationProp, ParamListBase } from '@react-navigation/native'
+import { showErrorToast } from '../../../components/ToastMessage/toast'
 
 
 jest.mock("../../../firebase/firebaseConfig", () => ({
@@ -62,14 +63,47 @@ describe('EventScreen', () => {
 
   it('refresh', async () => {
 
-    const { debug } = render(
+    const { getByText } = render(
       <NavigationContainer>
         <SafeAreaProvider>
           <EventScreen onEventPress={() => { }} userID='123' />
         </SafeAreaProvider>
       </NavigationContainer>
     )
-    debug()
+    await waitFor (()  => {
+    expect(getByText('Upcoming Events')).toBeTruthy()
+    })
+  })
+
+})
+
+///Test for no events
+
+jest.mock('../../../firebase/ManageEvents', () => ({
+  getAllFutureEvents: jest.fn(() => Promise.resolve([
+  ])),
+  getAllPastEvents: jest.fn(() => Promise.resolve([
+  ]))
+}))
+jest.mock("../../../components/ToastMessage/toast", () => ({
+  showErrorToast: jest.fn(),
+  showSuccessToast: jest.fn(),
+}))
+
+describe('EventScreenNoEvents', () => {
+
+  it('refresh', async () => {
+
+     render(
+      <NavigationContainer>
+        <SafeAreaProvider>
+          <EventScreen onEventPress={() => { }} userID='123' />
+        </SafeAreaProvider>
+      </NavigationContainer>
+    )
+    await waitFor (() => {
+    expect(showErrorToast).toHaveBeenCalledWith("Error fetching user data. Please check your connection and try again.")
+    })
   })
 
 })
