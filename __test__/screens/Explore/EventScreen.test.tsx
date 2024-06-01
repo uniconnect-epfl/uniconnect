@@ -1,7 +1,6 @@
 
-import { render, waitFor } from '@testing-library/react-native'
+import { fireEvent, render, waitFor } from '@testing-library/react-native'
 import EventScreen from '../../../screens/Explore/EventScreen/EventScreen'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
 import React from 'react'
 import { Firestore } from 'firebase/firestore'
 import { NavigationContainer, NavigationProp, ParamListBase } from '@react-navigation/native'
@@ -43,7 +42,9 @@ const mockNavigation = {
 jest.mock('@react-navigation/native', () => {
   return {
     ...jest.requireActual('@react-navigation/native'), // keep all the original implementations
-    useNavigation: () => mockNavigation,
+    useNavigation: () => ({
+      navigate: mockNavigation.navigate,
+    }),
   }
 })
 
@@ -65,13 +66,14 @@ describe('EventScreen', () => {
 
     const { getByText } = render(
       <NavigationContainer>
-        <SafeAreaProvider>
+        
           <EventScreen onEventPress={() => { }} userID='123' />
-        </SafeAreaProvider>
+        
       </NavigationContainer>
     )
     await waitFor (()  => {
     expect(getByText('Upcoming Events')).toBeTruthy()
+    
     })
   })
 
@@ -92,18 +94,33 @@ jest.mock("../../../components/ToastMessage/toast", () => ({
 
 describe('EventScreenNoEvents', () => {
 
-  it('refresh', async () => {
+  it('check Errors', async () => {
 
      render(
       <NavigationContainer>
-        <SafeAreaProvider>
+        
           <EventScreen onEventPress={() => { }} userID='123' />
-        </SafeAreaProvider>
+        
       </NavigationContainer>
     )
     await waitFor (() => {
     expect(showErrorToast).toHaveBeenCalledWith("Error fetching user data. Please check your connection and try again.")
     })
   })
+
+  it('check Errors', async () => {
+
+    const {getByText}= render(
+     <NavigationContainer>
+       
+         <EventScreen onEventPress={() => { }} userID='123' />
+       
+     </NavigationContainer>
+   )
+   await waitFor (() => {
+   fireEvent.press(getByText('Create an event'))
+   expect(mockNavigation.navigate).toHaveBeenCalled
+ })
+})
 
 })
