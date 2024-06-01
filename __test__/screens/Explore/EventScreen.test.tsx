@@ -48,6 +48,35 @@ jest.mock('@react-navigation/native', () => {
   }
 })
 
+export type User = {
+  uid: string
+  email: string
+  firstName: string
+  friends: string[]
+  lastName: string
+  date: Date
+  description: string
+  location: string
+  selectedInterests: string[]
+  profilePicture: string
+  events: string[]
+}
+jest.mock('../../../firebase/User.ts', () => ({
+  getUserData: jest.fn(() => Promise.resolve({
+    uid: "1234",
+    email: "test",
+    firstName: "alex",
+    lastName: "doe",
+    friends: [],
+    date: new Date(),
+    description: "test description",
+    location: "test location",
+    selectedInterests: [],
+    profilePicture: "test.jpg",
+    events: []
+  }))
+}))
+
 jest.mock('../../../firebase/ManageEvents', () => ({
   getAllFutureEvents: jest.fn(() => Promise.resolve([
     { id: '1', title: 'Future Event 1', date: '2024-01-01' },
@@ -59,6 +88,8 @@ jest.mock('../../../firebase/ManageEvents', () => ({
     { id: '4', title: 'Past Event 2', date: '2022-01-02' }
   ]))
 }))
+
+
 
 describe('EventScreen', () => {
 
@@ -104,7 +135,7 @@ describe('EventScreenNoEvents', () => {
       </NavigationContainer>
     )
     await waitFor (() => {
-    expect(showErrorToast).toHaveBeenCalledWith("Error fetching user data. Please check your connection and try again.")
+    expect(showErrorToast).toHaveBeenCalledWith("You have no events yet.")
     })
   })
 
