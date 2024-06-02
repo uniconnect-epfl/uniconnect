@@ -89,7 +89,7 @@ const ExternalProfileScreen = () => {
             profilePicture={externalUser.profilePicture}
           />
 
-          {isFriend ? (
+          {isFriend && (
             <View style={profileStyles.buttonsContainer}>
               <TouchableOpacity
                 style={profileStyles.button}
@@ -119,7 +119,8 @@ const ExternalProfileScreen = () => {
                 </View>
               </TouchableOpacity>
             </View>
-          ) : (
+          )}
+          {!isFriend && userId !== externalUserUid && (
             <View style={profileStyles.buttonsContainer}>
               <TouchableOpacity
                 style={[profileStyles.button, styles.uniqueButton]}

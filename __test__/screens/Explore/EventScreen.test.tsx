@@ -1,4 +1,5 @@
 
+
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
 import EventScreen from '../../../screens/Explore/EventScreen/EventScreen'
 import React from 'react'
@@ -48,6 +49,22 @@ jest.mock('@react-navigation/native', () => {
   }
 })
 
+jest.mock('../../../firebase/User.ts', () => ({
+  getUserData: jest.fn(() => Promise.resolve({
+    uid: "1234",
+    email: "test",
+    firstName: "alex",
+    lastName: "doe",
+    friends: [],
+    date: new Date(),
+    description: "test description",
+    location: "test location",
+    selectedInterests: [],
+    profilePicture: "test.jpg",
+    events: []
+  }))
+}))
+
 export type User = {
   uid: string
   email: string
@@ -91,14 +108,19 @@ jest.mock('../../../firebase/ManageEvents', () => ({
 
 
 
+
+
 describe('EventScreen', () => {
 
   it('refresh', async () => {
 
+   
     const { getByText } = render(
       <NavigationContainer>
         
+        
           <EventScreen onEventPress={() => { }} userID='123' />
+        
         
       </NavigationContainer>
     )

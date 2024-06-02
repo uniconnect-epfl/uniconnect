@@ -26,8 +26,28 @@ jest.mock("react-native-safe-area-context", () => {
   }
 })
 
+jest.mock("../../../../firebase/Registration", () => ({
+  storeInitialUserData: jest.fn()
+}))
+
 jest.mock("../../../../components/ToastMessage/toast", () => ({
   showErrorToast: jest.fn(),
+}))
+
+// Mock AsyncStorage methods
+jest.mock("@react-native-async-storage/async-storage", () => ({
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  removeItem: jest.fn(),
+}))
+
+jest.mock("firebase/auth", () => ({
+  getReactNativePersistence: jest.fn(() => ({})),
+  initializeAuth: jest.fn(() => ({})),
+  onAuthStateChanged: jest.fn(() => ({ uid: "dFcpWnfaNTOWBFyJnoJSIL6xyi32" })),
+  getAuth: jest.fn(() => ({
+    currentUser: { uid: "dFcpWnfaNTOWBFyJnoJSIL6xyi32" },
+  })),
 }))
 
 describe("Information Screen", () => {
@@ -49,6 +69,7 @@ describe("Information Screen", () => {
       setDate: jest.fn(),
       location: "",
       setLocation: jest.fn(),
+      fromGoogle: false
     }
 
     const { getByPlaceholderText, getByText } = render(
@@ -84,6 +105,7 @@ describe("Information Screen", () => {
       setDate: jest.fn(),
       location: "",
       setLocation: jest.fn(),
+      fromGoogle: false
     }
     const { getByText, queryByText } = render(
       <SafeAreaProvider>
@@ -118,6 +140,7 @@ describe("Information Screen", () => {
       setDate: jest.fn(),
       location: "",
       setLocation: jest.fn(),
+      fromGoogle: false
     }
     const { getByTestId } = render(
       <SafeAreaProvider>
@@ -144,6 +167,7 @@ describe("Information Screen", () => {
       setDate: jest.fn(),
       location: "",
       setLocation: jest.fn(),
+      fromGoogle: false
     }
 
     // Mock Keyboard.dismiss
@@ -177,6 +201,7 @@ describe("Information Screen", () => {
       setDate: jest.fn(),
       location: "",
       setLocation: jest.fn(),
+      fromGoogle: false
     }
     const { getByText } = render(
       <SafeAreaProvider>
@@ -205,6 +230,7 @@ describe("Information Screen", () => {
       setDate: jest.fn(),
       location: "",
       setLocation: jest.fn(),
+      fromGoogle: false
     }
     const { getByText } = render(
       <SafeAreaProvider>
@@ -345,6 +371,7 @@ describe("Information Screen", () => {
       setDate: jest.fn(),
       location: "",
       setLocation: jest.fn(),
+      fromGoogle: false
     }
     const { getByText } = render(
       <SafeAreaProvider>
@@ -359,5 +386,33 @@ describe("Information Screen", () => {
     expect(showErrorToast).toHaveBeenCalledWith(
       "You need to input your birth day!"
     )
+  })
+  it("Passes to the section tabs when user is authenticated", () => {
+    const providerProps = {
+      user: { email: "email", uid: "uid" },
+      selectedInterests: ["one"],
+      setSelectedInterests: jest.fn(),
+      description: "",
+      setDescription: jest.fn(),
+      firstName: "first name",
+      setFirstName: jest.fn(),
+      lastName: "last name",
+      setLastName: jest.fn(),
+      date: new Date(),
+      setDate: jest.fn(),
+      location: "",
+      setLocation: jest.fn(),
+      fromGoogle: true
+    }
+    const { getByText } = render(
+      <SafeAreaProvider>
+        <RegistrationContext.Provider value={providerProps}>
+          <InformationScreen />
+        </RegistrationContext.Provider>
+      </SafeAreaProvider>
+    )
+
+    const NextButton = getByText("Next")
+    fireEvent.press(NextButton)
   })
 })
