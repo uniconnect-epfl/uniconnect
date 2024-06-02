@@ -1,5 +1,5 @@
 import React from "react"
-import { View, Text, TouchableOpacity, Alert } from "react-native"
+import { View, Text, TouchableOpacity } from "react-native"
 import { styles } from "./styles"
 import { useNavigation } from "@react-navigation/native"
 import { Logout } from "../../firebase/Logout"
@@ -14,12 +14,9 @@ export const SettingsScreen = () => {
     action: () => Promise<void> | void
   }
 
-  const pressPlaceholder = () => Alert.alert("Coming soon")
-
+  
   const menuItems: MenuItem[] = [
-    { title: "LANGUAGE", action: pressPlaceholder },
     
-    { title: "HELP", action: pressPlaceholder },
     { title: "ABOUT", action: () => navigation.navigate("About" as never) },
     { title: "LOG OUT", action: Logout },
   ]

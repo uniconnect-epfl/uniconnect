@@ -2,7 +2,7 @@ import React from "react"
 import { render, fireEvent } from "@testing-library/react-native"
 import { SettingsScreen } from "../../../screens/Settings/SettingsScreen"
 import { NavigationContainer } from "@react-navigation/native"
-import { Alert } from "react-native"
+
 import { Auth } from "firebase/auth"
 import { SafeAreaProvider } from "react-native-safe-area-context"
 
@@ -77,9 +77,9 @@ describe("SettingsScreen", () => {
 
     // Assert that the menu items are rendered
     const menuItemTexts = [
-      "LANGUAGE",
+     
       
-      "HELP",
+      
       "ABOUT",
       "LOG OUT",
     ]
@@ -104,7 +104,7 @@ describe("SettingsScreen", () => {
     expect(mockGoBack).toHaveBeenCalled()
   })
   test("calls the correct action when a menu item is pressed", () => {
-    const alertSpy = jest.spyOn(Alert, "alert")
+    
     const { getByText } = render(
       <NavigationContainer>
         <SafeAreaProvider>
@@ -113,10 +113,9 @@ describe("SettingsScreen", () => {
       </NavigationContainer>
     )
 
-    const menuItem = getByText("LANGUAGE")
+    const menuItem = getByText("ABOUT")
     fireEvent.press(menuItem)
 
-    expect(alertSpy).toHaveBeenCalledWith("Coming soon")
   })
 
   test("calls the correct action when the logout menu item is pressed", () => {
