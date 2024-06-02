@@ -1,7 +1,7 @@
 # flow.yaml
 
 
-appId: com.epfl.
+appId: com.epfl.uniconnect
 # need to have a connected user
 ---
 - launchApp:
@@ -10,7 +10,91 @@ appId: com.epfl.
 - inputText: "email@oui.com"
 - tapOn: "Password"
 - inputText: "VeryHard6_"
-- tapOn : "Log In"
+- tapOn: "Log In"
 - tapOn:
     point: "50%,25%"
+- tapOn: "Search..."
+- inputText: "Pedro"
+- tapOn:
+    point: "92%,91%"
+- tapOn: "Interests"
+- tapOn: "Events"
+- tapOn:
+    id: "event-card-Book Club Meeting"
+- tapOn:
+    id: "back-arrow"
+- tapOn:
+    id: "back-arrow"
+- tapOn: ", Explore"
+- tapOn: "Music and Arts Festival"
+- tapOn: "Participate"
+- tapOn:
+    id: "back-arrow"
+- tapOn: "Map View"
+- tapOn:
+    id: "back-arrow"
+- tapOn: "Announcements"
+- tapOn: "Create an announcement"
+- tapOn: "Chemistry x Python"
+- inputText: "test Demo"
+- tapOn:
+    point: "17%,33%"
+- tapOn: "Photography"
+- tapOn:
+    id: "WritingID"
+- tapOn: "Search"
+- inputText: "Gardening"
+- "hideKeyboard"
+- tapOn:
+    text: "Gardening"
+    index: 1
+- tapOn: "Add a location"
+- tapOn:
+    point: "50%,53%"
+- tapOn: "Confirm"
+- tapOn: "Validate"
+- tapOn: "Events"
+- tapOn: "Music and Arts Festival"
+- tapOn: "Withdraw"
+- tapOn:
+    id: "back-arrow"
+- tapOn: "Create an event"
+- tapOn:
+    id: "back-arrow"
+- tapOn:
+    point: "50%,93%"
+- tapOn: ", Network"
+- tapOn: "List"
+- tapOn: "Gaël Conditos "
+- tapOn: "Interests"
+- tapOn: "Events"
+- tapOn:
+    id: "back-arrow"
+- tapOn:
+    id: "profile-button"
+- tapOn: ", QR"
+- tapOn:
+    id: "back-arrow"
+- tapOn: "Map View"
+- tapOn:
+    id: "back-arrow"
+- tapOn: "Update"
+- tapOn: "Enter your description here"
+- tapOn:
+    text: "magnifiqueDemo"
+    index: 0
+- tapOn:
+    id: "com.google.android.inputmethod.latin:id/0_resource_name_obfuscated"
+    index: 48
+- tapOn: "Done"
+- tapOn:
+    id: "back-button"
+- tapOn:
+    id: "back-arrow"
+- tapOn:
+    id: "settings-button"
+- tapOn: "ABOUT"
+- tapOn:
+    id: "back-arrow"
+- tapOn: "LOG OUT"
 
