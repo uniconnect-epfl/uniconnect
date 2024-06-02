@@ -1,7 +1,7 @@
 # flow.yaml
 
-#replace by the right appId
-appId: com.alexandremrt.uniconnect
+
+appId: com.epfl.uniconnect
 # need to have a connected user
 ---
 - launchApp

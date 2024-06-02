@@ -1,10 +1,10 @@
-
 # flow.yaml
 
 #replace by the right appId
-appId: com.alexandremrt.uniconnect
+appId: com.epfl.uniconnect
 ---
-- launchApp
+- launchApp: 
+    clearState: true
 - startRecording: recording
 - tapOn: "Dont have an account?"
 - tapOn: "First name"
@@ -29,13 +29,13 @@ appId: com.alexandremrt.uniconnect
 - tapOn: "Writing"
 - tapOn: "Next"
 - tapOn: "****************"
-- inputText: "VeryHard6_"
+- inputText: "VeryHard7_"
 - tapOn: "****************"
-- inputText: "VeryHard6_"
+- inputText: "VeryHard7_"
 - tapOn: "E-mail"
-- inputText: "email@oui.com"
+- inputText: "emaill@oui.com"
 - tapOn: "Confirm your e-mail"
-- inputText: "email@oui.com"
+- inputText: "emaill@oui.com"
 - "hideKeyboard"
 - tapOn: "Confirm"
 - tapOn: "Not now"
