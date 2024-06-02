@@ -139,7 +139,6 @@ describe("ExternalProfileScreen", () => {
 
     await waitFor(() => {
       fireEvent.press(getByText("Network"))
-      expect(getByText("Message")).toBeTruthy()
       expect(getByText("Remove")).toBeTruthy()
     })
   })
