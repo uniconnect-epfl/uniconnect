@@ -14,7 +14,7 @@ const Interest = ({ interest }: { interest: string }) => (
   </View>
 )
 
-export const xProfileInterests = ({ user }: ProfileInterestsProps) => {
+export const ProfileInterests = ({ user }: ProfileInterestsProps) => {
   return (
     <View style={styles.container}>
       <FlatList

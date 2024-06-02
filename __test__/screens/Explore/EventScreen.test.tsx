@@ -120,8 +120,6 @@ describe('EventScreen', () => {
         
         
           <EventScreen onEventPress={() => { }} userID='123' />
-        
-        
       </NavigationContainer>
     )
     await waitFor (()  => {
