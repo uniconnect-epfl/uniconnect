@@ -1,15 +1,18 @@
 # flow.yaml
 
 #replace by the right appId
-appId: com.alexandremrt.uniconnect
+appId: com.epfl.uniconnect
 # need to run registrationM4 before
 ---
-- launchApp
+- launchApp: 
+    clearState: true
+
 - tapOn: "Username or email"
 - inputText: "email@oui.com"
 - tapOn: "Password"
 - inputText: "VeryHard6_"
+- tapOn : "Log In"
 - tapOn:
-    id: "login-btn"
+    point: "50%,25%"
 
 

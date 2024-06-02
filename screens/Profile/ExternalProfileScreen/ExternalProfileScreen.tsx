@@ -92,14 +92,6 @@ const ExternalProfileScreen = () => {
           {isFriend && (
             <View style={profileStyles.buttonsContainer}>
               <TouchableOpacity
-                style={profileStyles.button}
-                onPress={() => alert("To come")}
-              >
-                <Text style={[globalStyles.boldText, profileStyles.buttonText]}>
-                  Message
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
                 style={[profileStyles.button, styles.invertedButtonColors]}
                 onPress={() => {
                   const removeFriendInternal = async () => {
@@ -158,7 +150,7 @@ const ExternalProfileScreen = () => {
 
         <View style={styles.separatorLine} />
 
-        {selectedTab === "Events" && <ProfileEvents />}
+        {selectedTab === "Events" && <ProfileEvents userId={externalUserUid}/>}
         {selectedTab === "Interests" && (
           <ProfileInterests user={externalUser} />
         )}

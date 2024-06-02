@@ -39,6 +39,7 @@ type RootStackParamList = {
 }
 
 const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
+
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>()
   const [futureEvents, setFutureEvents] = React.useState<Event[]>([])
   const [pastEvents, setPastEvents] = React.useState<Event[]>([])
@@ -61,7 +62,9 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
     try {
       setLoading(true)
       if (userID) {
+
         const userData = await getUserData(userID)
+        
         if (userData) {
           const userEvents = userData.events
           const fetchedFutureEvents = await getAllFutureEvents()
@@ -77,8 +80,8 @@ const EventScreen = ({ onEventPress, userID }: EventsScreenProps) => {
           setFutureEvents(userFutureEvents)
           setPastEvents(userPastEvents)
 
-            setFilteredFutureEvents(userFutureEvents)
-            setFilteredPastEvents(userPastEvents)
+          setFilteredFutureEvents(userFutureEvents)
+          setFilteredPastEvents(userPastEvents)
             if (userFutureEvents.length === 0 && userPastEvents.length === 0) {
               showErrorToast("You have no events yet.")
             }

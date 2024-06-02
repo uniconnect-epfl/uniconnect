@@ -23,7 +23,6 @@ import ViewEventScreen from "../../screens/ViewDetails/ViewEventScreen/ViewEvent
 import ViewAnnoucementScreen from "../../screens/ViewDetails/ViewAnnouncementScreen/ViewAnnouncementScreen"
 import { SelectLocationScreen } from "../../screens/SelectLocation/SelectLocationScreen"
 import { AboutScreen } from "../../screens/Settings/AboutScreen/AboutScreen"
-import NotificationsScreen from "../../screens/Settings/NotificationsScreen/NotificationsScreen"
 const Stack = createStackNavigator()
 
 const MainStackNavigator: React.FC = () => {
@@ -191,11 +190,7 @@ const MainStackNavigator: React.FC = () => {
               component={AboutScreen}
               options={{ headerShown: false }}
             />
-            <Stack.Screen
-              name="Notifications"
-              component={NotificationsScreen}
-              options={{ headerShown: false }}
-            />
+            
             <Stack.Screen
               name="EventInterests"
               component={InterestsScreen}
