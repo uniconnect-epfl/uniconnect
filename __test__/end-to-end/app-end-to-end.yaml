@@ -2,16 +2,19 @@
 
 
 appId: com.epfl.uniconnect
-# need to have a connected user
+## Can have some problem if the user is connectect to google and a pop up appears asking to save of note the google account
 ---
 - launchApp:
     clearState: true
+- startRecording: end-to-end-demo
+
 - tapOn: "Username or email"
 - inputText: "email@oui.com"
 - tapOn: "Password"
 - inputText: "VeryHard6_"
 - tapOn: "Log In"
-- tapOn: "Save"
+- tapOn:
+    point: "50%,53%"
 - tapOn: "Search..."
 - inputText: "Pedro"
 - tapOn:
@@ -36,8 +39,10 @@ appId: com.epfl.uniconnect
 - tapOn: "Create an announcement"
 - tapOn: "Chemistry x Python"
 - inputText: "test Demo"
+- hideKeyboard
 - tapOn:
-    point: "17%,33%"
+   text: 
+   index: 2
 - tapOn: "Photography"
 - tapOn:
     id: "WritingID"
@@ -96,4 +101,4 @@ appId: com.epfl.uniconnect
 - tapOn:
     id: "back-arrow"
 - tapOn: "LOG OUT"
-
+- stopRecording
