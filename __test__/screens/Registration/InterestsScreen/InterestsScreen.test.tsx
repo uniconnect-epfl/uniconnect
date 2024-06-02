@@ -39,8 +39,8 @@ const mockNavigation = {
   isFocused: jest.fn().mockReturnValue(false),
 }
 
-jest.mock('@react-navigation/native', () => {
-  const actualNav = jest.requireActual('@react-navigation/native')
+jest.mock("@react-navigation/native", () => {
+  const actualNav = jest.requireActual("@react-navigation/native")
   return {
     ...actualNav,
     useNavigation: () => mockNavigation,

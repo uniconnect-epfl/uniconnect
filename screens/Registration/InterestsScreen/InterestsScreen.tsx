@@ -50,7 +50,7 @@ const InterestButton: React.FC<InterestButtonProps> = ({
     </Text>
   </TouchableOpacity>
 )
-
+//add announcement
 const InterestsScreen = () => {
   const route = useRoute()
   const navigation = useNavigation()

@@ -154,9 +154,16 @@ const EventCreationScreen = ({ navigation }: EventCreationScreenProps) => {
                 )}
               </View>
               {selectedInterests?.length !== 0 && (
-                <Text style={[styles.tagsTitle, globalStyles.text]}>
-                  Interests selected!
-                </Text>
+                <>
+                 <View style={styles.interestsContainer}>
+                  <Text style={[styles.tagsTitle, globalStyles.text]}>
+                    Interests selected!
+                  </Text>
+                    <Text style={[styles.interests, globalStyles.text]}>
+                      {selectedInterests.join(" - ")}
+                    </Text>
+                  </View>
+                  </>
               )}
             </View>
           </Pressable>

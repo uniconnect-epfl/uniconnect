@@ -6,6 +6,7 @@ import {
   SectionListRenderItemInfo,
   TouchableOpacity,
   Pressable,
+  
 } from "react-native"
 import { styles } from "./styles" // Ensure the paths are correct
 import AnnouncementCard from "../../../components/AnnoucementCard/AnnouncementCard"
@@ -94,7 +95,6 @@ const AnnouncementScreen = ({
         recommendAnnouncements(searchedAnnouncement)
       setFilteredAnnouncements(recommendedAnnouncements)
     } else {
-      console.log(userData?.selectedInterests)
 
       setFilteredAnnouncements(recommendAnnouncements(announcements))
     }
@@ -110,7 +110,7 @@ const AnnouncementScreen = ({
       }))
     }
 
-    return announcements
+    const recomm = announcements
       .map((announcement) => ({
         announcement,
         recommended:
@@ -123,6 +123,7 @@ const AnnouncementScreen = ({
         if (a.recommended && !b.recommended) return -1
         return 0
       })
+    return recomm
   }
 
   const sections = [
@@ -166,20 +167,21 @@ const AnnouncementScreen = ({
           value={searchQuery}
           onChangeText={handleSearch}
         />
+        <Pressable
+          onPress={() =>
+            navigation.navigate("EventCreation" as never, {
+              isAnnouncement: true,
+            })
+          }
+          style={styles.createEventWrapper}
+        >
+          <Text style={[globalStyles.smallText, styles.createEvent]}>
+            Create an announcement
+          </Text>
+          <Ionicons name="create-outline" size={16} />
+        </Pressable>
       </View>
-      <Pressable
-        onPress={() =>
-          navigation.navigate("EventCreation" as never, {
-            isAnnouncement: true,
-          })
-        }
-        style={styles.createEventWrapper}
-      >
-        <Text style={[globalStyles.smallText, styles.createEvent]}>
-          Create an announcement
-        </Text>
-        <Ionicons name="create-outline" size={16} />
-      </Pressable>
+
       <View style={styles.container}>
         <SectionList
           sections={sections}

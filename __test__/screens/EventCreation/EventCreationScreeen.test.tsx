@@ -24,6 +24,7 @@ const mockNavigation = {
   canGoBack: jest.fn(),
   dangerouslyGetParent: jest.fn(),
   dangerouslyGetState: jest.fn(),
+  selectedInterests: jest.fn(),
 } as unknown as NavigationProp<ParamListBase>
 
 jest.mock("firebase/auth", () => ({
@@ -41,6 +42,18 @@ jest.mock("firebase/firestore", () => {
     getFirestore: jest.fn(() => ({} as Firestore)),
   }
 })
+
+//added after interests rendering 
+jest.mock("react", () => ({
+  ...jest.requireActual("react"),
+  useContext: () => ({
+    selectedInterests: jest.fn(),
+    description: jest.fn(),
+    setDescription: jest.fn(),
+    setSelectedInterests: jest.fn(),
+  }),
+}))
+
 
 jest.mock("@react-navigation/native", () => {
   return {

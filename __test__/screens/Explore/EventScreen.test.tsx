@@ -1,10 +1,10 @@
 
-import { render } from '@testing-library/react-native'
+import { fireEvent, render, waitFor } from '@testing-library/react-native'
 import EventScreen from '../../../screens/Explore/EventScreen/EventScreen'
-import { SafeAreaProvider } from 'react-native-safe-area-context'
 import React from 'react'
 import { Firestore } from 'firebase/firestore'
 import { NavigationContainer, NavigationProp, ParamListBase } from '@react-navigation/native'
+import { showErrorToast } from '../../../components/ToastMessage/toast'
 
 
 jest.mock("../../../firebase/firebaseConfig", () => ({
@@ -42,9 +42,40 @@ const mockNavigation = {
 jest.mock('@react-navigation/native', () => {
   return {
     ...jest.requireActual('@react-navigation/native'), // keep all the original implementations
-    useNavigation: () => mockNavigation,
+    useNavigation: () => ({
+      navigate: mockNavigation.navigate,
+    }),
   }
 })
+
+export type User = {
+  uid: string
+  email: string
+  firstName: string
+  friends: string[]
+  lastName: string
+  date: Date
+  description: string
+  location: string
+  selectedInterests: string[]
+  profilePicture: string
+  events: string[]
+}
+jest.mock('../../../firebase/User.ts', () => ({
+  getUserData: jest.fn(() => Promise.resolve({
+    uid: "1234",
+    email: "test",
+    firstName: "alex",
+    lastName: "doe",
+    friends: [],
+    date: new Date(),
+    description: "test description",
+    location: "test location",
+    selectedInterests: [],
+    profilePicture: "test.jpg",
+    events: []
+  }))
+}))
 
 jest.mock('../../../firebase/ManageEvents', () => ({
   getAllFutureEvents: jest.fn(() => Promise.resolve([
@@ -58,18 +89,69 @@ jest.mock('../../../firebase/ManageEvents', () => ({
   ]))
 }))
 
+
+
 describe('EventScreen', () => {
 
   it('refresh', async () => {
 
-    const { debug } = render(
+    const { getByText } = render(
       <NavigationContainer>
-        <SafeAreaProvider>
+        
           <EventScreen onEventPress={() => { }} userID='123' />
-        </SafeAreaProvider>
+        
       </NavigationContainer>
     )
-    debug()
+    await waitFor (()  => {
+    expect(getByText('Upcoming Events')).toBeTruthy()
+    
+    })
   })
+
+})
+
+///Test for no events
+
+jest.mock('../../../firebase/ManageEvents', () => ({
+  getAllFutureEvents: jest.fn(() => Promise.resolve([
+  ])),
+  getAllPastEvents: jest.fn(() => Promise.resolve([
+  ]))
+}))
+jest.mock("../../../components/ToastMessage/toast", () => ({
+  showErrorToast: jest.fn(),
+  showSuccessToast: jest.fn(),
+}))
+
+describe('EventScreenNoEvents', () => {
+
+  it('check Errors', async () => {
+
+     render(
+      <NavigationContainer>
+        
+          <EventScreen onEventPress={() => { }} userID='123' />
+        
+      </NavigationContainer>
+    )
+    await waitFor (() => {
+    expect(showErrorToast).toHaveBeenCalledWith("You have no events yet.")
+    })
+  })
+
+  it('check Errors', async () => {
+
+    const {getByText}= render(
+     <NavigationContainer>
+       
+         <EventScreen onEventPress={() => { }} userID='123' />
+       
+     </NavigationContainer>
+   )
+   await waitFor (() => {
+   fireEvent.press(getByText('Create an event'))
+   expect(mockNavigation.navigate).toHaveBeenCalled
+ })
+})
 
 })

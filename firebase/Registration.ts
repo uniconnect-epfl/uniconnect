@@ -47,7 +47,8 @@ export async function storeInitialUserData(uid: string, email: string, firstName
       location: location,
       description: description,
       selectedInterests: selectedInterests,
-      profilePicture: ""
+      profilePicture: "",
+      events : []
     })
   } catch (error) {
     showErrorToast("There was an error storing your user data, please try again.")
