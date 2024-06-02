@@ -104,6 +104,7 @@ describe('EventScreen', () => {
     )
     await waitFor (()  => {
     expect(getByText('Upcoming Events')).toBeTruthy()
+    expect(getByText('Past Events')).toBeTruthy()
     
     })
   })

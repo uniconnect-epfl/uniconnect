@@ -62,9 +62,11 @@ describe("ProfileEvents", () => {
   })
 
   it("renders EventScreen with userID", async () => {
+    const userID : string = "123"
+
     const { getByText } = render(
       <NavigationContainer>
-        <ProfileEvents />
+        <ProfileEvents userId={userID} />
       </NavigationContainer>
     )
     await waitFor(() => {
@@ -73,9 +75,11 @@ describe("ProfileEvents", () => {
   })
 
   it("navigates to ViewEvent when an event is pressed", async () => {
+    const userID = "123"
+
     const { getByText } = render(
       <NavigationContainer>
-        <ProfileEvents />
+        <ProfileEvents userId={userID}/>
       </NavigationContainer>
     )
 

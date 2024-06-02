@@ -88,7 +88,7 @@ export const MyProfileScreen = ({ navigation }: MyProfileScreenProps) => {
           onTabChange={setSelectedTab}
         />
 
-        {selectedTab === "Events" && <ProfileEvents />}
+        {selectedTab === "Events" && <ProfileEvents user={userId} />}
         {selectedTab === "Interests" && <ProfileInterests user={user} />}
       </View>
     </View>
