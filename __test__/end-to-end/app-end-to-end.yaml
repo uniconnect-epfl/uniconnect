@@ -11,8 +11,7 @@ appId: com.epfl.uniconnect
 - tapOn: "Password"
 - inputText: "VeryHard6_"
 - tapOn: "Log In"
-- tapOn:
-    point: "50%,25%"
+- tapOn: "Save"
 - tapOn: "Search..."
 - inputText: "Pedro"
 - tapOn:

@@ -18,10 +18,7 @@ export const SettingsScreen = () => {
 
   const menuItems: MenuItem[] = [
     { title: "LANGUAGE", action: pressPlaceholder },
-    {
-      title: "NOTIFICATIONS",
-      action: () => navigation.navigate("Notifications" as never),
-    },
+    
     { title: "HELP", action: pressPlaceholder },
     { title: "ABOUT", action: () => navigation.navigate("About" as never) },
     { title: "LOG OUT", action: Logout },
