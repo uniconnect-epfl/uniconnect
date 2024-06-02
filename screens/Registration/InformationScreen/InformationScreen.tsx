@@ -40,6 +40,7 @@ const InformationScreen: React.FC = () => {
     location,
     setLocation,
     description,
+    fromGoogle
   } = useContext(RegistrationContext)
 
   const onPress = () => {
@@ -146,7 +147,7 @@ const InformationScreen: React.FC = () => {
 
         <View style={[styles.footer, { bottom: insets.bottom }]}>
           {!keyboardVisible && (
-            <LowBar nextScreen="Interests" checkFields={checkFields} />
+            <LowBar nextScreen="Interests" checkFields={checkFields} goBack={!fromGoogle}/>
           )}
         </View>
 

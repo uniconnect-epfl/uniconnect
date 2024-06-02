@@ -60,8 +60,7 @@ const InterestsScreen = () => {
   const [searchTerm, setSearchTerm] = useState("")
   const [interests, setInterests] = useState<Interest[]>([])
   const [filteredInterests, setFilteredInterests] = useState<Interest[]>([])
-  const { selectedInterests, setSelectedInterests } =
-    useContext(RegistrationContext)
+  const { selectedInterests, setSelectedInterests, fromGoogle } = useContext(RegistrationContext)
   const [isLoading, setIsLoading] = useState(true)
   const keyboardVisible = useKeyboardVisibility()
 
@@ -177,7 +176,7 @@ const InterestsScreen = () => {
         />
 
         <View style={[styles.footer, { bottom: insets.bottom }]}>
-          {!keyboardVisible && !eventMode && <LowBar nextScreen="Authentication" />}
+          {!keyboardVisible && !eventMode && <LowBar nextScreen={fromGoogle? "ExploreTabs" : "Authentication"} />}
         </View>
       </View>
     </TouchableWithoutFeedback>
