@@ -22,13 +22,9 @@ appId: com.epfl.uniconnect
 - tapOn: "Interests"
 - tapOn: "Events"
 - tapOn:
-    id: "event-card-Book Club Meeting"
-- tapOn:
-    id: "back-arrow"
-- tapOn:
     id: "back-arrow"
 - tapOn: ", Explore"
-- tapOn: "Music and Arts Festival"
+- tapOn: "Book Club Meeting"
 - tapOn: "Participate"
 - tapOn:
     id: "back-arrow"
@@ -58,7 +54,8 @@ appId: com.epfl.uniconnect
 - tapOn: "Confirm"
 - tapOn: "Validate"
 - tapOn: "Events"
-- tapOn: "Music and Arts Festival"
+- tapOn: "Events"
+- tapOn: "Book Club Meeting"
 - tapOn: "Withdraw"
 - tapOn:
     id: "back-arrow"
