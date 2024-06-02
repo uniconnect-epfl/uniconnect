@@ -158,7 +158,7 @@ const ExternalProfileScreen = () => {
 
         <View style={styles.separatorLine} />
 
-        {selectedTab === "Events" && <ProfileEvents user={externalUserUid}/>}
+        {selectedTab === "Events" && <ProfileEvents userId={externalUserUid}/>}
         {selectedTab === "Interests" && (
           <ProfileInterests user={externalUser} />
         )}
